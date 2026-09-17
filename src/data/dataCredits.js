@@ -67,6 +67,13 @@ export const DATA_CREDITS = [
     html: 'Earthquakes: Data courtesy of the U.S. Geological Survey',
   },
   {
+    key: 'portwatch',
+    html:
+      'Chokepoint tanker transits: IMF PortWatch (AIS-derived, with the UN Global Platform) · ' +
+      '<a href="https://portwatch.imf.org" target="_blank" rel="noopener">portwatch.imf.org</a> · ' +
+      '<a href="https://www.imf.org/external/terms.htm" target="_blank" rel="noopener">IMF terms</a>',
+  },
+  {
     key: 'overpass',
     html:
       'Road geometry (traffic): ' +
