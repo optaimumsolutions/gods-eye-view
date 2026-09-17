@@ -1,5 +1,6 @@
 import * as Cesium from 'cesium';
 import { isPointerFree } from '../../data/inputOwnership.js';
+import { CHOKEPOINT_GAZETTEER } from './gazetteer.js';
 import {
   CHOKEPOINT_LAYER_ID,
   CHOKEPOINT_OVERLAY_SOURCE_ID,
@@ -18,21 +19,41 @@ import {
 import { formatDeviation } from './records.js';
 export * from './model.js';
 export * from './records.js';
+export { CHOKEPOINT_GAZETTEER } from './gazetteer.js';
 export { createPortWatchChokepointSource } from './source.js';
 
 /** PortWatch publishes daily; a half-hour poll is plenty and polite. */
 const UPDATE_INTERVAL_MS = 30 * 60_000;
 
+/** A pinned strait before its first feed: known place, unknown flow. */
+function emptyRow(point) {
+  return {
+    ...point,
+    recentAvg: null,
+    baselineAvg: null,
+    recentDays: 0,
+    baselineDays: 0,
+    deviationPct: null,
+    status: 'unknown',
+    latestDate: null,
+    history: [],
+  };
+}
+
 /**
- * Own one chokepoint display: a ground ring per strait sized by its baseline
- * tanker rate, an inner disc showing how much of that flow is still moving,
- * an ambient deviation label, and a selected detail card.
+ * Own one chokepoint display. Geometry is pinned: every strait's ring, inner
+ * disc and marker are created once from the bundled gazetteer at a fixed
+ * height, and each refresh only restyles them from the daily feed (colour,
+ * ring size, disc size, ambient label, detail card). Nothing that marks a
+ * position is clamped to terrain, so a marker never re-seats itself as
+ * tiles refine and never blinks on a refresh.
  */
 export function createChokepointsLayer({
   source,
   overlayHost,
   context,
   screenSpaceEventHandlerFactory,
+  points = CHOKEPOINT_GAZETTEER,
 } = {}) {
   if (typeof source?.getSnapshot !== 'function')
     throw new TypeError('Chokepoints require a snapshot source');
@@ -62,6 +83,8 @@ export function createChokepointsLayer({
   let _enabled = false;
   const _rowById = new Map();
   const _positionById = new Map();
+  /** Pinned entities per chokepoint id: `{ point, ring, flow, radius }`. */
+  const _pinsById = new Map();
 
   function publishOverlay() {
     if (!_enabled) return;
@@ -80,10 +103,12 @@ export function createChokepointsLayer({
 
   function select(entity) {
     const id = entity?.__chokepointId;
-    if (!id || !_rowById.has(id)) return;
+    if (!id || !_pinsById.has(id)) return;
+    // The disc is pickable too, but the context lives on the ring entity.
+    const anchor = _pinsById.get(id).ring;
     _selectedId = id;
-    if (_viewer) _viewer.selectedEntity = entity;
-    context.selectEntityContext(entity);
+    if (_viewer) _viewer.selectedEntity = anchor;
+    context.selectEntityContext(anchor);
     publishOverlay();
   }
 
@@ -132,6 +157,107 @@ export function createChokepointsLayer({
     };
   }
 
+  function registerContext(ring, row) {
+    context.registerEntityContext(ring, {
+      id: `${CHOKEPOINT_LAYER_ID}:${row.id}`,
+      layerId: CHOKEPOINT_LAYER_ID,
+      layerName: layer.name,
+      source: 'IMF PortWatch',
+      dataSource: _dataSource,
+      label: row.latestDate
+        ? `${row.name} · tanker transits ${formatDeviation(row.deviationPct)} vs ${row.baselineDays}d`
+        : `${row.name} · tanker transits awaiting PortWatch data`,
+      latitude: row.lat,
+      longitude: row.lon,
+      properties: contextProperties(row),
+    });
+  }
+
+  /** Create every strait's pinned geometry once; positions never change after this. */
+  function createPins() {
+    for (const point of points) {
+      const row = emptyRow(point);
+      const position = chokepointPosition(point);
+      const color = statusColor(row.status);
+      const radius = ringRadiusMeters(null);
+      const ring = new Cesium.Entity({
+        id: `chokepoint:${point.id}`,
+        position,
+        polyline: {
+          // A ground polyline draws on terrain; a clamped ellipse outline
+          // does not (Cesium drops it with a one-time warning).
+          positions: groundCirclePositions(point.lon, point.lat, radius),
+          clampToGround: true,
+          width: 2.5,
+          material: color.withAlpha(0.9),
+        },
+        point: {
+          pixelSize: 9,
+          color,
+          outlineColor: Cesium.Color.BLACK.withAlpha(0.8),
+          outlineWidth: 2,
+          // Pinned at the ellipsoid: a clamped point re-seats itself on every
+          // terrain refinement and visibly hops under a tilted camera. The
+          // disabled depth test keeps it drawn where terrain sits above it.
+          heightReference: Cesium.HeightReference.NONE,
+          disableDepthTestDistance: Number.POSITIVE_INFINITY,
+        },
+        properties: {
+          portid: point.id,
+          name: point.name,
+          ...contextProperties(row),
+        },
+      });
+      ring.__chokepointId = point.id;
+      const flow = new Cesium.Entity({
+        id: `chokepoint-flow:${point.id}`,
+        position,
+        ellipse: {
+          semiMajorAxis: radius,
+          semiMinorAxis: radius,
+          material: new Cesium.ColorMaterialProperty(color.withAlpha(0.35)),
+          heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+        },
+      });
+      flow.__chokepointId = point.id;
+      _dataSource.entities.add(ring);
+      _dataSource.entities.add(flow);
+      _pinsById.set(point.id, { point, ring, flow, radius });
+      _rowById.set(point.id, row);
+      _positionById.set(point.id, position);
+      registerContext(ring, row);
+    }
+  }
+
+  /** Restyle one pinned strait from a fresh row; its position is untouched. */
+  function restyle(row) {
+    const pin = _pinsById.get(row.id);
+    if (!pin) return false;
+    const color = statusColor(row.status);
+    const radius = ringRadiusMeters(row.baselineAvg);
+    const innerRadius = radius * flowRatio(row);
+    if (radius !== pin.radius) {
+      pin.ring.polyline.positions = groundCirclePositions(
+        pin.point.lon,
+        pin.point.lat,
+        radius,
+      );
+      pin.radius = radius;
+    }
+    pin.ring.polyline.material = color.withAlpha(0.9);
+    pin.ring.point.color = color;
+    pin.ring.properties = {
+      portid: row.id,
+      name: row.name,
+      ...contextProperties(row),
+    };
+    pin.flow.ellipse.semiMajorAxis = innerRadius;
+    pin.flow.ellipse.semiMinorAxis = innerRadius;
+    pin.flow.ellipse.material = color.withAlpha(0.35);
+    registerContext(pin.ring, row);
+    return true;
+  }
+
   const layer = {
     id: CHOKEPOINT_LAYER_ID,
     name: 'Chokepoints · Tanker Transits',
@@ -152,8 +278,9 @@ export function createChokepointsLayer({
       _lastError = null;
       _latestDate = null;
       _enabled = false;
+      createPins();
       overlayHost.setVisible(CHOKEPOINT_OVERLAY_SOURCE_ID, false);
-      console.log('[Data:Chokepoints] Initialized');
+      console.log(`[Data:Chokepoints] Initialized: ${_pinsById.size} pinned`);
     },
 
     enable(viewer = _viewer) {
@@ -187,80 +314,32 @@ export function createChokepointsLayer({
         const rows = Array.isArray(snapshot?.rows) ? snapshot.rows : null;
         if (!rows) throw new Error('Malformed chokepoint snapshot');
 
-        const entities = [];
         const entries = [];
-        _rowById.clear();
-        _positionById.clear();
+        const applied = [];
+        const unpinned = [];
         for (const row of rows) {
-          const position = chokepointPosition(row);
-          const color = statusColor(row.status);
-          const radius = ringRadiusMeters(row.baselineAvg);
-          const innerRadius = radius * flowRatio(row);
-          const ring = new Cesium.Entity({
-            id: `chokepoint:${row.id}`,
-            position,
-            polyline: {
-              // A ground polyline draws on terrain; a clamped ellipse outline
-              // does not (Cesium drops it with a one-time warning).
-              positions: groundCirclePositions(row.lon, row.lat, radius),
-              clampToGround: true,
-              width: 2.5,
-              material: color.withAlpha(0.9),
-            },
-            point: {
-              pixelSize: 9,
-              color,
-              outlineColor: Cesium.Color.BLACK.withAlpha(0.8),
-              outlineWidth: 2,
-              heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
-              disableDepthTestDistance: Number.POSITIVE_INFINITY,
-            },
-            properties: {
-              portid: row.id,
-              name: row.name,
-              ...contextProperties(row),
-            },
-          });
-          ring.__chokepointId = row.id;
-          const flow = new Cesium.Entity({
-            id: `chokepoint-flow:${row.id}`,
-            position,
-            ellipse: {
-              semiMajorAxis: innerRadius,
-              semiMinorAxis: innerRadius,
-              material: new Cesium.ColorMaterialProperty(color.withAlpha(0.35)),
-              heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
-            },
-          });
-          flow.__chokepointId = row.id;
-          entities.push(ring, flow);
-          entries.push(createChokepointOverlayEntry(row, position));
+          if (!restyle(row)) {
+            unpinned.push(row.id);
+            continue;
+          }
           _rowById.set(row.id, row);
-          _positionById.set(row.id, position);
-          context.registerEntityContext(ring, {
-            id: `${CHOKEPOINT_LAYER_ID}:${row.id}`,
-            layerId: CHOKEPOINT_LAYER_ID,
-            layerName: layer.name,
-            source: 'IMF PortWatch',
-            dataSource: _dataSource,
-            label: `${row.name} · tanker transits ${formatDeviation(row.deviationPct)} vs ${row.baselineDays}d`,
-            latitude: row.lat,
-            longitude: row.lon,
-            properties: contextProperties(row),
-          });
+          entries.push(
+            createChokepointOverlayEntry(row, _positionById.get(row.id)),
+          );
+          applied.push(row);
         }
-
-        _dataSource.entities.removeAll();
-        for (const entity of entities) _dataSource.entities.add(entity);
+        if (unpinned.length)
+          console.warn(
+            `[Data:Chokepoints] ${unpinned.length} feed ids have no pinned strait: ${unpinned.slice(0, 5).join(', ')}`,
+          );
         _entries = selectChokepointOverlayCohort(entries);
-        if (_selectedId && !_rowById.has(_selectedId)) _selectedId = null;
-        _rows = rows;
+        _rows = applied;
         _latestDate = snapshot.latestDate ?? null;
         _lastUpdate = Date.now();
         _lastError = null;
         publishOverlay();
         console.log(
-          `[Data:Chokepoints] Updated: ${rows.length} chokepoints (latest ${_latestDate ?? 'n/a'})`,
+          `[Data:Chokepoints] Updated: ${applied.length} of ${_pinsById.size} chokepoints (latest ${_latestDate ?? 'n/a'})`,
         );
         return true;
       } catch (e) {
@@ -292,6 +371,7 @@ export function createChokepointsLayer({
       _entries = [];
       _rowById.clear();
       _positionById.clear();
+      _pinsById.clear();
       _lastUpdate = null;
       _lastError = null;
       _latestDate = null;
@@ -309,6 +389,7 @@ export function createChokepointsLayer({
     getStats() {
       return {
         count: _rows.length,
+        pinned: _pinsById.size,
         lastUpdate: _lastUpdate,
         error: _lastError,
         latestDate: _latestDate,

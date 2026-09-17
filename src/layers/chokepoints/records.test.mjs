@@ -8,6 +8,7 @@ import {
   normalizeChokepointPoints,
 } from './records.js';
 import { createPortWatchChokepointSource } from './source.js';
+import { CHOKEPOINT_GAZETTEER } from './gazetteer.js';
 
 function point(portid, portname, lon, lat) {
   return {
@@ -141,6 +142,7 @@ test('the source pages daily rows, anchors the query window, and rejects failure
     fetchImpl,
     now: () => Date.parse('2026-09-16T12:00:00Z'),
     pageSize: 2,
+    points: [{ id: 'chokepoint6', name: 'Strait of Hormuz', lon: 56.86, lat: 26.3 }],
   });
   const snapshot = await source.getSnapshot();
   assert.equal(snapshot.latestDate, '2026-09-13');
@@ -178,10 +180,44 @@ test('paging follows the server transfer-limit flag even when the server caps be
     ];
     return { ok: true, json: async () => pages[offsets.length - 1] };
   };
-  const source = createPortWatchChokepointSource({ fetchImpl, pageSize: 5 });
+  const source = createPortWatchChokepointSource({
+    fetchImpl,
+    pageSize: 5,
+    points: [{ id: 'p', name: 'P', lon: 0, lat: 0 }],
+  });
   const snapshot = await source.getSnapshot();
   assert.deepEqual(offsets, [0, 1, 2]);
   assert.equal(snapshot.latestDate, '2026-09-12');
   assert.equal(snapshot.rows[0].baselineDays, 3);
   assert.equal(snapshot.rows[0].recentAvg, 20);
+});
+
+test('the gazetteer pins 28 unique chokepoints with valid coordinates and is frozen', () => {
+  assert.equal(CHOKEPOINT_GAZETTEER.length, 28);
+  assert.equal(new Set(CHOKEPOINT_GAZETTEER.map((p) => p.id)).size, 28);
+  for (const p of CHOKEPOINT_GAZETTEER) {
+    assert.match(p.id, /^chokepoint[0-9]+$/);
+    assert.ok(p.name.length > 0);
+    assert.ok(Math.abs(p.lon) <= 180 && Math.abs(p.lat) <= 90);
+    assert.ok(Object.isFrozen(p));
+  }
+  assert.ok(Object.isFrozen(CHOKEPOINT_GAZETTEER));
+  assert.equal(CHOKEPOINT_GAZETTEER.find((p) => p.id === 'chokepoint6').name, 'Strait of Hormuz');
+});
+
+test('the source joins the daily feed onto the pinned gazetteer and never fetches geometry', async () => {
+  const requests = [];
+  const fetchImpl = async (url) => {
+    requests.push(url);
+    return { ok: true, json: async () => ({ features: [daily('chokepoint6', '2026-09-13', 12)] }) };
+  };
+  const snapshot = await createPortWatchChokepointSource({ fetchImpl }).getSnapshot();
+  assert.equal(requests.length, 1);
+  assert.ok(requests.every((url) => url.includes('Daily_Chokepoints_Data')));
+  assert.equal(snapshot.rows.length, 28);
+  const hormuz = snapshot.rows.find((row) => row.id === 'chokepoint6');
+  assert.equal(hormuz.lon, 56.8598);
+  assert.equal(hormuz.lat, 26.2969);
+  assert.equal(hormuz.recentAvg, 12);
+  assert.equal(snapshot.rows.find((row) => row.id === 'chokepoint1').status, 'unknown');
 });

@@ -86,6 +86,11 @@ provenance; change a rule by re-opening its question, not by drifting.
 - ArcGIS feature services cap a page at 1,000 rows regardless of the request;
   follow `exceededTransferLimit`. Cesium drops outlines on terrain-clamped
   ellipses; draw rings as clamped polylines.
+- Markers are pinned at a fixed height (`HeightReference.NONE` with the depth
+  test disabled), never `CLAMP_TO_GROUND`: a clamped point re-seats itself on
+  every terrain refinement and visibly hops under a tilted camera while the
+  ground-draped ring stays put. Fixed reference geometry (the chokepoint
+  gazetteer) is created once at init; a refresh only restyles it.
 - Every layer ships with a headless render check (the pattern in
   `.gev-logs/render-chokepoints.mjs`): dismiss the first-run dialog, pin the
   camera, enable the layer, wait for `getStats().count`, screenshot, click.

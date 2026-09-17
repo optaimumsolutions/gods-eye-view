@@ -1,7 +1,7 @@
+import { CHOKEPOINT_GAZETTEER } from './gazetteer.js';
 import {
   buildChokepointSnapshot,
   normalizeChokepointDailyRows,
-  normalizeChokepointPoints,
 } from './records.js';
 
 /**
@@ -11,7 +11,6 @@ import {
  */
 export const PORTWATCH_SERVICES_URL =
   'https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services';
-const POINTS_URL = `${PORTWATCH_SERVICES_URL}/PortWatch_chokepoints_database/FeatureServer/0/query`;
 const DAILY_URL = `${PORTWATCH_SERVICES_URL}/Daily_Chokepoints_Data/FeatureServer/0/query`;
 /** ArcGIS Online caps one query page at 2,000 features. */
 const DEFAULT_PAGE_SIZE = 2000;
@@ -22,11 +21,17 @@ const MAX_PAGES = 12;
  */
 const FETCH_WINDOW_DAYS = 120;
 
-/** Read PortWatch chokepoint geometry plus daily tanker transits as one snapshot. */
+/**
+ * Read PortWatch daily tanker transits and join them onto the pinned
+ * chokepoint gazetteer. Geometry is never fetched: the 28 straits are a
+ * fixed reference (see gazetteer.js), so a refresh can only change the
+ * numbers on a point, never where the point is.
+ */
 export function createPortWatchChokepointSource({
   fetchImpl = (...args) => globalThis.fetch(...args),
   now = () => Date.now(),
   pageSize = DEFAULT_PAGE_SIZE,
+  points = CHOKEPOINT_GAZETTEER,
 } = {}) {
   async function readJson(url, signal, label) {
     signal?.throwIfAborted();
@@ -76,22 +81,7 @@ export function createPortWatchChokepointSource({
   return {
     label: 'IMF PortWatch',
     async getSnapshot({ signal } = {}) {
-      const pointParams = new URLSearchParams({
-        where: '1=1',
-        outFields: 'portid,portname',
-        returnGeometry: 'true',
-        f: 'geojson',
-      });
-      const [pointPayload, dailyRows] = await Promise.all([
-        readJson(
-          `${POINTS_URL}?${pointParams}`,
-          signal,
-          'PortWatch chokepoints',
-        ),
-        readDailyRows(signal),
-      ]);
-      const points = normalizeChokepointPoints(pointPayload);
-      if (!points) throw new Error('Malformed PortWatch chokepoint response');
+      const dailyRows = await readDailyRows(signal);
       return buildChokepointSnapshot(points, dailyRows);
     },
   };
