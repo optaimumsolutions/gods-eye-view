@@ -497,11 +497,10 @@ card all print the same "as of" stamp from one function.
 - **Oracle repo is not on this machine** (checked 2026-09-17; it exists on
   GitHub, private). → Clone it before milestone 6. Milestones 1 to 5 need
   nothing from it.
-- **0b is unmerged and the worktree does not exist.** `feat/commodity-ports`
-  sits off `commodities`; `commodities-shell` has not been created. → Merge
-  0b into `commodities` first, then
-  `git worktree add ../commodities-shell -b feat/commodities-shell commodities`.
-  Retrofitting from any other base conflicts. (Assumption; confirm.)
+- ~~**0b is unmerged and the worktree does not exist.**~~ Resolved
+  2026-09-17: 0b fast-forwarded into `commodities` (`2ef8247`), pushed to
+  origin and mirror; worktree `../commodities-shell` created on
+  `feat/commodities-shell` off that commit.
 - **Console absolute links and polling under the proxy** (§6). → Milestone
   6 test. Fallback: a proxy `rewrite` rule here instead of console edits.
 - **Pick cost over 2,065 port markers.** → Single `scene.pick`, never
