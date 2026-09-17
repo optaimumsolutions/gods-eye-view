@@ -259,12 +259,14 @@ export function createPortsLayer({
           const marker = new Cesium.Entity({
             id: `port:${row.id}`,
             position,
+            // Pinned at a fixed height: a clamped point re-seats itself on every
+            // terrain refinement and visibly hops under a tilted camera.
             point: {
               pixelSize: portPixelSize(row.annualTankers),
               color,
               outlineColor: Cesium.Color.BLACK.withAlpha(0.8),
               outlineWidth: 1.5,
-              heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+              heightReference: Cesium.HeightReference.NONE,
               disableDepthTestDistance: Number.POSITIVE_INFINITY,
             },
             properties: {
@@ -304,7 +306,7 @@ export function createPortsLayer({
               color,
               outlineColor: Cesium.Color.BLACK.withAlpha(0.8),
               outlineWidth: 2,
-              heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+              heightReference: Cesium.HeightReference.NONE,
               disableDepthTestDistance: Number.POSITIVE_INFINITY,
             },
             properties: {
