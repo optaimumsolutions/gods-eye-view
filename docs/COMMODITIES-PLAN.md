@@ -27,6 +27,7 @@ owns layers. Re-check `git status` before every edit to a shared file.
 | 6   | Trade-flow arcs                                  | layers + server                      | OPEN                                                                                                |
 | 7   | Episode scene packs                              | content                              | OPEN — the only oracle bridge, offline and per episode                                              |
 | 8   | `energy-datacenters`, US power load, bundled   | layers (worktree `commodities-datacenters`) | **BUILT** 2026-09-17 — first five sites on `feat/energy-datacenters`, PRD §8, not merged; next tier and refresh script open |
+| 9   | Port dossier: camera + data panel, 20 ports   | layers + server + content (worktree `commodities-ports-dossier`) | OPEN — PRD §9 written 2026-09-17 from the grill (G1 to G6); not claimed; cut `feat/port-dossier` from `feat/commodities-shell` |
 
 Definition of usable, pending founder confirmation of question 13: rows 1
 through 4. Rows 5 to 7 are context and content.
@@ -313,6 +314,27 @@ the physical layers frozen to the date, the fingerprint card.
 **Class.** Replay. Scene playback already stamps shot time; the packs carry
 `observedAt` for the window they represent.
 
+### Row 9 — Port dossier: camera and data panel for 20 ports (FR-G9)
+
+**Panel, not a layer.** Clicking one of the twenty ports in §9.6.1 opens a
+right-hand dossier panel: a camera still through the existing CCTV proxy (or
+the day's NASA GIBS tile when no public camera exists), then flow versus
+baseline with a 90-day chart, calls by class, trade role, disruptions,
+weather at the berth, headlines and an "about". Static facts are built once
+by `scripts/build-port-dossiers.mjs` into
+`src/data/local_data/port_dossiers/`; live sections are fetched on click.
+
+**Files.** `config/port_dossiers.seed.json`, `config/cctv_sources.ports.json`,
+`server/providers/cctv/portSources.js` (one registration line upstream),
+`server/providers/portNews.js`, `src/layers/ports/dossier.js` (pure),
+`src/app/portDossier.js`, `src/ui/portDossierPanel.js`.
+
+**Cards.** Hover unchanged (row 1). Click: the existing overlay card plus the
+panel. Ports outside the twenty: unchanged.
+
+**Acceptance.** PRD §9.4; headless check on Singapore (camera or satellite),
+Ras Tanura (satellite) and a port outside the twenty (no panel).
+
 ---
 
 ## 5. Non-goals
@@ -333,6 +355,9 @@ the physical layers frozen to the date, the fingerprint card.
 - **Console proxy paths.** The console's root page maps to `/market`; confirm
   that the console's own absolute links can go relative without breaking its
   60-second reload and 15-second log poll.
+- **Port cameras.** Which of the twenty ports publish a public still is
+  unknown until the row 9 research pass; the satellite fallback keeps the
+  panel complete either way.
 
 ---
 
@@ -695,3 +720,332 @@ same bundle format grows to the next tier and, later, to global sites.
 - **Headless flakiness.** The render check fails with "Rendering has
   stopped" when the full test suite or a build runs at the same time. → Run
   it alone; it passes.
+
+---
+
+## 9. Row 9 PRD — Port dossier: live camera and data panel for 20 commodity ports (FR-G9)
+
+**Written:** 2026-09-17 · **Status:** decided in the 2026-09-17 grill
+(questions G1 to G6), build not started · **Mirror:** Project Brain
+`gods-eye-view/05-prd.md`. Requested by the founder on 2026-09-17 after the
+ports layer landed. Decisions the grill did not reach are marked as defaults
+(D1 to D4) and change by re-opening them, not by drifting.
+
+### 9.1 Summary
+
+Clicking one of twenty commodity-critical ports opens a right-hand dossier
+panel: a camera still refreshed every sixty seconds (or the day's satellite
+tile when no public camera exists), then the port's tanker flow against its
+baseline with a 90-day chart, calls by vessel class, its trade role, the
+disruptions touching it, the weather at the berth, this week's headlines and
+an encyclopaedic "about" with links. Facts that rarely change are built once
+by a script into a bundled dossier per port; the live sections are fetched on
+click. Hover is untouched and the existing overlay card stays as the headline.
+
+### 9.2 Problem
+
+- The ports layer answers "is it moving?" with a deviation and a two-line
+  card. It cannot answer "what is this place, who runs it, what does it
+  handle, what is happening there now, what does it look like?"
+- The oracle's console has numbers without geography; the globe has
+  geography without depth per asset. A port is the first asset where the two
+  need to meet in one view.
+- Why now: 0b is built and pinned, row 1 is about to give every reading a
+  freshness stamp, and the dossier is the first place a user spends more than
+  three seconds on the globe.
+
+### 9.3 Target user
+
+- Jack, reading the globe beside the console: during a Hormuz story he clicks
+  Fujairah and wants the camera, the flow, the disruptions and the headlines
+  in one place within two seconds.
+- The next build session, which inherits a seed file, a build script and a
+  panel contract so that adding port 21 is data entry, not code.
+
+### 9.4 Goals (verifiable)
+
+1. **Twenty dossiers bundled.** `src/data/local_data/port_dossiers/index.json`
+   lists exactly the twenty ports in §9.6.1 and each has a dossier JSON that
+   passes the schema test.
+2. **Fast and stamped.** The panel opens on the click frame; on a warm cache
+   every live section resolves within two seconds in the headless check, and
+   every section shows its own "as of" stamp and status.
+3. **The camera slot never lies.** A registered camera shows a frame from
+   `/api/cctv/frame/:id` with the camera's name, operator and frame age;
+   otherwise the daily satellite tile with its date; a nearby road camera
+   appears only within 3 km, labelled with distance and bearing.
+4. **Every fact carries its source.** Each section ends with a provenance
+   line naming PortWatch, Open-Meteo, Google News or GDELT, Wikipedia, NASA
+   GIBS, or the camera operator, with the licence recorded in
+   `DATA_SOURCES.md`.
+5. **Ports outside the twenty are unchanged.** No panel opens; the card is
+   the same as today.
+6. **Additive.** No upstream layer or provider internals are edited. The one
+   upstream touch is a single registration line for the port camera loader.
+7. **Gates green.** Format, boundaries, `npm test` and build pass; the
+   headless check clicks Singapore and Ras Tanura and screenshots both panel
+   states.
+
+### 9.5 Non-goals
+
+- Embedded video players (YouTube, Windy, EarthCam). Recorded in `UPGRADE.md`
+  as the camera upgrade path (grill G3).
+- All 2,065 ports. The seed format and build script support growth; the
+  launch set is twenty (grill G6).
+- Vessel lists or "ships in port now" (row 2), pipeline and plant joins
+  (row 4), news badges on the globe (row 5). The dossier consumes those rows
+  when they land; it does not build them.
+- Any price, spread, curve or recommendation on the panel (R7, R11).
+- Changing the CCTV layer's rendering or the regional briefing.
+
+### 9.6 Requirements
+
+#### 9.6.1 The twenty ports (grill G6)
+
+Chosen by role, with the PortWatch annual tanker count as the tie-break only.
+A pure count ranking is a list of Japanese refineries; the ports that move
+the oil and gas market take few, huge calls.
+
+| #   | portid      | Port                   | Country      | Role                                                     | Linked system               | Tanker calls/yr |
+| --- | ----------- | ---------------------- | ------------ | -------------------------------------------------------- | --------------------------- | --------------: |
+| 1   | `port1091`  | Ras Tanura             | Saudi Arabia | Saudi Aramco's main crude export terminal                | Hormuz                      |             672 |
+| 2   | `port570`   | Yanbu (King Fahd Port) | Saudi Arabia | Red Sea outlet of the East-West pipeline, Hormuz bypass  | Bab el-Mandeb, Suez         |           1,323 |
+| 3   | `port362`   | Fujairah               | UAE          | Gulf of Oman storage and bunkering hub outside Hormuz    | Hormuz bypass (ADCOP)       |           3,165 |
+| 4   | `port1090`  | Ras Laffan             | Qatar        | Largest LNG export complex                               | Hormuz                      |           1,634 |
+| 5   | `port2164`  | Kharg Island           | Iran         | Sanctioned crude export terminal                         | Hormuz, sanctions           |              75 |
+| 6   | `port481`   | Houston                | United States| Largest US crude export and petrochemical complex        | US Gulf, PADD 3             |           5,014 |
+| 7   | `port264`   | Corpus Christi         | United States| Largest US crude export port, LNG                        | US Gulf                     |           1,454 |
+| 8   | `port2388`  | Sabine Pass            | United States| First and largest US LNG export terminal                 | US Gulf, Henry Hub          |             569 |
+| 9   | `port933`   | Port Arthur            | United States| Gulf refining (Motiva), Sabine-Neches waterway           | US Gulf                     |             912 |
+| 10  | `port1114`  | Rotterdam              | Netherlands  | Europe's crude and product hub (ARA), Gate LNG           | Dover, Suez                 |          16,990 |
+| 11  | `port57`    | Antwerp                | Belgium      | ARA refining and chemicals                               | Dover, Suez                 |          13,486 |
+| 12  | `port45`    | Amsterdam              | Netherlands  | ARA gasoline and product storage                         | Dover                       |           5,628 |
+| 13  | `port740`   | Milford Haven          | UK           | UK LNG (South Hook, Dragon) and refining                 | Atlantic                    |           1,110 |
+| 14  | `port833`   | Novorossiysk           | Russia       | Black Sea crude and CPC terminal                         | Bosporus, sanctions         |           1,578 |
+| 15  | `port1020`  | Primorsk               | Russia       | Baltic crude outlet                                      | Oresund, sanctions          |             961 |
+| 16  | `port1201`  | Singapore              | Singapore    | Bunkering, refining and trading hub                      | Malacca                     |          26,277 |
+| 17  | `port824`   | Ningbo                 | China        | China's crude gateway (Ningbo-Zhoushan)                  | Taiwan Strait, Malacca      |           4,945 |
+| 18  | `port1338`  | Ulsan                  | Korea        | SK Energy and S-Oil refining complex                     | Korea Strait                |           8,643 |
+| 19  | `port239`   | Chiba                  | Japan        | Tokyo Bay refining                                       | Luzon, Malacca              |           9,275 |
+| 20  | `port1199`  | Sikka                  | India        | Outlet of the Jamnagar refinery (Reliance)               | Hormuz                      |             462 |
+
+Left out on purpose: Basrah (PortWatch counts zero calls at the offshore
+buoys), Gladstone and Dampier (Australian LNG, less tied to oil and US gas),
+Map Ta Phut and the Japanese secondary ports. Growth beyond twenty is a seed
+entry and a build-script run.
+
+#### 9.6.2 Static dossier, built once (grill G1, D1)
+
+- **Seed.** `config/port_dossiers.seed.json`, hand-written, one entry per
+  port: `portid`, `slug`, `aliases` for news queries (Houston carries
+  "Port of Houston" and "Houston Ship Channel"), `role`, `roleNotes` (one
+  descriptive sentence), `linkedSystems` (chokepoint ids and tags such as
+  `hormuz-bypass`), `authority` `{ name, url }`, `terminals` (up to six
+  `{ name, operator, product }`), `wikipediaTitle`, `cameraIds`,
+  `satelliteZoom`.
+- **Build script.** `scripts/build-port-dossiers.mjs` reads the seed, pulls
+  the PortWatch registry row (identity, LOCODE, annual vessel counts by
+  class, top industries, share of the country's maritime imports and
+  exports), the Wikipedia REST summary (title, extract, thumbnail, page URL;
+  User-Agent set; text CC BY-SA 4.0), validates every field, and writes
+  `src/data/local_data/port_dossiers/<portid>.json`, `index.json`,
+  `source.json` (URLs, fetch dates, sha256) and a `README.md` in the
+  datacenters-bundle style (source, licence, count, refresh command). It
+  fails loudly on a missing seed field or an unreachable source and never
+  writes a partial bundle. Re-running it on unchanged sources reproduces the
+  committed JSON byte for byte.
+- **Camera catalog.** `config/cctv_sources.ports.json`, the same shape as
+  `config/cctv_sources.warendorf.json` (id, name, provider, `sourceKind`
+  `port-webcam`, `feedType` `image`, url, lat, lon, pose fields where known,
+  licence text). Every entry is hand-verified before it ships (grill G4).
+  The build script's `--probe` mode fetches each URL, checks an `image/*`
+  content type and size, confirms two fetches sixty seconds apart differ,
+  and prints a review sheet; the sheet goes in the commit message.
+- **Loader.** `server/providers/cctv/portSources.js` exporting
+  `loadPortSourcesFromCatalog`, modelled on `loadWarendorfSourcesFromCatalog`
+  with an origin allowlist derived from the catalog's own hosts, registered
+  by one line where the CCTV catalog aggregates its loaders. That line is
+  the only edit to upstream server code (R13).
+- **Discovery, later.** The script's `--discover` mode (Overpass query for
+  tagged webcams within a few kilometres of a port, then probe) is the tool
+  for growing coverage past twenty; it is not a launch requirement.
+
+#### 9.6.3 Live sections, fetched on click (D2)
+
+| Section             | Source                                                                                                   | Path                                  | Cache                                                                     | Stamp                |
+| ------------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------- | ------------------------------------------------------------------------- | -------------------- |
+| Camera frame        | CCTV proxy `/api/cctv/frame/:id`                                                                         | server, existing                      | source cadence; the panel re-requests every 60 s while open               | frame age            |
+| Satellite fallback  | NASA GIBS WMTS true colour (MODIS Terra, VIIRS SNPP) tile at the port, `satelliteZoom`                   | browser-direct                        | daily                                                                     | tile date            |
+| Flow                | the ports layer's current row for the port                                                               | in memory                             | 30 min (layer refresh)                                                    | latest published day |
+| 90-day history      | PortWatch `Daily_Ports_Data` for the one `portid`: port calls and imports/exports by class, ≤ 120 rows  | browser-direct, one request           | 30 min per port                                                           | published day        |
+| Disruptions         | the ports layer's snapshot: events whose `affectedPorts` name the port or one of its linked chokepoints | in memory                             | 30 min                                                                    | event dates          |
+| Weather at the berth| Open-Meteo forecast (wind, gusts, visibility, precipitation) and marine (wave height, period)            | browser-direct                        | 15 min                                                                    | issued and valid     |
+| Headlines           | new `server/providers/portNews.js`: Google News RSS first, GDELT DOC second, using the seed aliases, 7-day window, ≤ 10 items, every item marked UNVERIFIED WIRE | server | 15 min; one upstream query per port per window; body cap; sanitized errors; per-client rate limit | seen time |
+
+Every section renders its own status (`ready`, `partial` when a stale cache
+is shown, `unavailable` with the reason) so no section blocks another (R3).
+
+#### 9.6.4 The panel (grill G2, D3)
+
+- **Placement.** A new panel `port-dossier-panel` registered by an additive
+  entry in `src/ui/panelChrome.js`, in the right-hand column with the CONTEXT
+  and CCTV panels. `src/app/portDossier.js` opens it on `gev:entity-selected`
+  for a `commodity-ports` record whose `portid` has a bundled dossier, swaps
+  content when another of the twenty is clicked, and closes it on deselect or
+  the panel's close button (closing does not deselect).
+- **Order, top to bottom.** Header (name, country, LOCODE, role, authority
+  link, panel "as of"); camera slot (frame or satellite, name, operator, age;
+  the nearby road camera thumbnail only within 3 km); flow (recent versus
+  baseline, band colour, 90-day sparkline with the 7-day and 90-day means);
+  calls by class (tanker, container, dry bulk, general cargo, ro-ro; imports
+  versus exports); trade role (share of the country's maritime imports and
+  exports, top industries, terminals from the seed); disruptions; weather;
+  headlines; about (Wikipedia extract with attribution); links (authority,
+  PortWatch port page, Wikipedia).
+- **Pure assembly.** `src/layers/ports/dossier.js` exports
+  `assemblePortDossier({ dossier, row, history, disruptions, weather, news,
+  cameras, now })` returning frozen section records with status and stamp;
+  no DOM, no Cesium; unit-tested with fixtures for every status.
+- **Stamps.** From row 1's `formatAsOf` once it has landed; until then an
+  interim helper with the same signature inside `dossier.js`, replaced at the
+  retrofit (milestone 6).
+- **Descriptive only (R11).** Counts, deviations, dates and quoted headlines
+  with their source. The band colours are the shared vocabulary of §3.3 and
+  mean nothing beyond deviation.
+
+#### 9.6.5 Freshness classes (R2)
+
+The header stamp is the newest observation among the sections; each section
+keeps its own. Camera: `live` when the frame is under fifteen minutes old,
+`daily` for the satellite tile. Flow and history: `published`. Weather:
+`daily`. Headlines: `live`.
+
+### 9.7 Constraints and invariants
+
+- **Free first (R12).** Every source above is keyless. Windy Webcams (free
+  key, their player, attribution) is the recorded camera upgrade; EarthCam
+  and YouTube embeds are recorded as curated extras. None is built here.
+- **Additive (R13).** New modules plus one loader registration line. The
+  ports layer gains at most one accessor, `getRow(portid)`, if the panel
+  needs it; its rendering is untouched.
+- **R6, read for a panel.** The dossier is a panel on an existing layer, not
+  a layer. Milestones 1 to 5 do not wait for row 1; milestone 6 adopts its
+  contract.
+- **Licensing.** Wikipedia text CC BY-SA 4.0 with attribution on the panel
+  and in `DATA_SOURCES.md`; each camera carries its operator's terms in the
+  catalog and on the panel; GIBS imagery credited to NASA; PortWatch under
+  IMF terms; Open-Meteo CC BY 4.0.
+- **Privacy.** Camera frames are public operator stills; the app displays
+  them and does nothing else with them, the same statement the CCTV layer
+  makes.
+- **Performance.** Nothing is fetched before a click; every request aborts
+  on deselect or port swap; one in-flight dossier at a time; the history
+  request is one page of at most 120 rows.
+- **Portable modules.** `dossier.js`, the build script's normalizers and the
+  news provider never import Cesium or touch browser globals.
+- **Shared clone.** Claim row 9 before the first edit; guard every commit
+  with `git branch --show-current` in the same command; never a bare
+  `git stash`.
+
+### 9.8 Milestones (smallest shippable first)
+
+1. **Seed and build script (D1).** Verify: twenty dossier files, `index.json`,
+   `source.json`, `README.md`; the schema test is green; a second run
+   reproduces the committed JSON.
+2. **Camera catalog and loader.** Verify: `/api/cctv/sources` lists the port
+   cameras; `/api/cctv/frame/<id>` returns an image for each in the headless
+   check; the probe sheet is in the commit message. Expect eight to twelve
+   of the twenty to have a public still; the rest use the satellite tile.
+3. **News provider.** Verify: unit tests for query building, caching and
+   error sanitizing; a manual call for Fujairah returns items marked
+   UNVERIFIED WIRE.
+4. **Panel with the static and PortWatch sections** (header, flow, history,
+   calls, trade role, disruptions, about, links). Verify: the headless check
+   clicks Singapore and screenshots the panel with the chart; clicking a port
+   outside the twenty opens nothing.
+5. **Camera slot, weather, headlines.** Verify: the headless check screenshots
+   Rotterdam (camera) and Ras Tanura (satellite fallback).
+6. **Row-1 retrofit.** Stamps via `formatAsOf`; hover unchanged. Verify: the
+   header stamp string equals the panel row's stamp string.
+7. **Ledger and docs.** Ledger row 9 to BUILT, `DATA_SOURCES.md`,
+   `src/data/dataCredits.js`, the row in `docs/COMMODITIES.md`, the camera
+   upgrade rows in `UPGRADE.md`; merge order agreed with rows 1 and 8.
+
+### 9.9 Risks and open questions
+
+- **Camera availability** is unknown until the research pass. → The
+  satellite fallback keeps the panel complete at any coverage; coverage is
+  reported per port in the ledger.
+- **Operator cameras change URLs or forbid hotlinking.** → Health tracking
+  in the CCTV proxy marks them and the slot falls back; `--probe` is the
+  refresh tool.
+- **Wikipedia extracts describe cities as often as ports** (Ningbo, Chiba).
+  → The seed's `wikipediaTitle` names the port article where one exists.
+- **News queries on common names drift** (Houston, Amsterdam). → Alias sets
+  carry "Port of" phrasing and the provider keeps only items whose title
+  contains an alias.
+- **Row 1 timing.** → Milestone 6 waits; milestones 1 to 5 do not.
+- **Google News RSS has no published API terms; GDELT rate-limits.** → Both
+  already power the regional briefing under the same conditions; the cache
+  and per-port ceiling keep the footprint small.
+- **Open:** should the overlay card's title also open the panel, and should
+  the analyst and voice tools be able to open it (the voice enums are
+  hash-pinned, so that is its own deliberate change)?
+
+### 9.10 Bootstrap from a fresh Claude Code session
+
+Everything below assumes this PRD is committed on `feat/commodities-shell`,
+the branch the new worktree is cut from.
+
+**1. In a cleared PowerShell:**
+
+```powershell
+cd C:\Users\jgewi\gods-eye-view
+git fetch --all --prune
+git worktree add ..\commodities-ports-dossier -b feat/port-dossier feat/commodities-shell
+cd ..\commodities-ports-dossier
+npm ci            # a fresh worktree has no node_modules; Chrome for Puppeteer is already cached
+npm run doctor    # confirms Node 24, keyless map and terrain; no key is needed for row 9
+claude
+```
+
+Port 4173 belongs to the `commodities-shell` worktree's dev server. For
+render checks this worktree runs its own server in a second window:
+`npx vite --port 4174`.
+
+**2. Paste this as the first message to Claude:**
+
+```text
+Work in C:\Users\jgewi\commodities-ports-dossier, a git worktree on branch
+feat/port-dossier (cut from feat/commodities-shell). This is row 9 of
+docs/COMMODITIES-PLAN.md. Read, in this order, before touching anything:
+docs/COMMODITIES-PLAN.md §0 (ledger), §2 (rules R1-R13 and the engineering
+rules), §9 (the row 9 PRD); docs/COMMODITIES.md; UPGRADE.md, the section
+"How a paid provider is wired in"; src/layers/ports/ (the layer this
+extends); src/layers/chokepoints/gazetteer.js (the pinned-reference
+pattern); config/cctv_sources.warendorf.json and
+loadWarendorfSourcesFromCatalog in server/providers/cctv/sources.js (the
+camera catalog pattern); server/providers/gbfs.js (the provider pattern);
+server/providers/regional/news.js (the news pattern);
+src/data/local_data/datacenters/README.md (the bundle README pattern).
+
+Then: (1) claim row 9 in the ledger, status "CLAIMED <today>, worktree
+commodities-ports-dossier, branch feat/port-dossier, next: milestone 1", and
+commit that change alone. (2) Execute §9.8 milestones in order, one commit
+per milestone, with the verification evidence in each commit message.
+
+Rules that bind you: free keyless sources only; descriptive, never signals;
+additive to upstream (the one allowed upstream touch is the CCTV loader
+registration line); portable modules never import Cesium; take the PRD's
+defaults D1-D4 and note them in the commit rather than asking. Gates before
+every commit: npm run format, npm run check:boundaries, npm test (four to
+seven minutes, run it alone), npm run build. Never push. Shared clone: guard
+every commit with git branch --show-current in the same command; never a
+bare git stash. Headless render checks: copy
+C:\Users\jgewi\gods-eye-view\.gev-logs\render-ports.mjs into this
+worktree's gitignored .gev-logs\ and point its URL at
+http://localhost:4174/ (start npx vite --port 4174 in a separate window).
+If a render reports "Rendering has stopped" on the first load after adding
+modules, run it again. Ask me only when a decision is genuinely missing
+from §9.
+```
