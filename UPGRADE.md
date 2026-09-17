@@ -59,7 +59,7 @@ has a verified free endpoint and a slot in `docs/COMMODITIES.md`.
 | --- | --- | --- | --- |
 | AISStream terrestrial AIS, free key, one connection, beta terms | Open-ocean coverage between coastal receivers, historical tracks beyond the session, cargo and draft history, ship particulars | **Spire Maritime** (satellite AIS, global), **MarineTraffic API** (Kpler), **VesselFinder API**, **Datalastic**, **exactEarth** (Spire) | No mid-ocean gaps, full voyage history on click, laden state from draft changes, fleet-level filters by owner or class |
 
-### 3. Ports and container throughput (PLANNED)
+### 3. Ports and container throughput (BUILT)
 
 | Free now | What it lacks | Paid upgrades | What the globe gains |
 | --- | --- | --- | --- |

@@ -69,7 +69,7 @@ export const DATA_CREDITS = [
   {
     key: 'portwatch',
     html:
-      'Chokepoint tanker transits: IMF PortWatch (AIS-derived, with the UN Global Platform) · ' +
+      'Chokepoint tanker transits, port calls and disruptions: IMF PortWatch (AIS-derived, with the UN Global Platform) · ' +
       '<a href="https://portwatch.imf.org" target="_blank" rel="noopener">portwatch.imf.org</a> · ' +
       '<a href="https://www.imf.org/external/terms.htm" target="_blank" rel="noopener">IMF terms</a>',
   },

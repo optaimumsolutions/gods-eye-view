@@ -25,7 +25,7 @@ Principles:
 | --- | --- | --- | --- | --- | --- |
 | 1 | `commodity-chokepoints` | 28 maritime chokepoints, ring sized by baseline tanker rate, inner disc = share still flowing, label with 7-day vs 90-day deviation, detail card on click | IMF PortWatch ArcGIS: `PortWatch_chokepoints_database`, `Daily_Chokepoints_Data` | browser-direct source, same pattern as USGS earthquakes | **BUILT** |
 | 2 | vessels row control | tankers only, destination labels | AISStream (already integrated; AIS type 80 to 89 is TANKER) | row control on the existing vessels layer | planned |
-| 3 | `commodity-ports` | 2,065 ports with tanker and container call counts, disruption polygons | PortWatch `PortWatch_ports_database`, `Daily_Ports_Data`, `portwatch_disruptions_database` | browser-direct, viewport-bounded | planned |
+| 3 | `commodity-ports` | 2,065 ports as markers sized by annual tanker visits and coloured by 7-day vs 90-day tanker-call deviation (ports under 0.5 tankers/day read as thin, not moving), ground rings and labels for disruptions open or closed within 90 days, detail card on click | PortWatch `PortWatch_ports_database`, `Daily_Ports_Data` (means grouped by port, computed server-side), `portwatch_disruptions_database` | browser-direct source; five requests per refresh instead of a quarter-million daily rows | **BUILT** |
 | 4 | `energy-pipelines` | US gas, crude, and HGL pipeline lines with operator | EIA public-domain copies (32,892 gas segments, 236 crude trunk, 133 HGL) | bundled GeoJSON under `src/data/local_data/`, LOD like datacenters | planned |
 | 5 | `energy-plants` | refineries with capacity, gas processing plants, LNG terminals, storage fields, product terminals, shale plays | EIA copies plus EIA-owned shale play and basin services; OGIM and Global Energy Monitor for the rest of the world | bundled GeoJSON | planned |
 | 6 | `weather-*` overlays | GOES clouds, precipitation, radar, hurricane cones, NWS alerts, basin ensemble cards | NASA GIBS WMTS, RainViewer, NHC ArcGIS, NWS API, Open-Meteo ensemble | imagery-layer modules (precedent: Nepal event pack) plus browser-direct point sources | planned |
@@ -83,7 +83,7 @@ non-commercial. Every source gets a row in `DATA_SOURCES.md` and a credit in
 
 ## Follow-ups
 
-- Voice control: the layer id is not yet in the Realtime tool enums because
+- Voice control: the layer ids are not yet in the Realtime tool enums because
   `src/voice/actionSchemas.js` is hash-pinned by its test; add it in a
   deliberate change that updates the digest.
 - First-run experience and scene policy lists do not mention the new layer;

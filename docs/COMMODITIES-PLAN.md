@@ -18,7 +18,7 @@ owns layers. Re-check `git status` before every edit to a shared file.
 | Row | Work item                                        | Lane                                 | Status (2026-09-17)                                                                                 |
 | --- | ------------------------------------------------ | ------------------------------------ | --------------------------------------------------------------------------------------------------- |
 | 0a  | `commodity-chokepoints` layer                    | layers                               | **BUILT** — commit `7400360`, pushed to origin and mirror                                           |
-| 0b  | `commodity-ports` layer                          | layers                               | **BUILT, uncommitted** in the main tree (second session); adopts the row-1 contract after merge     |
+| 0b  | `commodity-ports` layer                          | layers                               | **BUILT** — committed on branch `feat/commodity-ports` (off `commodities`, not pushed); adopts the row-1 contract after merge |
 | 1   | Shell, observation contract, hover, class groups | shell (worktree `commodities-shell`) | OPEN — this session, starts after 0b commits                                                        |
 | 2   | `commodity-tankers`                              | layers                               | BLOCKED — AISStream rejects the saved key; verify or rotate on the Account page, enter via POWER UP |
 | 3   | Weather overlays and basin cards                 | layers                               | OPEN — after row 1                                                                                  |

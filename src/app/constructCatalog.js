@@ -19,6 +19,7 @@ import { createApplicationFirms } from './layers/firms.js';
 import { createApplicationEarthquakes } from './layers/earthquakes.js';
 import { createApplicationCables } from './layers/submarineCables.js';
 import { createApplicationChokepoints } from './layers/chokepoints.js';
+import { createApplicationPorts } from './layers/ports.js';
 import { createInfrastructureLayers } from '../data/infrastructure.js';
 import { localGeoJsonServices } from './localGeojsonServices.js';
 import { createBhoteKoshiEventLayer } from '../data/bhoteKoshiEvent.js';
@@ -46,6 +47,7 @@ const SOURCE_METHODS = Object.freeze({
   earthquakes: ['getSnapshot'],
   cables: ['fetch'],
   chokepoints: ['getSnapshot'],
+  ports: ['getSnapshot'],
 });
 
 /** Construct the current catalog without choosing any source provider.
@@ -133,6 +135,7 @@ export function createApplicationCatalog({
         ...createInfrastructureLayers(localGeoJsonServices),
         createApplicationCables({ source: sources.cables }),
         createApplicationChokepoints({ source: sources.chokepoints }),
+        createApplicationPorts({ source: sources.ports }),
         createApplicationFirms({
           surface,
           id: 'local-firms',
