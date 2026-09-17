@@ -1,0 +1,329 @@
+# PLAN — Commodities Globe: rules, features and layout for rows 1 to 7
+
+**Version:** 1.0 · **Date:** 2026-09-17 · **Status:** decisions locked in the
+2026-09-17 grill; build not started beyond rows 0a and 0b
+**Owner:** Jack Gewirz
+**Companions:** [`COMMODITIES.md`](COMMODITIES.md) (verified endpoints, source
+notes), [`../UPGRADE.md`](../UPGRADE.md) (paid enhancement per stream)
+
+This plan does what the oracle's PRDs do: §0 is the ledger and the ledger is
+the lock. Claim a row before touching its files. Two sessions share this
+clone; the session in the worktree owns row 1, the session in the main tree
+owns layers. Re-check `git status` before every edit to a shared file.
+
+---
+
+## 0. Status ledger
+
+| Row | Work item                                        | Lane                                 | Status (2026-09-17)                                                                                 |
+| --- | ------------------------------------------------ | ------------------------------------ | --------------------------------------------------------------------------------------------------- |
+| 0a  | `commodity-chokepoints` layer                    | layers                               | **BUILT** — commit `7400360`, pushed to origin and mirror                                           |
+| 0b  | `commodity-ports` layer                          | layers                               | **BUILT, uncommitted** in the main tree (second session); adopts the row-1 contract after merge     |
+| 1   | Shell, observation contract, hover, class groups | shell (worktree `commodities-shell`) | OPEN — this session, starts after 0b commits                                                        |
+| 2   | `commodity-tankers`                              | layers                               | BLOCKED — AISStream rejects the saved key; verify or rotate on the Account page, enter via POWER UP |
+| 3   | Weather overlays and basin cards                 | layers                               | OPEN — after row 1                                                                                  |
+| 4   | Pipelines and plants, bundled                    | layers                               | OPEN — after row 3                                                                                  |
+| 5   | News pinned to assets                            | layers + server                      | OPEN — needs the assets from row 4                                                                  |
+| 6   | Trade-flow arcs                                  | layers + server                      | OPEN                                                                                                |
+| 7   | Episode scene packs                              | content                              | OPEN — the only oracle bridge, offline and per episode                                              |
+
+Definition of usable, pending founder confirmation of question 13: rows 1
+through 4. Rows 5 to 7 are context and content.
+
+---
+
+## 1. Purpose
+
+The globe is a **live view of the systems that affect the commodities market**,
+oil and gas first, running **locally for one user** inside a **SaaS-shaped,
+multi-page dashboard**. The globe is the physical page. The Oil Oracle's
+console pages (market, gas, weather, trades, chat) are sibling pages under the
+same origin. No number is duplicated between pages: the globe computes its own
+readings from its own live sources, and the oracle's numbers live on the
+oracle's pages.
+
+---
+
+## 2. Rules
+
+Every rule below was decided in the grill. The question number is the
+provenance; change a rule by re-opening its question, not by drifting.
+
+### 2.1 Product rules
+
+| #   | Rule                                                                                                                                                                                                                                                                      | From     |
+| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| R1  | Local host, one user, SaaS-shaped interface. No tenancy, billing or public deployment in v1. Free-tier and non-commercial sources are therefore legal; the swap list for a second user is `UPGRADE.md`.                                                                   | Q1, Q8   |
+| R2  | Every layer declares one **freshness class**: `live` (observation under 15 minutes old), `daily` (under 24 hours), `published` (older, including static reference datasets, whose "as of" is their vintage). All classes go on the map; none is hidden.                   | Q2       |
+| R3  | Every observation carries its own timestamps: `observedAt` (when the thing happened or was measured), `validAt` (forecasts only), `publishedAt` (when the source released it), `fetchedAt` (when we read it). Cards show the observation time, never only the fetch time. | Q2       |
+| R4  | Hover cards exist on **commodity layers only**. Upstream layers keep their click cards.                                                                                                                                                                                   | Q3       |
+| R5  | **Hover is the quick look**: name, observation timestamp with age, headline number. **Click is the full card**, as today. Hover stays silent while a tool or the cockpit owns the pointer, the same rule click follows.                                                   | Q6       |
+| R6  | The shared observation contract and hover service are built **before any further layer**, and rows 0a and 0b are retrofitted to it.                                                                                                                                       | Q5       |
+| R7  | The globe is **physical only**. Oracle prices, risk indices and briefs appear on their own pages, never on the map. The one bridge is row 7: dated episodes exported once each as scene packs.                                                                            | Q7       |
+| R8  | **This repo is the shell.** The Vite dev server proxies the console's pages under one origin; a shared navigation strip appears on every page. The console-side change (relative links plus the strip) gets its own ledger row in the oracle repo before anyone edits it. | Q9       |
+| R9  | The layer panel shows freshness as **three class-named groups**: `Commodities · Live`, `Commodities · Daily`, `Commodities · Published`. Every row's meta line is its "as of" stamp.                                                                                      | Q11      |
+| R10 | Tankers are a **separate commodity layer** reading the same AIS snapshot; upstream Live Vessels is untouched. Enabling both draws tankers twice, and the panel says so.                                                                                                   | Q12      |
+| R11 | Descriptive, never signals. Cards show counts, deviations, percentiles and timestamps. No panel recommends anything. Matches the oracle's standing mission gate.                                                                                                          | standing |
+| R12 | Free first. Each stream ships on a keyless or free-key source; paid providers slot in behind the same source contract per `UPGRADE.md`. Keys are server-side only, entered through POWER UP, never pasted into chat.                                                      | standing |
+| R13 | Additive to upstream. New code lives in new layer families, new panel groups and new providers so `git pull upstream main` merges clean. Upstream layer internals are not edited.                                                                                         | standing |
+
+### 2.2 Engineering rules (what CI and the tests actually enforce)
+
+- Adding a layer touches, in this order: `src/layers/<family>/`,
+  `src/app/layers/<family>.js`, `src/sources/reference.js` or
+  `src/standalone/layerSources.js`, `src/app/constructCatalog.js`,
+  `src/data/layerState.js` (alphabetical, single-character token),
+  `src/ui/layerPanel.js`, `scripts/package-boundaries.json` (insert lines
+  textually in `application-components`, `application-layer-construction`,
+  and `reference-sources`), `DATA_SOURCES.md`, `src/data/dataCredits.js`.
+- Three tests pin counts and must move with each layer:
+  `constructCatalog.test.mjs` (layer count), `layerState.test.mjs` (registry
+  count and alphabetical order), `reference.test.mjs` (source keys).
+- Gates before any commit: `npm run format`, `npm run check:boundaries`,
+  `npm test` (about 3.5 minutes), `npm run build`.
+- Portable modules (`source.js`, `records.js`) never import Cesium or touch
+  browser globals; `index.js` and `model.js` may.
+- ArcGIS feature services cap a page at 1,000 rows regardless of the request;
+  follow `exceededTransferLimit`. Cesium drops outlines on terrain-clamped
+  ellipses; draw rings as clamped polylines.
+- Every layer ships with a headless render check (the pattern in
+  `.gev-logs/render-chokepoints.mjs`): dismiss the first-run dialog, pin the
+  camera, enable the layer, wait for `getStats().count`, screenshot, click.
+- The voice tool enums are hash-pinned; adding commodity layer ids to voice is
+  one deliberate change that updates the digest, not part of any layer row.
+
+---
+
+## 3. Layout
+
+### 3.1 The shell
+
+One origin, `http://localhost:4173`. A fixed navigation strip at the top of
+every page:
+
+```
+GLOBE   MARKET   GAS   WEATHER   TRADES   CHAT ▾            mirror as of 13:02Z · LIVE
+```
+
+| Route                                    | Served by                         | Page                                                           |
+| ---------------------------------------- | --------------------------------- | -------------------------------------------------------------- |
+| `/`                                      | this app                          | the globe, full-screen, HUD as today                           |
+| `/market`                                | console `/` on port 8011, proxied | price strip, situation brief, causal market map, driver panels |
+| `/gas`                                   | console `/gas`                    | gas fundamentals                                               |
+| `/weather`                               | console `/weather`                | weather terminal, GWDD hero, Windy panel, basin band           |
+| `/trades`                                | console `/trades`                 | trade tracker                                                  |
+| `/ask`, `/logs.json`, `/trade`, `/grill` | console, proxied                  | chat and live ops endpoints the console pages call             |
+
+The strip is the only shared chrome. Each page keeps its own theme: the globe
+stays dark, the console keeps its light LEDGER sheet. The right end of the
+strip shows the oracle mirror age from `/logs.json` so every page states how
+old its numbers are. `oracle.cmd` in the oracle repo gains one line so the
+whole dashboard is one command: pull, tunnel, console, globe, browser.
+
+### 3.2 The globe page
+
+- **Data Layers panel.** Three commodity groups first, in class order, then the
+  upstream groups untouched:
+
+  ```
+  Commodities · Live         🛢 Tankers               observed 38s ago
+                             📰 News on assets         seen 4m ago
+  Commodities · Daily        🌩 Storms & alerts        issued 12:00Z
+                             ☁ Satellite & radar      frame 12:50Z
+                             🌡 Basin forecasts        issued 00Z · valid 7d
+  Commodities · Published    ⚓ Chokepoints            as of 2026-09-13 · 4d lag
+                             🚢 Ports                  as of 2026-09-11 · 6d lag
+                             🛢 Pipelines & plants     vintage 2025
+                             ⇄ Trade flows            period 2026-07
+  ```
+
+- **Hover card** (compact, R5), anchored above the thing, drawn on the shared
+  overlay canvas in the layer's status colour:
+
+  ```
+  STRAIT OF HORMUZ
+  as of 2026-09-13 · published 4d ago
+  1.4 tankers/day · -65% vs 90d
+  ```
+
+  For a live object the second line reads `observed 12:04:31Z · 38s ago`; for a
+  forecast, `issued 00Z 09-17 · valid 09-18`.
+
+- **Click card** (full, as today): title with headline number, every field the
+  layer holds, provenance line with source and lag, plus what the layer adds
+  (history for a chokepoint, track for a tanker, headline list for news).
+
+- **Legend chip** in the panel footer for the shared status colours: red
+  collapse, amber down, blue normal, green up, lime surge, grey unknown.
+
+- **Time control** (row 3 only): a small scrubber in the radar and satellite
+  row controls stepping through the available frames; the frame time is the
+  card timestamp.
+
+### 3.3 Status colours and rings
+
+Shared by every commodity layer so the eye learns one vocabulary: a ring or
+marker sized by the baseline, a filled share for what is moving now, a colour
+for the deviation band (collapse ≤ -40, down ≤ -20, normal, up ≥ +20, surge
+≥ +40, unknown when no baseline).
+
+---
+
+## 4. Features by row
+
+### Row 1 — Shell, observation contract, hover, class groups (FR-G1)
+
+**Files.** `src/layers/commodities/observation.js` (pure), `src/app/hoverCards.js`,
+`src/ui/layerPanel.js` (groups), `server/standalone/vite.config.js` (proxy),
+`index.html` and `src/shell/nav.js` (strip). Retrofit: chokepoints and ports.
+
+**Contract.** `createObservation({ observedAt, validAt, publishedAt, fetchedAt, freshnessClass, source, headline, fields })`
+returns a frozen record; `freshnessClassFor(observedAt, now)` derives the class
+from age; `formatAsOf(observation)` renders the stamp used by the panel, the
+hover card and the click card so the three can never disagree. Layers expose
+`freshnessClass` and `getStats().asOf`; context records carry `observation`.
+
+**Hover.** One service, installed once by the app: picks at most ten times a
+second on pointer move, resolves the entity to a commodity context record,
+publishes one compact overlay entry under source id `commodity-hover`, clears
+on leave, yields while the pointer is owned.
+
+**Shell.** Vite `server.proxy` forwards the console routes in §3.1 to
+`http://127.0.0.1:8011`. The strip is plain HTML and CSS, no framework.
+Console-side: links relative, strip rendered, one ledger row in
+`PRD-market-console.md`.
+
+**Acceptance.** Unit tests for the contract and stamp formatting; a headless
+render shows the hover card on a chokepoint and the full card on click; the
+panel shows the three groups with "as of" stamps; `/market` renders through
+the proxy with the strip; all CI gates green.
+
+### Row 2 — Tankers (FR-G2)
+
+**Layer.** `commodity-tankers`, class `live`. Source: the existing AISStream
+snapshot through `/api/ais-live`, filtered to ship types 80 to 89 (crude,
+product, chemical, LNG and LPG carriers). One websocket, shared with upstream.
+
+**Draws.** A chevron per tanker oriented by course, coloured by speed band
+(underway, slow, stopped), sized by nothing (hulls are hulls). Each tanker is
+tagged with the chokepoint ring or port it is inside or the one it is
+approaching within a set distance.
+
+**Adds.** A live count per chokepoint: tankers inside the ring now versus the
+published baseline rate, shown as a second line on the chokepoint card. This
+is the reading the oracle cannot make.
+
+**Cards.** Hover: name, observed time and age, speed and course. Click: MMSI,
+IMO, type, destination, draught when present, position history from the
+server's track endpoint, nearest chokepoint or port.
+
+**Blocked on** a working AISStream key. Double-draw note in the panel meta.
+
+### Row 3 — Weather overlays and basin cards (FR-G3)
+
+| Layer id            | Shows                                                                                                                                                | Source                                                                                            | Class                                |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------ |
+| `weather-satellite` | GOES GeoColor clouds, IMERG precipitation rate                                                                                                       | NASA GIBS WMTS tiles                                                                              | live (frames every 10 to 30 minutes) |
+| `weather-radar`     | composite radar, 13 past frames                                                                                                                      | RainViewer tiles                                                                                  | live                                 |
+| `weather-storms`    | hurricane forecast cones, tracks, wind radii                                                                                                         | NHC ArcGIS layers                                                                                 | daily (advisory cadence)             |
+| `weather-alerts`    | active watches and warnings as polygons                                                                                                              | NWS API, User-Agent required                                                                      | live                                 |
+| `weather-basins`    | six shale basins and the Gulf: 7-day minimum-temperature ensemble p10, p50, p90 and a freeze flag against each basin's threshold; Gulf wind and wave | Open-Meteo forecast and 30-member ensemble at the basin points from the oracle's `wx_basins.yaml` | daily                                |
+
+**Mechanism.** Imagery overlays are layer modules that own a Cesium imagery
+layer above the basemap, the precedent being the Nepal event pack; the point
+and polygon layers are browser-direct sources. Every frame and forecast
+carries `observedAt` or `validAt`; the scrubber sets which frame is shown.
+
+**Cards.** Hover on a basin: name, issued time, p50 minimum and freeze flag.
+Click: the full ensemble spread by day. Hover on a cone: storm name, advisory
+time, category. Alerts: event type, effective and expires.
+
+### Row 4 — Pipelines and plants, bundled (FR-G4)
+
+**Data.** Downloaded once from the verified public copies into
+`src/data/local_data/eia_energy/` with `source.json` (URLs, dates, sha256) and
+a README, EIA public domain: gas pipelines (32,892 segments), crude trunk
+lines (236), HGL lines (133), refineries with capacity (127), processing
+plants (478), LNG terminals (8 US, 15 North America), underground storage
+(412), product terminals (1,476); EIA-owned shale plays, basins and PADDs
+live-read since they are keyless.
+
+| Layer id           | Shows                                                                                     | Class                      |
+| ------------------ | ----------------------------------------------------------------------------------------- | -------------------------- |
+| `energy-pipelines` | lines by product, operator on hover; trunk lines at global zoom, all lines under 2,000 km | published, vintage stamped |
+| `energy-plants`    | refineries scaled by capacity, terminals, processing, storage; shale play polygons faint  | published, vintage stamped |
+
+**Mechanism.** The infrastructure-layer factory used by datacenters and dams,
+with its label budgets and level-of-detail policy.
+
+**Cards.** Hover: name, operator or company, capacity where known, vintage.
+Click: every attribute the dataset carries.
+
+### Row 5 — News pinned to assets (FR-G5)
+
+**Server.** `server/providers/gdelt.js`: GDELT DOC queries per asset keyword
+group, 15-minute cache, one query per minute ceiling, body cap, sanitized
+errors. `server/providers/gdacs.js` optional; PortWatch's GDACS point layer
+covers disasters keylessly.
+
+**Gazetteer.** `src/layers/news/gazetteer.js`: keyword sets per asset id
+(chokepoints, ports, terminals, refineries, basins, pipelines), built from the
+row 0 and row 4 datasets. Headlines pin to the asset they name; unmatched
+headlines are not drawn.
+
+**Layer.** `commodity-news`, class `live` (15-minute cadence). A badge on the
+asset with the headline count for the window; badge intensity by count.
+
+**Cards.** Hover: latest headline and when GDELT saw it. Click: the window's
+headlines with domain and link, marked UNVERIFIED WIRE as the oracle does.
+
+### Row 6 — Trade-flow arcs (FR-G6)
+
+**Data.** EIA crude imports by origin country (monthly, free EIA key entered
+through POWER UP), EIA natural gas trade by point of entry, UN Comtrade
+preview (annual, numeric partner codes, through a proxy with an M49 table),
+ENTSOG EU interconnection flows.
+
+**Layer.** `commodity-flows`, class `published`. Great-circle arcs from origin
+centroid to destination port or border point, width by volume, colour by
+product. Period stamped on every arc.
+
+**Cards.** Hover: origin, destination, period, volume. Click: twelve-month
+history for that pair.
+
+### Row 7 — Episode scene packs (FR-G7)
+
+**Source.** The oracle's reviewed episodes. A one-time export per episode in
+the oracle repo, `tools/globe_episode_export.py`, writes a Director scene
+document plus GeoJSON data packs of the physical state for that window:
+chokepoint rings with that week's deviation, disruption polygons, storm
+tracks, and the episode's PRICE FINGERPRINT as a text card. Assets land under
+`public/scene-assets/episodes/<episode-id>/` with attribution.
+
+**First four.** Hormuz closure 2026, Red Sea 2023, Colonial Pipeline 2021,
+Uri freeze 2021. Each is a camera flight: overview, the constrained system,
+the physical layers frozen to the date, the fingerprint card.
+
+**Class.** Replay. Scene playback already stamps shot time; the packs carry
+`observedAt` for the window they represent.
+
+---
+
+## 5. Non-goals
+
+- Tenancy, login, billing, public hosting. Recorded in `UPGRADE.md` for later.
+- Any oracle number on the globe page. Prices and briefs stay on their pages.
+- Editing upstream layer internals for hover, filters or styling.
+- Trade signals, alerts framed as entries or exits, recommendations.
+- Commodities beyond oil and gas until the four systems rows are usable.
+
+---
+
+## 6. Open questions
+
+- **Q13, definition of usable.** Recommended: rows 1 through 4. Unconfirmed.
+- **AISStream key.** Saved and rejected identically to a fake key; verify or
+  rotate on the Account page, enter via POWER UP. Row 2 waits on it.
+- **Console proxy paths.** The console's root page maps to `/market`; confirm
+  that the console's own absolute links can go relative without breaking its
+  60-second reload and 15-second log poll.
