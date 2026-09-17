@@ -18,8 +18,8 @@ owns layers. Re-check `git status` before every edit to a shared file.
 | Row | Work item                                        | Lane                                 | Status (2026-09-17)                                                                                 |
 | --- | ------------------------------------------------ | ------------------------------------ | --------------------------------------------------------------------------------------------------- |
 | 0a  | `commodity-chokepoints` layer                    | layers                               | **BUILT** — commit `7400360`, pushed to origin and mirror                                           |
-| 0b  | `commodity-ports` layer                          | layers                               | **BUILT** — committed on branch `feat/commodity-ports` (off `commodities`, not pushed); adopts the row-1 contract after merge |
-| 1   | Shell, observation contract, hover, class groups | shell (worktree `commodities-shell`) | OPEN — PRD written (§7); next: merge 0b into `commodities`, create the worktree, start milestone 1 |
+| 0b  | `commodity-ports` layer                          | layers                               | **BUILT** — commit `f042155`, merged into `commodities`, pushed to origin and mirror; retrofit to the row-1 contract pending |
+| 1   | Shell, observation contract, hover, class groups | shell (worktree `commodities-shell`) | CLAIMED 2026-09-17 — PRD §7; worktree `commodities-shell` on `feat/commodities-shell`; next: milestone 1, observation contract |
 | 2   | `commodity-tankers`                              | layers                               | BLOCKED — AISStream rejects the saved key; verify or rotate on the Account page, enter via POWER UP |
 | 3   | Weather overlays and basin cards                 | layers                               | OPEN — after row 1                                                                                  |
 | 4   | Pipelines and plants, bundled                    | layers                               | OPEN — after row 3                                                                                  |
