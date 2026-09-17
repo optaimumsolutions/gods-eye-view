@@ -25,3 +25,22 @@ the `vintage` below, never the fetch time.
 
 Refresh: re-download the Epoch bundle, re-rank by current IT power, update
 `vintage`, `source.retrieved` and `source.json`, and re-verify positions.
+
+## Footprints and on-site assets
+
+- `footprint` is a simplified OpenStreetMap outline as `[lon, lat]` pairs
+  (ODbL, © OpenStreetMap contributors) for campuses that OSM has mapped: the
+  Colossus 2 building, the Project Rainier industrial parcel and the Lancium
+  Clean Campus. `footprintSource` names the OSM object. Sites without one draw
+  the campus ring instead. Outlines are simplified to a handful of points and
+  are not survey geometry.
+- `assets[]` are on-site plants or substations that get their own amber
+  marker and label at the local zoom tier: Colossus 2's Southaven turbine
+  plant, positioned and sized from Global Energy Monitor.
+
+## How the layer reads the bundle
+
+Three zoom tiers (label above 2,500 km, short card to 300 km, campus below),
+hover highlight, click-to-fly, and a dossier drawer with every field above;
+see `docs/COMMODITIES-PLAN.md` §8 for the requirements and
+`src/layers/datacenters/` for the code.

@@ -519,3 +519,35 @@ One heads-up from the inside: build in this space for a week and you learn that 
 **🌐 God's Eye View. No place left behind.**
 
 </div>
+
+## 🛢️ Commodities globe (optaimumsolutions fork)
+
+The `commodities` and `feat/commodities-shell` branches of this fork turn the
+globe into the physical twin of the Oil Oracle market console: what moves oil
+and gas, where it is constrained, and what draws the power. Everything is
+additive to upstream: new layer families, new panel groups and new bundled
+data, with no edits to upstream layer internals, so `git pull upstream main`
+keeps merging clean.
+
+- **Plan and ledger:** [`docs/COMMODITIES-PLAN.md`](docs/COMMODITIES-PLAN.md)
+  holds the product rules (R1 to R13), the row ledger (claim a row before
+  touching its files) and the row PRDs: §7 the shell and observation
+  contract, §8 the data center layer.
+- **Sources and roadmap:** [`docs/COMMODITIES.md`](docs/COMMODITIES.md); paid
+  upgrades per stream in [`UPGRADE.md`](UPGRADE.md).
+- **Layers so far** (Data Layers panel, Commodities group):
+  - **Chokepoints · Tanker Transits.** IMF PortWatch, 28 straits, a ring sized
+    by the baseline tanker rate and coloured by the 7-day vs 90-day deviation.
+  - **Ports · Tanker Calls.** IMF PortWatch, 2,065 ports sized by annual tanker
+    visits, coloured by tanker-call deviation, with disruption rings.
+  - **Data Centers · US Power.** The five largest US data centers by current
+    IT power (Epoch AI, CC BY 4.0), bundled and vintage-stamped. Three zoom
+    tiers: a label from orbit, a short card at regional zoom, and under 300 km
+    the campus footprint with its on-site plants. Hovering highlights a site;
+    clicking flies the camera to the campus and opens a dossier drawer with
+    stat tiles, an IT-power-by-milestone chart, supply, compute, capital,
+    campus and people sections, the full timeline, notes and sources. The
+    drawer's ◂ ▸ buttons step through the sites by rank.
+- **Run it:** `npm run dev` on port 4173 as upstream; keys go in through the
+  in-app POWER UP panel. Each commodity layer ships with a headless render
+  check under the gitignored `.gev-logs/` folder (plan §2.2).

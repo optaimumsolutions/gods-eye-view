@@ -638,21 +638,30 @@ same bundle format grows to the next tier and, later, to global sites.
 6. **Marker.** A pinned point sized by the square root of IT MW (8 px plus
    0.35 px per √MW) and a clamped ground-polyline ring of 3 km plus 350 m per
    √MW, coloured blue for `operating` and green for `expanding`.
-7. **Ambient depth.** Above 2,000 km camera height the overlay entry is a
-   label, `NAME · 946 MW IT`; below it a card with three lines: owner and
-   users; facility MW and the planned path with its date; grid utility and
-   on-site generation. The layer republishes on the camera's `moveEnd` when
-   the tier changes.
-8. **Full card.** On click, the selected card lists in order: place, project,
-   status and rank; owner and operator; users, investors, builders; planned
-   path and note; compute (H100 equivalents) and chips; capex, compute and
-   construction cost, planned capex, annual opex, capex per IT MW; buildings,
-   campus acres, square feet, facility/IT ratio; cooling and chiller plant;
-   grid utility, operator, interconnection and substation; on-site
-   generation, its units and permit status; batteries, backup and water;
-   gas-equivalent demand now and at full build, labelled illustrative;
-   latest and next milestone; the site's as-of date, licence and position
-   source. Lines clamp at 150 characters.
+7. **Ambient depth.** Three tiers by camera height. Above 2,500 km each
+   site is a label, `NAME · 946 MW IT`. Between 300 km and 2,500 km it is a
+   three-line card: owner and users; facility MW and the planned path with
+   its date; grid utility and on-site generation. Under 300 km the campus
+   itself appears: the mapped footprint (an OpenStreetMap outline where one
+   exists, otherwise the ring), on-site plants as their own amber markers and
+   labels (Colossus 2's Southaven turbines), and a campus card that ends with
+   the hint that the marker opens the dossier. The layer republishes on the
+   camera's `moveEnd` whenever the tier changes.
+8. **Hover, click and the dossier.** Hovering a marker turns the cursor into
+   a pointer, enlarges the marker and brightens its ring or outline (picks
+   throttled to eight a second, skipped while the camera moves or a tool owns
+   the pointer). Clicking opens the dossier drawer and, from above 400 km,
+   flies the camera down to 45 km over the campus. The map card while
+   selected is five headline lines; everything else lives in the drawer.
+   `src/layers/datacenters/dossier.js` owns the drawer: fixed at the right
+   edge above the panels and below the command dock, with rank and status,
+   title, four stat tiles (IT power, facility, planned IT, capex), an SVG
+   power-path chart of IT MW by milestone (solid built, dashed projected,
+   facility line), five sections (Supply, Compute, Capital, Campus, People),
+   the full timeline table, notes, source links, the licence line, and
+   buttons for previous site, fly to campus, zoom out and next site. Closing
+   the drawer, clicking empty map or selecting another layer's entity clears
+   the selection. `buildDossierModel` is pure and unit-tested.
 9. **Context.** Each marker registers a context record whose `properties` is
    the analyst record (32 fields); `getAnalystRecords()` exposes the same
    rows to the voice and analyst engines.
@@ -695,7 +704,8 @@ same bundle format grows to the next tier and, later, to global sites.
 4. **Next tier.** Sites 6 to 15 by current IT power (Fairwater Wisconsin,
    Google Pryor, Colossus 1, and on), same fields, same test. Verify: the
    global view stays legible under the 24-entry cohort cap.
-5. **Hover retrofit.** After row 1, the hover card shows name, stamp, IT MW.
+5. **Hover retrofit.** After row 1, the shared hover service replaces the
+   layer's own hover highlight with the standard hover card.
 6. **Global sites** (deferred by the founder): a `country` field and a panel
    sub-toggle `US only`; positions verified per site.
 
@@ -711,9 +721,9 @@ same bundle format grows to the next tier and, later, to global sites.
 - **Positions.** Prometheus uses a campus landmark; New Albany's buildings
   spread across the business park. → Move to a polygon centroid once
   OpenStreetMap maps the campus.
-- **Card size.** Sixteen lines at 150 characters is wide; on a narrow window
-  the right edge clips. → Row 1's hover keeps the quick look short; consider
-  a two-column card in the full-card redesign.
+- **Drawer versus the right rail.** The dossier covers the DISPLAY, CCTV and
+  CONTEXT rows while it is open. → Acceptable for v1 because it closes with
+  one click; revisit if the rail gains something a site reader needs.
 - **Lane.** Built in a third worktree while the layers session works in the
   main tree. → Merge order and the ledger claim avoid a conflict; no shared
   file was edited by both.

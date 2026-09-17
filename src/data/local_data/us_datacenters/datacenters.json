@@ -1,6 +1,6 @@
 {
   "vintage": "2026-09-17",
-  "selection": "The five largest United States data centers by current IT power (MW) in the Epoch AI 'AI Data Centers' tracker as of 2026-09-17. Planned end-state figures are Epoch projections from satellite imagery, permits and disclosures; Epoch states an IT-power estimate falls within a factor of 1.4 of the true value about 80% of the time.",
+  "selection": "The five largest United States data centers by current IT power (MW) in the Epoch AI 'AI Data Centers' tracker as of 2026-09-17. Planned end-state figures are Epoch projections from satellite imagery, permits and disclosures; Epoch states an IT-power estimate falls within a factor of 1.4 of the true value about 80% of the time. Campus footprints, where present, are OpenStreetMap outlines (ODbL) simplified to a few points.",
   "source": {
     "name": "Epoch AI, 'AI Data Centers'",
     "shortName": "Epoch AI",
@@ -11,7 +11,7 @@
     "retrieved": "2026-09-17"
   },
   "assumptions": {
-    "gasHeatRateMmbtuPerMwh": 7.0,
+    "gasHeatRateMmbtuPerMwh": 7,
     "gasEnergyMmbtuPerMcf": 1.037,
     "note": "Gas-equivalent demand is illustrative arithmetic only: facility MW x 24 h x heat rate / gas energy content, as if the whole load were served by gas-fired generation around the clock. It is not a statement about how a site is actually supplied."
   },
@@ -21,10 +21,17 @@
       "name": "Colossus 2",
       "owner": "xAI (listed as SpaceXAI by Epoch AI)",
       "operator": "xAI",
-      "users": ["Anthropic", "Cursor", "SpaceXAI"],
+      "users": [
+        "Anthropic",
+        "Cursor",
+        "SpaceXAI"
+      ],
       "investors": [],
       "builders": [],
-      "energyCompanies": ["MLGW (Memphis) grid supply", "MZT Tech LLC (X.AI Corp) behind-the-meter turbines, Southaven MS"],
+      "energyCompanies": [
+        "MLGW (Memphis) grid supply",
+        "MZT Tech LLC (X.AI Corp) behind-the-meter turbines, Southaven MS"
+      ],
       "project": "Colossus",
       "address": "5420 Tulane Rd, Memphis, TN 38109",
       "city": "Memphis",
@@ -44,17 +51,31 @@
       "h100e": 1111673,
       "plannedH100e": 1824154,
       "capexUsdB": 35.84,
-      "plannedCapexUsdB": 58.0,
+      "plannedCapexUsdB": 58,
       "computeCostUsdB": 24.7,
       "constructionCostUsdB": 11.13,
       "annualOpexUsdB": 0.853,
       "chips": [
-        { "type": "Nvidia B200", "count": 110000, "date": "2025-10-19" },
-        { "type": "Nvidia B300", "count": 330000, "date": "2026-06-15" }
+        {
+          "type": "Nvidia B200",
+          "count": 110000,
+          "date": "2025-10-19"
+        },
+        {
+          "type": "Nvidia B300",
+          "count": 330000,
+          "date": "2026-06-15"
+        }
       ],
       "plannedChips": [
-        { "type": "Nvidia B200", "count": 110000 },
-        { "type": "Nvidia B300", "count": 612228 }
+        {
+          "type": "Nvidia B200",
+          "count": 110000
+        },
+        {
+          "type": "Nvidia B300",
+          "count": 612228
+        }
       ],
       "buildingsOperational": 2,
       "buildingsPlanned": 3,
@@ -86,23 +107,107 @@
       "waterUseMgd": null,
       "firstOperational": "2025-10-19",
       "timeline": [
-        { "date": "2025-02-28", "milestone": "Land clearing begins", "buildingsOperational": 0, "itPowerMw": 0, "facilityPowerMw": 0 },
-        { "date": "2025-10-19", "milestone": "First cluster online, 110k GB200", "buildingsOperational": 1, "itPowerMw": 239, "facilityPowerMw": 323 },
-        { "date": "2026-04-06", "milestone": "Second cluster online, 110k GB300", "buildingsOperational": 1, "itPowerMw": 490, "facilityPowerMw": 661 },
-        { "date": "2026-06-15", "milestone": "Third phase, Building 2 online", "buildingsOperational": 2, "itPowerMw": 946, "facilityPowerMw": 1276 },
-        { "date": "2027-02-25", "milestone": "Building 3 completion (projected)", "buildingsOperational": 3, "itPowerMw": 1531, "facilityPowerMw": 2065, "projected": true }
+        {
+          "date": "2025-02-28",
+          "milestone": "Land clearing begins",
+          "buildingsOperational": 0,
+          "itPowerMw": 0,
+          "facilityPowerMw": 0
+        },
+        {
+          "date": "2025-10-19",
+          "milestone": "First cluster online, 110k GB200",
+          "buildingsOperational": 1,
+          "itPowerMw": 239,
+          "facilityPowerMw": 323
+        },
+        {
+          "date": "2026-04-06",
+          "milestone": "Second cluster online, 110k GB300",
+          "buildingsOperational": 1,
+          "itPowerMw": 490,
+          "facilityPowerMw": 661
+        },
+        {
+          "date": "2026-06-15",
+          "milestone": "Third phase, Building 2 online",
+          "buildingsOperational": 2,
+          "itPowerMw": 946,
+          "facilityPowerMw": 1276
+        },
+        {
+          "date": "2027-02-25",
+          "milestone": "Building 3 completion (projected)",
+          "buildingsOperational": 3,
+          "itPowerMw": 1531,
+          "facilityPowerMw": 2065,
+          "projected": true
+        }
       ],
       "sources": [
-        { "title": "Epoch AI site page", "url": "https://epoch.ai/data/ai-data-centers/directory/colossus-2" },
-        { "title": "SpaceX S-1 filing (compute and power for Colossus 2)", "url": "https://www.sec.gov/Archives/edgar/data/1181412/000162828026036936/spaceexplorationtechnologi.htm" },
-        { "title": "MLGW update on xAI power requests", "url": "https://www.mlgw.com/images/content/files/pdf/new/5-5-25%20xAI%20Update.pdf" },
-        { "title": "Global Energy Monitor, Colossus 2 power station", "url": "https://www.gem.wiki/Colossus_2_power_station" },
-        { "title": "DCD, xAI deploys 19 gas turbines at Colossus 2", "url": "https://www.datacenterdynamics.com/en/news/xai-deploys-19-natural-gas-turbines-at-colossus-2-data-center-in-southaven-mississippi-report/" },
-        { "title": "SELC on the Southaven turbines", "url": "https://www.selc.org/news/xai-built-an-illegal-power-plant-to-power-its-data-center/" }
+        {
+          "title": "Epoch AI site page",
+          "url": "https://epoch.ai/data/ai-data-centers/directory/colossus-2"
+        },
+        {
+          "title": "SpaceX S-1 filing (compute and power for Colossus 2)",
+          "url": "https://www.sec.gov/Archives/edgar/data/1181412/000162828026036936/spaceexplorationtechnologi.htm"
+        },
+        {
+          "title": "MLGW update on xAI power requests",
+          "url": "https://www.mlgw.com/images/content/files/pdf/new/5-5-25%20xAI%20Update.pdf"
+        },
+        {
+          "title": "Global Energy Monitor, Colossus 2 power station",
+          "url": "https://www.gem.wiki/Colossus_2_power_station"
+        },
+        {
+          "title": "DCD, xAI deploys 19 gas turbines at Colossus 2",
+          "url": "https://www.datacenterdynamics.com/en/news/xai-deploys-19-natural-gas-turbines-at-colossus-2-data-center-in-southaven-mississippi-report/"
+        },
+        {
+          "title": "SELC on the Southaven turbines",
+          "url": "https://www.selc.org/news/xai-built-an-illegal-power-plant-to-power-its-data-center/"
+        }
       ],
       "notes": [
         "Largest US site by current IT power in the Epoch tracker.",
         "Turbine plant sits across the state line in Mississippi and serves the Tennessee buildings behind the meter."
+      ],
+      "footprint": [
+        [
+          -90.03584,
+          34.99569
+        ],
+        [
+          -90.03391,
+          34.99569
+        ],
+        [
+          -90.0339,
+          35.00027
+        ],
+        [
+          -90.03582,
+          35.00028
+        ],
+        [
+          -90.03584,
+          34.99569
+        ]
+      ],
+      "footprintSource": "OpenStreetMap way/1386926534 (ODbL), simplified",
+      "assets": [
+        {
+          "id": "southaven-turbines",
+          "kind": "gas-turbines",
+          "name": "Southaven turbine plant",
+          "lat": 34.98203,
+          "lon": -90.04071,
+          "capacityMw": 495,
+          "plannedCapacityMw": 1240.5,
+          "note": "Behind-the-meter gas turbines across the state line (MZT Tech LLC / X.AI Corp); position and capacity per Global Energy Monitor"
+        }
       ]
     },
     {
@@ -110,10 +215,14 @@
       "name": "Anthropic-Amazon New Carlisle",
       "owner": "Amazon (AWS)",
       "operator": "Amazon Web Services",
-      "users": ["Anthropic"],
+      "users": [
+        "Anthropic"
+      ],
       "investors": [],
       "builders": [],
-      "energyCompanies": ["Indiana Michigan Power (AEP)"],
+      "energyCompanies": [
+        "Indiana Michigan Power (AEP)"
+      ],
       "project": "Project Rainier",
       "address": "55001 Larrison Blvd, New Carlisle, IN 46552",
       "city": "New Carlisle",
@@ -138,11 +247,21 @@
       "constructionCostUsdB": 10.71,
       "annualOpexUsdB": 0.821,
       "chips": [
-        { "type": "AWS Trainium2", "count": 1044980, "date": "2026-03-23" }
+        {
+          "type": "AWS Trainium2",
+          "count": 1044980,
+          "date": "2026-03-23"
+        }
       ],
       "plannedChips": [
-        { "type": "AWS Trainium2", "count": 1044980 },
-        { "type": "AWS Trainium3 (inferred for Buildings 19-32)", "count": null }
+        {
+          "type": "AWS Trainium2",
+          "count": 1044980
+        },
+        {
+          "type": "AWS Trainium3 (inferred for Buildings 19-32)",
+          "count": null
+        }
       ],
       "buildingsOperational": 16,
       "buildingsPlanned": 32,
@@ -176,34 +295,126 @@
       "waterNote": "Epoch timeline value at the 2026-10 projection row",
       "firstOperational": "2025-06-23",
       "timeline": [
-        { "date": "2024-02-09", "milestone": "Land clearing begins, northern section", "buildingsOperational": 0, "itPowerMw": 0, "facilityPowerMw": 0 },
-        { "date": "2025-06-23", "milestone": "Buildings 1 to 7 operational", "buildingsOperational": 7, "itPowerMw": 398, "facilityPowerMw": 478 },
-        { "date": "2025-10-17", "milestone": "AWS confirms nearly 500k chips operational", "buildingsOperational": 7, "itPowerMw": 398, "facilityPowerMw": 478 },
-        { "date": "2025-12-23", "milestone": "Buildings 8 to 11 operational", "buildingsOperational": 11, "itPowerMw": 626, "facilityPowerMw": 751 },
-        { "date": "2026-03-23", "milestone": "Buildings 12 to 16 operational", "buildingsOperational": 16, "itPowerMw": 910, "facilityPowerMw": 1092 },
-        { "date": "2026-10-19", "milestone": "Buildings 17 and 18 operational (projected)", "buildingsOperational": 18, "itPowerMw": 1037, "facilityPowerMw": 1244, "projected": true },
-        { "date": "2028-03-17", "milestone": "Buildings 19 to 32 operational (projected)", "buildingsOperational": 32, "itPowerMw": 1925, "facilityPowerMw": 2310, "projected": true }
+        {
+          "date": "2024-02-09",
+          "milestone": "Land clearing begins, northern section",
+          "buildingsOperational": 0,
+          "itPowerMw": 0,
+          "facilityPowerMw": 0
+        },
+        {
+          "date": "2025-06-23",
+          "milestone": "Buildings 1 to 7 operational",
+          "buildingsOperational": 7,
+          "itPowerMw": 398,
+          "facilityPowerMw": 478
+        },
+        {
+          "date": "2025-10-17",
+          "milestone": "AWS confirms nearly 500k chips operational",
+          "buildingsOperational": 7,
+          "itPowerMw": 398,
+          "facilityPowerMw": 478
+        },
+        {
+          "date": "2025-12-23",
+          "milestone": "Buildings 8 to 11 operational",
+          "buildingsOperational": 11,
+          "itPowerMw": 626,
+          "facilityPowerMw": 751
+        },
+        {
+          "date": "2026-03-23",
+          "milestone": "Buildings 12 to 16 operational",
+          "buildingsOperational": 16,
+          "itPowerMw": 910,
+          "facilityPowerMw": 1092
+        },
+        {
+          "date": "2026-10-19",
+          "milestone": "Buildings 17 and 18 operational (projected)",
+          "buildingsOperational": 18,
+          "itPowerMw": 1037,
+          "facilityPowerMw": 1244,
+          "projected": true
+        },
+        {
+          "date": "2028-03-17",
+          "milestone": "Buildings 19 to 32 operational (projected)",
+          "buildingsOperational": 32,
+          "itPowerMw": 1925,
+          "facilityPowerMw": 2310,
+          "projected": true
+        }
       ],
       "sources": [
-        { "title": "Epoch AI site page", "url": "https://epoch.ai/data/ai-data-centers/directory/anthropic-amazon-new-carlisle" },
-        { "title": "AWS, Project Rainier announcement", "url": "https://www.aboutamazon.com/news/aws/aws-project-rainier-ai-trainium-chips-compute-cluster" },
-        { "title": "CNBC, Amazon opens $11 billion Project Rainier", "url": "https://www.cnbc.com/2025/10/29/amazon-opens-11-billion-ai-data-center-project-rainier-in-indiana.html" },
-        { "title": "DCD, Amazon $15bn Northern Indiana expansion", "url": "https://www.datacenterdynamics.com/en/news/amazon-announces-15bn-data-center-ai-investment-plan-for-northern-indiana/" }
+        {
+          "title": "Epoch AI site page",
+          "url": "https://epoch.ai/data/ai-data-centers/directory/anthropic-amazon-new-carlisle"
+        },
+        {
+          "title": "AWS, Project Rainier announcement",
+          "url": "https://www.aboutamazon.com/news/aws/aws-project-rainier-ai-trainium-chips-compute-cluster"
+        },
+        {
+          "title": "CNBC, Amazon opens $11 billion Project Rainier",
+          "url": "https://www.cnbc.com/2025/10/29/amazon-opens-11-billion-ai-data-center-project-rainier-in-indiana.html"
+        },
+        {
+          "title": "DCD, Amazon $15bn Northern Indiana expansion",
+          "url": "https://www.datacenterdynamics.com/en/news/amazon-announces-15bn-data-center-ai-investment-plan-for-northern-indiana/"
+        }
       ],
       "notes": [
         "1,200 acres of former farmland along State Road 2; full site expected to reach about 30 buildings.",
         "Second-largest planned end state in the tracker after Microsoft Fairwater Wisconsin."
-      ]
+      ],
+      "footprint": [
+        [
+          -86.48203,
+          41.66383
+        ],
+        [
+          -86.4641,
+          41.66393
+        ],
+        [
+          -86.46408,
+          41.66647
+        ],
+        [
+          -86.4663,
+          41.66853
+        ],
+        [
+          -86.46819,
+          41.6717
+        ],
+        [
+          -86.48187,
+          41.67157
+        ],
+        [
+          -86.48203,
+          41.66383
+        ]
+      ],
+      "footprintSource": "OpenStreetMap way/1303947602 (ODbL), simplified"
     },
     {
       "id": "fairwater-atlanta",
       "name": "Microsoft Fairwater Atlanta",
       "owner": "Microsoft (tenant); QTS Data Centers (campus landlord, Blackstone)",
       "operator": "Microsoft",
-      "users": ["OpenAI (likely)", "Microsoft (likely)"],
+      "users": [
+        "OpenAI (likely)",
+        "Microsoft (likely)"
+      ],
       "investors": [],
       "builders": [],
-      "energyCompanies": ["Georgia Power (Southern Company)"],
+      "energyCompanies": [
+        "Georgia Power (Southern Company)"
+      ],
       "project": "Microsoft AI WAN (Fairwater)",
       "address": "1435 Hwy 54 W, Fayetteville, GA 30214",
       "city": "Fayetteville",
@@ -228,10 +439,17 @@
       "constructionCostUsdB": 7.49,
       "annualOpexUsdB": 0.574,
       "chips": [
-        { "type": "Nvidia B200", "count": 304279, "date": "2026-06-14" }
+        {
+          "type": "Nvidia B200",
+          "count": 304279,
+          "date": "2026-06-14"
+        }
       ],
       "plannedChips": [
-        { "type": "Nvidia B200", "count": 304279 }
+        {
+          "type": "Nvidia B200",
+          "count": 304279
+        }
       ],
       "buildingsOperational": 4,
       "buildingsPlanned": 4,
@@ -265,15 +483,45 @@
       "waterUseMgd": null,
       "firstOperational": "2025-10-14",
       "timeline": [
-        { "date": "2023-04-09", "milestone": "Land clearing begins, Buildings 1 and 2", "buildingsOperational": 0, "itPowerMw": 0, "facilityPowerMw": 0 },
-        { "date": "2025-10-14", "milestone": "Buildings 1 and 2 operational", "buildingsOperational": 2, "itPowerMw": 321, "facilityPowerMw": 433 },
-        { "date": "2026-06-14", "milestone": "Buildings 3 and 4 operational", "buildingsOperational": 4, "itPowerMw": 636, "facilityPowerMw": 859 }
+        {
+          "date": "2023-04-09",
+          "milestone": "Land clearing begins, Buildings 1 and 2",
+          "buildingsOperational": 0,
+          "itPowerMw": 0,
+          "facilityPowerMw": 0
+        },
+        {
+          "date": "2025-10-14",
+          "milestone": "Buildings 1 and 2 operational",
+          "buildingsOperational": 2,
+          "itPowerMw": 321,
+          "facilityPowerMw": 433
+        },
+        {
+          "date": "2026-06-14",
+          "milestone": "Buildings 3 and 4 operational",
+          "buildingsOperational": 4,
+          "itPowerMw": 636,
+          "facilityPowerMw": 859
+        }
       ],
       "sources": [
-        { "title": "Epoch AI site page", "url": "https://epoch.ai/data/ai-data-centers/directory/microsoft-fairwater-atlanta" },
-        { "title": "AJC, Microsoft AI superfactory opens in Fayetteville", "url": "https://www.ajc.com/business/2025/11/microsofts-newest-ai-superfactory-opens-at-sprawling-fayetteville-campus/" },
-        { "title": "DCD, Atlanta Fairwater: two stories, no UPS or gen-sets", "url": "https://www.datacenterdynamics.com/en/news/microsoft-launches-atlanta-fairwater-data-center-two-stories-no-ups-or-gen-sets/" },
-        { "title": "Bloomberg, QTS Fayetteville campus and AI power needs", "url": "https://www.bloomberg.com/news/features/2024-12-08/georgia-s-blackstone-backed-qts-data-center-hits-resistance-over-ai-power-needs" }
+        {
+          "title": "Epoch AI site page",
+          "url": "https://epoch.ai/data/ai-data-centers/directory/microsoft-fairwater-atlanta"
+        },
+        {
+          "title": "AJC, Microsoft AI superfactory opens in Fayetteville",
+          "url": "https://www.ajc.com/business/2025/11/microsofts-newest-ai-superfactory-opens-at-sprawling-fayetteville-campus/"
+        },
+        {
+          "title": "DCD, Atlanta Fairwater: two stories, no UPS or gen-sets",
+          "url": "https://www.datacenterdynamics.com/en/news/microsoft-launches-atlanta-fairwater-data-center-two-stories-no-ups-or-gen-sets/"
+        },
+        {
+          "title": "Bloomberg, QTS Fayetteville campus and AI power needs",
+          "url": "https://www.bloomberg.com/news/features/2024-12-08/georgia-s-blackstone-backed-qts-data-center-hits-resistance-over-ai-power-needs"
+        }
       ],
       "notes": [
         "Paired over Microsoft's AI WAN with Fairwater Wisconsin (Mount Pleasant), the largest planned site in the tracker at 2,263 MW.",
@@ -285,10 +533,16 @@
       "name": "Meta Prometheus",
       "owner": "Meta (with QTS- and Vantage-owned buildings on the campus)",
       "operator": "Meta",
-      "users": ["Meta"],
+      "users": [
+        "Meta"
+      ],
       "investors": [],
       "builders": [],
-      "energyCompanies": ["AEP Ohio", "Williams (Socrates North and South gas plants)", "Sidecat (Meta subsidiary, 200 MW gas project)"],
+      "energyCompanies": [
+        "AEP Ohio",
+        "Williams (Socrates North and South gas plants)",
+        "Sidecat (Meta subsidiary, 200 MW gas project)"
+      ],
       "project": "Prometheus",
       "address": "1500 Beech Rd SW, New Albany Business Park, New Albany, OH 43054",
       "city": "New Albany",
@@ -313,10 +567,17 @@
       "constructionCostUsdB": 6.61,
       "annualOpexUsdB": 0.507,
       "chips": [
-        { "type": "Nvidia B200", "count": 268973, "date": "2026-08-01" }
+        {
+          "type": "Nvidia B200",
+          "count": 268973,
+          "date": "2026-08-01"
+        }
       ],
       "plannedChips": [
-        { "type": "Nvidia B200", "count": 408539 }
+        {
+          "type": "Nvidia B200",
+          "count": 408539
+        }
       ],
       "buildingsOperational": 12,
       "buildingsPlanned": 19,
@@ -348,20 +609,79 @@
       "waterUseMgd": null,
       "firstOperational": "2025-10-14",
       "timeline": [
-        { "date": "2022-04-14", "milestone": "Land clearing begins, Buildings 1 and 2", "buildingsOperational": 0, "itPowerMw": 0, "facilityPowerMw": 0 },
-        { "date": "2025-10-14", "milestone": "Building 1 operational", "buildingsOperational": 1, "itPowerMw": 76, "facilityPowerMw": 99 },
-        { "date": "2026-01-18", "milestone": "Buildings 2 to 6 operational; 7 turbines at Socrates South", "buildingsOperational": 6, "itPowerMw": 339, "facilityPowerMw": 441 },
-        { "date": "2026-05-18", "milestone": "Buildings 7 to 11 (tents) operational", "buildingsOperational": 11, "itPowerMw": 493, "facilityPowerMw": 641 },
-        { "date": "2026-08-01", "milestone": "Building 12 (Vantage) operational", "buildingsOperational": 12, "itPowerMw": 562, "facilityPowerMw": 731 },
-        { "date": "2026-10-01", "milestone": "Socrates North and South online; Buildings 15 to 19 (projected)", "buildingsOperational": 17, "itPowerMw": 716, "facilityPowerMw": 931, "projected": true },
-        { "date": "2027-01-28", "milestone": "Building 14 operational (projected)", "buildingsOperational": 19, "itPowerMw": 854, "facilityPowerMw": 1110, "projected": true }
+        {
+          "date": "2022-04-14",
+          "milestone": "Land clearing begins, Buildings 1 and 2",
+          "buildingsOperational": 0,
+          "itPowerMw": 0,
+          "facilityPowerMw": 0
+        },
+        {
+          "date": "2025-10-14",
+          "milestone": "Building 1 operational",
+          "buildingsOperational": 1,
+          "itPowerMw": 76,
+          "facilityPowerMw": 99
+        },
+        {
+          "date": "2026-01-18",
+          "milestone": "Buildings 2 to 6 operational; 7 turbines at Socrates South",
+          "buildingsOperational": 6,
+          "itPowerMw": 339,
+          "facilityPowerMw": 441
+        },
+        {
+          "date": "2026-05-18",
+          "milestone": "Buildings 7 to 11 (tents) operational",
+          "buildingsOperational": 11,
+          "itPowerMw": 493,
+          "facilityPowerMw": 641
+        },
+        {
+          "date": "2026-08-01",
+          "milestone": "Building 12 (Vantage) operational",
+          "buildingsOperational": 12,
+          "itPowerMw": 562,
+          "facilityPowerMw": 731
+        },
+        {
+          "date": "2026-10-01",
+          "milestone": "Socrates North and South online; Buildings 15 to 19 (projected)",
+          "buildingsOperational": 17,
+          "itPowerMw": 716,
+          "facilityPowerMw": 931,
+          "projected": true
+        },
+        {
+          "date": "2027-01-28",
+          "milestone": "Building 14 operational (projected)",
+          "buildingsOperational": 19,
+          "itPowerMw": 854,
+          "facilityPowerMw": 1110,
+          "projected": true
+        }
       ],
       "sources": [
-        { "title": "Epoch AI site page", "url": "https://epoch.ai/data/ai-data-centers/directory/meta-prometheus" },
-        { "title": "Meta Engineering, infrastructure evolution and Prometheus", "url": "https://engineering.fb.com/2025/09/29/data-infrastructure/metas-infrastructure-evolution-and-the-advent-of-ai/" },
-        { "title": "PUCO case 25-0188-EL-BGN (Socrates South)", "url": "https://dis.puc.state.oh.us/CaseRecord.aspx?CaseNo=25-0188-EL-BGN" },
-        { "title": "Williams, Socrates North fact sheet", "url": "https://www.williams.com/wp-content/uploads/sites/8/2025/03/Socrates-North-Fact-Sheet-Final-1.pdf" },
-        { "title": "NBC4, Meta will use nuclear power for New Albany", "url": "https://www.nbc4i.com/news/local-news/new-albany/meta-will-use-nuclear-power-for-its-new-albany-a-i-data-center/" }
+        {
+          "title": "Epoch AI site page",
+          "url": "https://epoch.ai/data/ai-data-centers/directory/meta-prometheus"
+        },
+        {
+          "title": "Meta Engineering, infrastructure evolution and Prometheus",
+          "url": "https://engineering.fb.com/2025/09/29/data-infrastructure/metas-infrastructure-evolution-and-the-advent-of-ai/"
+        },
+        {
+          "title": "PUCO case 25-0188-EL-BGN (Socrates South)",
+          "url": "https://dis.puc.state.oh.us/CaseRecord.aspx?CaseNo=25-0188-EL-BGN"
+        },
+        {
+          "title": "Williams, Socrates North fact sheet",
+          "url": "https://www.williams.com/wp-content/uploads/sites/8/2025/03/Socrates-North-Fact-Sheet-Final-1.pdf"
+        },
+        {
+          "title": "NBC4, Meta will use nuclear power for New Albany",
+          "url": "https://www.nbc4i.com/news/local-news/new-albany/meta-will-use-nuclear-power-for-its-new-albany-a-i-data-center/"
+        }
       ],
       "notes": [
         "Meta's first gigawatt-class training campus; ad hoc build with tents beside conventional halls.",
@@ -373,10 +693,21 @@
       "name": "OpenAI Stargate Abilene",
       "owner": "Oracle (lessee); campus developed by Crusoe with Blue Owl and Primary Digital",
       "operator": "Crusoe (campus), Oracle Cloud Infrastructure (compute)",
-      "users": ["OpenAI"],
-      "investors": ["SoftBank", "OpenAI", "Oracle"],
-      "builders": ["Mortenson"],
-      "energyCompanies": ["AEP Texas", "Lancium (campus power and land)"],
+      "users": [
+        "OpenAI"
+      ],
+      "investors": [
+        "SoftBank",
+        "OpenAI",
+        "Oracle"
+      ],
+      "builders": [
+        "Mortenson"
+      ],
+      "energyCompanies": [
+        "AEP Texas",
+        "Lancium (campus power and land)"
+      ],
       "project": "Stargate",
       "address": "5502 Spinks Rd, Abilene, TX 79601",
       "city": "Abilene",
@@ -401,12 +732,26 @@
       "constructionCostUsdB": 4.95,
       "annualOpexUsdB": 0.38,
       "chips": [
-        { "type": "Nvidia B200", "count": 100800, "date": "2025-12-24" },
-        { "type": "Nvidia B300", "count": 100800, "date": "2026-05-23" }
+        {
+          "type": "Nvidia B200",
+          "count": 100800,
+          "date": "2025-12-24"
+        },
+        {
+          "type": "Nvidia B300",
+          "count": 100800,
+          "date": "2026-05-23"
+        }
       ],
       "plannedChips": [
-        { "type": "Nvidia B200", "count": 100800 },
-        { "type": "Nvidia B300", "count": 302400 }
+        {
+          "type": "Nvidia B200",
+          "count": 100800
+        },
+        {
+          "type": "Nvidia B300",
+          "count": 302400
+        }
       ],
       "buildingsOperational": 4,
       "buildingsPlanned": 8,
@@ -444,23 +789,124 @@
       "waterUseMgd": null,
       "firstOperational": "2025-09-26",
       "timeline": [
-        { "date": "2024-05-31", "milestone": "Land clearing begins, Buildings 1 and 2", "buildingsOperational": 0, "itPowerMw": 0, "facilityPowerMw": 0 },
-        { "date": "2025-09-26", "milestone": "Building 1 operational; first Stargate phase live", "buildingsOperational": 1, "itPowerMw": 105, "facilityPowerMw": 147 },
-        { "date": "2025-12-24", "milestone": "Building 2 operational", "buildingsOperational": 2, "itPowerMw": 211, "facilityPowerMw": 295 },
-        { "date": "2026-05-23", "milestone": "Buildings 3 and 4 operational", "buildingsOperational": 4, "itPowerMw": 421, "facilityPowerMw": 590 },
-        { "date": "2026-11-01", "milestone": "Buildings 5 to 8 operational (projected)", "buildingsOperational": 8, "itPowerMw": 843, "facilityPowerMw": 1180, "projected": true }
+        {
+          "date": "2024-05-31",
+          "milestone": "Land clearing begins, Buildings 1 and 2",
+          "buildingsOperational": 0,
+          "itPowerMw": 0,
+          "facilityPowerMw": 0
+        },
+        {
+          "date": "2025-09-26",
+          "milestone": "Building 1 operational; first Stargate phase live",
+          "buildingsOperational": 1,
+          "itPowerMw": 105,
+          "facilityPowerMw": 147
+        },
+        {
+          "date": "2025-12-24",
+          "milestone": "Building 2 operational",
+          "buildingsOperational": 2,
+          "itPowerMw": 211,
+          "facilityPowerMw": 295
+        },
+        {
+          "date": "2026-05-23",
+          "milestone": "Buildings 3 and 4 operational",
+          "buildingsOperational": 4,
+          "itPowerMw": 421,
+          "facilityPowerMw": 590
+        },
+        {
+          "date": "2026-11-01",
+          "milestone": "Buildings 5 to 8 operational (projected)",
+          "buildingsOperational": 8,
+          "itPowerMw": 843,
+          "facilityPowerMw": 1180,
+          "projected": true
+        }
       ],
       "sources": [
-        { "title": "Epoch AI site page", "url": "https://epoch.ai/data/ai-data-centers/directory/openai-stargate-abilene" },
-        { "title": "Crusoe, flagship Abilene data center is live", "url": "https://www.crusoe.ai/resources/newsroom/crusoe-announces-flagship-abilene-data-center-is-live" },
-        { "title": "Mortenson, Abilene data center development (substations)", "url": "https://www.mortenson.com/projects/abilene-data-center-development" },
-        { "title": "DCD, Crusoe Abilene campus officially live for Oracle and Stargate", "url": "https://www.datacenterdynamics.com/en/news/crusoes-abilene-data-center-officially-live-serving-oracle-and-openais-stargate/" },
-        { "title": "Texas TDLR project filings", "url": "https://www.tdlr.texas.gov/TABS/Search/Project/TABS2025000156" }
+        {
+          "title": "Epoch AI site page",
+          "url": "https://epoch.ai/data/ai-data-centers/directory/openai-stargate-abilene"
+        },
+        {
+          "title": "Crusoe, flagship Abilene data center is live",
+          "url": "https://www.crusoe.ai/resources/newsroom/crusoe-announces-flagship-abilene-data-center-is-live"
+        },
+        {
+          "title": "Mortenson, Abilene data center development (substations)",
+          "url": "https://www.mortenson.com/projects/abilene-data-center-development"
+        },
+        {
+          "title": "DCD, Crusoe Abilene campus officially live for Oracle and Stargate",
+          "url": "https://www.datacenterdynamics.com/en/news/crusoes-abilene-data-center-officially-live-serving-oracle-and-openais-stargate/"
+        },
+        {
+          "title": "Texas TDLR project filings",
+          "url": "https://www.tdlr.texas.gov/TABS/Search/Project/TABS2025000156"
+        }
       ],
       "notes": [
         "First Stargate site; the fastest planned doubling among the five (421 MW to 843 MW IT within 2026).",
         "ERCOT load with both a 1 GW substation and on-site gas turbines: grid and behind-the-meter supply in one campus."
-      ]
+      ],
+      "footprint": [
+        [
+          -99.80373,
+          32.50044
+        ],
+        [
+          -99.80219,
+          32.49486
+        ],
+        [
+          -99.77421,
+          32.4945
+        ],
+        [
+          -99.77423,
+          32.50185
+        ],
+        [
+          -99.77302,
+          32.50186
+        ],
+        [
+          -99.77305,
+          32.50616
+        ],
+        [
+          -99.77242,
+          32.50821
+        ],
+        [
+          -99.77836,
+          32.5111
+        ],
+        [
+          -99.77879,
+          32.51044
+        ],
+        [
+          -99.77845,
+          32.51027
+        ],
+        [
+          -99.78503,
+          32.50839
+        ],
+        [
+          -99.78967,
+          32.50392
+        ],
+        [
+          -99.80373,
+          32.50044
+        ]
+      ],
+      "footprintSource": "OpenStreetMap way/1432100334 (ODbL), simplified"
     }
   ]
 }

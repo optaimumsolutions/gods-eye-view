@@ -2,8 +2,6 @@ import * as Cesium from 'cesium';
 import {
   DATACENTER_LAYER_ID,
   formatCount,
-  formatInt,
-  formatMmcfd,
   formatMw,
   formatUsdB,
 } from './records.js';
@@ -11,23 +9,34 @@ import {
 export { DATACENTER_LAYER_ID };
 export const DATACENTER_OVERLAY_SOURCE_ID = 'energy-datacenters';
 export const DATACENTER_OVERLAY_COHORT_LIMIT = 24;
-export const DATACENTER_OVERLAY_COLLISION_CAPACITY = 24;
+export const DATACENTER_OVERLAY_COLLISION_CAPACITY = 32;
 
 /**
- * Detail tiers by camera height. Above the threshold the ambient entry is a
- * bare label (name and IT power); below it the entry becomes a short card
- * with the owner, the expansion path and the power story. Clicking gives
- * the full card at any height.
+ * Three depths, by camera height. Global: a bare label per site. Regional:
+ * a short card. Local: the campus itself, with its footprint, its on-site
+ * plants and a hint that the marker opens the dossier. Clicking at any depth
+ * opens the dossier; from far away the click also flies the camera down.
  */
-export const DATACENTER_DETAIL_HEIGHT_M = 2_000_000;
+export const DATACENTER_REGIONAL_HEIGHT_M = 2_500_000;
+export const DATACENTER_LOCAL_HEIGHT_M = 300_000;
 export const DATACENTER_TIER_GLOBAL = 'global';
 export const DATACENTER_TIER_REGIONAL = 'regional';
+export const DATACENTER_TIER_LOCAL = 'local';
+/** Above this height a click flies the camera down to the campus first. */
+export const DATACENTER_FLY_FROM_HEIGHT_M = 400_000;
+/** Where a click lands the camera: the whole campus and its ring in view. */
+export const DATACENTER_FLY_TO_HEIGHT_M = 45_000;
+export const DATACENTER_ZOOM_OUT_HEIGHT_M = 2_500_000;
+export const DATACENTER_FLY_DURATION_S = 2.0;
+/** Hover picks are event-driven and throttled; a still pointer costs nothing. */
+export const DATACENTER_HOVER_THROTTLE_MS = 120;
 
 export function detailTierForHeight(cameraHeightM) {
-  return Number.isFinite(cameraHeightM) &&
-    cameraHeightM < DATACENTER_DETAIL_HEIGHT_M
-    ? DATACENTER_TIER_REGIONAL
-    : DATACENTER_TIER_GLOBAL;
+  if (!Number.isFinite(cameraHeightM)) return DATACENTER_TIER_GLOBAL;
+  if (cameraHeightM < DATACENTER_LOCAL_HEIGHT_M) return DATACENTER_TIER_LOCAL;
+  if (cameraHeightM < DATACENTER_REGIONAL_HEIGHT_M)
+    return DATACENTER_TIER_REGIONAL;
+  return DATACENTER_TIER_GLOBAL;
 }
 
 /** Status to accent: the shared commodity vocabulary (blue steady, green growing). */
@@ -36,6 +45,7 @@ const STATUS_CSS = Object.freeze({
   expanding: '#7cff9b',
   unknown: '#9aa4b2',
 });
+const ASSET_CSS = '#ffb347';
 
 export function statusCss(status) {
   return STATUS_CSS[status] || STATUS_CSS.unknown;
@@ -45,10 +55,21 @@ export function statusColor(status) {
   return Cesium.Color.fromCssColorString(statusCss(status));
 }
 
-/** Marker size grows with the square root of IT power so a gigawatt does not swallow the map. */
-export function markerPixelSize(itPowerMw) {
+export function assetColor() {
+  return Cesium.Color.fromCssColorString(ASSET_CSS);
+}
+
+/**
+ * Marker size grows with the square root of IT power so a gigawatt does not
+ * swallow the map; the local tier and a hover each scale it up so the thing
+ * to click is never in doubt.
+ */
+export function markerPixelSize(itPowerMw, { tier, hovered = false } = {}) {
   const mw = Number.isFinite(itPowerMw) ? Math.max(0, itPowerMw) : 0;
-  return Math.round(8 + Math.sqrt(mw) * 0.35);
+  let size = 8 + Math.sqrt(mw) * 0.35;
+  if (tier === DATACENTER_TIER_LOCAL) size *= 1.25;
+  if (hovered) size *= 1.35;
+  return Math.round(size);
 }
 
 /** Ground-ring radius in metres: a campus-scale ring that reads at regional zoom. */
@@ -79,7 +100,22 @@ export function datacenterPosition(row) {
   return Cesium.Cartesian3.fromDegrees(row.lon, row.lat);
 }
 
-const LINE_MAX = 150;
+export function assetPosition(asset) {
+  return Cesium.Cartesian3.fromDegrees(asset.lon, asset.lat);
+}
+
+/** A campus footprint ring as world positions; closed so the outline joins. */
+export function footprintPositions(ring) {
+  if (!Array.isArray(ring) || ring.length < 3) return null;
+  const flat = [];
+  for (const [lon, lat] of ring) flat.push(lon, lat);
+  const [lon0, lat0] = ring[0];
+  const [lonN, latN] = ring[ring.length - 1];
+  if (lon0 !== lonN || lat0 !== latN) flat.push(lon0, lat0);
+  return Cesium.Cartesian3.fromDegreesArray(flat);
+}
+
+const LINE_MAX = 110;
 
 function clampLine(line) {
   const s = String(line).replace(/\s+/g, ' ').trim();
@@ -92,7 +128,7 @@ function joinParts(parts, sep = ' · ') {
     .join(sep);
 }
 
-function onSiteSummary(row) {
+export function onSiteSummary(row) {
   const gen = row.power.onSiteGeneration;
   if (!gen.type) return 'on-site n/a';
   if (gen.capacityMw === 0) return 'grid only';
@@ -104,7 +140,7 @@ function onSiteSummary(row) {
   return joinParts(['on-site gas', now, planned], ' ');
 }
 
-function expansionLine(row) {
+export function expansionLine(row) {
   if (row.plannedItPowerMw === null || row.plannedItPowerMw <= row.itPowerMw)
     return 'no further expansion tracked';
   return joinParts([
@@ -116,10 +152,8 @@ function expansionLine(row) {
   ]);
 }
 
-/** Ambient entry: a bare label at global zoom, a short card once the camera is regional. */
-export function createDatacenterOverlayEntry(row, position, tier) {
-  const title = `${row.name.toUpperCase()} · ${formatMw(row.itPowerMw)} IT`;
-  const base = {
+function baseEntry(row, position) {
+  return {
     id: String(row.id),
     position,
     accent: statusCss(row.status),
@@ -134,18 +168,36 @@ export function createDatacenterOverlayEntry(row, position, tier) {
     verticalOnly: true,
     placement: 'above',
   };
-  if (tier !== DATACENTER_TIER_REGIONAL)
-    return { ...base, variant: 'label', title };
+}
+
+/** Ambient entry for the site at the current depth. */
+export function createDatacenterOverlayEntry(row, position, tier) {
+  const base = baseEntry(row, position);
+  if (tier === DATACENTER_TIER_LOCAL) {
+    return {
+      ...base,
+      variant: 'card',
+      title: row.name.toUpperCase(),
+      details: localCardLines(row).map(clampLine),
+    };
+  }
+  if (tier === DATACENTER_TIER_REGIONAL) {
+    return {
+      ...base,
+      variant: 'card',
+      title: `${row.name.toUpperCase()} · ${formatMw(row.itPowerMw)} IT`,
+      details: regionalCardLines(row).map(clampLine),
+    };
+  }
   return {
     ...base,
-    variant: 'card',
-    title,
-    details: shortCardLines(row).map(clampLine),
+    variant: 'label',
+    title: `${row.name.toUpperCase()} · ${formatMw(row.itPowerMw)} IT`,
   };
 }
 
-/** The three lines that make the regional card: who, where it is going, how it is powered. */
-export function shortCardLines(row) {
+/** Regional card: who, where it is going, how it is powered. */
+export function regionalCardLines(row) {
   return [
     joinParts([
       row.owner ? `owner ${row.owner}` : null,
@@ -161,11 +213,62 @@ export function shortCardLines(row) {
   ];
 }
 
-/** Every reading the layer holds, ordered the way an analyst reads a site. */
-export function fullCardLines(row) {
-  const gen = row.power.onSiteGeneration;
-  const cooling = row.cooling;
-  const lines = [
+/** Local card: the campus at a glance, and the hint that the marker opens the dossier. */
+export function localCardLines(row) {
+  return [
+    joinParts([
+      row.status,
+      row.rank ? `#${row.rank} US` : null,
+      `${formatMw(row.itPowerMw)} IT now`,
+      row.plannedItPowerMw !== null && row.plannedItPowerMw > row.itPowerMw
+        ? `→ ${formatMw(row.plannedItPowerMw)} ${row.plannedDate ? `by ${row.plannedDate}` : 'planned'}`
+        : null,
+    ]),
+    joinParts([
+      row.owner ? `owner ${row.owner}` : null,
+      row.h100e !== null ? `${formatCount(row.h100e)} H100e` : null,
+    ]),
+    joinParts([row.power.gridUtility, onSiteSummary(row)]),
+    'click the marker for the dossier',
+  ];
+}
+
+/** Ambient label for an on-site asset (a turbine plant, a substation). */
+export function createAssetOverlayEntry(row, asset, position) {
+  const capacity = joinParts(
+    [
+      asset.capacityMw !== null ? formatMw(asset.capacityMw) : null,
+      asset.plannedCapacityMw !== null
+        ? `→ ${formatMw(asset.plannedCapacityMw)}`
+        : null,
+    ],
+    ' ',
+  );
+  return {
+    id: `asset:${row.id}:${asset.id}`,
+    position,
+    variant: 'label',
+    title: joinParts([asset.name.toUpperCase(), capacity]),
+    accent: ASSET_CSS,
+    priority: Math.round((asset.capacityMw ?? 0) + 1),
+    collisionGroup: 'ambient-label',
+    paintLane: 'ambient-label',
+    interactive: false,
+    edgeFade: 'keyhole',
+    horizonCull: true,
+    terrainOcclusion: false,
+    gapPx: 12,
+    verticalOnly: true,
+    placement: 'above',
+  };
+}
+
+/**
+ * Selected card: compact on purpose. The full record, the timeline and the
+ * sources live in the dossier drawer; the map card carries the headline.
+ */
+export function buildSelectedDatacenterCard(row, position) {
+  const details = [
     joinParts([
       joinParts([row.city, row.state], ', '),
       row.project ? `project ${row.project}` : null,
@@ -174,124 +277,31 @@ export function fullCardLines(row) {
     ]),
     joinParts([
       row.owner ? `owner ${row.owner}` : null,
-      row.operator ? `operator ${row.operator}` : null,
-    ]),
-    joinParts([
       row.users.length ? `users ${row.users.join(', ')}` : null,
-      row.investors.length ? `investors ${row.investors.join(', ')}` : null,
-      row.builders.length ? `builder ${row.builders.join(', ')}` : null,
     ]),
-    joinParts([expansionLine(row), row.plannedNote]),
     joinParts([
-      row.h100e !== null ? `compute ${formatCount(row.h100e)} H100e` : null,
-      row.plannedH100e !== null && row.plannedH100e !== row.h100e
-        ? `→ ${formatCount(row.plannedH100e)}`
+      row.facilityPowerMw !== null
+        ? `facility ${formatMw(row.facilityPowerMw)}`
         : null,
-      row.chips.length
-        ? `chips ${row.chips.map((c) => `${formatCount(c.count)} ${c.type}`).join(', ')}`
-        : null,
+      expansionLine(row),
+    ]),
+    joinParts([
+      row.power.gridUtility,
+      row.power.gridOperator ? `(${row.power.gridOperator})` : null,
+      onSiteSummary(row),
     ]),
     joinParts([
       row.capexUsdB !== null ? `capex ${formatUsdB(row.capexUsdB)}` : null,
-      row.computeCostUsdB !== null
-        ? `(compute ${formatUsdB(row.computeCostUsdB)}, build ${formatUsdB(row.constructionCostUsdB)})`
-        : null,
-      row.plannedCapexUsdB !== null && row.plannedCapexUsdB !== row.capexUsdB
-        ? `→ ${formatUsdB(row.plannedCapexUsdB)}`
-        : null,
-      row.annualOpexUsdB !== null
-        ? `opex ${formatUsdB(row.annualOpexUsdB)}/yr`
-        : null,
-      row.capexPerItMwUsdM !== null
-        ? `$${formatInt(row.capexPerItMwUsdM)}M per IT MW`
-        : null,
-    ]),
-    joinParts([
-      row.buildingsOperational !== null
-        ? `buildings ${formatInt(row.buildingsOperational)}${row.buildingsPlanned !== null ? ` of ${formatInt(row.buildingsPlanned)}` : ''}`
-        : null,
-      row.campusAcres !== null
-        ? `campus ${formatInt(row.campusAcres)} acres`
-        : null,
-      row.buildingSqFt !== null
-        ? `${formatCount(row.buildingSqFt)} sq ft`
-        : null,
-      row.facilityToItRatio !== null
-        ? `facility/IT ${row.facilityToItRatio.toFixed(2)}`
-        : null,
-    ]),
-    joinParts([
-      cooling.method ? `cooling ${cooling.method}` : null,
-      cooling.chillers !== null
-        ? `${formatInt(cooling.chillers)} chillers${cooling.chillerCapacityMw !== null ? ` (${formatMw(cooling.chillerCapacityMw)})` : ''}`
-        : null,
-      cooling.condensers !== null
-        ? `${formatInt(cooling.condensers)} condensers`
-        : null,
-    ]),
-    joinParts([
-      row.power.gridUtility ? `grid ${row.power.gridUtility}` : null,
-      row.power.gridOperator ? `(${row.power.gridOperator})` : null,
-      row.power.interconnectionMw !== null
-        ? `interconnect ${formatMw(row.power.interconnectionMw)}`
-        : null,
-      row.power.substationMw !== null
-        ? `substation ${formatMw(row.power.substationMw)}`
-        : null,
-    ]),
-    joinParts([
-      gen.type ? `on-site ${gen.type}` : null,
-      gen.capacityMw !== null && gen.capacityMw > 0
-        ? formatMw(gen.capacityMw)
-        : null,
-      gen.plannedCapacityMw !== null
-        ? `→ ${formatMw(gen.plannedCapacityMw)}`
-        : null,
-    ]),
-    joinParts([gen.units, gen.capacityNote]),
-    gen.permitStatus ? `permit ${gen.permitStatus}` : null,
-    joinParts([
-      row.power.batteries ? `batteries ${row.power.batteries}` : null,
-      row.power.backupGenerators
-        ? `backup ${row.power.backupGenerators}`
-        : null,
-      row.waterUseMgd !== null ? `water ${row.waterUseMgd} MGD` : null,
-    ]),
-    joinParts([
-      row.gasEquivalentMmcfd !== null
-        ? `gas-equivalent ${formatMmcfd(row.gasEquivalentMmcfd)} now`
-        : null,
-      row.plannedGasEquivalentMmcfd !== null &&
-      row.plannedGasEquivalentMmcfd !== row.gasEquivalentMmcfd
-        ? `${formatMmcfd(row.plannedGasEquivalentMmcfd)} at full build`
-        : null,
-      'illustrative, 7.0 MMBtu/MWh around the clock',
-    ]),
-    joinParts([
-      row.latestMilestone
-        ? `latest ${row.latestMilestone.date} ${row.latestMilestone.milestone}`
-        : null,
-      row.nextMilestone
-        ? `next ${row.nextMilestone.date} ${row.nextMilestone.milestone}`
-        : null,
-    ]),
-    joinParts([
-      row.asOf ? `site data as of ${row.asOf}` : null,
-      'Epoch AI (CC BY 4.0)',
-      row.positionSource ? `position ${row.positionSource}` : null,
+      row.h100e !== null ? `${formatCount(row.h100e)} H100e` : null,
+      'dossier open ▸',
     ]),
   ];
-  return lines.filter(Boolean).map(clampLine);
-}
-
-/** Selected detail card: the whole record, pinned above the marker. */
-export function buildSelectedDatacenterCard(row, position) {
   return {
     id: `selected-datacenter:${row.id}`,
     position,
     accent: statusCss(row.status),
-    title: `${row.name.toUpperCase()} · ${formatMw(row.itPowerMw)} IT · ${formatMw(row.facilityPowerMw)} FACILITY`,
-    details: fullCardLines(row),
+    title: `${row.name.toUpperCase()} · ${formatMw(row.itPowerMw)} IT`,
+    details: details.filter(Boolean).map(clampLine),
     selected: true,
     priority: Number.MAX_SAFE_INTEGER,
     horizonCull: true,

@@ -119,6 +119,45 @@ function normalizeCooling(raw) {
   });
 }
 
+/** A campus outline as [lon, lat] pairs; fewer than three points is no footprint. */
+function normalizeFootprint(ring) {
+  if (!Array.isArray(ring)) return null;
+  const points = ring
+    .map((p) => (Array.isArray(p) ? [num(p[0]), num(p[1])] : null))
+    .filter(
+      (p) =>
+        p &&
+        p[0] !== null &&
+        p[1] !== null &&
+        Math.abs(p[0]) <= 180 &&
+        Math.abs(p[1]) <= 90,
+    );
+  return points.length >= 3 ? Object.freeze(points.map(Object.freeze)) : null;
+}
+
+/** On-site plants and substations that get their own marker at the local tier. */
+function normalizeAssets(entries) {
+  return list(entries)
+    .map((asset) => {
+      const id = text(asset?.id);
+      const name = text(asset?.name);
+      const lat = num(asset?.lat);
+      const lon = num(asset?.lon);
+      if (!id || !name || lat === null || lon === null) return null;
+      return Object.freeze({
+        id,
+        name,
+        kind: text(asset.kind) ?? 'asset',
+        lat,
+        lon,
+        capacityMw: num(asset.capacityMw),
+        plannedCapacityMw: num(asset.plannedCapacityMw),
+        note: text(asset.note),
+      });
+    })
+    .filter(Boolean);
+}
+
 function normalizeSources(entries) {
   return list(entries)
     .map((s) => {
@@ -212,6 +251,8 @@ export function normalizeDatacenterSite(site, assumptions) {
     nextMilestone,
     sources: normalizeSources(site.sources),
     notes: list(site.notes),
+    footprint: normalizeFootprint(site.footprint),
+    assets: normalizeAssets(site.assets),
     // Derived readings, all null-safe.
     facilityToItRatio:
       facilityPowerMw !== null && itPowerMw > 0

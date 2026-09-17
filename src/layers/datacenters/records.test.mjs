@@ -13,6 +13,7 @@ import {
   normalizeDatacenterSite,
 } from './records.js';
 import { createBundledDatacenterSource } from './source.js';
+import { buildDossierModel } from './dossier.js';
 
 const BUNDLE_URL = new URL(
   '../../data/local_data/us_datacenters/datacenters.json',
@@ -168,4 +169,65 @@ test('the bundled source reads once and caches the snapshot', async () => {
     fetchImpl: async () => ({ ok: true, json: async () => ({ nope: true }) }),
   });
   await assert.rejects(() => malformed.getSnapshot(), /Malformed/);
+});
+
+test('campus footprints and on-site assets normalize and survive bad input', () => {
+  const snapshot = normalizeDatacenterDataset(loadBundle());
+  const byId = new Map(snapshot.rows.map((r) => [r.id, r]));
+  for (const id of ['colossus-2', 'new-carlisle-rainier', 'stargate-abilene']) {
+    const row = byId.get(id);
+    assert.ok(row.footprint && row.footprint.length >= 3, id + ' has a footprint');
+    for (const [lon, lat] of row.footprint) {
+      assert.ok(Math.abs(lon - row.lon) < 0.2 && Math.abs(lat - row.lat) < 0.2, id + ' footprint sits on the site');
+    }
+  }
+  assert.equal(byId.get('fairwater-atlanta').footprint, null);
+  const colossus = byId.get('colossus-2');
+  assert.equal(colossus.assets.length, 1);
+  assert.equal(colossus.assets[0].kind, 'gas-turbines');
+  assert.equal(colossus.assets[0].capacityMw, 495);
+  assert.deepEqual(byId.get('meta-prometheus').assets, []);
+
+  const site = normalizeDatacenterSite(
+    {
+      id: 'z',
+      name: 'Z',
+      lat: 1,
+      lon: 1,
+      itPowerMw: 1,
+      footprint: [[1, 1], [2, 2]],
+      assets: [{ id: 'a' }, { id: 'b', name: 'B', lat: 1, lon: 1 }],
+    },
+    DEFAULT_GAS_ASSUMPTIONS,
+  );
+  assert.equal(site.footprint, null);
+  assert.equal(site.assets.length, 1);
+  assert.equal(site.assets[0].capacityMw, null);
+});
+
+test('the dossier model carries every section an analyst reads', () => {
+  const snapshot = normalizeDatacenterDataset(loadBundle());
+  const model = buildDossierModel(snapshot.rows[0], { total: 5 });
+  assert.equal(model.title, 'Colossus 2');
+  assert.match(model.kicker, /#1 of 5/);
+  assert.equal(model.stats.length, 4);
+  assert.equal(model.stats[0].value, '946 MW');
+  assert.deepEqual(
+    model.sections.map((s) => s.title),
+    ['Supply', 'Compute', 'Capital', 'Campus', 'People'],
+  );
+  for (const section of model.sections)
+    assert.ok(section.rows.length >= 2, section.title + ' has rows');
+  const supply = Object.fromEntries(model.sections[0].rows);
+  assert.match(supply['On-site MW'], /495 MW/);
+  assert.match(supply['Gas-equiv.'], /illustrative/);
+  assert.ok(model.chart.length >= 4);
+  assert.ok(model.chart.some((p) => p.projected));
+  assert.ok(model.sources.length >= 3);
+  assert.match(model.footer, /CC BY 4.0/);
+  const steady = buildDossierModel(
+    normalizeDatacenterSite({ id: 'y', name: 'Y', lat: 1, lon: 1, itPowerMw: 10 }, DEFAULT_GAS_ASSUMPTIONS),
+  );
+  assert.equal(steady.stats[2].value, 'no growth');
+  assert.equal(steady.chart.length, 0);
 });
