@@ -1,0 +1,22 @@
+{
+  "dataset": "Epoch AI, AI Data Centers",
+  "landing": "https://epoch.ai/data/ai-data-centers",
+  "files": [
+    { "name": "data_centers.zip", "url": "https://epoch.ai/data/data_centers/data_centers.zip", "retrieved": "2026-09-17" },
+    { "name": "data_centers.csv", "url": "https://epoch.ai/data/data_centers/data_centers.csv", "retrieved": "2026-09-17" }
+  ],
+  "license": "CC BY 4.0",
+  "citation": "Epoch AI, 'AI Data Centers'. Published online at epoch.ai. Retrieved from https://epoch.ai/data/ai-data-centers [online resource].",
+  "positions": {
+    "nominatim": "https://nominatim.openstreetmap.org (OpenStreetMap, ODbL), queried 2026-09-17 for the street addresses and campus names"
+  },
+  "supplementary": [
+    "https://www.gem.wiki/Colossus_2_power_station",
+    "https://www.datacenterdynamics.com/en/news/xai-deploys-19-natural-gas-turbines-at-colossus-2-data-center-in-southaven-mississippi-report/",
+    "https://www.cnbc.com/2025/10/29/amazon-opens-11-billion-ai-data-center-project-rainier-in-indiana.html",
+    "https://www.ajc.com/business/2025/11/microsofts-newest-ai-superfactory-opens-at-sprawling-fayetteville-campus/",
+    "https://www.datacenterdynamics.com/en/news/microsoft-launches-atlanta-fairwater-data-center-two-stories-no-ups-or-gen-sets/",
+    "https://www.nbc4i.com/news/local-news/new-albany/meta-will-use-nuclear-power-for-its-new-albany-a-i-data-center/",
+    "https://www.datacenterdynamics.com/en/news/crusoes-abilene-data-center-officially-live-serving-oracle-and-openais-stargate/"
+  ]
+}

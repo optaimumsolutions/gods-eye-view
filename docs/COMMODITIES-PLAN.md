@@ -1,6 +1,6 @@
-# PLAN — Commodities Globe: rules, features and layout for rows 1 to 7
+# PLAN — Commodities Globe: rules, features and layout for rows 1 to 8
 
-**Version:** 1.1 · **Date:** 2026-09-17 · **Status:** decisions locked in the
+**Version:** 1.2 · **Date:** 2026-09-17 · **Status:** decisions locked in the
 2026-09-17 grill; build not started beyond rows 0a and 0b
 **Owner:** Jack Gewirz
 **Companions:** [`COMMODITIES.md`](COMMODITIES.md) (verified endpoints, source
@@ -26,6 +26,7 @@ owns layers. Re-check `git status` before every edit to a shared file.
 | 5   | News pinned to assets                            | layers + server                      | OPEN — needs the assets from row 4                                                                  |
 | 6   | Trade-flow arcs                                  | layers + server                      | OPEN                                                                                                |
 | 7   | Episode scene packs                              | content                              | OPEN — the only oracle bridge, offline and per episode                                              |
+| 8   | `energy-datacenters`, US power load, bundled   | layers (worktree `commodities-datacenters`) | **BUILT** 2026-09-17 — first five sites on `feat/energy-datacenters`, PRD §8, not merged; next tier and refresh script open |
 
 Definition of usable, pending founder confirmation of question 13: rows 1
 through 4. Rows 5 to 7 are context and content.
@@ -519,3 +520,178 @@ card all print the same "as of" stamp from one function.
   the first-run dialog before dismissing it.
 - **Q13, definition of usable.** Unconfirmed; does not change row 1. →
   Confirm before row 4 planning.
+
+---
+
+## 8. Row 8 PRD — `energy-datacenters`, United States power load (FR-G8)
+
+**Written:** 2026-09-17 · **Status:** built for the first five sites on
+`feat/energy-datacenters` (worktree `commodities-datacenters`), not merged ·
+**Mirror:** Project Brain `gods-eye-view/05-prd.md`. Requested by the founder
+on 2026-09-17 after reviewing the upstream data center layer; decisions not
+covered by rules R1 to R13 are marked as assumptions.
+
+### 8.1 Summary
+
+A static, US-only data center layer that shows the largest sites by power,
+sized by IT megawatts, with the depth of card an energy analyst would want:
+a bare label at global zoom, a short card once the camera is regional, and
+the full record on click (owner, users, IT and facility power, planned
+build-out, chips, capex and operating cost, cooling, grid, on-site
+generation, water, timeline, sources). The first five sites ship now; the
+same bundle format grows to the next tier and, later, to global sites.
+
+### 8.2 Problem
+
+- The upstream `local-datacenters` layer draws 4,351 OpenStreetMap footprints
+  worldwide (1,617 in the US bounding box) and none of them carries a power,
+  capacity or wattage tag. It cannot answer "how big" or "who".
+- Data centers are now gigawatt-class electricity loads with on-site gas
+  turbines and dedicated gas plants. For an oil and gas globe they are demand
+  assets, and the layer has to say so in numbers.
+- The founder wants US sites only for now, static assets built the way the
+  upstream bundles are built, and cards that get richer as the camera gets
+  closer.
+
+### 8.3 Target user
+
+- Jack, reading the physical globe beside the oracle console (R1).
+- An analyst at an energy or infrastructure firm looking at one campus: who
+  owns it, how much it draws today and at full build, what powers it, what
+  it cost, and where each number came from.
+
+### 8.4 Goals (verifiable)
+
+1. US only. Every record's position is inside the contiguous United States
+   bounding box, pinned by the unit test.
+2. Static. Nothing is fetched at runtime beyond the bundled JSON; every card
+   and the panel meta line show the bundle vintage (`as of 2026-09-17 ·
+   Epoch AI`), never the fetch time.
+3. Three depths. The render check shows a label at 7,000 km, a three-line
+   card at 150 km, and a full card of at least twelve lines on click, and
+   the layer's `getStats().tier` flips between `global` and `regional` at the
+   2,000 km threshold.
+4. Analyst-grade. Every site carries owner, users, current IT MW, facility
+   MW, planned IT MW, capex, chips, cooling, grid utility and on-site
+   generation, plus at least three cited sources, all asserted by the test.
+5. Attributed and gated. Epoch AI (CC BY 4.0) is in `DATA_SOURCES.md` and the
+   Data attribution popover; `format`, `check:boundaries`, `test` and `build`
+   are green with the count pins moved from 23 to 24.
+
+### 8.5 Non-goals
+
+- Sites outside the United States. The bundle format already allows them;
+  the founder deferred global coverage to a later row.
+- Editing the upstream `local-datacenters` layer (R13). It stays as the
+  global footprint layer; the new layer is additive.
+- Live data. Utility interconnection queues, real-time load and outage feeds
+  are candidates for `UPGRADE.md`, not this row.
+- Signals (R11). Gas-equivalent demand is labelled illustrative arithmetic.
+- Hover cards. They arrive with the row 1 hover service (R4, R6).
+
+### 8.6 Requirements
+
+1. **Bundle.** `src/data/local_data/us_datacenters/datacenters.json` with a
+   `vintage`, `source` (name, URL, license, retrieval date), `selection`
+   statement, `assumptions` for the gas arithmetic, and `sites[]`; a
+   `README.md` and `source.json` record provenance and the refresh procedure.
+2. **Selection.** The five largest US sites by current IT power in the Epoch
+   AI "AI Data Centers" tracker on the retrieval date: Colossus 2 (946 MW),
+   Anthropic-Amazon New Carlisle (910), Microsoft Fairwater Atlanta (636),
+   Meta Prometheus (562), OpenAI Stargate Abilene (421). (Assumption: rank by
+   current, not planned, IT power; planned figures are on every card.)
+3. **Positions.** OpenStreetMap polygon centroids where a mapped campus
+   exists, otherwise the street address or a campus landmark, with the method
+   recorded per site in `positionSource`.
+4. **Records module.** `src/layers/datacenters/records.js` is portable:
+   normalizes and freezes each site, rejects rows missing id, name, position
+   or IT power, ranks by IT power, derives facility/IT ratio, capex per IT MW,
+   planned growth, gas-equivalent demand (facility MW × 24 h × 7.0 MMBtu/MWh
+   ÷ 1.037 MMBtu/Mcf), latest and next milestone, and owns the formatters.
+5. **Source.** `source.js` reads the bundle once through an injected fetch,
+   caches the normalized snapshot, and fails loudly on HTTP or shape errors.
+6. **Marker.** A pinned point sized by the square root of IT MW (8 px plus
+   0.35 px per √MW) and a clamped ground-polyline ring of 3 km plus 350 m per
+   √MW, coloured blue for `operating` and green for `expanding`.
+7. **Ambient depth.** Above 2,000 km camera height the overlay entry is a
+   label, `NAME · 946 MW IT`; below it a card with three lines: owner and
+   users; facility MW and the planned path with its date; grid utility and
+   on-site generation. The layer republishes on the camera's `moveEnd` when
+   the tier changes.
+8. **Full card.** On click, the selected card lists in order: place, project,
+   status and rank; owner and operator; users, investors, builders; planned
+   path and note; compute (H100 equivalents) and chips; capex, compute and
+   construction cost, planned capex, annual opex, capex per IT MW; buildings,
+   campus acres, square feet, facility/IT ratio; cooling and chiller plant;
+   grid utility, operator, interconnection and substation; on-site
+   generation, its units and permit status; batteries, backup and water;
+   gas-equivalent demand now and at full build, labelled illustrative;
+   latest and next milestone; the site's as-of date, licence and position
+   source. Lines clamp at 150 characters.
+9. **Context.** Each marker registers a context record whose `properties` is
+   the analyst record (32 fields); `getAnalystRecords()` exposes the same
+   rows to the voice and analyst engines.
+10. **Freshness surface.** The layer declares `freshnessClass: 'published'`
+    and `getStats().asOf`, pre-adopting the row 1 contract; it joins the 0a
+    and 0b retrofit when the observation module lands.
+11. **Panel.** Listed in the Commodities group as `Data Centers · US Power`
+    with the bundle vintage in its meta line; token `y` in the layer registry.
+12. **Wiring.** `src/app/layers/datacenters.js`, `src/sources/reference.js`,
+    `src/app/constructCatalog.js`, `src/data/layerState.js`,
+    `src/ui/layerPanel.js`, `scripts/package-boundaries.json` (three
+    sections), `DATA_SOURCES.md`, `src/data/dataCredits.js`,
+    `docs/COMMODITIES.md`; the three count-pinning tests move to 24.
+13. **Render check.** `.gev-logs/render-datacenters.mjs` asserts five sites,
+    the as-of stamp, the global and regional tiers, the Colossus 2 click, the
+    analyst record on the context, and no page errors, with screenshots of
+    all three depths.
+14. **Refresh.** Re-download the Epoch bundle, re-rank, update `vintage` and
+    `source.retrieved`, re-verify positions; a script for this is milestone 3.
+
+### 8.7 Constraints and invariants
+
+- R2 and R3: class `published`, stamp is the vintage. R11: descriptive only.
+  R12: free source, CC BY 4.0. R13: additive; upstream layer untouched.
+- R6 exception, recorded: this row was built before the row 1 contract at the
+  founder's request; the layer pre-adopts the contract's surface and is in
+  the retrofit list.
+- Engineering rules §2.2 in full, including portable `records.js` and
+  `source.js` with no Cesium import.
+
+### 8.8 Milestones (smallest shippable first)
+
+1. **Five largest US sites.** Built 2026-09-17. Verify: render check green,
+   four gates green. Done.
+2. **Merge.** Rebase `feat/energy-datacenters` onto `commodities` once the
+   other lanes land; ledger row 8 → BUILT with the merge commit.
+3. **Refresh script.** `scripts/refresh-us-datacenters.mjs` reads the Epoch
+   ZIP, re-ranks, rewrites the bundle and prints a diff. Verify: running it
+   on 2026-09-17 data reproduces the committed JSON.
+4. **Next tier.** Sites 6 to 15 by current IT power (Fairwater Wisconsin,
+   Google Pryor, Colossus 1, and on), same fields, same test. Verify: the
+   global view stays legible under the 24-entry cohort cap.
+5. **Hover retrofit.** After row 1, the hover card shows name, stamp, IT MW.
+6. **Global sites** (deferred by the founder): a `country` field and a panel
+   sub-toggle `US only`; positions verified per site.
+
+### 8.9 Risks and open questions
+
+- **Estimates, not meter readings.** Epoch states an IT-power estimate is
+  within a factor of 1.4 of truth about 80% of the time; planned figures are
+  projections from satellite imagery. → Every card names Epoch and the site's
+  as-of date; the selection text says so.
+- **Reported but unconfirmed facts** (Socrates plant MW, Abilene on-site MW,
+  Colossus 2 turbine counts) are flagged in the record notes. → Replace with
+  filing-sourced numbers at milestone 3.
+- **Positions.** Prometheus uses a campus landmark; New Albany's buildings
+  spread across the business park. → Move to a polygon centroid once
+  OpenStreetMap maps the campus.
+- **Card size.** Sixteen lines at 150 characters is wide; on a narrow window
+  the right edge clips. → Row 1's hover keeps the quick look short; consider
+  a two-column card in the full-card redesign.
+- **Lane.** Built in a third worktree while the layers session works in the
+  main tree. → Merge order and the ledger claim avoid a conflict; no shared
+  file was edited by both.
+- **Headless flakiness.** The render check fails with "Rendering has
+  stopped" when the full test suite or a build runs at the same time. → Run
+  it alone; it passes.

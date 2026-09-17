@@ -217,6 +217,13 @@ export const DATA_CREDITS = [
       '(ODbL 1.0)',
   },
   {
+    key: 'us-datacenters',
+    html:
+      'US data centers (power): ' +
+      '<a href="https://epoch.ai/data/ai-data-centers" target="_blank" rel="noopener">Epoch AI, AI Data Centers</a> ' +
+      '(CC BY 4.0); positions © OpenStreetMap contributors (ODbL 1.0)',
+  },
+  {
     key: 'dams',
     html:
       'Dams: ' +

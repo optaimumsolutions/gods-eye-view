@@ -16,7 +16,7 @@ const FEED_STATE_LABELS = Object.freeze({
 const PANEL_GROUPS = [
   {
     label: 'Commodities',
-    ids: ['commodity-chokepoints', 'commodity-ports'],
+    ids: ['commodity-chokepoints', 'commodity-ports', 'energy-datacenters'],
   },
   {
     label: 'Movement',
@@ -67,6 +67,7 @@ const PANEL_LABELS = {
   'local-firms': 'Active Fires',
   'commodity-chokepoints': 'Chokepoints · Tanker Transits',
   'commodity-ports': 'Ports · Tanker Calls',
+  'energy-datacenters': 'Data Centers · US Power',
 };
 
 function panelLabel(layer) {

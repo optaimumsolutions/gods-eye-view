@@ -32,6 +32,7 @@ Principles:
 | 7 | `commodity-news` | headlines pinned to the asset they name, disaster events | GDELT DOC through the server proxy with a keyword gazetteer, GDACS via PortWatch `gdacs_events` | proxy + gazetteer; the GDELT GEO API is dead | planned |
 | 8 | `commodity-flows` | origin-to-destination arcs by monthly volume | EIA crude imports, EIA gas trade lanes, UN Comtrade preview, ENTSOG | exporter from the oracle store plus Comtrade proxy | planned |
 | 9 | oracle state | prices, chokepoint deviations, episode scene packs | `tools/globe_export.py` in the oracle repo | static JSON served by a provider, Director data packs | planned |
+| 10 | `energy-datacenters` | the five largest US data centers by current IT power: marker sized by MW with a campus ring, label at global zoom, short card once regional, full analyst card on click (owner, users, IT and facility MW, planned build-out, chips, capex and opex, cooling, grid, on-site gas, illustrative gas-equivalent demand) | Epoch AI "AI Data Centers" bundle (CC BY 4.0), positions from OpenStreetMap | bundled JSON under `src/data/local_data/us_datacenters/`, chokepoints layer pattern | **BUILT** |
 
 ## Verified endpoints
 
