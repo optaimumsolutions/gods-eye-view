@@ -381,7 +381,7 @@ const SVG_NS = 'http://www.w3.org/2000/svg';
 function renderChart(doc, points) {
   const width = 400;
   const height = 110;
-  const padL = 34;
+  const padL = 48;
   const padR = 6;
   const padT = 10;
   const padB = 24;

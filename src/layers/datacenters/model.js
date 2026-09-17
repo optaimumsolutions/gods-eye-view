@@ -24,8 +24,8 @@ export const DATACENTER_TIER_REGIONAL = 'regional';
 export const DATACENTER_TIER_LOCAL = 'local';
 /** Above this height a click flies the camera down to the campus first. */
 export const DATACENTER_FLY_FROM_HEIGHT_M = 400_000;
-/** Where a click lands the camera: the whole campus and its ring in view. */
-export const DATACENTER_FLY_TO_HEIGHT_M = 45_000;
+/** Where a click lands the camera: low enough to read a campus footprint and its plants. */
+export const DATACENTER_FLY_TO_HEIGHT_M = 18_000;
 export const DATACENTER_ZOOM_OUT_HEIGHT_M = 2_500_000;
 export const DATACENTER_FLY_DURATION_S = 2.0;
 /** Hover picks are event-driven and throttled; a still pointer costs nothing. */
