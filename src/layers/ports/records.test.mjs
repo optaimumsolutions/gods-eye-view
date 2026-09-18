@@ -209,6 +209,9 @@ test('snapshot joins registry, windows and disruptions; a missing window reads a
     baselineStats: baseline,
     latestDate: '2026-09-11',
     disruptions,
+    // This case is about the join, so keep the quiet ports the tanker floor
+    // would otherwise drop; the floor itself is covered by its own test.
+    minAnnualTankers: 0,
   });
   assert.equal(snapshot.latestDate, '2026-09-11');
   assert.equal(snapshot.disruptions.length, 1);
@@ -227,6 +230,32 @@ test('snapshot joins registry, windows and disruptions; a missing window reads a
   assert.equal(silent.recentAvg, null);
   assert.equal(silent.recentDays, 0);
   assert.equal(silent.latestDate, null);
+});
+
+test('the tanker floor drops registry ports that are not tanker ports', () => {
+  const ports = normalizePortRows({
+    features: [
+      port('port1201', 'Singapore', 103.7, 1.27),
+      port('port9', 'Quiet', 10, 10, { vessel_count_tanker: 3 }),
+      port('port8', 'Just Under', 30, 30, { vessel_count_tanker: 249 }),
+      port('port6', 'Just Over', 40, 40, { vessel_count_tanker: 250 }),
+      port('port5', 'Unrated', 50, 50, { vessel_count_tanker: null }),
+    ],
+  });
+  const snapshot = buildPortSnapshot({
+    ports,
+    recentStats: [],
+    baselineStats: [],
+    latestDate: '2026-09-11',
+  });
+  assert.deepEqual(
+    snapshot.rows.map((row) => row.name),
+    ['Singapore', 'Just Over'],
+    'the floor is inclusive, and an unrated port is not assumed to have traffic',
+  );
+  // The registry count is what was offered, not what survived: the layer
+  // reports both so the drop is visible rather than silent.
+  assert.equal(snapshot.registryCount, 5);
 });
 
 test('source anchors both windows on the newest published day and follows the transfer-limit flag', async () => {

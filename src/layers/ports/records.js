@@ -16,6 +16,19 @@ export const PORT_BASELINE_DAYS = 90;
 /** Disruptions still open, or closed within this many days, are drawn. */
 export const DISRUPTION_RECENT_DAYS = 90;
 /**
+ * Annual tanker visits a port must clear to be drawn — roughly one tanker call
+ * every day and a half.
+ *
+ * PortWatch's registry is every port it tracks, not every tanker port: of its
+ * 2,065 entries 297 see no tanker at all in a year and the median sees 51, so
+ * drawing the whole registry buries the liquid-bulk traffic this layer exists
+ * to show under a coastline of dots that mean nothing to it. Measured against
+ * the live registry on 2026-09-18, this floor keeps 431 ports. Alternatives on
+ * the same data if this reads too aggressive: 52/yr (one a week) keeps 1,035,
+ * 365/yr (one a day) keeps about 330.
+ */
+export const PORT_MIN_ANNUAL_TANKER_VISITS = 250;
+/**
  * Below this baseline a deviation is noise, not a move: one extra tanker at a
  * port that sees two a month reads as +1,400%. Such ports are 'thin'.
  */
@@ -257,10 +270,17 @@ export function buildPortSnapshot({
   baselineStats,
   latestDate = null,
   disruptions = [],
+  minAnnualTankers = PORT_MIN_ANNUAL_TANKER_VISITS,
 }) {
   const recentById = new Map(recentStats.map((row) => [row.id, row]));
   const baselineById = new Map(baselineStats.map((row) => [row.id, row]));
-  const rows = ports.map((port) => {
+  // A missing count is not evidence of traffic: an unrated port is dropped.
+  const tankerPorts = ports.filter(
+    (port) =>
+      (Number.isFinite(port.annualTankers) ? port.annualTankers : 0) >=
+      minAnnualTankers,
+  );
+  const rows = tankerPorts.map((port) => {
     const recent = recentById.get(port.id) ?? null;
     const baseline = baselineById.get(port.id) ?? null;
     const recentAvg = recent?.tankers ?? null;
@@ -282,5 +302,10 @@ export function buildPortSnapshot({
       latestDate: recent ? latestDate : null,
     };
   });
-  return { rows, disruptions: disruptions.slice(), latestDate };
+  return {
+    rows,
+    disruptions: disruptions.slice(),
+    latestDate,
+    registryCount: ports.length,
+  };
 }
