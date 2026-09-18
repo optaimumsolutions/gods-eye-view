@@ -1,4 +1,5 @@
 import * as Cesium from 'cesium';
+import { horizonOccluder } from '../../data/iconOrientation.js';
 import { isPointerFree } from '../../data/inputOwnership.js';
 import { CHOKEPOINT_GAZETTEER } from './gazetteer.js';
 import {
@@ -74,6 +75,7 @@ export function createChokepointsLayer({
   let _request = null;
   let _dataSource = null;
   let _clickHandler = null;
+  let _horizonCullRemovers = [];
   let _rows = [];
   let _entries = [];
   let _selectedId = null;
@@ -83,7 +85,7 @@ export function createChokepointsLayer({
   let _enabled = false;
   const _rowById = new Map();
   const _positionById = new Map();
-  /** Pinned entities per chokepoint id: `{ point, ring, flow, radius }`. */
+  /** Pinned entities per chokepoint id: `{ point, ring, flow, radius, visible }`. */
   const _pinsById = new Map();
 
   function publishOverlay() {
@@ -143,6 +145,48 @@ export function createChokepointsLayer({
     if (!_clickHandler) return;
     _clickHandler.destroy();
     _clickHandler = null;
+  }
+
+  /**
+   * Hide the strait markers that sit beyond the ellipsoid horizon.
+   *
+   * The dots are always-on-top (`disableDepthTestDistance: INFINITY`, so the
+   * terrain a strait sits beside can never swallow its marker) and with the
+   * Cesium globe hidden behind Google 3D tiles nothing writes far-side depth,
+   * so without this pass every strait on the opposite side of the planet shone
+   * through it. Only the dot bled: the ring and disc are clamped to ground and
+   * the ambient label already sets `horizonCull`, which is why the leak read as
+   * bare unlabelled points scattered over the globe. Same occluder pass as the
+   * CCTV and FIRMS layers.
+   */
+  function refreshHorizonCulling() {
+    if (!_enabled || !_viewer || _viewer.isDestroyed?.()) return;
+    const occluder = horizonOccluder(_viewer.camera);
+    for (const [id, pin] of _pinsById) {
+      const visible = occluder.isPointVisible(_positionById.get(id)) === true;
+      // Assigning `show` rebuilds a ConstantProperty, so only write on a flip.
+      if (pin.visible === visible) continue;
+      pin.ring.point.show = visible;
+      pin.visible = visible;
+    }
+  }
+
+  function installHorizonCulling(viewer) {
+    if (_horizonCullRemovers.length || !viewer?.camera) return;
+    // Event-driven, never a per-frame pass: the pins never move, so only the
+    // camera can flip which side of the planet a strait is on. `moveEnd` is the
+    // settle after a drag or flight; `changed` also catches a programmatic
+    // `setView`, which raises no move events at all.
+    _horizonCullRemovers = [
+      viewer.camera.moveEnd.addEventListener(refreshHorizonCulling),
+      viewer.camera.changed.addEventListener(refreshHorizonCulling),
+    ];
+    refreshHorizonCulling();
+  }
+
+  function removeHorizonCulling() {
+    for (const remove of _horizonCullRemovers) remove();
+    _horizonCullRemovers = [];
   }
 
   function contextProperties(row) {
@@ -222,7 +266,7 @@ export function createChokepointsLayer({
       flow.__chokepointId = point.id;
       _dataSource.entities.add(ring);
       _dataSource.entities.add(flow);
-      _pinsById.set(point.id, { point, ring, flow, radius });
+      _pinsById.set(point.id, { point, ring, flow, radius, visible: true });
       _rowById.set(point.id, row);
       _positionById.set(point.id, position);
       registerContext(ring, row);
@@ -288,6 +332,7 @@ export function createChokepointsLayer({
       if (_dataSource) _dataSource.show = true;
       overlayHost.setVisible(CHOKEPOINT_OVERLAY_SOURCE_ID, true);
       installClickHandler(viewer);
+      installHorizonCulling(viewer);
       publishOverlay();
     },
 
@@ -297,6 +342,7 @@ export function createChokepointsLayer({
       clearSelection({ publish: false });
       _enabled = false;
       removeClickHandler();
+      removeHorizonCulling();
       if (_dataSource) _dataSource.show = false;
       overlayHost.clearSource(CHOKEPOINT_OVERLAY_SOURCE_ID);
       overlayHost.setVisible(CHOKEPOINT_OVERLAY_SOURCE_ID, false);
@@ -359,6 +405,7 @@ export function createChokepointsLayer({
       clearSelection({ publish: false });
       _enabled = false;
       removeClickHandler();
+      removeHorizonCulling();
       overlayHost.clearSource(CHOKEPOINT_OVERLAY_SOURCE_ID);
       overlayHost.setVisible(CHOKEPOINT_OVERLAY_SOURCE_ID, false);
       context.removeEntityContextsForLayer(CHOKEPOINT_LAYER_ID);

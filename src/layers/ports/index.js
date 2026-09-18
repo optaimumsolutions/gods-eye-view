@@ -1,4 +1,5 @@
 import * as Cesium from 'cesium';
+import { horizonOccluder } from '../../data/iconOrientation.js';
 import { isPointerFree } from '../../data/inputOwnership.js';
 import {
   PORT_LAYER_ID,
@@ -59,6 +60,9 @@ export function createPortsLayer({
   let _request = null;
   let _dataSource = null;
   let _clickHandler = null;
+  let _horizonCullRemovers = [];
+  /** Always-on-top markers to horizon-cull: `{ entity, position, visible }`. */
+  let _cullTargets = [];
   let _rows = [];
   let _disruptions = [];
   let _entries = [];
@@ -154,6 +158,48 @@ export function createPortsLayer({
     _clickHandler = null;
   }
 
+  /**
+   * Hide the port and disruption markers that sit beyond the ellipsoid horizon.
+   *
+   * Same defect the chokepoints layer carried: these dots are always-on-top
+   * (`disableDepthTestDistance: INFINITY`, so the quay a port sits on cannot
+   * swallow its marker) and nothing writes far-side depth, so without this pass
+   * every port on the opposite side of the planet painted straight through it.
+   * At two thousand ports that reads as a haze of dots drifting over the globe.
+   * The disruption rings are clamped to ground and the ambient labels already
+   * horizon-cull, so only the dots leaked. Same occluder pass as the CCTV and
+   * FIRMS layers.
+   */
+  function refreshHorizonCulling() {
+    if (!_enabled || !_viewer || _viewer.isDestroyed?.()) return;
+    const occluder = horizonOccluder(_viewer.camera);
+    for (const target of _cullTargets) {
+      const visible = occluder.isPointVisible(target.position) === true;
+      // Assigning `show` rebuilds a ConstantProperty, so only write on a flip.
+      if (target.visible === visible) continue;
+      target.entity.point.show = visible;
+      target.visible = visible;
+    }
+  }
+
+  function installHorizonCulling(viewer) {
+    if (_horizonCullRemovers.length || !viewer?.camera) return;
+    // Event-driven, never a per-frame pass: a port never moves, so only the
+    // camera can flip which side of the planet it is on. `moveEnd` is the
+    // settle after a drag or flight; `changed` also catches a programmatic
+    // `setView`, which raises no move events at all.
+    _horizonCullRemovers = [
+      viewer.camera.moveEnd.addEventListener(refreshHorizonCulling),
+      viewer.camera.changed.addEventListener(refreshHorizonCulling),
+    ];
+    refreshHorizonCulling();
+  }
+
+  function removeHorizonCulling() {
+    for (const remove of _horizonCullRemovers) remove();
+    _horizonCullRemovers = [];
+  }
+
   function portContextProperties(row) {
     return {
       country: row.country,
@@ -221,6 +267,7 @@ export function createPortsLayer({
       if (_dataSource) _dataSource.show = true;
       overlayHost.setVisible(PORT_OVERLAY_SOURCE_ID, true);
       installClickHandler(viewer);
+      installHorizonCulling(viewer);
       publishOverlay();
     },
 
@@ -230,6 +277,7 @@ export function createPortsLayer({
       clearSelection({ publish: false });
       _enabled = false;
       removeClickHandler();
+      removeHorizonCulling();
       if (_dataSource) _dataSource.show = false;
       overlayHost.clearSource(PORT_OVERLAY_SOURCE_ID);
       overlayHost.setVisible(PORT_OVERLAY_SOURCE_ID, false);
@@ -252,6 +300,7 @@ export function createPortsLayer({
 
         const entities = [];
         const entries = [];
+        const cullTargets = [];
         resetIndexes();
         for (const row of rows) {
           const position = portPosition(row);
@@ -277,6 +326,7 @@ export function createPortsLayer({
           });
           marker.__portId = row.id;
           entities.push(marker);
+          cullTargets.push({ entity: marker, position, visible: true });
           entries.push(createPortOverlayEntry(row, position));
           const key = selectionKey('port', row.id);
           _rowById.set(row.id, row);
@@ -317,6 +367,7 @@ export function createPortsLayer({
           });
           anchor.__disruptionId = event.id;
           entities.push(anchor);
+          cullTargets.push({ entity: anchor, position, visible: true });
           event.rings.forEach((ring, index) => {
             const outline = new Cesium.Entity({
               id: `disruption-ring:${event.id}:${index}`,
@@ -352,6 +403,10 @@ export function createPortsLayer({
 
         _dataSource.entities.removeAll();
         for (const entity of entities) _dataSource.entities.add(entity);
+        // A rebuild hands back fresh, unculled entities: re-cull immediately so
+        // a refresh never flashes the far side of the planet back on.
+        _cullTargets = cullTargets;
+        refreshHorizonCulling();
         _entries = selectPortOverlayCohort(entries);
         if (
           _selected &&
@@ -365,7 +420,7 @@ export function createPortsLayer({
         _lastError = null;
         publishOverlay();
         console.log(
-          `[Data:Ports] Updated: ${rows.length} ports, ${disruptions.length} disruptions (latest ${_latestDate ?? 'n/a'})`,
+          `[Data:Ports] Updated: ${rows.length} tanker ports of ${snapshot.registryCount ?? rows.length} in the registry, ${disruptions.length} disruptions (latest ${_latestDate ?? 'n/a'})`,
         );
         return true;
       } catch (e) {
@@ -385,6 +440,8 @@ export function createPortsLayer({
       clearSelection({ publish: false });
       _enabled = false;
       removeClickHandler();
+      removeHorizonCulling();
+      _cullTargets = [];
       overlayHost.clearSource(PORT_OVERLAY_SOURCE_ID);
       overlayHost.setVisible(PORT_OVERLAY_SOURCE_ID, false);
       context.removeEntityContextsForLayer(PORT_LAYER_ID);
