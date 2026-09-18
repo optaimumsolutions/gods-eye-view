@@ -2532,6 +2532,7 @@
     "modules": [
       "src/sources/reference.js",
       "src/layers/earthquakes/source.js",
+      "src/layers/commodities/observation.js",
       "src/layers/chokepoints/source.js",
       "src/layers/chokepoints/records.js",
       "src/layers/chokepoints/gazetteer.js",
