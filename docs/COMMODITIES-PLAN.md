@@ -30,7 +30,7 @@ owns layers. Re-check `git status` before every edit to a shared file.
 | 7   | Episode scene packs                              | content                              | OPEN — the only oracle bridge, offline and per episode                                              |
 | 8   | `energy-datacenters`, US power load, bundled   | layers (worktree `commodities-datacenters`) | **BUILT** — v1 (five sites) `4ab9c96` on `feat/energy-datacenters`, PRD §8; v2 cards `76a334e`/`8f758b3`; v3 `1ccf37f` (2026-09-21, on `feat/commodities-shell`): fifteen sites, live EIA-930 grid and Open-Meteo weather on the cards and dossier, `/api/epoch/` proxy (no consumer yet — the refresh script is still open) |
 | 9   | Port dossier: camera + data panel, 20 ports   | layers + server + content (worktree `commodities-ports-dossier`) | OPEN — PRD §9 written 2026-09-17 from the grill (G1 to G6); not claimed; cut `feat/port-dossier` from `feat/commodities-shell` |
-| 11  | Gas production facilities: Gulf platforms (BSEE) first | layers + content (shell worktree, `feat/commodities-shell`) | **CLAIMED 2026-09-21** — PRD §13 from the founder's pivot and grill; built in `~/commodities-shell` on `feat/commodities-shell` (founder's instruction: every update on the shell branch, no row worktree), token `2`; no code yet. Next: milestone 1 (bundle + records) |
+| 11  | Gas production facilities: Gulf platforms (BSEE) first | layers + content (shell worktree, `feat/commodities-shell`) | **BUILT (first slice) 2026-09-21** — PRD §13 from the founder's pivot and grill; on `feat/commodities-shell` (founder's instruction: every update on the shell branch, no row worktree), token `2`. Milestone 1 `c6c92b2`: `scripts/build-gulf-platforms.mjs` + `src/data/local_data/bsee_gulf/` (1,315 installed structures, 120-month series, 608 KB gzip), the completeness rule and the one record shape. Milestone 2 `1e685f0`: marks sized by gas share and coloured by change against last year, three tiers, hover and selected cards, the panel line, `scripts/qa-gulf-platforms.mjs`. Milestone 3 `af342d1`: the dossier (ten-year chart, this-month ledger, identity, lifetime, sources) and the drawer chrome shared with the datacenters; QA 20 checks green (layer activation 755 ms apart from the bundle fetch, heap +50 MiB). Milestone 4 is the commit carrying this line. Four gates green at every commit. Next: milestone 5 (EIA regional backdrop, short grill first) |
 
 Definition of usable, pending founder confirmation of question 13: rows 1
 through 4. Rows 5 to 7 are context and content.
@@ -3138,17 +3138,22 @@ layer; never a bare `git stash`; the four gates at every commit
    the committed bytes from `.gev-cache/bsee/`; `completeness.test.mjs` pins
    2026-06 as the newest complete month from the measured counts;
    `records.test.mjs` proves the 120-month window, the lifetime summary and
-   the stamps; the bundle is ≤ 640 KB gzipped.
+   the stamps; the bundle is ≤ 640 KB gzipped. BUILT 2026-09-21 `c6c92b2`.
 2. **Marks, tiers, panel.** Verify: the QA at global and regional — the
    producing count equals the bundle, idle installed structures draw grey,
    removed ones do not draw, activation under 900 ms, heap growth under
-   100 MiB, no page errors.
+   100 MiB, no page errors. BUILT 2026-09-21 `1e685f0` (17 checks, 867 ms,
+   +78 MiB).
 3. **Cards and dossier.** Verify: the QA hovers the top producer (card lines
    match the bundle), clicks it (five dossier sections, 120-point chart,
-   lifetime block, sources) and screenshots all three tiers.
+   lifetime block, sources) and screenshots all three tiers. BUILT
+   2026-09-21 `af342d1` — the chart carries one point per _filed_ month (87
+   of 120 for Whale) rather than a fixed 120, so a gap in filing reads as a
+   gap; the activation gate was split, see 13.10.
 4. **Ledger, docs, credits; push.** Verify: ledger row 11 BUILT with SHAs;
    `DATA_SOURCES.md` and the credits footer name BSEE; the QA script is
-   committed.
+   committed. BUILT 2026-09-21 — credits and the QA script landed with
+   milestone 2; the ledger and these notes are the commit after `af342d1`.
 5. **EIA regional backdrop.** A short grill first, then state and play cards
    — gross withdrawals, marketed production, DPR rigs and new-well
    productivity, consumption by sector, storage, net trade: the state balance
@@ -3181,6 +3186,16 @@ layer; never a bare `git stash`; the four gates at every commit
   guard in R11.2. And BSEE's filed BOE is not exactly oil + gas / 5.62
   (47,571 filed where the convention gives 47,570), so BOE is carried as
   filed and the convention only fills a blank.
+- **Deviation 2026-09-21 (milestone 3) — the activation gate measures the
+  layer, not the dev server.** The same tree read 819, 990 and 1,077 ms
+  cold against the 900 ms gate with nothing changed; profiled in the page,
+  the 2.6 MB bundle fetch alone ranged 307 to 1,613 ms within an hour while
+  parse (18 ms), records (43 ms) and the 1,315 entities (~600 ms, Cesium's
+  Entity API) were steady. `scripts/qa-gulf-platforms.mjs` now reads the
+  fetch from `performance.getEntriesByType('resource')`, gates the
+  remainder at 900 ms (755 ms measured) and the cold total at 3,000 ms.
+  Suspending collection events around the adds changed nothing measurable
+  and was not kept.
 - **Open:** datum conversion — no by default (R11.12); revisit only if a
   mark visibly misses its platform in imagery.
 
