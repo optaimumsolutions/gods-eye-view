@@ -28,7 +28,7 @@ Principles:
 | 3 | `commodity-ports` | 2,065 ports as markers sized by annual tanker visits and coloured by 7-day vs 90-day tanker-call deviation (ports under 0.5 tankers/day read as thin, not moving), ground rings and labels for disruptions open or closed within 90 days, detail card on click | PortWatch `PortWatch_ports_database`, `Daily_Ports_Data` (means grouped by port, computed server-side), `portwatch_disruptions_database` | browser-direct source; five requests per refresh instead of a quarter-million daily rows | **BUILT** |
 | 4 | `commodity-gas-flows` | US gas transmission network (EIA, January 2020, 234 systems as a 1 px hairline, off by default because it costs ~500 MiB to draw) and North American gas border crossings (NACEI 2017, 60 marks as fixed grey pips); geometry only until EIA monthly point-of-entry volumes join at runtime | EIA public-domain linework (32,892 segments via an ArcGIS hosted view), NACEI layer 2 (Natural Resources Canada); volumes later from EIA API v2 `move/poe1` and `poe2` (key required) | bundled JSON under `src/data/local_data/eia_energy/` built by `npm run build:gas-pipelines`; PRD in `COMMODITIES-PLAN.md` §10 | **BUILT** (substrate; volumes pending an EIA key) |
 | 5 | `energy-plants` | refineries with capacity, gas processing plants, LNG terminals, storage fields, product terminals, shale plays | EIA copies plus EIA-owned shale play and basin services; OGIM and Global Energy Monitor for the rest of the world | bundled GeoJSON | planned |
-| 6 | `weather-*` overlays | GOES clouds, precipitation, radar, hurricane cones, NWS alerts, basin ensemble cards | NASA GIBS WMTS, RainViewer, NHC ArcGIS, NWS API, Open-Meteo ensemble | imagery-layer modules (precedent: Nepal event pack) plus browser-direct point sources | planned |
+| 6 | `weather-forecast`, then `weather-*` overlays | six basins, two market regions and the Gulf as pinned markers: 15-day AIFS ENS minimum-temperature fan, a labelled freeze-day count, degree days, Gulf gusts and waves, anomaly colour against bundled ERA5 normals, spread ring, lead-day stepper; then forecast lines on the asset cards, a WeatherNext 2 challenger, a CONUS AIFS field, and the observational overlays (NHC cones, NWS alerts, GIBS, RainViewer) | Open-Meteo ensemble API (`ecmwf_aifs025_ensemble`, `google_weathernext2_ensemble`, probed 2026-09-21), the model metadata files, the marine and ERA5 archive endpoints; the dynamical.org Zarr copy of AIFS ENS for the field | gazetteer built from the oracle's yaml, normals bundled, browser-direct points (chokepoints pattern); nightly Node reducer for the field; PRD in `COMMODITIES-PLAN.md` §11 | **SPECCED** 2026-09-21 |
 | 7 | `commodity-news` | headlines pinned to the asset they name, disaster events | GDELT DOC through the server proxy with a keyword gazetteer, GDACS via PortWatch `gdacs_events` | proxy + gazetteer; the GDELT GEO API is dead | planned |
 | 8 | `commodity-flows` | origin-to-destination arcs by monthly volume | EIA crude imports, EIA gas trade lanes, UN Comtrade preview, ENTSOG | exporter from the oracle store plus Comtrade proxy | planned |
 | 9 | oracle state | prices, chokepoint deviations, episode scene packs | `tools/globe_export.py` in the oracle repo | static JSON served by a provider, Director data packs | planned |
@@ -55,12 +55,22 @@ the host sends permissive CORS headers so no proxy is needed.
 | US weather alerts | `https://api.weather.gov/alerts/active` (User-Agent required) | none | yes |
 | Headlines | `https://api.gdeltproject.org/api/v2/doc/doc` | none, rate limited | no, proxy |
 | Trade by partner | `https://comtradeapi.un.org/public/v1/preview/C/A/HS` | none, codes only | no, proxy |
+| AI ensembles at points: AIFS ENS (51 members), AIGEFS (31), WeatherNext 2 (64); probed 2026-09-21 | `https://ensemble-api.open-meteo.com/v1/ensemble?models={ecmwf_aifs025_ensemble,ncep_aigefs025,google_weathernext2_ensemble}` | none, about one call per point, 600 a minute | yes |
+| Model issue and availability times; probed 2026-09-21 | `https://ensemble-api.open-meteo.com/data/<model>/static/meta.json` | none | yes |
+| ERA5 daily normals; probed 2026-09-21 | `https://archive-api.open-meteo.com/v1/archive` | none | yes |
+| Gulf waves; probed 2026-09-21 | `https://marine-api.open-meteo.com/v1/marine` | none | yes |
+| AIFS ENS gridded, Zarr on icechunk; probed 2026-09-21 | `https://dynamical-ecmwf-aifs-ens.s3.us-west-2.amazonaws.com/ecmwf-aifs-ens-forecast/v0.1.0.icechunk` | none | yes, read by a Node reducer, not the browser |
+| NWS official forecast grids; probed 2026-09-21 | `https://mapservices.weather.noaa.gov/raster/rest/services/NDFD/NDFD_temp/MapServer` | none | yes |
 
 Known dead or locked: the GDELT GEO API returns 404; the official EIA atlas
 infrastructure services require a token and the atlas download endpoint
 errors, which is why the public-domain copies above are used; both public
 Overpass mirrors timed out under load during the probe, so OpenStreetMap
-queries must keep using the cached server proxy.
+queries must keep using the cached server proxy. Probed 2026-09-21: the
+Open-Meteo free tier refuses a gridded pull (300 points trips the minute
+limit, 1,500 points is a 414), so fields come from the dynamical.org Zarr
+copy; ECMWF's own AIFS GRIB is CCSDS-packed, which no JavaScript decoder
+reads; NOAA's AIGEFS is on NOMADS only, with no AWS bucket.
 
 ## Bridge to the oracle
 

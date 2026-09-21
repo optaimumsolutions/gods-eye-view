@@ -2,7 +2,8 @@
 
 **Version:** 1.3 · **Date:** 2026-09-21 · **Status:** decisions locked in the
 2026-09-17 grill; built so far — rows 0a, 0b, 1 (milestone 1), 4 (substrate)
-and 8 (v3), see the §0 ledger for commits
+and 8 (v3), see the §0 ledger for commits; row 3 re-specced in the
+2026-09-21 weather grill (§11)
 **Owner:** Jack Gewirz
 **Companions:** [`COMMODITIES.md`](COMMODITIES.md) (verified endpoints, source
 notes), [`../UPGRADE.md`](../UPGRADE.md) (paid enhancement per stream)
@@ -22,7 +23,7 @@ owns layers. Re-check `git status` before every edit to a shared file.
 | 0b  | `commodity-ports` layer                          | layers                               | **BUILT** — commit `f042155`, merged into `commodities`, pushed to origin and mirror; markers pinned in `f238b66` (merged here as `fa8132f`, not pushed); retrofit to the row-1 contract pending |
 | 1   | Shell, observation contract, hover, class groups | shell (worktree `commodities-shell`) | CLAIMED 2026-09-17 — PRD §7; worktree `commodities-shell` on `feat/commodities-shell`; milestone 1 (observation contract) BUILT 2026-09-18, four gates green; next: milestone 2, retrofit 0a and 0b |
 | 2   | `commodity-tankers`                              | layers                               | BLOCKED — AISStream rejects the saved key; verify or rotate on the Account page, enter via POWER UP |
-| 3   | Weather overlays and basin cards                 | layers                               | OPEN — after row 1                                                                                  |
+| 3   | Weather forecast and overlays (`weather-forecast` first) | layers                               | **SPECCED 2026-09-21** — PRD §11 from the weather grill (W1 to W9): AIFS ENS via Open-Meteo at the six basins, two market regions and the Gulf, browser-direct, keyless, token `3`; six milestones (point layer → asset-card lines → WN2 challenger → AIFS field → truth overlays → beyond the US). Not claimed; cut `feat/weather-forecast` from `feat/commodities-shell`; needs no key |
 | 4   | `commodity-gas-flows`, gas cross-border crossings | layers                               | **BUILT (substrate) 2026-09-21** — PRD §10. Data layer `f665031`: `scripts/build-gas-bundle.mjs` + `src/data/local_data/eia_energy/` (32,892 features to 234 systems; 99 filings to 60 marks) and the `src/layers/gasFlows/` pure modules. Render layer `4919e03`: PENCIL pips and hairline, token `l`, GRID off by default after the milestone-5 gate breached (~500 MiB to draw; `scripts/qa-gas-flows.mjs` 18/18). Four gates green at every commit. Open: no UI chip calls `setNetworkEnabled` yet. Next: milestone 1 (EIA key) — everything else is blocked on it |
 | 5   | News pinned to assets                            | layers + server                      | OPEN — needs the assets from row 4                                                                  |
 | 6   | Trade-flow arcs                                  | layers + server                      | OPEN                                                                                                |
@@ -138,7 +139,7 @@ whole dashboard is one command: pull, tunnel, console, globe, browser.
                              📰 News on assets         seen 4m ago
   Commodities · Daily        🌩 Storms & alerts        issued 12:00Z
                              ☁ Satellite & radar      frame 12:50Z
-                             🌡 Basin forecasts        issued 00Z · valid 7d
+                             🌡 Basin forecasts        issued 06Z · valid 15d
   Commodities · Published    ⚓ Chokepoints            as of 2026-09-13 · 4d lag
                              🚢 Ports                  as of 2026-09-11 · 6d lag
                              🛢 Pipelines & plants     vintage 2025
@@ -227,24 +228,35 @@ server's track endpoint, nearest chokepoint or port.
 
 **Blocked on** a working AISStream key. Double-draw note in the panel meta.
 
-### Row 3 — Weather overlays and basin cards (FR-G3)
+### Row 3 — Weather forecast and overlays (FR-G3)
 
-| Layer id            | Shows                                                                                                                                                | Source                                                                                            | Class                                |
-| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------ |
-| `weather-satellite` | GOES GeoColor clouds, IMERG precipitation rate                                                                                                       | NASA GIBS WMTS tiles                                                                              | live (frames every 10 to 30 minutes) |
-| `weather-radar`     | composite radar, 13 past frames                                                                                                                      | RainViewer tiles                                                                                  | live                                 |
-| `weather-storms`    | hurricane forecast cones, tracks, wind radii                                                                                                         | NHC ArcGIS layers                                                                                 | daily (advisory cadence)             |
-| `weather-alerts`    | active watches and warnings as polygons                                                                                                              | NWS API, User-Agent required                                                                      | live                                 |
-| `weather-basins`    | six shale basins and the Gulf: 7-day minimum-temperature ensemble p10, p50, p90 and a freeze flag against each basin's threshold; Gulf wind and wave | Open-Meteo forecast and 30-member ensemble at the basin points from the oracle's `wx_basins.yaml` | daily                                |
+Re-specced 2026-09-21; the PRD is §11. The forecast point layer ships first;
+the observational overlays follow as milestone 5.
 
-**Mechanism.** Imagery overlays are layer modules that own a Cesium imagery
-layer above the basemap, the precedent being the Nepal event pack; the point
-and polygon layers are browser-direct sources. Every frame and forecast
-carries `observedAt` or `validAt`; the scrubber sets which frame is shown.
+| Layer id            | Shows                                                                                                                                                                                                                                                                                       | Source                                                                                                                                                                           | Class                                | Milestone |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ | --------- |
+| `weather-forecast`  | six basins, two market regions and the Gulf as pinned markers: 15-day minimum-temperature ensemble p10, p50, p90 and spread, a labelled freeze-day count, region degree days, Gulf gusts and waves; colour by anomaly against bundled ERA5 normals, ring by spread, disc by threshold share; a lead-day stepper | Open-Meteo ensemble API `ecmwf_aifs025_ensemble` (51 members), the model metadata file for the issue time, the marine API for the Gulf; gazetteer built from the oracle's yaml | daily                                | 1         |
+| asset-card lines    | one forecast line on the campus, crossing and US port cards through a shared service                                                                                                                                                                                                        | the same request                                                                                                                                                                 | daily                                | 2         |
+| `WN2` row control   | Google WeatherNext 2 as a challenger ring and a `vs WN2` card line, off by default                                                                                                                                                                                                          | Open-Meteo `google_weathernext2_ensemble` (64 members)                                                                                                                           | daily                                | 3         |
+| `weather-field`     | CONUS AIFS ENS field: p50 minimum, spread, freeze share, gust per lead day as an imagery overlay under the same stepper                                                                                                                                                                       | dynamical.org Zarr copy of AIFS ENS, reduced nightly by a Node script, served from the cache                                                                                     | daily                                | 4         |
+| `weather-storms`    | hurricane forecast cones, tracks, wind radii                                                                                                                                                                                                                                                | NHC ArcGIS layers                                                                                                                                                                | daily (advisory cadence)             | 5         |
+| `weather-alerts`    | active watches and warnings as polygons                                                                                                                                                                                                                                                     | NWS API, User-Agent required                                                                                                                                                     | live                                 | 5         |
+| `weather-satellite` | GOES GeoColor clouds, IMERG precipitation rate                                                                                                                                                                                                                                              | NASA GIBS WMTS tiles                                                                                                                                                             | live (frames every 10 to 30 minutes) | 5         |
+| `weather-radar`     | composite radar, 13 past frames                                                                                                                                                                                                                                                             | RainViewer tiles                                                                                                                                                                 | live                                 | 5         |
+| `weather-official`  | optional: NWS NDFD temperature grids as an ArcGIS imagery layer, labelled the official forecast                                                                                                                                                                                             | `mapservices.weather.noaa.gov/raster/…/NDFD/NDFD_temp`, browser-direct                                                                                                            | daily                                | 5         |
 
-**Cards.** Hover on a basin: name, issued time, p50 minimum and freeze flag.
-Click: the full ensemble spread by day. Hover on a cone: storm name, advisory
-time, category. Alerts: event type, effective and expires.
+**Mechanism.** Point readings are browser-direct and keyless; the field is a
+cached bundle behind a provider; imagery overlays own a Cesium imagery layer
+above the basemap, the precedent being the Nepal event pack. Every reading
+carries `observedAt` (issue), `publishedAt` (availability), `validAt` (the
+selected day) and `fetchedAt`; the stepper sets which day is shown and never
+triggers a fetch.
+
+**Cards.** Hover on a basin: name, issued and valid stamp, p10 and p50
+minimum, the freeze-day count with its heuristic threshold. Click: the
+fifteen-day fan with the threshold and the normal, a table by day,
+provenance. Hover on a cone: storm name, advisory time, category. Alerts:
+event type, effective and expires.
 
 ### Row 4 — Gas cross-border flows on the bundled pipeline network (FR-G4)
 
@@ -2337,4 +2349,592 @@ npm ci            # a fresh worktree has no node_modules
 npm run doctor    # confirms Node 24; row 4 needs a free EIA API key via POWER UP
 npx vite --port 4175   # 4173 is another session's tree — never restart theirs
 claude
+```
+
+---
+
+## 11. Row 3 PRD — Weather forecast and overlays: the `weather-forecast` point layer first (FR-G3)
+
+<!-- Canonical copy for the build session. Mirror: Project Brain gods-eye-view/05-prd.md; keep both in sync via /prd. -->
+
+**Scope:** Row 3 of `docs/COMMODITIES-PLAN.md`, re-specced. The 2026-09-17
+plan listed five observational overlays and one basin card layer. The
+2026-09-21 grill (questions W1 to W9, §11.1) puts a **forecast point layer**
+first, adds a **forecast line on the asset cards** the globe already draws, a
+**challenger model** behind a row control, and a **gridded AIFS ENS field**
+from a nightly reducer, and keeps the five overlays as a later milestone. The
+globe consumes the best open AI weather models; it trains nothing and reads
+nothing from the oracle's store.
+
+**Written:** 2026-09-21 · **Status:** decided in the 2026-09-21 grill; build
+not started; not claimed · **Mirror:** Project Brain `gods-eye-view/05-prd.md`,
+synced the same day with the §0 ledger row. Decisions the grill did not reach
+are marked `A-n` (assumption) and change by re-opening them, not by drifting.
+
+**Provenance:** every figure below was live-probed on 2026-09-21 unless marked
+otherwise. `[LIVE]` means an HTTP response was read that day.
+
+**What already exists, and why this row is not a model build.** The Oil
+Oracle (`optaimumsolutions/commodities`) has run the prediction pipeline this
+row projects since 2026-09-11: a VPS cron pulls ECMWF AIFS ENS and NOAA GEFS
+every night, samples them at 58 metros, six production basins and two market
+regions (`corpus/wx_stations.yaml`, `wx_basins.yaml`, `wx_regions.yaml`),
+stores ensemble mean, spread, p10 and p90 per lead day, derives freeze-off
+degree days (FRZDD) and gas-weighted degree days (GWDD), and scores itself
+against GHCN observations (`PRD-weather-model-ensemble.md`,
+`PRD-weather-supply-basins.md`). Its 2026-09-15 grill pinned **AIFS ENS as the
+single source of truth** and put NOAA data in a verification-only role. The
+model is chosen and running. What the globe adds is the projection onto the
+map and the join to the physical assets the oracle cannot see: crossings,
+campuses, ports, chokepoints, pipelines.
+
+---
+
+### 11.1 The grill (2026-09-21), W1 to W9
+
+| #  | Question                                     | Decision                                                                                                                                                                                                                                                                                                                                                                                      | Rejected                                                                                                                                                                                        |
+| -- | -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| W1 | Who owns the forecast numbers on the globe?  | The globe fetches its own AIFS ENS, browser-direct, pinned to the model the oracle pinned so the two pages never disagree on which model is truth. The globe shows raw fields and per-point readings; FRZDD sums, GWDD and skill stay on the oracle's pages (R7, §1 "no number duplicated").                                                                                                    | Rendering the oracle's `weather_forecast` rows through the unbuilt `globe_export.py` bridge (breaks R7; point aggregates only, no field). A split by quantity (two pipelines to keep in step). |
+| W2 | Which layer first?                           | The point layer `weather-forecast`: basins, market regions and the Gulf from Open-Meteo's AIFS ENS. Zero new infrastructure; the chokepoints pattern.                                                                                                                                                                                                                                          | The gridded field first (new worker, provider and render path, latency unverified). The NWS NDFD raster first (official blend, not an ensemble, not AI).                                       |
+| W3 | What is sampled, and who draws it?           | The layer draws only basin, region and Gulf markers from a bundled gazetteer that mirrors the oracle's yaml so both pages name the same places. The same portable source is exposed as a service; the campus, crossing and port cards each add one forecast line to their own card (R13 holds: each layer edits only its own card).                                                            | Basins only (the weather-to-asset bridge waits for another row). A weather ring at every asset (ninety-odd rings over markers other layers already draw; two layers own one place).            |
+| W4 | What does a marker read?                     | Basins: daily-minimum temperature p10, p50, p90 and spread for 15 days, plus a count of days whose p10 sits below the basin's threshold, copied from the oracle's yaml and labelled `heuristic 25°F`. Regions: heating and cooling degree days computed per member then summarized (the oracle's convexity-safe order). Gulf: gust percentiles from AIFS and wave height from the marine endpoint, stamped separately. Precipitation and snow on the click card only. | Temperature only, no thresholds (the card cannot say "four freeze days"). The full variable set as fans on every marker (heaviest requests; the hover card no longer fits three lines).        |
+| W5 | Which models?                                | AIFS ENS pinned for every marker, ring and stamp. One challenger, Google WeatherNext 2, behind a row control, off by default, drawn as a second thin ring with a `vs WN2` card line, fetched only when toggled. AIGEFS waits; the source takes a third id without new code.                                                                                                                      | AIFS only (the globe can never show where models disagree over a basin). All three always (triple budget, crowded rings at nine markers).                                                       |
+| W6 | Time?                                        | Every 30 minutes read the model's metadata file; re-fetch data only when `last_run_availability_time` changes. A lead-day stepper (1 to 15) in the panel row; the ring summarizes the window, the label and disc show the selected day; the card stamps `issued 06Z 09-21 · valid 09-24`. Default day 1.                                                                                       | A fixed six-hour poll with no stepper. Animated playback (launches-replay style; competes with the Director's timing).                                                                          |
+| W7 | Visual?                                      | Colour is the selected day's p50 minimum against a bundled ERA5 day-of-year normal, in the shared six colour slots relabelled for weather in the legend. Ring radius is ensemble spread. Disc fill is the freeze-day share of the window (basins), the heating-day share (regions) or the gale-day share (Gulf). Normals are built once by a script and bundled with a vintage, like the gazetteer. | Freeze-count colour with no climatology (regions and the Gulf fall to grey). An absolute temperature ramp (abandons the shared vocabulary; 30°F reads the same in Williston and Midland).       |
+| W8 | Ledger?                                      | Row 3 re-specced as "Weather forecast and overlays": six milestones (§11.10), one PRD section, one ledger row.                                                                                                                                                                                                                                                                                 | A new row 10 (two rows would share the scrubber, the gazetteer and the panel group). Milestone 1 only, re-grill the rest later.                                                                |
+| W9 | Write-up?                                    | This section, the §0 ledger row, the `COMMODITIES.md` roadmap and endpoint rows, the brain mirror and a decision record. No commit.                                                                                                                                                                                                                                                             | Chat summary only. Brain only.                                                                                                                                                                  |
+
+### 11.2 Live probe log (2026-09-21)
+
+| Probe                     | Result                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Open-Meteo ensemble ids   | `ecmwf_aifs025_ensemble` (50 perturbed members plus the unsuffixed control, 15 days), `ncep_aigefs025` (30 plus control, 16 days), `google_weathernext2_ensemble` (63 plus control, 16 days), `ncep_gefs025`. Mean-and-spread variants `ecmwf_aifs025_ensemble_mean` and `google_weathernext2_ensemble_mean`, archived since March 2026. `[LIVE]`                                                                                                                                                                                                             |
+| Daily variables, AIFS ENS | `temperature_2m_min`, `temperature_2m_max`, `precipitation_sum`, `snowfall_sum`, `wind_speed_10m_max`, `wind_gusts_10m_max`; hourly `temperature_2m`, `precipitation`, `wind_speed_10m`. AIGEFS and WeatherNext 2 answer `temperature_2m_min`, `precipitation_sum`, `wind_speed_10m_max`. `[LIVE]`                                                                                                                                                                                                                                                             |
+| Issue time                | `https://ensemble-api.open-meteo.com/data/<model>/static/meta.json`, keyless, CORS `*`: `last_run_initialisation_time`, `last_run_availability_time`, `update_interval_seconds` (21,600 for AIFS and AIGEFS, 43,200 for WeatherNext 2). Today: AIFS 06Z available 15:20Z (9 h 20 m after issue), AIGEFS 06Z at 15:07Z, WeatherNext 2 00Z at 10:54Z. `[LIVE]`                                                                                                                                                                                                  |
+| CORS                      | `ensemble-api`, `archive-api`, `marine-api` and the metadata files all answer `access-control-allow-origin: *`; `api.open-meteo.com` is already read browser-direct by the data center cards. `[LIVE]`                                                                                                                                                                                                                                                                                                                                                       |
+| Request cap               | 300 points in one GET: HTTP 200, 2.3 MB, 1.4 s; the next request answered `Minutely API request limit exceeded`. 1,500 points: HTTP 414 from nginx. Free tier: 600 calls a minute, 5,000 an hour, 10,000 a day, weighted per location, per ten variables and per two weeks. **A field cannot come from this API; ninety points four times a day can.** `[LIVE]`                                                                                                                                                                                                 |
+| ERA5 normals              | `archive-api.open-meteo.com/v1/archive`: ten years of daily minimums at one point in one call, 3,653 days, 66 KB, CORS `*`; a small follow-up call was still allowed. `[LIVE]`                                                                                                                                                                                                                                                                                                                                                                                 |
+| Marine                    | `marine-api.open-meteo.com/v1/marine` daily `wave_height_max`, `wind_wave_height_max`, `swell_wave_height_max`, 7 days, deterministic (no ensemble). `[LIVE]`                                                                                                                                                                                                                                                                                                                                                                                                 |
+| ECMWF open data, direct   | `data.ecmwf.int/forecasts/<ymd>/00z/aifs-ens/0p25/enfo/` index present today; one 2 m temperature message is 618,968 bytes per member per step, 1,038,240 points, **CCSDS packing (data representation template 42)**, which no JavaScript decoder reads. The oracle's `ingest/wx/aifs.py` reads it with eccodes on the VPS. `[LIVE]`                                                                                                                                                                                                                       |
+| dynamical.org AIFS ENS    | Icechunk v2 store `https://dynamical-ecmwf-aifs-ens.s3.us-west-2.amazonaws.com/ecmwf-aifs-ens-forecast/v0.1.0.icechunk`, anonymous, CORS `*`, CC BY 4.0 plus ECMWF terms; dimensions init_time × lead_time (61 six-hourly steps) × ensemble_member (51) × latitude × longitude at 0.25°; chunk shape (1, 61, 51, 32, 32) = 12.2 MiB uncompressed, shard 1.3 GiB; variables `temperature_2m`, `wind_u_10m`, `wind_v_10m`, `precipitation_surface` among 16. Readers on npm: `icechunk-js` 0.6.0 with `zarrita` 0.7.5 (pure JS), `@earthmover/icechunk` 2.2.2 (native, win32 and linux). Publication latency not stated. `[LIVE]` |
+| NOAA AIGEFS, direct       | NOMADS `com/aigefs/prod/aigefs.20260921/{00,06,12}/mem000…` plus `ensstat/`; NOMADS only, no AWS open-data bucket (`noaa-aigefs-pds` and `noaa-aigfs-pds` do not exist). Operational since January 2026 alongside AIGFS and HGEFS. `[LIVE]`                                                                                                                                                                                                                                                                                                                  |
+| NWS NDFD raster           | `mapservices.weather.noaa.gov/raster/rest/services/NDFD/NDFD_temp/MapServer`, CORS echoes the origin, updates every 30 minutes: temperature, apparent temperature and humidity at 3-hour steps to 24 h, max temperature days 1 to 3, min temperature days 1 to 2; sibling raster folders `precip`, `snow`, `hazards`, `outlooks`, `obs`, `air_quality`, `climate`. Cesium's `ArcGisMapServerImageryProvider` is already used for the Esri basemap. `[LIVE]`                                                                                                     |
+| Registry                  | Layer tokens are `/^[a-z0-9]$/` (`layerState.js`); every letter but `v` is taken and `v` is reserved for `energy-plants` (§10.1). The count pins stand at 25 (`constructCatalog.test.mjs:42`, `layerState.test.mjs:161`). `[LIVE]`                                                                                                                                                                                                                                                                                                                         |
+| Licences                  | Open-Meteo API output CC BY 4.0 on the non-commercial tier (R1 applies); ECMWF AIFS CC BY 4.0 with ECMWF credit; WeatherNext 2 real-time output under Google's experimental terms, historical output CC BY 4.0, relicensed CC BY 4.0 by Open-Meteo; ERA5 under the Copernicus licence ("Contains modified Copernicus Climate Change Service information"); NOAA public domain. `[documented]`                                                                                                                                                                 |
+
+---
+
+### 11.3 Summary
+
+Nine markers appear on the globe: six production basins (Appalachia, Permian,
+Haynesville, Anadarko, Eagle Ford, Bakken), two market demand regions (South
+Central, Texas) and the Gulf (offshore production and the LNG coast). Each is
+a pinned marker whose **colour is the forecast minimum against its own
+climatology**, whose **ring is the ensemble's disagreement**, and whose
+**disc is the share of the next fifteen days that cross a labelled
+threshold**. A stepper in the panel row walks the forecast one day at a time;
+the hover card names the day, the issue time and the three percentiles; the
+click card draws the fan. Every reading comes from ECMWF's AIFS ENS through
+Open-Meteo, browser-direct and keyless, stamped `issued 06Z 09-21 · valid
+09-24` under the row-1 contract, class `daily`.
+
+The same source is a service. Milestone 2 gives each campus, gas crossing and
+dossier port one forecast line on the card it already has. Milestone 3 adds
+Google WeatherNext 2 as a challenger ring. Milestone 4 turns the point layer
+into a field: a nightly Node reducer over the dynamical.org copy of AIFS ENS
+writes a CONUS bundle of ensemble mean, spread and freeze probability per lead
+day, drawn as an imagery overlay under the same stepper. Milestone 5 is the
+observational truth beside the forecast (NHC cones, NWS alerts, satellite,
+radar). Milestone 6 grows the gazetteer past the United States.
+
+### 11.4 Problem
+
+- The globe shows what is moving and what carries it, and nothing of the
+  weather that will constrain it. The cockpit reads current conditions and
+  the data center cards read a current temperature; no forecast and no
+  ensemble exists anywhere on the map.
+- Freeze-offs are a first-order winter supply driver (Uri 2021: ~20 Bcf/d
+  off) and ride the daily **minimum**, which a mean-temperature reading
+  cannot see. Summer power burn rides cooling degree days in Texas. Gulf
+  gales and waves stop tanker loading and shut in platforms. None of these is
+  visible on the globe today.
+- The oracle already forecasts these quantities with the strongest open
+  models and has decided which model is truth. Building a second model on
+  the globe would duplicate that work with a weaker result; rendering the
+  oracle's rows would break R7. The row's shape follows: same model, own
+  fetch, raw readings only, joined to the physical assets.
+- Why now: rows 4 and 8 landed as commits on 2026-09-21, row 2 is blocked
+  on the AIS key, row 5 waits on row 4's live join, and the observation
+  contract already stamps forecasts (`validAt`, class `daily`) because row 8's
+  grid day-ahead line uses it.
+
+### 11.5 Target user
+
+- Jack, reading the globe beside the oracle console during a cold snap: is
+  the Permian going to freeze this week, how sure are the models, and which
+  crossings, campuses and ports sit under the cold.
+- A gas or power analyst reading one basin: the fan, the spread, the count of
+  days below the winterization heuristic, and where the number came from.
+- The next build session, which inherits a gazetteer, a normals bundle, a
+  portable source and a service contract so that milestone 2 is card edits
+  and milestone 4 is a reducer, not a redesign.
+
+### 11.6 Goals (verifiable)
+
+1. **Nine markers, one model.** `getStats().count` is 9 with the layer on;
+   every reading's `source` names `ECMWF AIFS ENS via Open-Meteo`; the
+   test asserts that no reading is built from any other model id unless the
+   challenger control is on.
+2. **Stamped under the contract.** Every marker's observation is created by
+   `createObservation` with `observedAt` = the run's initialisation time,
+   `validAt` = the selected day, `publishedAt` = the run's availability time,
+   class `daily`; `formatAsOf` renders `issued 06Z 09-21 · valid 09-24`.
+   When the newest run is older than 24 hours the panel meta line says so
+   and the class falls to `published` by the contract's own rule.
+3. **Descriptive (R11).** Cards show percentiles, spreads, counts, anomalies
+   and timestamps; thresholds are printed with the word `heuristic` and their
+   value; nothing is phrased as an action. Asserted by a string test over
+   every card template.
+4. **Cheap.** One refresh is at most four requests (one ensemble call for
+   all points, one marine call, one metadata call per active model) and the
+   layer re-fetches data only when the run changes; the unit test counts
+   fetches across a simulated day at under 60.
+5. **Baseline bundled.** `normals.json` carries a day-of-year minimum for
+   every gazetteer point with a vintage and the Copernicus line; the build
+   script reproduces it byte for byte from the same window.
+6. **Gated.** Format, boundaries, `npm test` and build green; the count pins
+   move from 25 to 26; the headless check enables the layer, steps to day 7,
+   hovers the Permian, clicks it, screenshots the fan and reports no page
+   errors.
+
+### 11.7 Non-goals
+
+- Training, fine-tuning or running a weather model. The models are AIFS ENS,
+  WeatherNext 2 and, later, AIGEFS, consumed as published.
+- Any oracle row, FRZDD sum, GWDD headline, skill score or covariate on the
+  globe (R7). The globe's counts are its own arithmetic on its own fetch.
+- GRIB decoding anywhere in this repo, and Python anywhere in the read path.
+  The field (milestone 4) reads Zarr with JavaScript.
+- WeatherNext 2 through BigQuery or Earth Engine (a Google Cloud account;
+  R12). Open-Meteo carries it keyless.
+- HRRR and other short-range mesoscale models; recorded in `UPGRADE.md` as
+  the sub-day CONUS upgrade.
+- Animated playback, the Director's timing, voice enums (hash-pinned; their
+  own change).
+- Hurricane shut-in risk from 2 m temperature. The Gulf marker reads gusts
+  and waves; cones are milestone 5.
+
+### 11.8 Requirements
+
+#### 11.8.1 Gazetteer, bundled (W3)
+
+1. `scripts/build-weather-gazetteer.mjs` reads `corpus/wx_basins.yaml`,
+   `corpus/wx_regions.yaml` and `corpus/wx_stations.yaml` from
+   `optaimumsolutions/commodities` at a pinned commit through `gh api`
+   (build time only; nothing in the read path touches GitHub) and writes
+   `src/data/local_data/weather/gazetteer.json`, `source.json` (repo, commit,
+   retrieval date, sha256) and a `README.md` in the datacenters-bundle style.
+2. Each entry: `id` (`appalachia`, `permian`, `haynesville`, `anadarko`,
+   `eagleford`, `bakken`, `southcentral`, `texas`, `gulf-offshore`,
+   `gulf-lng`), `kind` (`basin`, `region`, `gulf`), `name`, `lat`, `lon` (the
+   weight-normalized centroid of the entry's sample points), `points[]`
+   (`name`, `lat`, `lon`, `w`), `freezeF` (basins only, the oracle's value),
+   `share` (basins only), `commodities` (`natgas`, `oil`), `country` (`US`
+   for all ten; milestone 6 adds others).
+3. **A-1.** The two Gulf entries are not in the oracle's yaml and are defined
+   here: `gulf-offshore` at 28.20, −89.80 (Mississippi Canyon production
+   area) and `gulf-lng` at 29.73, −93.87 (Sabine Pass); founder-editable,
+   recorded in `source.json` as hand-placed.
+4. Region entries resolve metro names against `wx_stations.yaml` plus the
+   `extra_metros` block, weights normalized within the region, exactly the
+   oracle's convention, so the two pages sample the same places.
+5. The bundle is frozen at import (`gazetteer.js`, the chokepoints pattern)
+   and the unit test pins ten entries, the contiguous-US bounding box and
+   the presence of `freezeF` on every basin.
+
+#### 11.8.2 Normals, bundled (W7)
+
+1. `scripts/build-weather-normals.mjs` fetches ten calendar years
+   (2016-01-01 to 2025-12-31) of daily `temperature_2m_min` and
+   `temperature_2m_max` per sample point from
+   `archive-api.open-meteo.com/v1/archive` (ERA5, one call per point, ~27
+   calls), aggregates to the entry's weighted centroid the same way the
+   forecast is aggregated, and writes `normals.json`: per entry, 366
+   day-of-year values smoothed with a ±7-day window, plus `window`,
+   `vintage`, `source` and the Copernicus attribution line.
+2. **A-2.** Ten years trailing, recomputed by re-running the script, never at
+   runtime; the oracle uses the same window for its anomaly series.
+3. The unit test pins the entry count, the 366 slots and the absence of
+   `null` after smoothing.
+
+#### 11.8.3 Source (W1, W5, W6)
+
+1. `src/layers/weather/source.js` exports
+   `createOpenMeteoEnsembleSource({ fetchImpl, now, ttlMs, models })`,
+   portable, no Cesium, no DOM, modelled on `createDatacenterLiveSource`.
+   It owns three URL builders and their normalizers in `live.js`:
+   - **Metadata.** `GET https://ensemble-api.open-meteo.com/data/<model>/static/meta.json`
+     → `{ initialisedAt, availableAt, updateIntervalS }`.
+   - **Ensemble.** One `GET https://ensemble-api.open-meteo.com/v1/ensemble`
+     for every sample point of every entry (27 today, up to ~90 with the
+     milestone-2 assets), `models=<id>`,
+     `daily=temperature_2m_min,temperature_2m_max,precipitation_sum,snowfall_sum,wind_gusts_10m_max`,
+     `forecast_days=15`, `temperature_unit=fahrenheit`,
+     `wind_speed_unit=mph`, `timezone=UTC`. The response is one block per
+     point in request order; `_memberNN` columns plus the unsuffixed control
+     are the members.
+   - **Marine.** One `GET https://marine-api.open-meteo.com/v1/marine` for
+     the Gulf points, `daily=wave_height_max,wind_wave_height_max`,
+     `forecast_days=7`.
+2. **Refresh rule (W6).** On enable and every 30 minutes the source reads
+   the metadata file for each active model. It fetches the ensemble and
+   marine payloads only when `availableAt` differs from the cached run's, or
+   when there is no cache. A failed fetch keeps the previous run and records
+   the error per feed; the layer never blanks a marker it was already showing
+   (the datacenters rule).
+3. **Budget.** At most four requests per refresh; the unit test walks a
+   simulated day with runs landing at four availability times and asserts
+   fewer than 60 requests. GET only; the 414 limit is ~1,000 points and this
+   row never exceeds 100.
+4. **Stamp.** Every reading is a `createObservation` with `observedAt` =
+   `initialisedAt`, `publishedAt` = `availableAt`, `validAt` = the selected
+   day at 00Z, `fetchedAt` = the fetch, `freshnessClass: 'daily'`, `source`
+   = `ECMWF AIFS ENS via Open-Meteo` (or the challenger's name).
+5. **Models.** `models` defaults to `['ecmwf_aifs025_ensemble']`; the
+   challenger control adds `'google_weathernext2_ensemble'`; a third id
+   (`'ncep_aigefs025'`) is a config change. Readings are keyed by model and
+   never mixed.
+
+#### 11.8.4 Records (W4, W7)
+
+`src/layers/weather/records.js`, portable, unit-tested with a fixture
+response:
+
+1. **Members.** For each point and day, the member set is the unsuffixed
+   column plus every `_memberNN` column; the count is asserted (51 for AIFS,
+   64 for WeatherNext 2) and a short member set is recorded, not padded.
+2. **Aggregation to the entry.** Per member per day, the entry value is the
+   weight-normalized mean over its sample points (the oracle's
+   point-then-weight order); percentiles and spread are then taken across
+   members: `p10`, `p50`, `p90`, `spread` (p90 − p10), `n`.
+3. **Freeze count (basins).** Per member per day, `frozen` = TMIN < `freezeF`;
+   the day's `freezeShare` is the member share frozen; the window's
+   `freezeDays` is the count of days whose **p10 is below `freezeF`**, and
+   `freezeDaysP50` the count by p50 (both on the card). The threshold is
+   printed as `heuristic 25°F` wherever the count appears.
+4. **Degree days (regions).** Per member per day, HDD = max(0, 65 − mean) and
+   CDD = max(0, mean − 65) with mean = (TMAX + TMIN) / 2 in °F, then
+   percentiles across members; `hdd7`, `hdd14`, `cdd7`, `cdd14` are p50 sums;
+   `heatingDays` is the count of days with p50 HDD > 0. Never HDD of the mean
+   temperature (the oracle measured a 15× understatement).
+5. **Gulf.** `gustP50`, `gustP90` from `wind_gusts_10m_max`; `galeDays` is
+   the count of days with p90 gust ≥ 39 mph (Beaufort 8, printed as
+   `gale ≥ 39 mph`); `waveMax` from the marine payload, its own observation
+   with the marine model's stamp.
+6. **Anomaly.** `anomalyF` = p50 TMIN − the normal for that day of year.
+   **A-3** bands, in °F: `much-colder` ≤ −15, `colder` ≤ −7, `near-normal`
+   otherwise, `warmer` ≥ +7, `much-warmer` ≥ +15, `unknown` when the normal
+   is missing. Exported as `WEATHER_ANOMALY_BANDS` next to
+   `CHOKEPOINT_DEVIATION_BANDS` in spirit.
+7. **Precipitation and snow.** `precipP50`, `snowP50` per day for the click
+   card only.
+8. **Analyst record.** `mapAnalystRecord(entry, selectedDay)` returns the
+   flat row the context service and the voice engine receive (name, kind,
+   model, issued, valid, p10, p50, p90, spread, anomaly, band, freezeDays,
+   threshold, hdd14, cdd14, gustP90, waveMax, source).
+
+#### 11.8.5 Marker and visual system (W7)
+
+1. **Pinned geometry.** Ten markers created once at init at a fixed height
+   (`HeightReference.NONE`, depth test off; §2.2) from the gazetteer; a
+   refresh restyles, never recreates. A ground ring as a clamped polyline
+   and an inner disc, the chokepoints pattern.
+2. **Colour** is the selected day's anomaly band in the shared six slots,
+   ordered by stress on supply and demand: `much-colder` red (the collapse
+   slot), `colder` amber, `near-normal` blue, `warmer` green, `much-warmer`
+   lime, `unknown` grey. The legend chip gains a second row with the weather
+   labels. **A-4:** the slot order is cold-to-warm because a cold surprise is
+   the supply shock and a warm one the demand shock; re-open if a reader
+   finds red-for-cold wrong.
+3. **Ring radius** = 30 km + 8 km per °F of the selected day's spread,
+   clamped to 200 km, so a confident forecast is a tight ring and a
+   disagreeing ensemble a wide one.
+4. **Disc fill** = `freezeDays / 15` (basins), `heatingDays / 15` (regions),
+   `galeDays / 7` (Gulf), drawn as the ring's inner filled share.
+5. **Ambient label** at every zoom: `PERMIAN · d+3 · p10 18°F · 4 frz`;
+   regions `TEXAS · d+3 · HDD14 62`; Gulf `GULF LNG · d+3 · gust p90 41`.
+   Labels join the overlay host with the chokepoints' cohort limits.
+6. **Challenger ring (milestone 3).** A second, thinner ring in a neutral
+   stroke whose radius is the challenger's spread; no colour of its own.
+
+#### 11.8.6 Time (W6)
+
+1. **Lead-day stepper.** The panel row gains `‹ d+1 ›` controls (a range
+   input, 1 to 15, the replay-speed slider's styling) that set the layer's
+   `selectedDay`; the layer republishes labels, colours and discs without a
+   fetch. Day 1 is the first valid day at or after the run's initialisation
+   date. Default 1.
+2. **Card stamp** = the selected day's observation:
+   `issued 06Z 09-21 · valid 09-24`.
+3. **Meta line** in the panel: `issued 06Z 09-21 · 9h ago · valid 15d`, or
+   `issued 06Z 09-20 · 33h ago · stale` when no newer run has arrived; the
+   class then reads `published` by `freshnessClassFor`.
+4. **Refresh cadence** per §11.8.3; the stepper never triggers a fetch.
+
+#### 11.8.7 Cards (R5)
+
+1. **Hover** (three lines, the row-1 hover service; until it lands, the
+   layer's own throttled pick, the datacenters pattern):
+   `PERMIAN` / `issued 06Z 09-21 · valid 09-24` /
+   `p10 18°F · p50 24°F · 4 freeze days (heuristic 25°F)`. Regions:
+   `HDD14 62 · CDD14 0 · p50 mean 41°F`. Gulf:
+   `gust p90 41 mph · wave 2.1 m · 2 gale days`.
+2. **Click** (the full card on the overlay canvas, the chokepoints pattern):
+   title with the headline number; a fan chart of fifteen days (SVG, the
+   datacenters dossier's `renderChart` style): p10 to p90 band, p50 line,
+   the threshold as a dashed horizontal, the normal as a dotted line, the
+   challenger's p50 dashed when on; a table by day (p10, p50, p90, spread,
+   freeze share, precip, snow); provenance: `ECMWF AIFS ENS v2 via Open-Meteo
+   · issued 06Z 09-21 · fetched 15:31Z · vs ERA5 normal 2016–2025`. Hover
+   on a cone or alert is milestone 5.
+3. **Context.** Each marker registers a context record whose `properties`
+   is the analyst record; `getAnalystRecords()` exposes the rows.
+
+#### 11.8.8 Forecast service and the asset join (W3; milestone 2)
+
+1. `src/services/weatherForecast.js` wraps the source as a service other
+   commodity layers receive through the construct catalog:
+   `getForecastAt(points, { model, signal })` returns, per point, the same
+   frozen per-day record the layer uses, sampled at that point (no
+   aggregation), and `subscribe(fn)` fires on a new run. Points are batched
+   into the layer's own ensemble request; they never cause a second one.
+2. **Which assets, which line** (each layer edits its own card, R13):
+   - `energy-datacenters` (15 campuses): `forecast · TMAX p90 104°F Thu ·
+     6 cooling days` — heat is what a campus rejects.
+   - `commodity-gas-flows` (the ~40 US crossings): `forecast · TMIN p10 18°F
+     Sat · 4 freeze days (heuristic 25°F, Permian)`, using the threshold of
+     the nearest basin or 25°F when none is within 500 km, printed.
+   - `commodity-ports` dossier ports in the US (Houston, Corpus Christi,
+     Sabine Pass, Port Arthur): `forecast · gust p90 41 mph Tue · wave 2.1 m`.
+   - Chokepoints and non-US ports: milestone 6.
+3. Every joined line is its own observation with the layer's source string
+   and stamps; a missing forecast leaves the line absent, never blank.
+4. Budget: the join adds about 60 points to the one ensemble request; the
+   §11.8.3 test covers it.
+
+#### 11.8.9 Challenger model (W5; milestone 3)
+
+1. A row control `WN2` (off by default) adds `google_weathernext2_ensemble`
+   to `models`; a second metadata poll and a second ensemble request follow
+   only while it is on.
+2. The card gains `vs WN2 · p50 27°F (+3) · spread 9°F`; the second ring per
+   §11.8.5.6. Numbers are never averaged across models.
+3. Licence line on the card and in `DATA_SOURCES.md`: WeatherNext 2 via
+   Open-Meteo, CC BY 4.0, real-time output under Google's experimental
+   terms.
+
+#### 11.8.10 The field (milestone 4)
+
+1. `scripts/reduce-weather-field.mjs` (Node, `icechunk-js` + `zarrita`)
+   opens the dynamical.org store, finds the newest `init_time`, reads the
+   CONUS window (24°N to 50°N, 126°W to 66°W; about 32 chunks per variable,
+   390 MiB uncompressed per variable per init) for `temperature_2m`,
+   `wind_u_10m`, `wind_v_10m`, `precipitation_surface`, reduces each UTC
+   day to per-member daily min and max, then to `p10`, `p50`, `p90`,
+   `spread`, and `freezeShare` (members with TMIN below 32°F, the physical
+   threshold, printed as such), and writes
+   `.gev-cache/weather-field/<init>.json` (Float16-packed grids, ~3 MB) plus
+   `latest.json`. Run by hand or by a cron on the desk; the VPS is not in
+   the read path.
+2. `server/providers/weatherField.js` serves `/api/weather-field/latest`
+   and `/api/weather-field/<init>/<day>/<stat>` from the cache with the
+   init's stamps in headers; no upstream fetch at request time.
+3. `src/layers/weather/field.js` draws the selected stat as a
+   `SingleTileImageryProvider` from a canvas (the Nepal precedent), under
+   the same stepper, with a row control for the stat (`p50 TMIN`, `spread`,
+   `freeze share`, `gust`), alpha 0.6, a colour bar in the legend chip and
+   the field's own stamp in the meta line.
+4. Latency after ECMWF publishes is measured at build time and recorded
+   here before the milestone closes; if it exceeds twelve hours the
+   reducer falls back to the previous init and says so.
+5. **A-5.** The NDFD official raster is not part of this milestone; it is
+   recorded in §11.8.11 as an optional truth overlay because it is
+   browser-direct and needs no reducer.
+
+#### 11.8.11 Truth overlays (milestone 5)
+
+As specced on 2026-09-17, unchanged in substance: `weather-storms` (NHC
+cones, tracks, wind radii; class `daily`), `weather-alerts` (NWS active
+polygons, User-Agent required; `live`), `weather-satellite` (GIBS GOES
+GeoColor, IMERG rate; `live`), `weather-radar` (RainViewer, 13 frames;
+`live`), each an imagery or polygon module owning its own layer above the
+basemap and sharing the stepper's frame semantics. Optional, same
+milestone: `weather-official` drawing the NWS NDFD temperature grids as an
+`ArcGisMapServerImageryProvider`, browser-direct, labelled `NWS official
+forecast`, so the AIFS field can be read beside the official blend.
+
+#### 11.8.12 Panel, registry, wiring, attribution
+
+1. **Id and token.** `weather-forecast`, token `3` (the first digit; `v` is
+   reserved for `energy-plants`). Registry entry alphabetical after
+   `transit`.
+2. **Panel.** In the Commodities group as `Weather · Basin Forecast` with
+   the §11.8.6 meta line; in `Commodities · Daily` once row 1 milestone 2
+   lands the class groups (R9). Row controls: the stepper, `WN2`
+   (milestone 3), the field stat (milestone 4).
+3. **Wiring** in §2.2 order: `src/layers/weather/` (`gazetteer.js`,
+   `normals.js`, `live.js`, `source.js`, `records.js`, `model.js`,
+   `index.js`), `src/app/layers/weatherForecast.js`,
+   `src/sources/reference.js` (`weatherForecast`), `src/app/constructCatalog.js`,
+   `src/data/layerState.js`, `src/ui/layerPanel.js`,
+   `scripts/package-boundaries.json` (three sections), `DATA_SOURCES.md`,
+   `src/data/dataCredits.js`, `docs/COMMODITIES.md`; the three count-pinning
+   tests move from 25 to 26; every new `*.test.mjs` is listed in
+   `scripts/format-scope.json` or `npm run format` will not see it.
+4. **Attribution.** New `DATA_SOURCES.md` rows: ECMWF AIFS ENS via
+   Open-Meteo (CC BY 4.0, credit ECMWF and Open-Meteo), ERA5 normals
+   (Copernicus line, bundled), the oracle's yaml (private repo, bundled
+   gazetteer, MIT-licensed globe code); milestone 3 adds WeatherNext 2,
+   milestone 4 adds dynamical.org, milestone 5 adds NHC, NWS, GIBS,
+   RainViewer. Credits registered in `dataCredits.js` before each ships.
+5. **Render check.** `.gev-logs/render-weather.mjs`: dismiss first run, pin
+   the camera over the south-central US at 3,000 km, enable the layer, wait
+   for `getStats().count === 10`, step to day 7, hover Permian, click,
+   screenshot, assert the stamp string and no page errors.
+
+### 11.9 Constraints and invariants
+
+- **R1, R12.** Open-Meteo's free tier is non-commercial; this is a local,
+  one-user tool. The paid Open-Meteo tier and the Meteomatics AIFS-ENS
+  endpoint are the recorded swaps in `UPGRADE.md`.
+- **R2, R3.** Class `daily`; four timestamps on every reading; the meta line
+  and every card show the issue time, never only the fetch time.
+- **R7.** No oracle number. The globe's freeze counts are its own; the card
+  names its own source and the oracle's pages name theirs.
+- **R11.** Thresholds print as heuristics with their value; bands are
+  anomalies, not risk grades; no card says what to do.
+- **R13.** New layer family, new service, one line per asset card in our own
+  layers; upstream untouched.
+- **§2.2.** Portable `source.js`, `live.js`, `records.js`, `normals.js`,
+  `gazetteer.js` never import Cesium; pinned markers; count pins moved; four
+  gates before every commit; `format-scope.json` updated.
+- **Same model, different pipeline.** Open-Meteo interpolates from its own
+  AIFS grid copy and the oracle samples ECMWF's GRIB nearest-grid; the two
+  pages may differ by a degree at the same point. Both name their pipeline;
+  neither claims the other's number.
+- **Shared clone.** Claim row 3 before the first edit; guard every commit
+  with `git branch --show-current`; never a bare `git stash`.
+
+### 11.10 Milestones (smallest shippable first)
+
+1. **The point layer**, two commits. (a) `build-weather-gazetteer.mjs`,
+   `build-weather-normals.mjs`, the two bundles, READMEs, unit tests; verify:
+   ten entries, 366 normals per entry, a second run reproduces the JSON.
+   (b) Source, records, model, index, panel row with the stepper, wiring,
+   attribution, render check; verify: goals 1 to 4 and 6, `getStats()`
+   reports the run's stamps, the card's fan matches a fixture. Ledger row 3
+   to BUILT (M1) with both SHAs.
+2. **Forecast lines on the asset cards.** The service; one line each on the
+   campus, crossing and US port cards. Verify: a fixture run shows the line
+   on Colossus 2, Sumas WA and Sabine Pass with their own stamps; the
+   request count is unchanged.
+3. **Challenger.** `WN2` control, second ring, `vs WN2` line, licence rows.
+   Verify: toggled off, zero WN2 requests; on, one metadata and one ensemble
+   request per run.
+4. **The field.** Reducer, provider, `field.js`, stat control, colour bar,
+   latency measured and recorded. Verify: `latest.json` for today's newest
+   init; the overlay steps with the stepper; screenshot at day 1 and day 7.
+5. **Truth overlays.** Cones, alerts, satellite, radar, the optional NDFD
+   official raster; each overlay its own commit; the ledger row records
+   which shipped.
+6. **The gazetteer past the US.** `country` beyond `US` with Montney (AECO),
+   the North Sea, Qatar, and the chokepoints and non-US dossier ports joined
+   through the service. Verify: the bounding-box test becomes a per-entry
+   country assertion; the render check adds one non-US marker.
+
+### 11.11 Risks and open questions
+
+- **Open-Meteo's copy differs from ECMWF's.** Interpolation and elevation
+  correction move a point reading by up to a degree or two against the
+  oracle's nearest-grid sample. → Both pages name their pipeline; the
+  render check does not compare them; if the founder wants identity, the
+  read path swaps to the field bundle (milestone 4), which is ECMWF's grid.
+- **Latency.** The 06Z AIFS run reached Open-Meteo at 15:20Z today. → The
+  metadata poll makes the wait visible; the meta line always says how old
+  the run is.
+- **Rate limits are shared with the data center cards and the cockpit.** →
+  One ensemble request per run, metadata polls at 30 minutes, the budget
+  test; if 429s appear the poll backs off to 60 minutes and the panel says
+  `rate limited`.
+- **WeatherNext 2 terms.** Real-time output is under Google's experimental
+  terms; Open-Meteo relicenses its API output CC BY 4.0. → Recorded in
+  `DATA_SOURCES.md` with both links; the control is off by default; drop
+  the challenger if the terms change.
+- **Thresholds are heuristics.** 25°F Permian and −10°F Bakken are the
+  oracle's winterization guesses, unvalidated against production data. →
+  Printed as heuristics; edited in the yaml and re-bundled, never in code.
+- **UTC-day minimum runs warm.** A daily minimum over 6-hourly UTC steps
+  undersamples the pre-dawn trough (the oracle measured it). → Open-Meteo's
+  daily aggregate uses hourly steps, which is better, but the card still
+  says `UTC day`.
+- **The reducer's chunk cost.** 32 chunks per variable per init, roughly
+  100 to 150 MB compressed, four variables. → Once per init on the desk,
+  cached; if too slow, reduce `temperature_2m` alone first.
+- **Red for cold** (A-4) may read wrong. → The legend labels the slots; one
+  edit swaps the order.
+- **Open:** should the stepper also drive the data center cards' forecast
+  line (day-of-week) or should those lines always show the worst day of the
+  window? Default: the worst day, named.
+
+### 11.12 Bootstrap from a fresh Claude Code session
+
+Assumes this PRD is committed on `feat/commodities-shell` and row 3 is
+claimed in the §0 ledger.
+
+```powershell
+cd C:\Users\jgewi\gods-eye-view
+git fetch --all --prune
+git worktree add ..\commodities-weather -b feat/weather-forecast feat/commodities-shell
+cd ..\commodities-weather
+npm ci            # a fresh worktree has no node_modules
+npm run doctor    # confirms Node 24; row 3 needs no key at all
+npx vite --port 4176   # 4173 is another session's tree — never restart theirs
+claude
+```
+
+**Paste this as the first message to Claude:**
+
+```text
+Work in C:\Users\jgewi\commodities-weather, a git worktree on branch
+feat/weather-forecast (cut from feat/commodities-shell). This is row 3 of
+docs/COMMODITIES-PLAN.md. Read, in this order, before touching anything:
+docs/COMMODITIES-PLAN.md §0 (ledger), §2 (rules R1-R13 and the engineering
+rules), §11 (the row 3 PRD, including the probe log); docs/COMMODITIES.md;
+src/layers/commodities/observation.js (the stamp every reading uses);
+src/layers/chokepoints/ (pinned markers, ring, disc, gazetteer);
+src/layers/datacenters/live.js and liveSource.js (browser-direct Open-Meteo
+with per-feed errors and the observation stamp); src/layers/datacenters/
+dossier.js renderChart (the SVG chart precedent);
+src/data/local_data/us_datacenters/README.md (the bundle README pattern);
+scripts/build-gas-bundle.mjs (the build-script pattern).
+
+Then: (1) claim row 3 in the ledger, status "CLAIMED <today>, worktree
+commodities-weather, branch feat/weather-forecast, next: milestone 1", and
+commit that change alone. (2) Execute §11.10 milestones in order, one commit
+per milestone, with the verification evidence in each commit message.
+
+Rules that bind you: free keyless sources only, browser-direct where CORS
+allows; AIFS ENS is the only model until milestone 4; descriptive, never
+signals — thresholds print as heuristics with their value; additive to
+upstream; portable modules never import Cesium; take the PRD's assumptions
+A-1 to A-5 and note them in the commit rather than asking. Gates before
+every commit: npm run format, npm run check:boundaries, npm test (four to
+seven minutes, run it alone), npm run build; list every new *.test.mjs in
+scripts/format-scope.json. Never push. Shared clone: guard every commit
+with git branch --show-current in the same command; never a bare git
+stash. Headless render checks: copy .gev-logs/render-datacenters.mjs from
+the commodities-shell worktree into this worktree's gitignored .gev-logs\
+as render-weather.mjs, point it at http://localhost:4176/. If a render
+reports "Rendering has stopped" on the first load after adding modules,
+run it again. Ask me only when a decision is genuinely missing from §11.
 ```
