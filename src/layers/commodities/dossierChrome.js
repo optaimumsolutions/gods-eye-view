@@ -89,3 +89,153 @@ export function svgEl(doc, tag, attributes = {}) {
   }
   return node;
 }
+
+/**
+ * A monthly series as a filled area with a secondary series as a dashed line
+ * on its own scale, one invisible-until-hovered point per filed month
+ * carrying a `<title>`. Runs of filed months are drawn; a null is a gap, so a
+ * month not filed reads as a gap. The newest month is the right edge. Shared
+ * by the production dossiers (Gulf platforms, onshore wells).
+ *
+ * `chart`: `{ months, primary: (number|null)[], secondary: (number|null)[]|null,
+ *   formatPrimaryAxis(max) → string, secondaryAxisLines(max) → string[],
+ *   pointTitle(index) → string }`.
+ */
+export function renderSeriesChart(doc, chart) {
+  const width = 400;
+  const height = 110;
+  // Gutters sized for the axis labels: "201.3 MMcf" left, "101,234" right.
+  const padL = 58;
+  const padR = 50;
+  const padT = 10;
+  const padB = 22;
+  const svg = svgEl(doc, 'svg', {
+    viewBox: `0 0 ${width} ${height}`,
+    class: 'dc-chart',
+    role: 'img',
+    'aria-label': chart.ariaLabel ?? 'Monthly series',
+  });
+  const n = chart.months.length;
+  const primary = chart.primary;
+  const secondary = chart.secondary ?? null;
+  const primaryMax = Math.max(0, ...primary.filter((v) => v !== null));
+  const secondaryMax = secondary
+    ? Math.max(0, ...secondary.filter((v) => v !== null))
+    : 0;
+  if (!n || primaryMax <= 0) return svg;
+  const plotW = width - padL - padR;
+  const plotH = height - padT - padB;
+  const x = (i) => padL + (plotW * i) / Math.max(1, n - 1);
+  const yPrimary = (v) => padT + plotH - (v / primaryMax) * plotH;
+  const ySecondary = (v) =>
+    padT + plotH - (secondaryMax > 0 ? (v / secondaryMax) * plotH : 0);
+
+  // Primary scale on the left, secondary on the right.
+  for (const [v, label] of [
+    [0, '0'],
+    [primaryMax, chart.formatPrimaryAxis(primaryMax)],
+  ]) {
+    const t = svgEl(doc, 'text', {
+      x: padL - 4,
+      y: yPrimary(v) + 3,
+      'text-anchor': 'end',
+      class: 'dc-chart__label',
+    });
+    t.textContent = label;
+    svg.appendChild(t);
+  }
+  if (secondaryMax > 0) {
+    chart.secondaryAxisLines(secondaryMax).forEach((label, line) => {
+      const t = svgEl(doc, 'text', {
+        x: width - padR + 4,
+        y: padT + 3 + line * 10,
+        'text-anchor': 'start',
+        class: 'dc-chart__label',
+      });
+      t.textContent = label;
+      svg.appendChild(t);
+    });
+  }
+
+  // Area under the primary series: runs of filed months, so a gap in filing is a gap on the chart.
+  let area = '';
+  let line = '';
+  let open = false;
+  primary.forEach((v, i) => {
+    if (v === null) {
+      if (open)
+        area += ` L${x(i - 1).toFixed(1)},${(padT + plotH).toFixed(1)} Z`;
+      open = false;
+      return;
+    }
+    const px = x(i).toFixed(1);
+    const py = yPrimary(v).toFixed(1);
+    if (!open) {
+      area += ` M${px},${(padT + plotH).toFixed(1)} L${px},${py}`;
+      line += ` M${px},${py}`;
+      open = true;
+    } else {
+      area += ` L${px},${py}`;
+      line += ` L${px},${py}`;
+    }
+  });
+  if (open) area += ` L${x(n - 1).toFixed(1)},${(padT + plotH).toFixed(1)} Z`;
+  svg.appendChild(
+    svgEl(doc, 'path', { d: area.trim(), class: 'dc-chart__area' }),
+  );
+  svg.appendChild(
+    svgEl(doc, 'path', { d: line.trim(), class: 'dc-chart__line' }),
+  );
+
+  if (secondaryMax > 0) {
+    let path = '';
+    let openSecondary = false;
+    secondary.forEach((v, i) => {
+      if (v === null) {
+        openSecondary = false;
+        return;
+      }
+      path += `${openSecondary ? ' L' : ' M'}${x(i).toFixed(1)},${ySecondary(v).toFixed(1)}`;
+      openSecondary = true;
+    });
+    svg.appendChild(
+      svgEl(doc, 'path', {
+        d: path.trim(),
+        class: 'dc-chart__line dc-chart__line--secondary',
+      }),
+    );
+  }
+
+  primary.forEach((v, i) => {
+    if (v === null) return;
+    const point = svgEl(doc, 'circle', {
+      cx: x(i).toFixed(1),
+      cy: yPrimary(v).toFixed(1),
+      r: 2.2,
+      class: 'dc-chart__point',
+      'data-point': chart.months[i],
+    });
+    const title = svgEl(doc, 'title');
+    title.textContent = chart.pointTitle(i);
+    point.appendChild(title);
+    svg.appendChild(point);
+  });
+
+  // Year ticks along the bottom; the left edge is only labelled when the
+  // first January sits far enough right (a label is ~20 units wide) not to
+  // overprint it.
+  const firstJanuary = chart.months.findIndex((m) => m.endsWith('-01'));
+  chart.months.forEach((month, i) => {
+    if (!month.endsWith('-01') && i !== 0) return;
+    if (i === 0 && firstJanuary > 0 && x(firstJanuary) - x(0) < 26) return;
+    const t = svgEl(doc, 'text', {
+      x: x(i).toFixed(1),
+      y: height - 10,
+      'text-anchor': 'middle',
+      class: 'dc-chart__label',
+    });
+    t.textContent = month.slice(0, 4);
+    svg.appendChild(t);
+  });
+  return svg;
+}

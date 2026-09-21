@@ -782,7 +782,11 @@
   "scripts/onshore/nd.mjs",
   "scripts/onshore/eia.mjs",
   "scripts/onshore/regions.mjs",
+  "scripts/onshore/qa-harness.mjs",
+  "scripts/qa-onshore-williston.mjs",
   "src/layers/onshore/records.test.mjs",
   "src/layers/onshore/shards.test.mjs",
-  "src/layers/onshore/bundledSource.test.mjs"
+  "src/layers/onshore/model.test.mjs",
+  "src/layers/onshore/bundledSource.test.mjs",
+  "src/layers/onshore/dossier.test.mjs"
 ]

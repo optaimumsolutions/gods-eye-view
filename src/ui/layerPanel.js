@@ -22,6 +22,7 @@ const PANEL_GROUPS = [
       'energy-datacenters',
       'commodity-gas-flows',
       'production-gulf-platforms',
+      'production-williston',
       'commodity-lng',
     ],
   },
@@ -82,6 +83,9 @@ const PANEL_LABELS = {
   // Row 11: monthly production per platform structure as filed with BSEE;
   // "current" is the newest complete reporting month, named on the row.
   'production-gulf-platforms': 'Gas · Gulf Platforms (BSEE)',
+  // Row 12: monthly production per well as filed with the state (North
+  // Dakota DMR first); "current" is the newest complete filing month.
+  'production-williston': 'Gas · Williston Wells (ND DMR)',
   'commodity-lng': 'LNG · Terminals & Cargoes',
 };
 

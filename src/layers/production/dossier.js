@@ -1,7 +1,7 @@
 import {
   ensureDossierStyles,
   el,
-  svgEl,
+  renderSeriesChart,
 } from '../commodities/dossierChrome.js';
 import { monthAbbrev } from './completeness.js';
 import {
@@ -315,146 +315,25 @@ export function buildGulfDossierModel(row, { snapshot = null } = {}) {
 
 /**
  * Ten years of gas as a filled area with oil as a dashed line on its own
- * scale, one invisible-until-hovered point per filed month carrying a
- * `<title>` with the month's figures. The current month is the right edge.
+ * scale, drawn by the chrome's shared chart (`renderSeriesChart`, moved
+ * there when the onshore wells needed the same picture). Gas Mcf/d on the
+ * left axis, oil bbl/d on the right; one point per filed month.
  */
-function renderSeriesChart(doc, chart) {
-  const width = 400;
-  const height = 110;
-  // Gutters sized for the axis labels: "201.3 MMcf" left, "101,234" right.
-  const padL = 58;
-  const padR = 50;
-  const padT = 10;
-  const padB = 22;
-  const svg = svgEl(doc, 'svg', {
-    viewBox: `0 0 ${width} ${height}`,
-    class: 'dc-chart',
-    role: 'img',
-    'aria-label': 'Gas and oil per day by month',
+function renderGasOilChart(doc, chart) {
+  return renderSeriesChart(doc, {
+    ariaLabel: 'Gas and oil per day by month',
+    months: chart.months,
+    primary: chart.gas,
+    secondary: chart.oil,
+    formatPrimaryAxis: (max) => formatMcfd(max).replace(/\/d$/, ''),
+    secondaryAxisLines: (max) => ['oil', formatInt(max), 'bbl'],
+    pointTitle: (i) =>
+      joinParts([
+        chart.months[i],
+        formatMcfd(chart.gas[i]),
+        chart.oil[i] !== null ? formatBbld(chart.oil[i]) : null,
+      ]),
   });
-  const n = chart.months.length;
-  const gasMax = Math.max(0, ...chart.gas.filter((v) => v !== null));
-  const oilMax = Math.max(0, ...chart.oil.filter((v) => v !== null));
-  if (!n || gasMax <= 0) return svg;
-  const plotW = width - padL - padR;
-  const plotH = height - padT - padB;
-  const x = (i) => padL + (plotW * i) / Math.max(1, n - 1);
-  const yGas = (v) => padT + plotH - (v / gasMax) * plotH;
-  const yOil = (v) => padT + plotH - (oilMax > 0 ? (v / oilMax) * plotH : 0);
-
-  // Gas scale on the left ("per day" is the caption's), oil scale on the right.
-  for (const [v, label] of [
-    [0, '0'],
-    [gasMax, formatMcfd(gasMax).replace(/\/d$/, '')],
-  ]) {
-    const t = svgEl(doc, 'text', {
-      x: padL - 4,
-      y: yGas(v) + 3,
-      'text-anchor': 'end',
-      class: 'dc-chart__label',
-    });
-    t.textContent = label;
-    svg.appendChild(t);
-  }
-  if (oilMax > 0) {
-    ['oil', formatInt(oilMax), 'bbl'].forEach((label, line) => {
-      const t = svgEl(doc, 'text', {
-        x: width - padR + 4,
-        y: padT + 3 + line * 10,
-        'text-anchor': 'start',
-        class: 'dc-chart__label',
-      });
-      t.textContent = label;
-      svg.appendChild(t);
-    });
-  }
-
-  // Area under gas: runs of filed months, so a gap in filing is a gap on the chart.
-  let area = '';
-  let line = '';
-  let open = false;
-  chart.gas.forEach((v, i) => {
-    if (v === null) {
-      if (open)
-        area += ` L${x(i - 1).toFixed(1)},${(padT + plotH).toFixed(1)} Z`;
-      open = false;
-      return;
-    }
-    const px = x(i).toFixed(1);
-    const py = yGas(v).toFixed(1);
-    if (!open) {
-      area += ` M${px},${(padT + plotH).toFixed(1)} L${px},${py}`;
-      line += ` M${px},${py}`;
-      open = true;
-    } else {
-      area += ` L${px},${py}`;
-      line += ` L${px},${py}`;
-    }
-  });
-  if (open) area += ` L${x(n - 1).toFixed(1)},${(padT + plotH).toFixed(1)} Z`;
-  svg.appendChild(
-    svgEl(doc, 'path', { d: area.trim(), class: 'dc-chart__area' }),
-  );
-  svg.appendChild(
-    svgEl(doc, 'path', { d: line.trim(), class: 'dc-chart__line' }),
-  );
-
-  if (oilMax > 0) {
-    let oil = '';
-    let openOil = false;
-    chart.oil.forEach((v, i) => {
-      if (v === null) {
-        openOil = false;
-        return;
-      }
-      oil += `${openOil ? ' L' : ' M'}${x(i).toFixed(1)},${yOil(v).toFixed(1)}`;
-      openOil = true;
-    });
-    svg.appendChild(
-      svgEl(doc, 'path', {
-        d: oil.trim(),
-        class: 'dc-chart__line dc-chart__line--secondary',
-      }),
-    );
-  }
-
-  chart.gas.forEach((v, i) => {
-    if (v === null) return;
-    const point = svgEl(doc, 'circle', {
-      cx: x(i).toFixed(1),
-      cy: yGas(v).toFixed(1),
-      r: 2.2,
-      class: 'dc-chart__point',
-      'data-point': chart.months[i],
-    });
-    const title = svgEl(doc, 'title');
-    const oilV = chart.oil[i];
-    title.textContent = joinParts([
-      chart.months[i],
-      formatMcfd(v),
-      oilV !== null ? formatBbld(oilV) : null,
-    ]);
-    point.appendChild(title);
-    svg.appendChild(point);
-  });
-
-  // Year ticks along the bottom; the left edge is only labelled when the
-  // first January sits far enough right (a label is ~20 units wide) not to
-  // overprint it.
-  const firstJanuary = chart.months.findIndex((m) => m.endsWith('-01'));
-  chart.months.forEach((month, i) => {
-    if (!month.endsWith('-01') && i !== 0) return;
-    if (i === 0 && firstJanuary > 0 && x(firstJanuary) - x(0) < 26) return;
-    const t = svgEl(doc, 'text', {
-      x: x(i).toFixed(1),
-      y: height - 10,
-      'text-anchor': 'middle',
-      class: 'dc-chart__label',
-    });
-    t.textContent = month.slice(0, 4);
-    svg.appendChild(t);
-  });
-  return svg;
 }
 
 function renderModel(doc, root, model) {
@@ -497,7 +376,7 @@ function renderModel(doc, root, model) {
         `Ten years · gas per day, oil dashed`,
       ),
     );
-    box.appendChild(renderSeriesChart(doc, model.chart));
+    box.appendChild(renderGasOilChart(doc, model.chart));
     box.appendChild(
       el(
         doc,

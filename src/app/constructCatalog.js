@@ -24,6 +24,7 @@ import { createApplicationDatacenters } from './layers/datacenters.js';
 import { createApplicationGasFlows } from './layers/gasFlows.js';
 import { createApplicationGulfPlatforms } from './layers/gulfPlatforms.js';
 import { createApplicationLng } from './layers/lng.js';
+import { createApplicationOnshoreWilliston } from './layers/onshore.js';
 import { createInfrastructureLayers } from '../data/infrastructure.js';
 import { localGeoJsonServices } from './localGeojsonServices.js';
 import { createBhoteKoshiEventLayer } from '../data/bhoteKoshiEvent.js';
@@ -148,6 +149,7 @@ export function createApplicationCatalog({
         createApplicationGasFlows({ source: sources.gasFlows }),
         createApplicationGulfPlatforms({ source: sources.gulfPlatforms }),
         createApplicationLng({ source: sources.lng }),
+        createApplicationOnshoreWilliston({ source: sources.onshoreWilliston }),
         createApplicationFirms({
           surface,
           id: 'local-firms',
