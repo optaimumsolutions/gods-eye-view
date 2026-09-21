@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { buildOnshoreDossierModel, chartFromHistory } from './dossier.js';
 import { normaliseOnshoreDataset } from './records.js';
-import { facility, months, payload, reading } from './records.test.mjs';
+import { facility, months, payload, reading } from './fixtures.mjs';
 
 const NOW = Date.parse('2026-09-21T18:00:00Z');
 

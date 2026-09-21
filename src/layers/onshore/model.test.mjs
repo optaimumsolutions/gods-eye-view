@@ -30,7 +30,7 @@ import {
   wellPixelSize,
 } from './model.js';
 import { normaliseOnshoreDataset } from './records.js';
-import { clusters, facility, payload, reading } from './records.test.mjs';
+import { clusters, facility, payload, reading } from './fixtures.mjs';
 
 const NOW = Date.parse('2026-09-21T18:00:00Z');
 const POSITION = { x: 1, y: 2, z: 3 };

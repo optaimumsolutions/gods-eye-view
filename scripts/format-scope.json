@@ -788,5 +788,6 @@
   "src/layers/onshore/shards.test.mjs",
   "src/layers/onshore/model.test.mjs",
   "src/layers/onshore/bundledSource.test.mjs",
-  "src/layers/onshore/dossier.test.mjs"
+  "src/layers/onshore/dossier.test.mjs",
+  "src/layers/onshore/fixtures.mjs"
 ]
