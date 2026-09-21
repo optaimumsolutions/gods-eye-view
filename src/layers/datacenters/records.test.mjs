@@ -24,15 +24,15 @@ function loadBundle() {
   return JSON.parse(readFileSync(BUNDLE_URL, 'utf8'));
 }
 
-test('the bundle normalizes to five ranked US sites, largest IT power first', () => {
+test('the bundle normalizes to fifteen ranked US sites, largest IT power first', () => {
   const snapshot = normalizeDatacenterDataset(loadBundle());
   assert.ok(snapshot);
-  assert.equal(snapshot.vintage, '2026-09-17');
-  assert.equal(snapshot.asOf, 'as of 2026-09-17 · Epoch AI');
+  assert.equal(snapshot.vintage, '2026-09-18');
+  assert.equal(snapshot.asOf, 'as of 2026-09-18 · Epoch AI');
   assert.equal(snapshot.source.license, 'CC BY 4.0');
-  assert.equal(snapshot.rows.length, 5);
+  assert.equal(snapshot.rows.length, 15);
   const ranks = snapshot.rows.map((r) => r.rank);
-  assert.deepEqual(ranks, [1, 2, 3, 4, 5]);
+  assert.deepEqual(ranks, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]);
   for (let i = 1; i < snapshot.rows.length; i++)
     assert.ok(snapshot.rows[i - 1].itPowerMw >= snapshot.rows[i].itPowerMw);
   assert.deepEqual(
@@ -43,6 +43,17 @@ test('the bundle normalizes to five ranked US sites, largest IT power first', ()
       'fairwater-atlanta',
       'meta-prometheus',
       'stargate-abilene',
+      'fairwater-wisconsin',
+      'google-pryor-north',
+      'colossus-1',
+      'google-new-albany',
+      'google-columbus',
+      'amazon-madison',
+      'coreweave-denton',
+      // 13 and 14 are both 238 MW; records.js breaks the tie on id.
+      'google-bristow',
+      'qts-richmond-1',
+      'google-council-bluffs-east',
     ],
   );
   for (const row of snapshot.rows) {
@@ -117,7 +128,12 @@ test('gas-equivalent arithmetic follows the stated assumptions', () => {
   assert.equal(gasEquivalentMmcfd(null), null);
   assert.equal(gasEquivalentMmcfd(0), null);
   assert.equal(
-    Math.round(gasEquivalentMmcfd(1000, { heatRateMmbtuPerMwh: 7, gasEnergyMmbtuPerMcf: 1 })),
+    Math.round(
+      gasEquivalentMmcfd(1000, {
+        heatRateMmbtuPerMwh: 7,
+        gasEnergyMmbtuPerMcf: 1,
+      }),
+    ),
     168,
   );
   assert.equal(gasEquivalentMmcfd(100, { heatRateMmbtuPerMwh: 0 }), null);
@@ -158,7 +174,7 @@ test('the bundled source reads once and caches the snapshot', async () => {
   const second = await source.getSnapshot();
   assert.equal(calls, 1);
   assert.equal(first, second);
-  assert.equal(first.rows.length, 5);
+  assert.equal(first.rows.length, 15);
 
   const failing = createBundledDatacenterSource({
     fetchImpl: async () => ({ ok: false, status: 404 }),
@@ -176,9 +192,15 @@ test('campus footprints and on-site assets normalize and survive bad input', () 
   const byId = new Map(snapshot.rows.map((r) => [r.id, r]));
   for (const id of ['colossus-2', 'new-carlisle-rainier', 'stargate-abilene']) {
     const row = byId.get(id);
-    assert.ok(row.footprint && row.footprint.length >= 3, id + ' has a footprint');
+    assert.ok(
+      row.footprint && row.footprint.length >= 3,
+      id + ' has a footprint',
+    );
     for (const [lon, lat] of row.footprint) {
-      assert.ok(Math.abs(lon - row.lon) < 0.2 && Math.abs(lat - row.lat) < 0.2, id + ' footprint sits on the site');
+      assert.ok(
+        Math.abs(lon - row.lon) < 0.2 && Math.abs(lat - row.lat) < 0.2,
+        id + ' footprint sits on the site',
+      );
     }
   }
   assert.equal(byId.get('fairwater-atlanta').footprint, null);
@@ -195,7 +217,10 @@ test('campus footprints and on-site assets normalize and survive bad input', () 
       lat: 1,
       lon: 1,
       itPowerMw: 1,
-      footprint: [[1, 1], [2, 2]],
+      footprint: [
+        [1, 1],
+        [2, 2],
+      ],
       assets: [{ id: 'a' }, { id: 'b', name: 'B', lat: 1, lon: 1 }],
     },
     DEFAULT_GAS_ASSUMPTIONS,
@@ -226,7 +251,10 @@ test('the dossier model carries every section an analyst reads', () => {
   assert.ok(model.sources.length >= 3);
   assert.match(model.footer, /CC BY 4.0/);
   const steady = buildDossierModel(
-    normalizeDatacenterSite({ id: 'y', name: 'Y', lat: 1, lon: 1, itPowerMw: 10 }, DEFAULT_GAS_ASSUMPTIONS),
+    normalizeDatacenterSite(
+      { id: 'y', name: 'Y', lat: 1, lon: 1, itPowerMw: 10 },
+      DEFAULT_GAS_ASSUMPTIONS,
+    ),
   );
   assert.equal(steady.stats[2].value, 'no growth');
   assert.equal(steady.chart.length, 0);

@@ -27,13 +27,21 @@ import {
   statusColor,
 } from './model.js';
 import { formatMw, mapAnalystRecord } from './records.js';
+import { createDatacenterLiveSource } from './liveSource.js';
 export * from './model.js';
 export * from './records.js';
+export * from './live.js';
+export { createDatacenterLiveSource } from './liveSource.js';
 export { createBundledDatacenterSource } from './source.js';
 export { buildDossierModel, createDatacenterDossier } from './dossier.js';
 
-/** A bundled snapshot never changes at runtime; the poll is a formality. */
-const UPDATE_INTERVAL_MS = 6 * 60 * 60_000;
+/**
+ * The bundled Epoch facts never change at runtime, but the grid and weather
+ * readings layered onto them do, so the poll now paces the live feeds: EIA
+ * publishes hourly and Open-Meteo every quarter hour. The live source caches
+ * on its own TTL, so a poll that finds nothing new costs no request.
+ */
+const UPDATE_INTERVAL_MS = 10 * 60_000;
 
 /**
  * Own the US data center display. Every site is a pinned marker with a
@@ -45,6 +53,7 @@ const UPDATE_INTERVAL_MS = 6 * 60 * 60_000;
  */
 export function createDatacentersLayer({
   source,
+  liveSource = createDatacenterLiveSource(),
   overlayHost,
   context,
   dossier = null,
@@ -81,6 +90,8 @@ export function createDatacentersLayer({
   let _lastUpdate = null;
   let _lastError = null;
   let _snapshot = null;
+  /** Latest `{ grid, weather, fetchedAt, errors }` from the live source. */
+  let _live = null;
   let _tier = DATACENTER_TIER_GLOBAL;
   let _enabled = false;
   const _rowById = new Map();
@@ -113,11 +124,30 @@ export function createDatacentersLayer({
     }
   }
 
+  /**
+   * The live readings that belong to one site: its balancing authority's grid
+   * figure and its own weather. Null until the first reading lands, which is
+   * what keeps the static card unchanged while the feeds are cold or down.
+   */
+  function liveFor(row) {
+    if (!_live) return null;
+    const grid = row.balancingAuthority
+      ? (_live.grid.get(row.balancingAuthority) ?? null)
+      : null;
+    const weather = _live.weather.get(row.id) ?? null;
+    return grid || weather ? { grid, weather } : null;
+  }
+
   function rebuildEntries() {
     const entries = [];
     for (const row of _rows) {
       entries.push(
-        createDatacenterOverlayEntry(row, _positionById.get(row.id), _tier),
+        createDatacenterOverlayEntry(
+          row,
+          _positionById.get(row.id),
+          _tier,
+          liveFor(row),
+        ),
       );
       if (_tier === DATACENTER_TIER_LOCAL) {
         for (const asset of row.assets)
@@ -138,7 +168,11 @@ export function createDatacentersLayer({
     const selected = _selectedId ? _rowById.get(_selectedId) : null;
     if (selected)
       entries.push(
-        buildSelectedDatacenterCard(selected, _positionById.get(selected.id)),
+        buildSelectedDatacenterCard(
+          selected,
+          _positionById.get(selected.id),
+          liveFor(selected),
+        ),
       );
     overlayHost.setEntries(DATACENTER_OVERLAY_SOURCE_ID, entries, {
       cohortLimit: DATACENTER_OVERLAY_COHORT_LIMIT + 1,
@@ -273,7 +307,7 @@ export function createDatacentersLayer({
 
   function openDossier(row) {
     if (!dossier?.show) return;
-    dossier.show(row, { total: _rows.length });
+    dossier.show(row, { total: _rows.length, live: liveFor(row) });
   }
 
   function closeDossier() {
@@ -554,6 +588,29 @@ export function createDatacentersLayer({
         console.log(
           `[Data:Datacenters] Updated: ${rows.length} sites (${snapshot.asOf})`,
         );
+        // Live readings are enrichment, never a precondition: the bundled
+        // facts are already on the map by the time these are asked for, and a
+        // failure here leaves the cards exactly as they are.
+        try {
+          const live = await liveSource.getReadings(rows, {
+            signal: request.signal,
+          });
+          if (request.signal.aborted || _request !== request || !_enabled)
+            return true;
+          _live = live;
+          refreshTier({ force: true });
+          const gridCount = live.grid.size;
+          const weatherCount = live.weather.size;
+          console.log(
+            `[Data:Datacenters] Live: ${gridCount} balancing authorities, ${weatherCount} campus observations` +
+              (live.errors.grid ? ` · grid error ${live.errors.grid}` : '') +
+              (live.errors.weather
+                ? ` · weather error ${live.errors.weather}`
+                : ''),
+          );
+        } catch (liveError) {
+          console.warn('[Data:Datacenters] Live feed error:', liveError);
+        }
         return true;
       } catch (e) {
         if (request.signal.aborted || _request !== request || !_enabled)
@@ -627,7 +684,13 @@ export function createDatacentersLayer({
         error: _lastError,
         asOf: _snapshot?.asOf ?? null,
         vintage: _snapshot?.vintage ?? null,
+        // The layer's headline reading is still Epoch's published IT-power
+        // estimate (R2); the grid and weather lines carry their own stamps.
         freshnessClass: 'published',
+        liveFetchedAt: _live?.fetchedAt ?? null,
+        gridAuthorities: _live ? _live.grid.size : 0,
+        weatherSites: _live ? _live.weather.size : 0,
+        liveErrors: _live?.errors ?? null,
         tier: _tier,
         selectedId: _selectedId,
         hoverId: _hoverId,

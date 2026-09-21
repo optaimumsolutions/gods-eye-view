@@ -5,6 +5,7 @@ import {
   formatMw,
   formatUsdB,
 } from './records.js';
+import { gridLine, weatherLine } from './live.js';
 
 export { DATACENTER_LAYER_ID };
 export const DATACENTER_OVERLAY_SOURCE_ID = 'energy-datacenters';
@@ -171,14 +172,14 @@ function baseEntry(row, position) {
 }
 
 /** Ambient entry for the site at the current depth. */
-export function createDatacenterOverlayEntry(row, position, tier) {
+export function createDatacenterOverlayEntry(row, position, tier, live = null) {
   const base = baseEntry(row, position);
   if (tier === DATACENTER_TIER_LOCAL) {
     return {
       ...base,
       variant: 'card',
       title: row.name.toUpperCase(),
-      details: localCardLines(row).map(clampLine),
+      details: localCardLines(row, live).map(clampLine),
     };
   }
   if (tier === DATACENTER_TIER_REGIONAL) {
@@ -186,7 +187,7 @@ export function createDatacenterOverlayEntry(row, position, tier) {
       ...base,
       variant: 'card',
       title: `${row.name.toUpperCase()} · ${formatMw(row.itPowerMw)} IT`,
-      details: regionalCardLines(row).map(clampLine),
+      details: regionalCardLines(row, live).map(clampLine),
     };
   }
   return {
@@ -196,8 +197,18 @@ export function createDatacenterOverlayEntry(row, position, tier) {
   };
 }
 
+/**
+ * Live lines, appended only when a reading has arrived. Absent live data must
+ * leave the static card exactly as it was, so a feed outage costs a line
+ * rather than changing the card's shape.
+ */
+function liveCardLines(row, live) {
+  if (!live) return [];
+  return [gridLine(row, live.grid), weatherLine(live.weather)].filter(Boolean);
+}
+
 /** Regional card: who, where it is going, how it is powered. */
-export function regionalCardLines(row) {
+export function regionalCardLines(row, live = null) {
   return [
     joinParts([
       row.owner ? `owner ${row.owner}` : null,
@@ -210,11 +221,12 @@ export function regionalCardLines(row) {
       expansionLine(row),
     ]),
     joinParts([row.power.gridUtility, onSiteSummary(row)]),
+    ...liveCardLines(row, live),
   ];
 }
 
 /** Local card: the campus at a glance, and the hint that the marker opens the dossier. */
-export function localCardLines(row) {
+export function localCardLines(row, live = null) {
   return [
     joinParts([
       row.status,
@@ -229,6 +241,7 @@ export function localCardLines(row) {
       row.h100e !== null ? `${formatCount(row.h100e)} H100e` : null,
     ]),
     joinParts([row.power.gridUtility, onSiteSummary(row)]),
+    ...liveCardLines(row, live),
     'click the marker for the dossier',
   ];
 }
@@ -267,7 +280,7 @@ export function createAssetOverlayEntry(row, asset, position) {
  * Selected card: compact on purpose. The full record, the timeline and the
  * sources live in the dossier drawer; the map card carries the headline.
  */
-export function buildSelectedDatacenterCard(row, position) {
+export function buildSelectedDatacenterCard(row, position, live = null) {
   const details = [
     joinParts([
       joinParts([row.city, row.state], ', '),
@@ -290,6 +303,7 @@ export function buildSelectedDatacenterCard(row, position) {
       row.power.gridOperator ? `(${row.power.gridOperator})` : null,
       onSiteSummary(row),
     ]),
+    ...liveCardLines(row, live),
     joinParts([
       row.capexUsdB !== null ? `capex ${formatUsdB(row.capexUsdB)}` : null,
       row.h100e !== null ? `${formatCount(row.h100e)} H100e` : null,

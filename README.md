@@ -540,7 +540,7 @@ keeps merging clean.
     by the baseline tanker rate and coloured by the 7-day vs 90-day deviation.
   - **Ports · Tanker Calls.** IMF PortWatch, 2,065 ports sized by annual tanker
     visits, coloured by tanker-call deviation, with disruption rings.
-  - **Data Centers · US Power.** The five largest US data centers by current
+  - **Data Centers · US Power.** The fifteen largest US data centers by current
     IT power (Epoch AI, CC BY 4.0), bundled and vintage-stamped. Three zoom
     tiers: a label from orbit, a short card at regional zoom, and under 300 km
     the campus footprint with its on-site plants. Hovering highlights a site;

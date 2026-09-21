@@ -10,9 +10,17 @@ the `vintage` below, never the fetch time.
   data_center_timelines.csv, data_center_chip_quantities.csv).
 - License: Creative Commons Attribution 4.0 (CC BY 4.0). Citation: Epoch AI,
   'AI Data Centers'. Published online at epoch.ai.
-- Retrieved: 2026-09-17. Vintage stamped in `datacenters.json`.
-- Selection: the five largest US sites by current IT power (MW) in the
+- Retrieved: 2026-09-18. Vintage stamped in `datacenters.json`.
+- Selection: the fifteen largest US sites by current IT power (MW) in the
   tracker on the retrieval date. Planned figures are Epoch projections.
+  Ties on IT power are broken by current H100 equivalents, which is what
+  separates Council Bluffs (East) from Omaha and Papillion, all three at
+  237 MW. The layer itself re-ranks and breaks ties on `id`
+  (`records.js`), so rank 13/14 read alphabetically.
+- Depth: sites 1 to 5 carry hand-curated grid, cooling, on-site generation,
+  footprint and asset detail from the supplementary sources below. Sites 6
+  to 15 carry the tracker's own fields only (owner, users, power, chips,
+  capex, timeline, sources) — no footprint, no on-site assets.
 - Positions: OpenStreetMap polygon centroids where a mapped campus exists
   (Colossus 2, Project Rainier, Lancium Clean Campus), otherwise the street
   address or a campus landmark; each record says which in `positionSource`.

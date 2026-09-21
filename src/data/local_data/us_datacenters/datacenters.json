@@ -1,6 +1,6 @@
 {
-  "vintage": "2026-09-17",
-  "selection": "The five largest United States data centers by current IT power (MW) in the Epoch AI 'AI Data Centers' tracker as of 2026-09-17. Planned end-state figures are Epoch projections from satellite imagery, permits and disclosures; Epoch states an IT-power estimate falls within a factor of 1.4 of the true value about 80% of the time. Campus footprints, where present, are OpenStreetMap outlines (ODbL) simplified to a few points.",
+  "vintage": "2026-09-18",
+  "selection": "The fifteen largest United States data centers by current IT power (MW) in the Epoch AI 'AI Data Centers' tracker as of 2026-09-18. Planned end-state figures are Epoch projections from satellite imagery, permits and disclosures; Epoch states an IT-power estimate falls within a factor of 1.4 of the true value about 80% of the time. Campus footprints, where present, are OpenStreetMap outlines (ODbL) simplified to a few points. The first five sites carry hand-curated grid, cooling, on-site generation and footprint detail from the supplementary sources on each record; sites 6 to 15 carry the tracker's own fields only.",
   "source": {
     "name": "Epoch AI, 'AI Data Centers'",
     "shortName": "Epoch AI",
@@ -8,7 +8,7 @@
     "download": "https://epoch.ai/data/data_centers/data_centers.zip",
     "license": "CC BY 4.0",
     "citation": "Epoch AI, 'AI Data Centers'. Published online at epoch.ai. Retrieved from https://epoch.ai/data/ai-data-centers [online resource].",
-    "retrieved": "2026-09-17"
+    "retrieved": "2026-09-18"
   },
   "assumptions": {
     "gasHeatRateMmbtuPerMwh": 7,
@@ -208,7 +208,9 @@
           "plannedCapacityMw": 1240.5,
           "note": "Behind-the-meter gas turbines across the state line (MZT Tech LLC / X.AI Corp); position and capacity per Global Energy Monitor"
         }
-      ]
+      ],
+      "balancingAuthority": "TVA",
+      "balancingAuthorityNote": "MLGW is a TVA distributor"
     },
     {
       "id": "new-carlisle-rainier",
@@ -399,7 +401,9 @@
           41.66383
         ]
       ],
-      "footprintSource": "OpenStreetMap way/1303947602 (ODbL), simplified"
+      "footprintSource": "OpenStreetMap way/1303947602 (ODbL), simplified",
+      "balancingAuthority": "PJM",
+      "balancingAuthorityNote": "Indiana Michigan Power (AEP) is in PJM"
     },
     {
       "id": "fairwater-atlanta",
@@ -526,7 +530,9 @@
       "notes": [
         "Paired over Microsoft's AI WAN with Fairwater Wisconsin (Mount Pleasant), the largest planned site in the tracker at 2,263 MW.",
         "Grid-only design: the whole load is a utility demand story rather than an on-site fuel story."
-      ]
+      ],
+      "balancingAuthority": "SOCO",
+      "balancingAuthorityNote": "Georgia Power, a Southern Company operating company"
     },
     {
       "id": "meta-prometheus",
@@ -686,7 +692,9 @@
       "notes": [
         "Meta's first gigawatt-class training campus; ad hoc build with tents beside conventional halls.",
         "Two dedicated gas plants make this the clearest on-site gas demand story among the five."
-      ]
+      ],
+      "balancingAuthority": "PJM",
+      "balancingAuthorityNote": "AEP Ohio is in PJM"
     },
     {
       "id": "stargate-abilene",
@@ -906,7 +914,1515 @@
           32.50044
         ]
       ],
-      "footprintSource": "OpenStreetMap way/1432100334 (ODbL), simplified"
+      "footprintSource": "OpenStreetMap way/1432100334 (ODbL), simplified",
+      "balancingAuthority": "ERCO",
+      "balancingAuthorityNote": "the Texas interconnection"
+    },
+    {
+      "id": "fairwater-wisconsin",
+      "name": "Microsoft Fairwater Wisconsin",
+      "owner": "Microsoft",
+      "operator": "Microsoft",
+      "users": [
+        "OpenAI",
+        "Microsoft"
+      ],
+      "investors": [],
+      "builders": [],
+      "energyCompanies": [
+        "WE Energies"
+      ],
+      "project": "Microsoft AI WAN",
+      "address": "4800 90th St, Mount Pleasant, WI 53403",
+      "city": "Mount Pleasant",
+      "county": "Racine County",
+      "state": "WI",
+      "lat": 42.67487,
+      "lon": -87.89488,
+      "positionSource": "Nominatim geocode of the street address (4800 90th St, Mount Pleasant)",
+      "status": "expanding",
+      "asOf": "2026-05-15",
+      "itPowerMw": 369,
+      "facilityPowerMw": 442,
+      "plannedItPowerMw": 2263,
+      "plannedFacilityPowerMw": 2715,
+      "plannedDate": "2028-05-13",
+      "plannedNote": "Buildings 3-11 are estimated to be operational, Epoch projection",
+      "h100e": 445679.63618,
+      "plannedH100e": 4527539.161193,
+      "capexUsdB": 13.978458,
+      "plannedCapexUsdB": 85.726966,
+      "computeCostUsdB": 9.635697,
+      "constructionCostUsdB": 4.342761,
+      "annualOpexUsdB": 0.332838,
+      "chips": [
+        {
+          "type": "B200",
+          "count": 176391,
+          "date": "2026-04-16"
+        }
+      ],
+      "plannedChips": [
+        {
+          "type": "B200",
+          "count": 352782,
+          "date": "2027-02-20"
+        }
+      ],
+      "buildingsOperational": 1,
+      "buildingsPlanned": 11,
+      "waterUseMgd": null,
+      "firstOperational": "2026-04-16",
+      "timeline": [
+        {
+          "date": "2023-07-14",
+          "milestone": "Land clearing begins for Building 1",
+          "buildingsOperational": 0,
+          "itPowerMw": 0,
+          "facilityPowerMw": 0
+        },
+        {
+          "date": "2025-09-26",
+          "milestone": "Building 1 cooling and backup generators all look complete from above but there is still construction visible around the",
+          "buildingsOperational": 0,
+          "itPowerMw": 0,
+          "facilityPowerMw": 0
+        },
+        {
+          "date": "2026-01-28",
+          "milestone": "Building 1 looks complete, but based on Microsoft announcements, it's not fully operational yet",
+          "buildingsOperational": 0,
+          "itPowerMw": 0,
+          "facilityPowerMw": 0
+        },
+        {
+          "date": "2026-04-16",
+          "milestone": "Building 1 is operational",
+          "buildingsOperational": 1,
+          "itPowerMw": 369,
+          "facilityPowerMw": 442
+        },
+        {
+          "date": "2026-05-15",
+          "milestone": "The main shell of Building 2 looks almost completed",
+          "buildingsOperational": 1,
+          "itPowerMw": 369,
+          "facilityPowerMw": 442
+        },
+        {
+          "date": "2027-02-20",
+          "milestone": "Building 2 is operational",
+          "buildingsOperational": 2,
+          "itPowerMw": 737,
+          "facilityPowerMw": 885,
+          "projected": true
+        },
+        {
+          "date": "2028-05-13",
+          "milestone": "Buildings 3-11 are estimated to be operational",
+          "buildingsOperational": 11,
+          "itPowerMw": 2263,
+          "facilityPowerMw": 2715,
+          "projected": true
+        }
+      ],
+      "sources": [
+        {
+          "title": "Epoch AI site page",
+          "url": "https://epoch.ai/data/ai-data-centers/directory/microsoft-fairwater-wisconsin"
+        },
+        {
+          "title": "Microsoft blog with engineering details",
+          "url": "https://blogs.microsoft.com/blog/2025/09/18/inside-the-worlds-most-powerful-ai-datacenter/"
+        },
+        {
+          "title": "Microsoft blog with more general information",
+          "url": "https://blogs.microsoft.com/on-the-issues/2025/09/18/made-in-wisconsin-the-worlds-most-powerful-ai-datacenter/"
+        },
+        {
+          "title": "Construction Permit Application for building 1",
+          "url": "https://drive.google.com/file/d/1azyXnreQBuYEqX2oaSUgePDGCMneez5Z/view?usp=sharing"
+        },
+        {
+          "title": "Plan for 9-building and 6-building expansions",
+          "url": "https://drive.google.com/file/d/1PQKzfauDNzabN7oNviMKTvsZmxlsUVpG/view?usp=sharing"
+        },
+        {
+          "title": "OpenAI article mentioning they use Microsoft's Fairwater supercomputers",
+          "url": "https://openai.com/index/mrc-supercomputer-networking/"
+        }
+      ],
+      "notes": [],
+      "power": {
+        "gridUtility": "WE Energies",
+        "gridOperator": null,
+        "interconnectionMw": null,
+        "interconnectionNote": null,
+        "substationMw": null,
+        "substationNote": null,
+        "onSiteGeneration": {
+          "type": null,
+          "capacityMw": null,
+          "capacityNote": null,
+          "plannedCapacityMw": null,
+          "plannedNote": null,
+          "units": null,
+          "permitStatus": null
+        },
+        "batteries": null,
+        "backupGenerators": null
+      },
+      "balancingAuthority": "MISO",
+      "balancingAuthorityNote": "WE Energies is in MISO"
+    },
+    {
+      "id": "google-pryor-north",
+      "name": "Google Pryor (North)",
+      "owner": "Google",
+      "operator": "Google",
+      "users": [
+        "Google DeepMind"
+      ],
+      "investors": [],
+      "builders": [],
+      "energyCompanies": [],
+      "project": null,
+      "address": "4581 Webb St, Pryor, OK 74361",
+      "city": "Pryor Creek",
+      "county": "Mayes County",
+      "state": "OK",
+      "lat": 36.24117,
+      "lon": -95.33005,
+      "positionSource": "OpenStreetMap building at 4581 Webb St, Mid-America Industrial Park",
+      "status": "operating",
+      "asOf": "2026-09-06",
+      "itPowerMw": 368,
+      "facilityPowerMw": 442,
+      "plannedItPowerMw": null,
+      "plannedFacilityPowerMw": null,
+      "plannedDate": null,
+      "plannedNote": null,
+      "h100e": 636685.194543,
+      "plannedH100e": null,
+      "capexUsdB": 13.940576,
+      "plannedCapexUsdB": null,
+      "computeCostUsdB": 9.609584,
+      "constructionCostUsdB": 4.330992,
+      "annualOpexUsdB": 0.331936,
+      "chips": [
+        {
+          "type": "TPU v5p",
+          "count": 23466,
+          "date": "2024-07-19"
+        },
+        {
+          "type": "TPU v5e",
+          "count": 77886,
+          "date": "2024-07-19"
+        }
+      ],
+      "plannedChips": [],
+      "buildingsOperational": 2,
+      "buildingsPlanned": null,
+      "waterUseMgd": null,
+      "firstOperational": "2024-07-19",
+      "timeline": [
+        {
+          "date": "2024-07-19",
+          "milestone": "Building 1 is operational, based on default roof-to-operational time",
+          "buildingsOperational": 1,
+          "itPowerMw": 53,
+          "facilityPowerMw": 63
+        },
+        {
+          "date": "2025-01-28",
+          "milestone": "Building 2 is being retrofitted from a warehouse",
+          "buildingsOperational": 1,
+          "itPowerMw": 53,
+          "facilityPowerMw": 63
+        },
+        {
+          "date": "2025-10-19",
+          "milestone": "The new substation for Building 2 looks mostly complete, half of the cooling towers are installed",
+          "buildingsOperational": 1,
+          "itPowerMw": 53,
+          "facilityPowerMw": 63
+        },
+        {
+          "date": "2026-05-26",
+          "milestone": "Building 2 looks almost complete, but still appears to have three cooling towers missing",
+          "buildingsOperational": 1,
+          "itPowerMw": 53,
+          "facilityPowerMw": 63
+        },
+        {
+          "date": "2026-09-06",
+          "milestone": "Building 2 is operational, confirmed via RAAD drone imagery of spinning cooling tower fans on September 8th",
+          "buildingsOperational": 2,
+          "itPowerMw": 368,
+          "facilityPowerMw": 442
+        }
+      ],
+      "sources": [
+        {
+          "title": "Epoch AI site page",
+          "url": "https://epoch.ai/data/ai-data-centers/directory/google-pryor-north"
+        },
+        {
+          "title": "Google announces expansion of Pryor facility",
+          "url": "https://blog.google/inside-google/company-announcements/google-american-innovation-oklahoma/"
+        },
+        {
+          "title": "Google 2025 Environmental Report",
+          "url": "https://sustainability.google/reports/google-2025-environmental-report/"
+        },
+        {
+          "title": "News of a 9 exaflop TPUv4 cluster in the Pryor data center, launched in 2022",
+          "url": "https://techcrunch.com/2022/05/11/google-launches-a-9-exaflop-cluster-of-cloud-tpu-v4-pods-into-public-preview/"
+        }
+      ],
+      "notes": [],
+      "balancingAuthority": "SWPP",
+      "balancingAuthorityNote": "Grand River Dam Authority is an SPP member"
+    },
+    {
+      "id": "colossus-1",
+      "name": "Colossus 1",
+      "owner": "SpaceXAI",
+      "operator": "SpaceXAI",
+      "users": [
+        "Anthropic"
+      ],
+      "investors": [],
+      "builders": [],
+      "energyCompanies": [
+        "MLGW"
+      ],
+      "project": null,
+      "address": "3231 Riverport Rd, Memphis, TN 38109",
+      "city": "Memphis",
+      "county": "Shelby County",
+      "state": "TN",
+      "lat": 35.06008,
+      "lon": -90.15641,
+      "positionSource": "OpenStreetMap building polygon ('xAI Colossus', way/1381264361)",
+      "status": "operating",
+      "asOf": "2026-06-15",
+      "itPowerMw": 340,
+      "facilityPowerMw": 425,
+      "plannedItPowerMw": null,
+      "plannedFacilityPowerMw": null,
+      "plannedDate": null,
+      "plannedNote": null,
+      "h100e": 275795.856493,
+      "plannedH100e": null,
+      "capexUsdB": 12.87988,
+      "plannedCapexUsdB": null,
+      "computeCostUsdB": 8.87842,
+      "constructionCostUsdB": 4.00146,
+      "annualOpexUsdB": 0.30668,
+      "chips": [
+        {
+          "type": "H100",
+          "count": 25000,
+          "date": "2024-08-11"
+        },
+        {
+          "type": "H100",
+          "count": 100000,
+          "date": "2024-09-02"
+        },
+        {
+          "type": "H100",
+          "count": 150000,
+          "date": "2025-02-17"
+        },
+        {
+          "type": "H200",
+          "count": 50000,
+          "date": "2025-02-17"
+        },
+        {
+          "type": "B200",
+          "count": 30000,
+          "date": "2025-07-22"
+        },
+        {
+          "type": "H200",
+          "count": 50000,
+          "date": "2026-06-01"
+        },
+        {
+          "type": "B200",
+          "count": 30000,
+          "date": "2026-06-01"
+        },
+        {
+          "type": "H100",
+          "count": 150000,
+          "date": "2026-06-01"
+        }
+      ],
+      "plannedChips": [],
+      "buildingsOperational": 1,
+      "buildingsPlanned": null,
+      "waterUseMgd": null,
+      "firstOperational": "2024-08-11",
+      "timeline": [
+        {
+          "date": "2024-04-24",
+          "milestone": "Construction starts with a road added on site, retrofitting a former Electrolux building",
+          "buildingsOperational": 0,
+          "itPowerMw": 0,
+          "facilityPowerMw": 0
+        },
+        {
+          "date": "2024-08-11",
+          "milestone": "First significant/useful training workload on 25k H100s",
+          "buildingsOperational": 1,
+          "itPowerMw": 35,
+          "facilityPowerMw": 45
+        },
+        {
+          "date": "2024-09-02",
+          "milestone": "100k H100s online",
+          "buildingsOperational": 1,
+          "itPowerMw": 139,
+          "facilityPowerMw": 181
+        },
+        {
+          "date": "2025-02-17",
+          "milestone": "150k H100s and 50k H200s online",
+          "buildingsOperational": 1,
+          "itPowerMw": 278,
+          "facilityPowerMw": 361
+        },
+        {
+          "date": "2025-03-06",
+          "milestone": "Second substation almost connected (red cables)",
+          "buildingsOperational": 1,
+          "itPowerMw": 278,
+          "facilityPowerMw": 361
+        },
+        {
+          "date": "2025-07-22",
+          "milestone": "30k B200s added (in GB200 configuration)",
+          "buildingsOperational": 1,
+          "itPowerMw": 340,
+          "facilityPowerMw": 442
+        },
+        {
+          "date": "2025-09-17",
+          "milestone": "Third substation looks completed, but it doesn't appear to be connected to the building yet",
+          "buildingsOperational": 1,
+          "itPowerMw": 268,
+          "facilityPowerMw": 348
+        },
+        {
+          "date": "2025-10-19",
+          "milestone": "There is still construction visible in the third substation yard and next to the new cooling towers",
+          "buildingsOperational": 1,
+          "itPowerMw": 268,
+          "facilityPowerMw": 348
+        },
+        {
+          "date": "2025-11-07",
+          "milestone": "Third substation was expected to power the building in Fall",
+          "buildingsOperational": 1,
+          "itPowerMw": 340,
+          "facilityPowerMw": 442
+        },
+        {
+          "date": "2026-02-11",
+          "milestone": "All air-cooled chillers have been disconnected and/or removed from the site, leaving only the cooling towers for cooling",
+          "buildingsOperational": 1,
+          "itPowerMw": 340,
+          "facilityPowerMw": 425
+        },
+        {
+          "date": "2026-05-06",
+          "milestone": "Anthropic announces their agreement with SpaceX to use all of the compute capacity at Colossus 1",
+          "buildingsOperational": 1,
+          "itPowerMw": 340,
+          "facilityPowerMw": 425
+        },
+        {
+          "date": "2026-06-01",
+          "milestone": "We assume that Anthropic has started using Colossus 1 now, since the announcement said they would get access to 300 MW \"",
+          "buildingsOperational": 1,
+          "itPowerMw": 340,
+          "facilityPowerMw": 425
+        },
+        {
+          "date": "2026-06-15",
+          "milestone": "No major changes to the data center since February",
+          "buildingsOperational": 1,
+          "itPowerMw": 340,
+          "facilityPowerMw": 425
+        }
+      ],
+      "sources": [
+        {
+          "title": "Epoch AI site page",
+          "url": "https://epoch.ai/data/ai-data-centers/directory/colossus-1"
+        },
+        {
+          "title": "May 2025 Electricity Provider Disclosure",
+          "url": "https://drive.google.com/file/d/17WAFThn95X85ebzA_e19R1zYycwFzAl2/view?usp=sharing"
+        },
+        {
+          "title": "July 2025 Permit for Gas Turbines",
+          "url": "https://www.scribd.com/document/883601734/01156-01PC-070225-Permit"
+        },
+        {
+          "title": "Southern Environmental Law Center Gas Permit Appeal, with additional satellite images",
+          "url": "https://cdn.arstechnica.net/wp-content/uploads/2025/07/NAACP-and-YGGs-xAI-Air-Permit-Appeal-7-15-2025.pdf"
+        },
+        {
+          "title": "Disclosure on X (formerly Twitter) by Elon Musk of the breakdown of GPUs",
+          "url": "https://archive.is/oHQSA"
+        },
+        {
+          "title": "Anthropic announcement",
+          "url": "https://www.anthropic.com/news/higher-limits-spacex"
+        }
+      ],
+      "notes": [
+        "Epoch AI shows IT power stepping down to 268 MW in late 2025 and back to 340 MW in November 2025 as substations were connected and chillers removed; the timeline keeps both readings."
+      ],
+      "power": {
+        "gridUtility": "MLGW",
+        "gridOperator": null,
+        "interconnectionMw": null,
+        "interconnectionNote": null,
+        "substationMw": null,
+        "substationNote": null,
+        "onSiteGeneration": {
+          "type": null,
+          "capacityMw": null,
+          "capacityNote": null,
+          "plannedCapacityMw": null,
+          "plannedNote": null,
+          "units": null,
+          "permitStatus": null
+        },
+        "batteries": null,
+        "backupGenerators": null
+      },
+      "balancingAuthority": "TVA",
+      "balancingAuthorityNote": "MLGW is a TVA distributor"
+    },
+    {
+      "id": "google-new-albany",
+      "name": "Google New Albany",
+      "owner": "Google",
+      "operator": "Google",
+      "users": [
+        "Google DeepMind"
+      ],
+      "investors": [],
+      "builders": [],
+      "energyCompanies": [],
+      "project": null,
+      "address": "1101 Beech Rd SW, New Albany, OH 43054",
+      "city": "New Albany",
+      "county": "Licking County",
+      "state": "OH",
+      "lat": 40.07005,
+      "lon": -82.75404,
+      "positionSource": "Nominatim geocode of the street address (1101 Beech Rd SW)",
+      "status": "operating",
+      "asOf": "2026-05-18",
+      "itPowerMw": 333,
+      "facilityPowerMw": 400,
+      "plannedItPowerMw": null,
+      "plannedFacilityPowerMw": null,
+      "plannedDate": null,
+      "plannedNote": null,
+      "h100e": 323900.960081,
+      "plannedH100e": null,
+      "capexUsdB": 12.614706,
+      "plannedCapexUsdB": null,
+      "computeCostUsdB": 8.695629,
+      "constructionCostUsdB": 3.919077,
+      "annualOpexUsdB": 0.300366,
+      "chips": [
+        {
+          "type": "TPU v5e",
+          "count": 151829,
+          "date": "2024-04-20"
+        },
+        {
+          "type": "TPU v5p",
+          "count": 7624,
+          "date": "2024-04-20"
+        },
+        {
+          "type": "TPU v5p",
+          "count": 50653,
+          "date": "2024-09-13"
+        },
+        {
+          "type": "TPU v5e",
+          "count": 247041,
+          "date": "2024-09-13"
+        },
+        {
+          "type": "TPU v6e",
+          "count": 94843,
+          "date": "2025-06-01"
+        },
+        {
+          "type": "TPU v5p",
+          "count": 66612,
+          "date": "2025-06-01"
+        },
+        {
+          "type": "TPU v6e",
+          "count": 262731,
+          "date": "2025-10-14"
+        }
+      ],
+      "plannedChips": [],
+      "buildingsOperational": 4,
+      "buildingsPlanned": null,
+      "waterUseMgd": null,
+      "firstOperational": "2024-04-20",
+      "timeline": [
+        {
+          "date": "2024-04-20",
+          "milestone": "Building 1 is operational",
+          "buildingsOperational": 1,
+          "itPowerMw": 67,
+          "facilityPowerMw": 80
+        },
+        {
+          "date": "2024-09-13",
+          "milestone": "Building 2 is operational",
+          "buildingsOperational": 2,
+          "itPowerMw": 144,
+          "facilityPowerMw": 173
+        },
+        {
+          "date": "2025-06-01",
+          "milestone": "Building 3 is operational, based on all cooling units and tanks installed, minimal construction work around the building",
+          "buildingsOperational": 3,
+          "itPowerMw": 222,
+          "facilityPowerMw": 267
+        },
+        {
+          "date": "2025-10-14",
+          "milestone": "Building 4 is operational, based on all cooling units and tanks installed, minimal construction work around the building",
+          "buildingsOperational": 4,
+          "itPowerMw": 333,
+          "facilityPowerMw": 400
+        },
+        {
+          "date": "2026-01-18",
+          "milestone": "Water vapor from cooling towers is present across Building 1-4, confirming their operation",
+          "buildingsOperational": 4,
+          "itPowerMw": 333,
+          "facilityPowerMw": 400
+        },
+        {
+          "date": "2026-03-12",
+          "milestone": "Building 5 has more cooling towers installed but not complete, and the roof is almost complete",
+          "buildingsOperational": 4,
+          "itPowerMw": 333,
+          "facilityPowerMw": 400
+        },
+        {
+          "date": "2026-05-18",
+          "milestone": "Building 5 has all cooling towers installed, and all other components look complete, but there is still light work aroun",
+          "buildingsOperational": 4,
+          "itPowerMw": 333,
+          "facilityPowerMw": 400
+        }
+      ],
+      "sources": [
+        {
+          "title": "Epoch AI site page",
+          "url": "https://epoch.ai/data/ai-data-centers/directory/google-new-albany"
+        },
+        {
+          "title": "Draft basis of air permit for Google Omaha, a similar data center",
+          "url": "https://drive.google.com/file/d/1KN7o-wQOyt1UEud8wpM8PymXJF479r0n/view?usp=sharing"
+        },
+        {
+          "title": "2025 Environmental Report",
+          "url": "https://sustainability.google/reports/google-2025-environmental-report/"
+        }
+      ],
+      "notes": [],
+      "balancingAuthority": "PJM",
+      "balancingAuthorityNote": "AEP Ohio is in PJM"
+    },
+    {
+      "id": "google-columbus",
+      "name": "Google Columbus",
+      "owner": "Google",
+      "operator": "Google",
+      "users": [
+        "Google DeepMind"
+      ],
+      "investors": [],
+      "builders": [],
+      "energyCompanies": [],
+      "project": null,
+      "address": "5076 S High St, Columbus, OH 43207",
+      "city": "Columbus",
+      "county": "Franklin County",
+      "state": "OH",
+      "lat": 39.86145,
+      "lon": -83.004,
+      "positionSource": "Nominatim geocode of the street address (5076 S High St)",
+      "status": "expanding",
+      "asOf": "2026-08-05",
+      "itPowerMw": 303,
+      "facilityPowerMw": 364,
+      "plannedItPowerMw": 386,
+      "plannedFacilityPowerMw": 464,
+      "plannedDate": "2027-07-01",
+      "plannedNote": "Building 5 operational, Epoch projection",
+      "h100e": 331985.85144,
+      "plannedH100e": 576048.509348,
+      "capexUsdB": 11.478246,
+      "plannedCapexUsdB": 14.622452,
+      "computeCostUsdB": 7.912239,
+      "constructionCostUsdB": 3.566007,
+      "annualOpexUsdB": 0.273306,
+      "chips": [
+        {
+          "type": "TPU v5e",
+          "count": 147878,
+          "date": "2024-04-01"
+        },
+        {
+          "type": "TPU v5p",
+          "count": 7425,
+          "date": "2024-04-01"
+        },
+        {
+          "type": "TPU v6e",
+          "count": 41245,
+          "date": "2025-03-01"
+        },
+        {
+          "type": "TPU v5p",
+          "count": 28246,
+          "date": "2025-03-01"
+        },
+        {
+          "type": "TPU v5e",
+          "count": 193949,
+          "date": "2025-03-01"
+        },
+        {
+          "type": "TPU v6e",
+          "count": 172060,
+          "date": "2025-10-01"
+        },
+        {
+          "type": "TPU v6e",
+          "count": 204638,
+          "date": "2026-05-01"
+        },
+        {
+          "type": "TPU v7",
+          "count": 38886,
+          "date": "2026-05-01"
+        }
+      ],
+      "plannedChips": [],
+      "buildingsOperational": 4,
+      "buildingsPlanned": 5,
+      "waterUseMgd": null,
+      "firstOperational": "2024-04-01",
+      "timeline": [
+        {
+          "date": "2021-10-01",
+          "milestone": "Land clearing begins on the eastern half of the site, for Buildings 1-2",
+          "buildingsOperational": 0,
+          "itPowerMw": 0,
+          "facilityPowerMw": 0
+        },
+        {
+          "date": "2023-07-01",
+          "milestone": "Building 2 foundation work begins",
+          "buildingsOperational": 0,
+          "itPowerMw": 0,
+          "facilityPowerMw": 0
+        },
+        {
+          "date": "2024-04-01",
+          "milestone": "Building 1 operational",
+          "buildingsOperational": 1,
+          "itPowerMw": 65,
+          "facilityPowerMw": 78
+        },
+        {
+          "date": "2025-03-01",
+          "milestone": "Building 2 operational",
+          "buildingsOperational": 2,
+          "itPowerMw": 130,
+          "facilityPowerMw": 156
+        },
+        {
+          "date": "2025-10-01",
+          "milestone": "Building 3 operational",
+          "buildingsOperational": 3,
+          "itPowerMw": 216,
+          "facilityPowerMw": 260
+        },
+        {
+          "date": "2026-02-21",
+          "milestone": "Buildings 1-3 are visibly operational, with steam coming out of the cooling towers",
+          "buildingsOperational": 3,
+          "itPowerMw": 216,
+          "facilityPowerMw": 260
+        },
+        {
+          "date": "2026-05-01",
+          "milestone": "Building 4 operational",
+          "buildingsOperational": 4,
+          "itPowerMw": 303,
+          "facilityPowerMw": 364
+        },
+        {
+          "date": "2026-08-05",
+          "milestone": "Confirmation that Building 4 is complete",
+          "buildingsOperational": 4,
+          "itPowerMw": 303,
+          "facilityPowerMw": 364
+        },
+        {
+          "date": "2027-07-01",
+          "milestone": "Building 5 operational",
+          "buildingsOperational": 5,
+          "itPowerMw": 386,
+          "facilityPowerMw": 464,
+          "projected": true
+        }
+      ],
+      "sources": [
+        {
+          "title": "Epoch AI site page",
+          "url": "https://epoch.ai/data/ai-data-centers/directory/google-columbus"
+        },
+        {
+          "title": "DCD article detailing early work beginning on the site",
+          "url": "https://www.datacenterdynamics.com/en/news/google-breaks-ground-on-columbus-ohio-data-center/"
+        },
+        {
+          "title": "Transmission line construction notice; details current site capacity, expansion, and maximum future site capacity",
+          "url": "https://www.aeptransmission.com/ohio/docs/Hartman%20Farms%20Extension%20No.%202%20138%20kV%20Transmission%20Line%20Project%20Construction%20Notice.pdf"
+        }
+      ],
+      "notes": [],
+      "balancingAuthority": "PJM",
+      "balancingAuthorityNote": "AEP Ohio is in PJM"
+    },
+    {
+      "id": "amazon-madison",
+      "name": "Amazon Madison Mega Site",
+      "owner": "Amazon",
+      "operator": "Amazon",
+      "users": [
+        "Anthropic"
+      ],
+      "investors": [],
+      "builders": [],
+      "energyCompanies": [],
+      "project": "Project Rainier",
+      "address": "Amazon Data Services Inc, Madison Mega Site Nissan Parkway and Highway 22 Canton, Mississippi Madison County",
+      "city": "Canton",
+      "county": "Madison County",
+      "state": "MS",
+      "lat": 32.58192,
+      "lon": -90.05089,
+      "positionSource": "Nominatim geocode of Nissan Parkway, Canton; road centreline beside the campus, not a building centroid",
+      "status": "expanding",
+      "asOf": "2026-06-04",
+      "itPowerMw": 284,
+      "facilityPowerMw": 341,
+      "plannedItPowerMw": 683,
+      "plannedFacilityPowerMw": 819,
+      "plannedDate": "2028-03-15",
+      "plannedNote": "Buildings 8-12 are operational, Epoch projection",
+      "h100e": 214348.143546,
+      "plannedH100e": 514435.544509,
+      "capexUsdB": 10.758488,
+      "plannedCapexUsdB": 25.873406,
+      "computeCostUsdB": 7.416092,
+      "constructionCostUsdB": 3.342396,
+      "annualOpexUsdB": 0.256168,
+      "chips": [
+        {
+          "type": "Trainium2",
+          "count": 326555,
+          "date": "2025-06-23"
+        }
+      ],
+      "plannedChips": [
+        {
+          "type": "Trainium2",
+          "count": 783732,
+          "date": "2028-03-15"
+        }
+      ],
+      "buildingsOperational": 5,
+      "buildingsPlanned": 12,
+      "waterUseMgd": null,
+      "firstOperational": "2025-06-23",
+      "timeline": [
+        {
+          "date": "2023-10-02",
+          "milestone": "Land clearing begins",
+          "buildingsOperational": 0,
+          "itPowerMw": 0,
+          "facilityPowerMw": 0
+        },
+        {
+          "date": "2025-03-11",
+          "milestone": "Generators and chillers still being installed on buildings 1-5",
+          "buildingsOperational": 0,
+          "itPowerMw": 0,
+          "facilityPowerMw": 0
+        },
+        {
+          "date": "2025-06-23",
+          "milestone": "Buildings 1-5 are operational, based on roofs being completed 5 months ago and generators being installed by 2025-04-10",
+          "buildingsOperational": 5,
+          "itPowerMw": 284,
+          "facilityPowerMw": 341
+        },
+        {
+          "date": "2025-10-04",
+          "milestone": "Confirmation that five buildings are fully equipped with cooling and backup generators",
+          "buildingsOperational": 5,
+          "itPowerMw": 284,
+          "facilityPowerMw": 341
+        },
+        {
+          "date": "2026-06-04",
+          "milestone": "Buildings 6 and 7 roof completed",
+          "buildingsOperational": 5,
+          "itPowerMw": 284,
+          "facilityPowerMw": 341
+        },
+        {
+          "date": "2027-03-01",
+          "milestone": "Buildings 6 and 7 operational, estimated from roofs having been completed 9 months ago (similar timeline to AWS building",
+          "buildingsOperational": 7,
+          "itPowerMw": 284,
+          "facilityPowerMw": 478,
+          "projected": true
+        },
+        {
+          "date": "2028-03-15",
+          "milestone": "Buildings 8-12 are operational",
+          "buildingsOperational": 12,
+          "itPowerMw": 683,
+          "facilityPowerMw": 819,
+          "projected": true
+        }
+      ],
+      "sources": [
+        {
+          "title": "Epoch AI site page",
+          "url": "https://epoch.ai/data/ai-data-centers/directory/amazon-madison-mega-site"
+        },
+        {
+          "title": "Air Construction Permit",
+          "url": "https://drive.google.com/file/d/1lhSF8TBA7fNWsN4Onj-nfL7X_-BN573r/view?usp=sharing"
+        },
+        {
+          "title": "Backup diesel generator referenced in the permit",
+          "url": "https://www.cat.com/en_US/products/new/power-systems/electric-power/diesel-generator-sets/117341.html"
+        },
+        {
+          "title": "New York Times article on Project Rainier",
+          "url": "https://www.nytimes.com/2025/06/24/technology/amazon-ai-data-centers.html"
+        },
+        {
+          "title": "SemiAnalysis article with imagery of Canton they have labeled as being an Amazon-Anthropic collaboration",
+          "url": "https://newsletter.semianalysis.com/p/amazons-ai-resurgence-aws-anthropics-multi-gigawatt-trainium-expansion"
+        }
+      ],
+      "notes": [
+        "Part of the same Project Rainier build-out as New Carlisle; Epoch marks the project attribution speculative."
+      ],
+      "balancingAuthority": "MISO",
+      "balancingAuthorityNote": "Entergy Mississippi is in MISO"
+    },
+    {
+      "id": "coreweave-denton",
+      "name": "CoreWeave Denton TX",
+      "owner": "CoreWeave",
+      "operator": "CoreWeave",
+      "users": [
+        "OpenAI"
+      ],
+      "investors": [],
+      "builders": [],
+      "energyCompanies": [],
+      "project": null,
+      "address": "8171 Jim Christal Rd, Denton, TX 76207",
+      "city": "Denton",
+      "county": "Denton County",
+      "state": "TX",
+      "lat": 33.21927,
+      "lon": -97.17472,
+      "positionSource": "Nominatim geocode of Jim Christal Rd; road centreline beside the campus, not a building centroid",
+      "status": "expanding",
+      "asOf": "2026-09-01",
+      "itPowerMw": 262,
+      "facilityPowerMw": 367,
+      "plannedItPowerMw": 282,
+      "plannedFacilityPowerMw": 395,
+      "plannedDate": "2027-05-31",
+      "plannedNote": "Building 8 projected operational, Epoch projection",
+      "h100e": 252652.854977,
+      "plannedH100e": 271854.471956,
+      "capexUsdB": 9.925084,
+      "plannedCapexUsdB": 10.682724,
+      "computeCostUsdB": 6.841606,
+      "constructionCostUsdB": 3.083478,
+      "annualOpexUsdB": 0.236324,
+      "chips": [
+        {
+          "type": "B200",
+          "count": 16000,
+          "date": "2025-12-31"
+        },
+        {
+          "type": "B200",
+          "count": 50000,
+          "date": "2026-02-23"
+        },
+        {
+          "type": "B200",
+          "count": 100000,
+          "date": "2026-07-03"
+        }
+      ],
+      "plannedChips": [
+        {
+          "type": "B200",
+          "count": 107634,
+          "date": "2027-05-31"
+        }
+      ],
+      "buildingsOperational": 7,
+      "buildingsPlanned": 8,
+      "waterUseMgd": null,
+      "firstOperational": "2025-05-31",
+      "timeline": [
+        {
+          "date": "2024-11-01",
+          "milestone": "Construction start - The Texas Department of Licensing and Regulation reports Core Scientific is converting existing Bit",
+          "buildingsOperational": 0,
+          "itPowerMw": 0,
+          "facilityPowerMw": 0
+        },
+        {
+          "date": "2025-05-31",
+          "milestone": "First 8 MW billable tranche dedicated to AI starts running at the site, with another 40 scheduled by the end of the quar",
+          "buildingsOperational": 1,
+          "itPowerMw": 8,
+          "facilityPowerMw": 11
+        },
+        {
+          "date": "2025-12-31",
+          "milestone": "Half the campus energized",
+          "buildingsOperational": 3,
+          "itPowerMw": 67,
+          "facilityPowerMw": 94
+        },
+        {
+          "date": "2026-02-23",
+          "milestone": "Buildings 1-3 (Denton North) are largely built out/operational, and Denton South has its first data hall plus support eq",
+          "buildingsOperational": 4,
+          "itPowerMw": 131,
+          "facilityPowerMw": 183
+        },
+        {
+          "date": "2026-03-02",
+          "milestone": "Buildings 1-3 (Denton North) are fully operational running AI (Denton North at 90 MW, Denton South partially running at ",
+          "buildingsOperational": 4,
+          "itPowerMw": 131,
+          "facilityPowerMw": 183
+        },
+        {
+          "date": "2026-07-03",
+          "milestone": "Buildings 1-7 are operational and running, with no construction work visible",
+          "buildingsOperational": 7,
+          "itPowerMw": 262,
+          "facilityPowerMw": 367
+        },
+        {
+          "date": "2026-09-01",
+          "milestone": "Building 8 interior fit-out scheduled to begin",
+          "buildingsOperational": 7,
+          "itPowerMw": 262,
+          "facilityPowerMw": 367
+        },
+        {
+          "date": "2027-05-31",
+          "milestone": "Building 8 projected operational",
+          "buildingsOperational": 8,
+          "itPowerMw": 282,
+          "facilityPowerMw": 395,
+          "projected": true
+        }
+      ],
+      "sources": [
+        {
+          "title": "Epoch AI site page",
+          "url": "https://epoch.ai/data/ai-data-centers/directory/coreweave-denton-tx"
+        },
+        {
+          "title": "Core Scientific - CoreWeave Announce 1.2B expansion in Denton, TX",
+          "url": "https://investors.corescientific.com/news-events/press-releases/detail/110/core-scientific-and-coreweave-announce-1-2-billion-expansion-at-denton-tx-site"
+        },
+        {
+          "title": "Core Scientific - Denton Datacenter Official Site",
+          "url": "https://corescientific.com/high-density-data-centers/denton-texas/"
+        },
+        {
+          "title": "TMF - Core Scientific Q4 2025 Earnings Transcript",
+          "url": "https://www.fool.com/earnings/call-transcripts/2026/03/02/core-scientific-corz-q4-2025-earnings-transcript/"
+        },
+        {
+          "title": "WSJ - plans to rent to OpenAI",
+          "url": "https://www.wsj.com/tech/ai/coreweave-stock-market-ai-bubble-a3c8c321"
+        }
+      ],
+      "notes": [],
+      "balancingAuthority": "ERCO",
+      "balancingAuthorityNote": "the Texas interconnection"
+    },
+    {
+      "id": "google-bristow",
+      "name": "Google Bristow",
+      "owner": "Google",
+      "operator": "Google",
+      "users": [
+        "Google DeepMind"
+      ],
+      "investors": [],
+      "builders": [],
+      "energyCompanies": [],
+      "project": null,
+      "address": "13001 Rollins Ford Road, Bristow, VA 20136",
+      "city": "Bristow",
+      "county": "Prince William County",
+      "state": "VA",
+      "lat": 38.76966,
+      "lon": -77.59388,
+      "positionSource": "Nominatim geocode of Rollins Ford Road (ZIP 20136 segment); road centreline, the parcel itself is not mapped in OSM",
+      "status": "operating",
+      "asOf": "2026-05-20",
+      "itPowerMw": 238,
+      "facilityPowerMw": 286,
+      "plannedItPowerMw": null,
+      "plannedFacilityPowerMw": null,
+      "plannedDate": null,
+      "plannedNote": null,
+      "h100e": 209860.535624,
+      "plannedH100e": null,
+      "capexUsdB": 9.015916,
+      "plannedCapexUsdB": null,
+      "computeCostUsdB": 6.214894,
+      "constructionCostUsdB": 2.801022,
+      "annualOpexUsdB": 0.214676,
+      "chips": [
+        {
+          "type": "TPU v5e",
+          "count": 197837,
+          "date": "2024-04-29"
+        },
+        {
+          "type": "TPU v5p",
+          "count": 9934,
+          "date": "2024-04-29"
+        },
+        {
+          "type": "TPU v5e",
+          "count": 259473,
+          "date": "2025-04-29"
+        },
+        {
+          "type": "TPU v6e",
+          "count": 55179,
+          "date": "2025-04-29"
+        },
+        {
+          "type": "TPU v5p",
+          "count": 37789,
+          "date": "2025-04-29"
+        },
+        {
+          "type": "TPU v7",
+          "count": 34087,
+          "date": "2026-05-20"
+        },
+        {
+          "type": "TPU v6e",
+          "count": 66108,
+          "date": "2026-05-20"
+        }
+      ],
+      "plannedChips": [],
+      "buildingsOperational": 3,
+      "buildingsPlanned": null,
+      "waterUseMgd": null,
+      "firstOperational": "2024-04-29",
+      "timeline": [
+        {
+          "date": "2021-07-01",
+          "milestone": "Land clearing begins",
+          "buildingsOperational": 0,
+          "itPowerMw": 0,
+          "facilityPowerMw": 0
+        },
+        {
+          "date": "2024-04-29",
+          "milestone": "Building 1 is operational, based off of colored motion artifacts from cooling towers",
+          "buildingsOperational": 1,
+          "itPowerMw": 87,
+          "facilityPowerMw": 104
+        },
+        {
+          "date": "2025-04-29",
+          "milestone": "Building 2 is operational, based off it being at least 12 months since the roof was complete",
+          "buildingsOperational": 2,
+          "itPowerMw": 174,
+          "facilityPowerMw": 208
+        },
+        {
+          "date": "2026-05-20",
+          "milestone": "Building 3 is operational, based off of colored motion artifacts from cooling towers",
+          "buildingsOperational": 3,
+          "itPowerMw": 238,
+          "facilityPowerMw": 286
+        }
+      ],
+      "sources": [
+        {
+          "title": "Epoch AI site page",
+          "url": "https://epoch.ai/data/ai-data-centers/directory/google-bristow"
+        },
+        {
+          "title": "Google Environmental Report",
+          "url": "https://sustainability.google/reports/google-2026-environmental-report/"
+        },
+        {
+          "title": "Epoch AI, 'AI Data Centers' dataset",
+          "url": "https://epoch.ai/data/ai-data-centers"
+        }
+      ],
+      "notes": [
+        "Epoch AI carries a single selected source for this site; the record adds the Epoch directory page and dataset landing page so provenance is traceable."
+      ],
+      "balancingAuthority": "PJM",
+      "balancingAuthorityNote": "Dominion Energy Virginia is in PJM"
+    },
+    {
+      "id": "qts-richmond-1",
+      "name": "QTS Richmond 1",
+      "owner": "QTS Data Centers (Blackstone); Epoch AI lists no owner for this site",
+      "operator": "QTS Data Centers",
+      "users": [],
+      "investors": [],
+      "builders": [],
+      "energyCompanies": [
+        "Dominion Energy"
+      ],
+      "project": null,
+      "address": "6000 Technology Blvd, Sandston, VA 23150",
+      "city": "Sandston",
+      "county": "Henrico County",
+      "state": "VA",
+      "lat": 37.48883,
+      "lon": -77.24749,
+      "positionSource": "OpenStreetMap industrial building at 6000 Technology Blvd",
+      "status": "operating",
+      "asOf": "2026-02-13",
+      "itPowerMw": 238,
+      "facilityPowerMw": 333,
+      "plannedItPowerMw": null,
+      "plannedFacilityPowerMw": null,
+      "plannedDate": null,
+      "plannedNote": null,
+      "h100e": 242546.740778,
+      "plannedH100e": null,
+      "capexUsdB": 9.015916,
+      "plannedCapexUsdB": null,
+      "computeCostUsdB": 6.214894,
+      "constructionCostUsdB": 2.801022,
+      "annualOpexUsdB": 0.214676,
+      "chips": [],
+      "plannedChips": [],
+      "buildingsOperational": 5,
+      "buildingsPlanned": null,
+      "waterUseMgd": null,
+      "firstOperational": "2024-01-29",
+      "timeline": [
+        {
+          "date": "2023-10-01",
+          "milestone": "Land cleared for site expansion, some materials down at substation site",
+          "buildingsOperational": 0,
+          "itPowerMw": 0,
+          "facilityPowerMw": 0
+        },
+        {
+          "date": "2023-11-02",
+          "milestone": "Building 1 and 2 retrofitting has begun (see Google Earth)",
+          "buildingsOperational": 0,
+          "itPowerMw": 0,
+          "facilityPowerMw": 0
+        },
+        {
+          "date": "2024-01-29",
+          "milestone": "Building 1 (retrofitted) is operational",
+          "buildingsOperational": 1,
+          "itPowerMw": 47,
+          "facilityPowerMw": 66
+        },
+        {
+          "date": "2024-06-23",
+          "milestone": "Building 2 (retrofitted) is operational",
+          "buildingsOperational": 2,
+          "itPowerMw": 94,
+          "facilityPowerMw": 132
+        },
+        {
+          "date": "2025-02-04",
+          "milestone": "Building 3 is operational, based on the building looking complete and the carpark to the south being full",
+          "buildingsOperational": 3,
+          "itPowerMw": 142,
+          "facilityPowerMw": 199
+        },
+        {
+          "date": "2025-06-03",
+          "milestone": "Building 4 is operational, based on a complete building and full carpark in a Google Earth image",
+          "buildingsOperational": 4,
+          "itPowerMw": 190,
+          "facilityPowerMw": 266
+        },
+        {
+          "date": "2025-11-19",
+          "milestone": "Building 5 is operational, based on a complete building and full carpark in a Google Earth image",
+          "buildingsOperational": 5,
+          "itPowerMw": 238,
+          "facilityPowerMw": 333
+        },
+        {
+          "date": "2025-12-31",
+          "milestone": "No changes to the site since November 2025",
+          "buildingsOperational": 5,
+          "itPowerMw": 238,
+          "facilityPowerMw": 333
+        },
+        {
+          "date": "2026-02-13",
+          "milestone": "No changes to the site since December 2025",
+          "buildingsOperational": 5,
+          "itPowerMw": 238,
+          "facilityPowerMw": 333
+        }
+      ],
+      "sources": [
+        {
+          "title": "Epoch AI site page",
+          "url": "https://epoch.ai/data/ai-data-centers/directory/qts-richmond-1"
+        },
+        {
+          "title": "Richmond 1 factsheet",
+          "url": "https://qtsdatacenters.com/data-centers/richmond-1/"
+        },
+        {
+          "title": "Environmental permit detailing power generation",
+          "url": "https://www.deq.virginia.gov/home/showpublisheddocument/25650/638627871515730000"
+        }
+      ],
+      "notes": [
+        "Epoch AI records no owner or user for this site; the operator is named from the QTS Richmond 1 factsheet."
+      ],
+      "power": {
+        "gridUtility": "Dominion Energy",
+        "gridOperator": null,
+        "interconnectionMw": null,
+        "interconnectionNote": null,
+        "substationMw": null,
+        "substationNote": null,
+        "onSiteGeneration": {
+          "type": null,
+          "capacityMw": null,
+          "capacityNote": null,
+          "plannedCapacityMw": null,
+          "plannedNote": null,
+          "units": null,
+          "permitStatus": null
+        },
+        "batteries": null,
+        "backupGenerators": null
+      },
+      "balancingAuthority": "PJM",
+      "balancingAuthorityNote": "Dominion Energy Virginia is in PJM"
+    },
+    {
+      "id": "google-council-bluffs-east",
+      "name": "Google Council Bluffs (East)",
+      "owner": "Google",
+      "operator": "Google",
+      "users": [
+        "Google DeepMind"
+      ],
+      "investors": [],
+      "builders": [],
+      "energyCompanies": [],
+      "project": null,
+      "address": "10410 Bunge Ave, Council Bluffs, IA 51503",
+      "city": "Council Bluffs",
+      "county": "Pottawattamie County",
+      "state": "IA",
+      "lat": 41.16665,
+      "lon": -95.79774,
+      "positionSource": "Nominatim geocode of the street address (10410 Bunge Ave)",
+      "status": "operating",
+      "asOf": "2026-07-07",
+      "itPowerMw": 237,
+      "facilityPowerMw": 284,
+      "plannedItPowerMw": null,
+      "plannedFacilityPowerMw": null,
+      "plannedDate": null,
+      "plannedNote": null,
+      "h100e": 255684.689237,
+      "plannedH100e": null,
+      "capexUsdB": 8.978034,
+      "plannedCapexUsdB": null,
+      "computeCostUsdB": 6.188781,
+      "constructionCostUsdB": 2.789253,
+      "annualOpexUsdB": 0.213774,
+      "chips": [
+        {
+          "type": "TPU v5e",
+          "count": 84203,
+          "date": "2024-11-19"
+        },
+        {
+          "type": "TPU v6e",
+          "count": 15419,
+          "date": "2024-11-19"
+        },
+        {
+          "type": "TPU v5p",
+          "count": 38053,
+          "date": "2024-11-19"
+        },
+        {
+          "type": "TPU v6e",
+          "count": 111739,
+          "date": "2025-06-15"
+        },
+        {
+          "type": "TPU v5p",
+          "count": 54261,
+          "date": "2025-06-15"
+        },
+        {
+          "type": "TPU v7",
+          "count": 41923,
+          "date": "2026-07-07"
+        },
+        {
+          "type": "TPU v6e",
+          "count": 125181,
+          "date": "2026-07-07"
+        }
+      ],
+      "plannedChips": [],
+      "buildingsOperational": 3,
+      "buildingsPlanned": null,
+      "waterUseMgd": null,
+      "firstOperational": "2024-11-19",
+      "timeline": [
+        {
+          "date": "2022-09-06",
+          "milestone": "Land clearing begins for east buildings",
+          "buildingsOperational": 0,
+          "itPowerMw": 0,
+          "facilityPowerMw": 0
+        },
+        {
+          "date": "2024-11-19",
+          "milestone": "Building 1 is operational",
+          "buildingsOperational": 1,
+          "itPowerMw": 79,
+          "facilityPowerMw": 95
+        },
+        {
+          "date": "2025-06-15",
+          "milestone": "Building 2 is operational",
+          "buildingsOperational": 2,
+          "itPowerMw": 158,
+          "facilityPowerMw": 190
+        },
+        {
+          "date": "2025-07-19",
+          "milestone": "Land clearing begins in the southwest, suggesting more buildings are planned",
+          "buildingsOperational": 2,
+          "itPowerMw": 158,
+          "facilityPowerMw": 190
+        },
+        {
+          "date": "2026-01-11",
+          "milestone": "Building 3 has all 34 backup generators installed and 4 cooling towers installed, with 3 more cooling towers under const",
+          "buildingsOperational": 2,
+          "itPowerMw": 158,
+          "facilityPowerMw": 190
+        },
+        {
+          "date": "2026-07-07",
+          "milestone": "Building 3 is operational",
+          "buildingsOperational": 3,
+          "itPowerMw": 237,
+          "facilityPowerMw": 284
+        }
+      ],
+      "sources": [
+        {
+          "title": "Epoch AI site page",
+          "url": "https://epoch.ai/data/ai-data-centers/directory/google-council-bluffs-east"
+        },
+        {
+          "title": "Construction permit application form with site address",
+          "url": "https://programs.iowadnr.gov/easyair/Public/EnSuite/Shared/Pages/Util/ServerRptViewer.aspx?sr=/IDNR/Reports/EASY/RPT_Construction_Application_A_GEN&SUBMISSION_RID=67330&SUB_FORM_RID=148293"
+        },
+        {
+          "title": "Construction permit application form with backup generator data",
+          "url": "https://programs.iowadnr.gov/easyair/Public/EnSuite/Shared/Pages/Util/ServerRptViewer.aspx?sr=/IDNR/Reports/EASY/RPT_Construction_Application_E_EU&SUBMISSION_RID=67330&SUB_FORM_RID=148297"
+        }
+      ],
+      "notes": [],
+      "balancingAuthority": "MISO",
+      "balancingAuthorityNote": "MidAmerican Energy is in MISO"
     }
-  ]
+  ],
+  "live": {
+    "grid": {
+      "source": "EIA Hourly Electric Grid Monitor",
+      "url": "https://www.eia.gov/electricity/930-api/",
+      "license": "US public domain",
+      "note": "Hourly demand and day-ahead demand forecast for the balancing authority each campus sits in. Region-wide load, never a meter on the building."
+    },
+    "weather": {
+      "source": "Open-Meteo",
+      "url": "https://api.open-meteo.com/",
+      "license": "CC BY 4.0",
+      "note": "Current conditions at the campus position; cooling context only."
+    }
+  }
 }

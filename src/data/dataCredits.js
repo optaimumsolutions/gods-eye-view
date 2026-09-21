@@ -221,7 +221,12 @@ export const DATA_CREDITS = [
     html:
       'US data centers (power): ' +
       '<a href="https://epoch.ai/data/ai-data-centers" target="_blank" rel="noopener">Epoch AI, AI Data Centers</a> ' +
-      '(CC BY 4.0); positions © OpenStreetMap contributors (ODbL 1.0)',
+      '(CC BY 4.0); positions © OpenStreetMap contributors (ODbL 1.0); ' +
+      'regional grid load and day-ahead forecast from the ' +
+      '<a href="https://www.eia.gov/electricity/gridmonitor/" target="_blank" rel="noopener">EIA Hourly Electric Grid Monitor</a> ' +
+      '(US public domain); campus weather by ' +
+      '<a href="https://open-meteo.com/en/licence" target="_blank" rel="noopener">Open-Meteo.com</a> ' +
+      '(CC BY 4.0)',
   },
   {
     key: 'dams',

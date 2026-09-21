@@ -243,6 +243,10 @@ export function normalizeDatacenterSite(site, assumptions) {
     buildingSqFtNote: text(site.buildingSqFtNote),
     cooling: normalizeCooling(site.cooling),
     power: normalizePower(site.power),
+    // EIA balancing authority the campus draws from, so the layer can join
+    // the live grid feed onto the site without geocoding it again.
+    balancingAuthority: text(site.balancingAuthority),
+    balancingAuthorityNote: text(site.balancingAuthorityNote),
     waterUseMgd: num(site.waterUseMgd),
     waterNote: text(site.waterNote),
     firstOperational: text(site.firstOperational),

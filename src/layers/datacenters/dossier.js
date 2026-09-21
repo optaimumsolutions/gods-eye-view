@@ -5,6 +5,8 @@ import {
   formatMw,
   formatUsdB,
 } from './records.js';
+import { gridSharePct, weatherLine } from './live.js';
+import { formatAsOf } from '../commodities/observation.js';
 
 /**
  * The site dossier: a scrollable drawer with everything the bundle holds
@@ -24,8 +26,20 @@ function mwOrNa(value) {
   return value === null || value === undefined ? 'n/a' : formatMw(value);
 }
 
+/**
+ * The campus as a share of its region's load. Absent when there is no reading,
+ * and absent — not `NaN%`, not a throw — when the region figure is zero or
+ * negative, which `gridSharePct` reports as `null`.
+ */
+function siteShareLine(row, grid) {
+  if (!grid) return null;
+  const share = gridSharePct(row.facilityPowerMw, grid.demandMw);
+  if (share === null) return null;
+  return `${share.toFixed(2)}% of ${grid.name} load · facility MW ÷ region MW`;
+}
+
 /** Pure: the dossier as data, so the layout and the tests share one shape. */
-export function buildDossierModel(row, { total = null } = {}) {
+export function buildDossierModel(row, { total = null, live = null } = {}) {
   const gen = row.power.onSiteGeneration;
   const cooling = row.cooling;
   const expanding =
@@ -78,6 +92,39 @@ export function buildDossierModel(row, { total = null } = {}) {
             row.power.gridUtility,
             row.power.gridOperator ? `(${row.power.gridOperator})` : null,
           ]),
+        ],
+        // Live rows: region-wide load from EIA, never a meter on this campus.
+        [
+          'Region now',
+          live?.grid?.demandMw != null
+            ? joinParts([
+                `${live.grid.name} ${formatInt(Math.round(live.grid.demandMw))} MW`,
+                live.grid.observation
+                  ? formatAsOf(live.grid.observation)
+                  : null,
+              ])
+            : null,
+        ],
+        ['Site share', siteShareLine(row, live?.grid ?? null)],
+        [
+          'Day-ahead',
+          live?.grid?.forecastMw != null
+            ? joinParts([
+                `${formatInt(Math.round(live.grid.forecastMw))} MW`,
+                live.grid.forecastObservation
+                  ? formatAsOf(live.grid.forecastObservation)
+                  : null,
+              ])
+            : null,
+        ],
+        [
+          'Campus weather',
+          live?.weather
+            ? joinParts([
+                weatherLine(live.weather),
+                formatAsOf(live.weather.observation),
+              ])
+            : null,
         ],
         [
           'Interconnect',
@@ -683,11 +730,11 @@ export function createDatacenterDossier({
   }
 
   return {
-    show(row, { total = null } = {}) {
+    show(row, { total = null, live = null } = {}) {
       if (!row) return;
       const node = ensureRoot();
       current = row;
-      renderModel(doc, node, buildDossierModel(row, { total }));
+      renderModel(doc, node, buildDossierModel(row, { total, live }));
       node.hidden = false;
       node.scrollTop = 0;
       const body = node.querySelector('.dc-dossier__body');

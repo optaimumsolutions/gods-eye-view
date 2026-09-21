@@ -2,13 +2,13 @@
   "dataset": "Epoch AI, AI Data Centers",
   "landing": "https://epoch.ai/data/ai-data-centers",
   "files": [
-    { "name": "data_centers.zip", "url": "https://epoch.ai/data/data_centers/data_centers.zip", "retrieved": "2026-09-17" },
-    { "name": "data_centers.csv", "url": "https://epoch.ai/data/data_centers/data_centers.csv", "retrieved": "2026-09-17" }
+    { "name": "data_centers.zip", "url": "https://epoch.ai/data/data_centers/data_centers.zip", "retrieved": "2026-09-18" },
+    { "name": "data_centers.csv", "url": "https://epoch.ai/data/data_centers/data_centers.csv", "retrieved": "2026-09-18" }
   ],
   "license": "CC BY 4.0",
   "citation": "Epoch AI, 'AI Data Centers'. Published online at epoch.ai. Retrieved from https://epoch.ai/data/ai-data-centers [online resource].",
   "positions": {
-    "nominatim": "https://nominatim.openstreetmap.org (OpenStreetMap, ODbL), queried 2026-09-17 for the street addresses and campus names"
+    "nominatim": "https://nominatim.openstreetmap.org (OpenStreetMap, ODbL), queried 2026-09-17 for sites 1 to 5 and 2026-09-18 for sites 6 to 15, using the street addresses and campus names"
   },
   "supplementary": [
     "https://www.gem.wiki/Colossus_2_power_station",
