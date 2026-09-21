@@ -32,7 +32,7 @@ owns layers. Re-check `git status` before every edit to a shared file.
 | 9   | Port dossier: camera + data panel, 20 ports   | layers + server + content (worktree `commodities-ports-dossier`) | OPEN — PRD §9 written 2026-09-17 from the grill (G1 to G6); not claimed; cut `feat/port-dossier` from `feat/commodities-shell` |
 | 10  | `commodity-lng`: LNG terminals, tiered cards, sea-routed cargo arcs | layers (worktree `commodities-lng`) | **BUILT 2026-09-21** — PRD §12 (mirror: Project Brain `05-prd.md`), milestones 0 to 6. Bundle `8b5c5b4` (`npm run build:lng`, `--check` byte-identical; 308 GEM terminals, EIA 2026-Q2 trains on 14 US plants, DOE cargoes through 2026-06, GIIGNL 2025 matrix 427.9 MT, 470 searoute-ts routes); layer, dossier, chips, docs in the commit carrying this line. `scripts/qa-lng.mjs` green (41 checks; activation 666 ms warm, heap +31 MiB); four gates green. Deviations in §12.11: GEM read from GEM's public tracker-map feed until the form-gated xlsx is placed (no operator column), via radius 40 km, chips session-only, EIA API codes null until milestone 7. Landed on `feat/commodities-shell` per the founder's 2026-09-21 rule. Next: milestone 7 (EIA `poe2` refresh once row 4 lands the key path) |
 | 11  | Gas production facilities: Gulf platforms (BSEE) first | layers + content (shell worktree, `feat/commodities-shell`) | **BUILT (first slice) 2026-09-21** — PRD §13 from the founder's pivot and grill; on `feat/commodities-shell` (founder's instruction: every update on the shell branch, no row worktree), token `2`. Milestone 1 `c6c92b2`: `scripts/build-gulf-platforms.mjs` + `src/data/local_data/bsee_gulf/` (1,315 installed structures, 120-month series, 608 KB gzip), the completeness rule and the one record shape. Milestone 2 `1e685f0`: marks sized by gas share and coloured by change against last year, three tiers, hover and selected cards, the panel line, `scripts/qa-gulf-platforms.mjs`. Milestone 3 `af342d1`: the dossier (ten-year chart, this-month ledger, identity, lifetime, sources) and the drawer chrome shared with the datacenters; QA 20 checks green (layer activation 755 ms apart from the bundle fetch, heap +50 MiB). Milestone 4 is the commit carrying this line. Four gates green at every commit. Next: milestone 5 (EIA regional backdrop, short grill first) |
-| 12  | Onshore production facilities: wells, leases and rigs, region by region | layers + content (shell worktree, `feat/commodities-shell`) | **CLAIMED (plan) 2026-09-21** — PRD §14 from the founder's direction the same day ("more important than the wells on the Gulf … region by region … lay out the entire plan first, do not build yet"); five live sweeps probed some twenty regulators plus the national and international sources (§14.4); eleven US regions ranked with their first slices (§14.5), one substrate, an international ladder after them; no code. Next: the founder settles O1 (where the history shards live) and confirms the order; then milestone 0/1 — the substrate with Williston (ND) |
+| 12  | Onshore production facilities: wells, leases and rigs, region by region | layers + content (shell worktree, `feat/commodities-shell`) | **BUILT (milestones 0 and 1, Williston) 2026-09-21** — PRD §14 from the founder's direction the same day; five live sweeps probed some twenty regulators (§14.4); eleven regions ranked (§14.5). The founder's "build out the basins one at a time" started the ladder in the §14.5 order with O1 taken as recommended (option a: index and clusters committed, history shards built from the archive, not committed). Milestone 1a `c4ec135`: `scripts/build-onshore.mjs` + `scripts/onshore/{nd,eia,regions}.mjs`, `src/layers/onshore/{records,shards,bundledSource}.js`, `src/data/local_data/onshore/williston/` (24,154 North Dakota wells over 120 months, 17,915 producing in 2026-07 at 3.30 Bcf/d and 1.17 MMbbl/d; 518 fields; index 2.5 MB gzip; `--check` byte-identical; 94 % of EIA gross withdrawals, 100 % of marketed). Milestones 1b and 1c `f66463a`: `production-williston` (token `4`) — region card at global, 518 field marks at regional, 24,154 well points (`PointPrimitiveCollection`, clipped to the view) at local, hover and selected cards, the dossier with the ten-year chart from an on-demand shard, `scripts/qa-onshore-williston.mjs` on the shared harness (32 checks: activation 659 ms apart from the 16 MB fetch, heap +35 MiB, layer frame cost 1.8 ms). `836c325` fixes the second enable of the rows 4 and 11 layers (found by this QA). Build notes §14.13. Next: region 2, Appalachia (PA unconventional) |
 
 Definition of usable, pending founder confirmation of question 13: rows 1
 through 4. Rows 5 to 7 are context and content.
@@ -4146,10 +4146,20 @@ Each region ladder is four commits, gate-clean: **a** bundle + reconciliation
    `scripts/build-onshore.mjs`, `scripts/onshore/` reader contract, the QA
    harness. Verify: unit tests; a synthetic 100,000-facility bundle renders
    at the local tier inside G4 on a fresh server. Lands with milestone 1.
+   BUILT 2026-09-21 with milestone 1 (`c4ec135`, `f66463a`) as
+   `src/layers/onshore/{records,shards,model,bundledSource,dossier,index}.js`
+   — row 11's completeness module is reused as is, and the level-of-detail
+   rules live in `model.js` (§14.13); the synthetic 100,000-well bundle is
+   normalised in `records.test.mjs` under the budget, and the local tier is
+   measured on the real 24,154 wells by the QA.
 1. **Williston (ND).** Verify: `npm run build:onshore -- --region williston
    --check` reproduces bytes from the archived `2026_06.xlsx` (and the
    trailing 120 months); the well count and gas equal the workbook's; the
    panel line reconciles with EIA North Dakota marketed production; QA green.
+   BUILT 2026-09-21 — `c4ec135` (bundle, 2026-07 newest), `f66463a` (layer,
+   dossier, QA 32 checks green twice on a fresh 4174), `836c325` (the re-enable
+   fix), docs in the commit carrying this line. Reconciled against EIA gross
+   and marketed (94 % / 100 % for 2026-06), not marketed alone (§14.13).
 2. **Appalachia (PA unconventional first).** Verify: monthly extract for the
    newest period reproduced; unconventional count and gas equal the extract;
    reconciliation with EIA Pennsylvania and STEO Marcellus; OH and WV added as
@@ -4243,3 +4253,96 @@ the index bundle under 3 MB gzipped; shards per O1's decision. Gates in
 order; commit on `feat/commodities-shell`, guarded by `git branch
 --show-current`; push origin and mirror; ledger row 12 milestone 1 BUILT with
 the SHA."
+
+Milestones 0 and 1 are built (§14.13). The next region's prompt: "Row 12,
+milestone 2 (PRD §14.5 row 2): add the Pennsylvania reader
+`scripts/onshore/pa.mjs` (DEP production report extracts, unconventional
+wells monthly, one request per period, cached under `.gev-cache/onshore/pa/`;
+locations joined by `WELL_PERMIT_NUM` from the PASDA monthly file) and the
+`appalachia` region in `scripts/onshore/regions.mjs`; register
+`production-appalachia` (next free token); reconcile with EIA Pennsylvania;
+`scripts/qa-onshore-appalachia.mjs` on the shared harness; the same ladder."
+
+### 14.13 Build notes (2026-09-21, milestones 0 and 1 — Williston)
+
+What was built, and where it departs from the text above:
+
+- **The go and O1.** The founder's "build out the basins one at a time in
+  the same method as the other data layers" started the ladder in the §14.5
+  order. O1 was taken as recommended (option a): `index.json` and
+  `clusters.json` are committed under `src/data/local_data/onshore/williston/`;
+  the history shards are written to `public/data/onshore/williston/history/`
+  (git-ignored), rebuilt from the archive by `npm run build:onshore -- --region
+  williston`, checked by `--check`, and the dossier says "history shards are
+  not built on this deployment" when they are absent. Measured: the shards
+  weigh 25.2 MB gzip for one region, which is why they are not in `.git`.
+- **1,024 shards, not 256.** The largest of 256 shards weighed 125 KB gzip
+  and of 512 still 71 KB against R12.6's 64 KB; 1,024 keeps the largest at
+  44 KB. The count travels in the bundle (`shards.count`), so a bigger basin
+  can raise it without touching the module.
+- **The substrate files.** `records.js` (the one record shape; readings are
+  monthly volumes in the fixed column order `oil, water, days, runs, gas,
+  gasSold, flared`, rates derived one way: per calendar day for the map and
+  the ranks, per producing day for the dossier), `shards.js` (FNV-1a shard
+  hash, the memoising store), `model.js` (tiers, sizes, cards, legend, the
+  view rectangle), `bundledSource.js`, `dossier.js`, `index.js`. Row 11's
+  `completeness.js` is reused unchanged with the reader's own lookback; no
+  separate `lod.js`. The ten-year summary is the `summary` key (the first
+  name, `window`, trips the package-boundary checker's browser-global scan —
+  a known gotcha).
+- **North Dakota, as read.** 120 workbooks (2016-08 to 2026-07, 3 MB each)
+  archived with `.retrieved` sidecars and parsed once into a sha256-keyed
+  cache (first parse about nine minutes, rebuilds 30 s). Sheet `Oil` only;
+  `SkimmedCrudeRecovery` (disposal facilities, no coordinates) is counted and
+  skipped. Pool rows are summed per well and month; identity follows the
+  newest filing; coordinates are rounded to six decimals and used as NAD83
+  (unstated by DMR; within a metre of WGS84 here). Two anomalies are
+  recorded in `source.json`, never corrected silently: the 2026-07 workbook's
+  `ReportDate` column reads 2023-07-01 (the file name is the month), and
+  78,550 numeric cells over the window hold `NR`/`NA` and are read as not
+  filed, never as zero.
+- **Reporters and the light month.** Reporters are wells present in the
+  month's workbook. 2026-07 filed 20,231 wells against a trailing median of
+  22,071 (92 %), inside the 90 % rule, so it is current; DMR does not re-cut
+  a month's workbook after publication (Last-Modified is the first release),
+  so a light month stays light and the panel line says so: `20,231 FILED
+  (92 % OF USUAL)`. The rule's filling line still names any month under
+  90 %.
+- **Reconciliation.** Against EIA's keyless dnav workbooks at build time
+  (`N9010ND2` gross withdrawals, `N9050ND2` marketed production, `MCRFPND1`
+  crude), for the newest month both report (2026-06): the state file's gas
+  is 94 % of EIA gross withdrawals and 100 % of marketed production, its oil
+  87 % of EIA's — the structural gap O8 expected (confidential wells and late
+  filers are estimated by EIA, absent from the file). The ratios are pinned
+  by `bundledSource.test.mjs` inside [0.85, 1.05] for gross and travel to the
+  panel line (`94 % OF EIA GROSS (JUN)`) and every dossier's Sources section.
+- **Tiers, lazily.** The region card is the only entity at activation; the
+  518 field entities are created on the first visit to the regional tier
+  and the 24,154 well points on the first visit to the local tier. Measured
+  by the QA on a fresh server: activation 659 ms apart from the two bundle
+  fetches (16 MB, 0.4 to 1.2 s on this box), cold total 1.1 s, heap
+  +35 MiB, field marks built in the regional pass, points clipped to the
+  padded view (17,148 of 24,154 shown at 120 km over the top pad), the
+  layer's own median frame cost 1.8 ms (measured as the same view with the
+  layer minus without it, after the globe's tiles load — the whole scene
+  runs at ~105 ms a frame on this box's iGPU with or without the layer, so
+  G4's 16 ms is held as the layer's cost, not the scene's).
+- **Picks on a pad and between fields.** Surface holes on one pad are
+  metres apart and share a pixel at every tier, so a hover raises one of the
+  pad's wells; the QA accepts a well within 60 m of the top producer, then
+  selects and opens the dossier of the well it hovered. Field centroids of
+  adjacent fields overlap at 1,200 km; the QA accepts the field mark within
+  30 px of the pointer. Pads as a display grouping (R12.1) remain open.
+- **A defect found by the QA in rows 4 and 11.** The data manager treats an
+  `update()` that returns `false` as a rejected enable and runs the disable
+  cleanup; the bundled layers of rows 4 and 11 (and the first draft here)
+  returned `false` once their snapshot was loaded, so a second enable left
+  their marks hidden. All three now answer `true`; the LNG layer already
+  did.
+- **Tokens.** `production-williston` took `4`; the registry allows one
+  character from `[a-z0-9]` and six remain (`0`, `5` to `9`) for ten more
+  regions — the registry's token alphabet needs widening before region 7.
+- **Not built here:** Montana's reader (per-query Data Miner), pads as a
+  grouping, laterals, county clusters as a tier (they are in the bundle and
+  the analyst records only), the EIA play polygon under the region mark
+  (milestone 9).
