@@ -6,6 +6,7 @@ import { createBundledDatacenterSource } from '../layers/datacenters/source.js';
 import { createBundledGasSource } from '../layers/gasFlows/bundledSource.js';
 import { createBundledGulfSource } from '../layers/production/bundledSource.js';
 import { createBundledLngSource } from '../layers/lng/source.js';
+import { createBundledOnshoreSource } from '../layers/onshore/bundledSource.js';
 
 /** Construct the existing reference feeds independently of application setup. */
 export function createReferenceSources() {
@@ -18,5 +19,6 @@ export function createReferenceSources() {
     gasFlows: createBundledGasSource(),
     gulfPlatforms: createBundledGulfSource(),
     lng: createBundledLngSource(),
+    onshoreWilliston: createBundledOnshoreSource({ region: 'williston' }),
   };
 }

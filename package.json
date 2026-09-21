@@ -43,6 +43,7 @@
     "build:gas-pipelines": "node scripts/build-gas-bundle.mjs",
     "build:gulf-platforms": "node scripts/build-gulf-platforms.mjs",
     "build:lng": "node scripts/build-lng-bundle.mjs",
+    "build:onshore": "node scripts/build-onshore.mjs",
     "test": "node scripts/run-unit-tests.mjs",
     "test:track": "node scripts/track-regression.mjs",
     "qa:map-source-tray": "node scripts/qa-map-source-tray.mjs",

@@ -777,5 +777,12 @@
   "src/layers/lng/records.test.mjs",
   "src/layers/lng/bundle.test.mjs",
   "src/layers/lng/dossier.test.mjs",
-  "scripts/qa-lng.mjs"
+  "scripts/qa-lng.mjs",
+  "scripts/build-onshore.mjs",
+  "scripts/onshore/nd.mjs",
+  "scripts/onshore/eia.mjs",
+  "scripts/onshore/regions.mjs",
+  "src/layers/onshore/records.test.mjs",
+  "src/layers/onshore/shards.test.mjs",
+  "src/layers/onshore/bundledSource.test.mjs"
 ]

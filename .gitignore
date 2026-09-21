@@ -7,6 +7,9 @@ qa-shots/
 output/
 .gev-logs/
 .gev-cache/
+# Onshore production history shards: built from .gev-cache by
+# `npm run build:onshore -- --region <id>`, never committed (plan §14, O1).
+public/data/onshore/*/history/
 .DS_Store
 .gstack/
 3d-models/

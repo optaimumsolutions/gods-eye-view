@@ -1850,7 +1850,10 @@
       "src/layers/lng/model.js",
       "src/layers/lng/dossier.js",
       "src/layers/lng/source.js",
-      "src/layers/lng/records.js"
+      "src/layers/lng/records.js",
+      "src/layers/onshore/bundledSource.js",
+      "src/layers/onshore/records.js",
+      "src/layers/onshore/shards.js"
     ],
     "external": [
       "@mapbox/vector-tile",
@@ -2285,7 +2288,10 @@
       "src/layers/lng/model.js",
       "src/layers/lng/dossier.js",
       "src/layers/lng/source.js",
-      "src/layers/lng/records.js"
+      "src/layers/lng/records.js",
+      "src/layers/onshore/bundledSource.js",
+      "src/layers/onshore/records.js",
+      "src/layers/onshore/shards.js"
     ],
     "external": [
       "cesium",
@@ -2600,7 +2606,10 @@
       "src/layers/production/records.js",
       "src/layers/production/completeness.js",
       "src/layers/lng/source.js",
-      "src/layers/lng/records.js"
+      "src/layers/lng/records.js",
+      "src/layers/onshore/bundledSource.js",
+      "src/layers/onshore/records.js",
+      "src/layers/onshore/shards.js"
     ],
     "external": []
   },
