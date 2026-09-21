@@ -5,6 +5,7 @@ import { createPortWatchPortSource } from '../layers/ports/source.js';
 import { createBundledDatacenterSource } from '../layers/datacenters/source.js';
 import { createBundledGasSource } from '../layers/gasFlows/bundledSource.js';
 import { createBundledGulfSource } from '../layers/production/bundledSource.js';
+import { createBundledLngSource } from '../layers/lng/source.js';
 
 /** Construct the existing reference feeds independently of application setup. */
 export function createReferenceSources() {
@@ -16,5 +17,6 @@ export function createReferenceSources() {
     datacenters: createBundledDatacenterSource(),
     gasFlows: createBundledGasSource(),
     gulfPlatforms: createBundledGulfSource(),
+    lng: createBundledLngSource(),
   };
 }

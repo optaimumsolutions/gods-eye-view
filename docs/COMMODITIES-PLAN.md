@@ -30,7 +30,7 @@ owns layers. Re-check `git status` before every edit to a shared file.
 | 7   | Episode scene packs                              | content                              | OPEN — the only oracle bridge, offline and per episode                                              |
 | 8   | `energy-datacenters`, US power load, bundled   | layers (worktree `commodities-datacenters`) | **BUILT** — v1 (five sites) `4ab9c96` on `feat/energy-datacenters`, PRD §8; v2 cards `76a334e`/`8f758b3`; v3 `1ccf37f` (2026-09-21, on `feat/commodities-shell`): fifteen sites, live EIA-930 grid and Open-Meteo weather on the cards and dossier, `/api/epoch/` proxy (no consumer yet — the refresh script is still open) |
 | 9   | Port dossier: camera + data panel, 20 ports   | layers + server + content (worktree `commodities-ports-dossier`) | OPEN — PRD §9 written 2026-09-17 from the grill (G1 to G6); not claimed; cut `feat/port-dossier` from `feat/commodities-shell` |
-| 10  | `commodity-lng`: LNG terminals, tiered cards, sea-routed cargo arcs | layers (worktree `commodities-lng`) | **CLAIMED 2026-09-21** — PRD §12 (mirror: Project Brain `05-prd.md`), decided in the 2026-09-21 grill (13 questions, all on the recommended branch). Worktree `commodities-lng` on `feat/commodity-lng`, cut from `feat/commodities-shell` at `a7245f2`; dev server 4175. Next: milestone 1 (bundle: GEM Sept 2025 terminals, EIA 2026-Q2 train table, DOE cargoes to Jun 2026, GIIGNL 2025 matrix, `searoute-ts` routes). Merges into `feat/commodities-shell`; `commodities` moves with row 1 m2 |
+| 10  | `commodity-lng`: LNG terminals, tiered cards, sea-routed cargo arcs | layers (worktree `commodities-lng`) | **BUILT 2026-09-21** — PRD §12 (mirror: Project Brain `05-prd.md`), milestones 0 to 6. Bundle `8b5c5b4` (`npm run build:lng`, `--check` byte-identical; 308 GEM terminals, EIA 2026-Q2 trains on 14 US plants, DOE cargoes through 2026-06, GIIGNL 2025 matrix 427.9 MT, 470 searoute-ts routes); layer, dossier, chips, docs in the commit carrying this line. `scripts/qa-lng.mjs` green (41 checks; activation 666 ms warm, heap +31 MiB); four gates green. Deviations in §12.11: GEM read from GEM's public tracker-map feed until the form-gated xlsx is placed (no operator column), via radius 40 km, chips session-only, EIA API codes null until milestone 7. Landed on `feat/commodities-shell` per the founder's 2026-09-21 rule. Next: milestone 7 (EIA `poe2` refresh once row 4 lands the key path) |
 | 11  | Gas production facilities: Gulf platforms (BSEE) first | layers + content (shell worktree, `feat/commodities-shell`) | **BUILT (first slice) 2026-09-21** — PRD §13 from the founder's pivot and grill; on `feat/commodities-shell` (founder's instruction: every update on the shell branch, no row worktree), token `2`. Milestone 1 `c6c92b2`: `scripts/build-gulf-platforms.mjs` + `src/data/local_data/bsee_gulf/` (1,315 installed structures, 120-month series, 608 KB gzip), the completeness rule and the one record shape. Milestone 2 `1e685f0`: marks sized by gas share and coloured by change against last year, three tiers, hover and selected cards, the panel line, `scripts/qa-gulf-platforms.mjs`. Milestone 3 `af342d1`: the dossier (ten-year chart, this-month ledger, identity, lifetime, sources) and the drawer chrome shared with the datacenters; QA 20 checks green (layer activation 755 ms apart from the bundle fetch, heap +50 MiB). Milestone 4 is the commit carrying this line. Four gates green at every commit. Next: milestone 5 (EIA regional backdrop, short grill first) |
 
 Definition of usable, pending founder confirmation of question 13: rows 1
@@ -3324,6 +3324,86 @@ first sea-borne flow on the globe.
 5. Work the milestones in order; each ends with the four gates and its
    verify line above.
 
+### 12.11 Build notes (2026-09-21, milestones 0 to 6)
+
+What was built matches §12.6 except where a probe said otherwise; each
+deviation is recorded in the bundle manifest (`lng/source.json`) as well.
+
+- **GEM input.** The form-gated xlsx was not on disk, so the build reads the
+  LNG units of GEM's own public tracker-map feed
+  (`publicgemdata.nyc3.cdn.digitaloceanspaces.com/interim_maps/ggit-lng_map_2025-11.geojson`,
+  same September 2025 release, CC BY 4.0, 1,198 units). It has owner and
+  parent but no Operator column, so non-US cards show owner and parent. The
+  xlsx path is implemented and asserts the PRD's column names but is
+  **unverified** until a file is placed at `.gev-cache/lng/gem-lng-terminals.xlsx`;
+  the build then prefers it. Two operating units without a facility type
+  (Klaipeda small-scale, Tangshan phase 2) are recorded and not drawn.
+- **Counts.** GEM: 74 export (59 operating, 15 building) and 234 import (196,
+  38) terminals in 74 countries; the EIA sheet has 39 train rows (the PRD said
+  55; that was the sheet's row count including notes), 37 joined; Commonwealth
+  LNG and Delfin are FID in EIA but proposed in GEM, so they have no marker
+  yet. DOE: 1,868 vessel cargoes in Jul 2025 to Jun 2026 across 42 countries,
+  220 terminal-to-country pairs, ten exit names (nine US plants plus DOE's
+  "Altamira, Tamaulipas, MX", mapped to New Fortress's Altamira FLNG). GIIGNL:
+  25 exporter columns × 47 markets, 293 cells, 427.9 MT, Sabine Pass has no
+  operator field from the feed but 6 EIA trains at 27.0 Mtpa baseload.
+- **Routes.** 470 pairs (218 DOE, 252 GIIGNL; the USA column of the matrix
+  is not drawn a second time); 47 pairs use Bab el-Mandeb when open and draw
+  the Cape variant; longest line 157 vertices. Two DOE pairs are unrouted and
+  kept in the manifest: Altamira FLNG → Mexico (same port, no sea route) and
+  cargoes to Bahamas and Israel, whose regas terminals GEM lists as neither
+  operating nor under construction. `searoute-ts@2.3.0` runs offline under
+  Node 24 (open question closed); a full rebuild routes in ~2 minutes and is
+  byte-identical (`--check --no-route-cache` exit 0).
+- **Via radius 40 km, not 25.** Measured over every lane: threaded passages
+  sit 1 to 27 km from the PortWatch pin (Hormuz and Malacca 26.9 km, pinned
+  mid-strait) and the nearest merely-passed pin is 45 km off (Mindoro), so
+  25 km silently dropped Hormuz from every Qatar route.
+- **Chips are session-only.** The options codec (`enabled+options`
+  dispositions) can carry them, but adding an option owner touches the
+  pinned codec tests; deferred, and the meta line says `chips session-only`.
+- **`properties.observation`** on `registerEntityContext` is new with this
+  layer; datacenters and ports pass flat records. Row 1 milestone 2 decides
+  whether to adopt it.
+- **Arcs are not ground-clamped entity polylines** (§12.6.2 item 13 said
+  `clampToGround`). A probe with the real GPU showed the four ground-polyline
+  batches (rings, DOE arrows, GIIGNL dashes, GIIGNL arrow tails) still not
+  ready 30 s after activation: a clamped line of 20,000 km is a worker
+  geometry job that never finished, and the rings queued behind it, so the
+  first QA screenshots showed markers only. Plain entity polylines rendered
+  but cost 118 MiB of heap against the 60 MiB gate. The arcs now live in one
+  `PolylineCollection` (the §12.9 "one primitive per grade" fallback): the
+  lane vertices are subdivided along the geodesic at 1° so no segment dips
+  under the ellipsoid, the DOE grade takes the `PolylineArrow` material, the
+  GIIGNL grade `PolylineDash` plus a three-vertex arrow tail, picking is by
+  the collection id, and hover widens the line. Rings stay clamped.
+- **Activation.** Subdividing 722 lines costs ~450 ms on this box, so the
+  markers and rings are drawn in the activation tick and the arcs follow in
+  chunks of 80 per macrotask (`getStats().arcsPending` reaches 0 within
+  ~400 ms; the QA asserts it). Measured warm: 687 ms activation (380 ms bundle
+  fetch, the rest entities) against the 900 ms gate; the first activation on
+  a freshly started dev server measured 1,643 ms, dominated by the cold read
+  of the 2.6 MB bundle. Heap +43 MiB against 60. 382 entities (308 markers,
+  74 rings) and 722 polylines (470 lines, 252 GIIGNL arrow tails).
+- **Activation gate split** (same day, same box as row 11's §13.10
+  deviation). Against a fresh dev server the whole-activation number ranged
+  666 ms to 2,420 ms across runs of the identical tree, and the swing was the
+  dev server's read of the 2.6 MB bundle, not the layer. `scripts/qa-lng.mjs`
+  now reads the four bundle fetches from `performance.getEntriesByType
+  ('resource')` and gates the remainder at 900 ms, plus a 3,000 ms gate on
+  the total including the fetch. The PRD's single 900 ms figure was written
+  before the fetch variance was measured.
+- **Cards.** "Ras Laffan" is `QatarEnergy LNG (N)` and `(S)` in GEM; the QA
+  asserts the (N) card. Utilization prints 116.8 % for Sabine Pass because
+  the window's MMcf exceeds baseload nameplate (peak is higher); labelled
+  arithmetic, as specified.
+- **EIA API terminal codes** (`crosswalk.json` `eiaApiTerminal`) are null
+  until milestone 7, which needs the key path from row 4; the test asserts
+  they are null by design rather than half-filled.
+- **Render check.** No separate `.gev-logs/render-lng.mjs`; `scripts/qa-lng.mjs`
+  takes the three-depth screenshots itself (`qa-shots/lng-global.png`,
+  `lng-regional.png`, `lng-local.png`, `lng-dossier.png`) and asserts the
+  card text at each depth through `getTerminalCard` / `getRouteCard`.
 ---
 
 ## 13. Row 11 PRD — Gas production facilities: Gulf of Mexico platforms first (FR-G11)

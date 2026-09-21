@@ -22,6 +22,7 @@ const PANEL_GROUPS = [
       'energy-datacenters',
       'commodity-gas-flows',
       'production-gulf-platforms',
+      'commodity-lng',
     ],
   },
   {
@@ -81,6 +82,7 @@ const PANEL_LABELS = {
   // Row 11: monthly production per platform structure as filed with BSEE;
   // "current" is the newest complete reporting month, named on the row.
   'production-gulf-platforms': 'Gas · Gulf Platforms (BSEE)',
+  'commodity-lng': 'LNG · Terminals & Cargoes',
 };
 
 function panelLabel(layer) {

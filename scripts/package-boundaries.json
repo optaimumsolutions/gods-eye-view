@@ -1844,7 +1844,13 @@
       "src/layers/gasFlows/naceiCells.js",
       "src/layers/production/bundledSource.js",
       "src/layers/production/records.js",
-      "src/layers/production/completeness.js"
+      "src/layers/production/completeness.js",
+      "src/app/layers/lng.js",
+      "src/layers/lng/index.js",
+      "src/layers/lng/model.js",
+      "src/layers/lng/dossier.js",
+      "src/layers/lng/source.js",
+      "src/layers/lng/records.js"
     ],
     "external": [
       "@mapbox/vector-tile",
@@ -2273,7 +2279,13 @@
       "src/layers/gasFlows/naceiCells.js",
       "src/layers/production/bundledSource.js",
       "src/layers/production/records.js",
-      "src/layers/production/completeness.js"
+      "src/layers/production/completeness.js",
+      "src/app/layers/lng.js",
+      "src/layers/lng/index.js",
+      "src/layers/lng/model.js",
+      "src/layers/lng/dossier.js",
+      "src/layers/lng/source.js",
+      "src/layers/lng/records.js"
     ],
     "external": [
       "cesium",
@@ -2586,7 +2598,9 @@
       "src/layers/gasFlows/naceiCells.js",
       "src/layers/production/bundledSource.js",
       "src/layers/production/records.js",
-      "src/layers/production/completeness.js"
+      "src/layers/production/completeness.js",
+      "src/layers/lng/source.js",
+      "src/layers/lng/records.js"
     ],
     "external": []
   },

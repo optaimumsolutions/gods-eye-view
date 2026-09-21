@@ -775,5 +775,7 @@
   "scripts/lng/endpoints.mjs",
   "scripts/lng/routes.mjs",
   "src/layers/lng/records.test.mjs",
-  "src/layers/lng/bundle.test.mjs"
+  "src/layers/lng/bundle.test.mjs",
+  "src/layers/lng/dossier.test.mjs",
+  "scripts/qa-lng.mjs"
 ]

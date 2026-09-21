@@ -23,6 +23,7 @@ import { createApplicationPorts } from './layers/ports.js';
 import { createApplicationDatacenters } from './layers/datacenters.js';
 import { createApplicationGasFlows } from './layers/gasFlows.js';
 import { createApplicationGulfPlatforms } from './layers/gulfPlatforms.js';
+import { createApplicationLng } from './layers/lng.js';
 import { createInfrastructureLayers } from '../data/infrastructure.js';
 import { localGeoJsonServices } from './localGeojsonServices.js';
 import { createBhoteKoshiEventLayer } from '../data/bhoteKoshiEvent.js';
@@ -54,6 +55,7 @@ const SOURCE_METHODS = Object.freeze({
   datacenters: ['getSnapshot'],
   gasFlows: ['getSnapshot'],
   gulfPlatforms: ['getSnapshot'],
+  lng: ['getSnapshot'],
 });
 
 /** Construct the current catalog without choosing any source provider.
@@ -145,6 +147,7 @@ export function createApplicationCatalog({
         createApplicationDatacenters({ source: sources.datacenters }),
         createApplicationGasFlows({ source: sources.gasFlows }),
         createApplicationGulfPlatforms({ source: sources.gulfPlatforms }),
+        createApplicationLng({ source: sources.lng }),
         createApplicationFirms({
           surface,
           id: 'local-firms',

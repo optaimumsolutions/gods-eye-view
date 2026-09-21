@@ -17,13 +17,22 @@ import {
  * snapshot's `asOf` line says so (R2, R3).
  */
 
-const bundleUrl = (name) =>
-  new URL(`../../data/local_data/lng/${name}`, import.meta.url).href;
-
-export const LNG_TERMINALS_URL = bundleUrl('terminals.json');
-export const LNG_CARGOES_URL = bundleUrl('cargoes.json');
-export const LNG_MATRIX_URL = bundleUrl('matrix.json');
-export const LNG_ROUTES_URL = bundleUrl('routes.json');
+export const LNG_TERMINALS_URL = new URL(
+  '../../data/local_data/lng/terminals.json',
+  import.meta.url,
+).href;
+export const LNG_CARGOES_URL = new URL(
+  '../../data/local_data/lng/cargoes.json',
+  import.meta.url,
+).href;
+export const LNG_MATRIX_URL = new URL(
+  '../../data/local_data/lng/matrix.json',
+  import.meta.url,
+).href;
+export const LNG_ROUTES_URL = new URL(
+  '../../data/local_data/lng/routes.json',
+  import.meta.url,
+).href;
 
 async function readJson(url, { fetchImpl, signal, label }) {
   signal?.throwIfAborted();

@@ -245,6 +245,21 @@ export const DATA_CREDITS = [
       '(production by platform and platform structures, US public domain)',
   },
   {
+    key: 'lng',
+    html:
+      'LNG terminals, cargoes and routes: terminals from ' +
+      '<a href="https://globalenergymonitor.org/projects/global-gas-infrastructure-tracker/" target="_blank" rel="noopener">Global Energy Monitor, Global Gas Infrastructure Tracker</a> ' +
+      '(CC BY 4.0, September 2025); US train table from the ' +
+      '<a href="https://www.eia.gov/naturalgas/data.php" target="_blank" rel="noopener">U.S. Energy Information Administration</a> ' +
+      '(public domain, 2026-Q2); US cargoes from the ' +
+      '<a href="https://www.energy.gov/fecm/natural-gas-imports-and-exports" target="_blank" rel="noopener">U.S. Department of Energy</a> ' +
+      '(public domain, through June 2026); world import matrix cited from the ' +
+      '<a href="https://giignl.org/annual-report" target="_blank" rel="noopener">GIIGNL Annual Report 2026</a>; ' +
+      'modelled sea routes by ' +
+      '<a href="https://github.com/mayurrawte/searoute-ts" target="_blank" rel="noopener">searoute-ts</a> ' +
+      '(MIT) over the Eurostat maritime network',
+  },
+  {
     key: 'dams',
     html:
       'Dams: ' +
