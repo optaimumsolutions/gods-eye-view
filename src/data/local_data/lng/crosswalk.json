@@ -1,0 +1,45 @@
+{
+  "schema": "lng-crosswalk/1",
+  "note": "Hand-kept join table for the commodity-lng bundle (docs/COMMODITIES-PLAN.md §12.6.1 item 2). GEM ids are the GGIT project ids; EIA project names are the 'Project name' column of the quarterly liquefaction workbook; DOE names are the 'Point of Entry or Exit' column of the monthly LNG exports file; eiaApiTerminal is the poe2 series terminal code, filled at milestone 7 when the key path lands (null until then). The build fails on any US export terminal or DOE exit name that does not resolve here.",
+  "usExportTerminals": [
+    { "gemId": "T100000130240", "name": "Sabine Pass", "eiaProjects": ["Sabine Pass"], "doeNames": ["Sabine Pass, LA"], "eiaApiTerminal": null },
+    { "gemId": "T100000130217", "name": "Cove Point", "eiaProjects": ["Cove Point"], "doeNames": ["Cove Point, MD"], "eiaApiTerminal": null },
+    { "gemId": "T100000130221", "name": "Elba Island", "eiaProjects": ["Elba Island"], "doeNames": ["Elba Island, GA"], "eiaApiTerminal": null },
+    { "gemId": "T100000130216", "name": "Corpus Christi", "eiaProjects": ["Corpus Christi", "Corpus Christi Liquefaction Stage 3", "Corpus Christi Liquefaction Midscale"], "doeNames": ["Corpus Christi, TX"], "eiaApiTerminal": null },
+    { "gemId": "T100000130214", "name": "Cameron", "eiaProjects": ["Cameron"], "doeNames": ["Cameron, LA"], "eiaApiTerminal": null },
+    { "gemId": "T100000130224", "name": "Freeport", "eiaProjects": ["Freeport"], "doeNames": ["Freeport, TX"], "eiaApiTerminal": null },
+    { "gemId": "T100000130212", "name": "Calcasieu Pass", "eiaProjects": ["Calcasieu Pass"], "doeNames": ["Cameron (Calcasieu Pass), LA"], "eiaApiTerminal": null },
+    { "gemId": "T100000130242", "name": "Plaquemines", "eiaProjects": ["Plaquemines LNG Phase 1", "Plaquemines LNG Phase 2"], "doeNames": ["Plaquemines, LA"], "eiaApiTerminal": null },
+    { "gemId": "T100000130227", "name": "Golden Pass", "eiaProjects": ["Golden Pass"], "doeNames": ["Golden Pass, TX"], "eiaApiTerminal": null },
+    { "gemId": "T100000130237", "name": "Port Arthur", "eiaProjects": ["Port Arthur LNG Phase 1", "Port Arthur LNG Phase 2"], "doeNames": [], "eiaApiTerminal": null },
+    { "gemId": "T100000130239", "name": "Rio Grande", "eiaProjects": ["Rio Grande LNG Phase 1", "Rio Grande LNG Phase 2"], "doeNames": [], "eiaApiTerminal": null },
+    { "gemId": "T100000130219", "name": "Woodside Louisiana", "eiaProjects": ["Woodside Louisiana LNG Phase 1"], "doeNames": [], "eiaApiTerminal": null },
+    { "gemId": "T100000130973", "name": "CP2", "eiaProjects": ["Venture Global CP2 Phase 1", "Venture Global CP2 Phase 2"], "doeNames": [], "eiaApiTerminal": null },
+    { "gemId": "T100000130208", "name": "American LNG Hialeah", "eiaProjects": [], "doeNames": [], "eiaApiTerminal": null, "smallScale": true, "why": "0.08 Mtpa ISO-container plant; below the EIA workbook's large-scale threshold and ships no vessel cargoes" }
+  ],
+  "eiaProjectsOutsideGemSet": {
+    "Commonwealth LNG": "EIA lists it as FID (Under construction); GEM Sept 2025 still carries every train as proposed, so it has no marker until GEM moves it",
+    "Delfin FLNG": "EIA lists it as FID; GEM Sept 2025 carries it as proposed"
+  },
+  "doeExitsOutsideUs": [
+    { "doeName": "Altamira, Tamaulipas, MX", "gemId": "T100000131069", "why": "US-sourced pipeline gas liquefied at New Fortress's Altamira FLNG; DOE files it as a US export by point of exit" }
+  ],
+  "countryAliases": {
+    "Turkiye": "Türkiye",
+    "Turkey": "Türkiye",
+    "UK": "United Kingdom",
+    "USA": "United States",
+    "UAE": "United Arab Emirates",
+    "Korea, South": "South Korea",
+    "Trinidad & Tobago": "Trinidad and Tobago",
+    "Congo": "Republic of the Congo"
+  },
+  "importEndpointOverrides": {
+    "Puerto Rico": { "gemId": "T100000130784", "why": "GEM files San Juan under United States with Puerto Rico as the subnational; GIIGNL and DOE count it as its own market" }
+  },
+  "exporterEndpoints": {
+    "Russia Europe": { "gemId": "T100000130518", "why": "GIIGNL splits Russia by basin; Yamal LNG is the Atlantic-basin exporter" },
+    "Russia Asia": { "gemId": "T100000130512", "why": "Sakhalin II is the Pacific-basin exporter" },
+    "USA": { "gemId": "T100000130240", "why": "largest operating US export terminal by GEM operating capacity (Sabine Pass)" }
+  }
+}

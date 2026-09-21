@@ -2,7 +2,7 @@
   "name": "gods-eye-view",
   "private": true,
   "version": "0.1.1",
-  "description": "A real-time intelligence console for planet Earth \u2014 photorealistic 3D globe, live aircraft/ships/satellites/earthquakes/CCTV, and hands-free voice control. Runs in a browser.",
+  "description": "A real-time intelligence console for planet Earth — photorealistic 3D globe, live aircraft/ships/satellites/earthquakes/CCTV, and hands-free voice control. Runs in a browser.",
   "type": "module",
   "license": "MIT",
   "author": "Bilawal Sidhu",
@@ -42,6 +42,7 @@
     "preview": "vite preview",
     "build:gas-pipelines": "node scripts/build-gas-bundle.mjs",
     "build:gulf-platforms": "node scripts/build-gulf-platforms.mjs",
+    "build:lng": "node scripts/build-lng-bundle.mjs",
     "test": "node scripts/run-unit-tests.mjs",
     "test:track": "node scripts/track-regression.mjs",
     "qa:map-source-tray": "node scripts/qa-map-source-tray.mjs",
@@ -59,10 +60,12 @@
   "devDependencies": {
     "prettier": "3.9.6",
     "puppeteer": "^25.10.0",
+    "searoute-ts": "^2.3.0",
     "sharp": "^0.35.4",
     "vite": "^6.0.0",
     "vite-plugin-cesium": "^1.2.23",
-    "ws": "^8.21.0"
+    "ws": "^8.21.0",
+    "xlsx": "^0.18.5"
   },
   "exports": {
     "./infrastructure": "./src/data/infrastructure.js",

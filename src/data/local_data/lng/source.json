@@ -1,0 +1,171 @@
+{
+  "id": "commodity-lng",
+  "name": "LNG terminals, US cargoes, the GIIGNL import matrix and modelled sea routes",
+  "category": "infrastructure",
+  "description": "Bundle for the commodity-lng layer: every operating and under-construction LNG terminal in GEM's tracker, the EIA train table joined onto US export plants, DOE cargo-level US exports, the GIIGNL annual country matrix, and searoute-ts shortest sea routes between the terminals that the trade files pair.",
+  "vintage": {
+    "terminals": "GEM September 2025",
+    "trains": "EIA 2026-Q2",
+    "cargoes": "DOE through 2026-06",
+    "matrix": "GIIGNL annual 2025"
+  },
+  "span": {
+    "from": "2025-07",
+    "to": "2026-06"
+  },
+  "inputs": {
+    "gem": {
+      "file": "gem-lng-units.geojson",
+      "sha256": "15344aaedb9f63136fa93de93ddb6c801fa6ca1faf6e0f3419d4f1fd424b36b2",
+      "bytes": 1250039,
+      "url": "https://publicgemdata.nyc3.cdn.digitaloceanspaces.com/interim_maps/ggit-lng_map_2025-11.geojson",
+      "retrieved": "2026-09-21",
+      "lastModified": "Tue, 24 Mar 2026 22:58:17 GMT",
+      "release": "September 2025",
+      "license": "CC BY 4.0",
+      "via": "public tracker-map feed, LNG units"
+    },
+    "eia": {
+      "file": "eia-liquefaction.xlsx",
+      "sha256": "22132b5772d788ce672a5986db7446170d2b75ac629081a65c0791d240591020",
+      "bytes": 44287,
+      "url": "https://www.eia.gov/naturalgas/importsexports/liquefactioncapacity/U.S.liquefactioncapacity_2026_Q2.xlsx",
+      "retrieved": "2026-09-21",
+      "lastModified": "Mon, 29 Jun 2026 21:05:39 GMT",
+      "release": "2026-Q2",
+      "license": "US public domain"
+    },
+    "doe": {
+      "file": "doe-lng-exports.xlsx",
+      "sha256": "feccb56db0c037d1231f0e6e9f8fb0537e046af801d27b9c2bf157ec18779907",
+      "bytes": 804299,
+      "url": "https://www.energy.gov/sites/default/files/2026-08/3.%20U.S.%20LNG%20Exports%20and%20Re-Exports%20Details%20%28Jan%202016%20-%20Jun%202026%29.xlsx",
+      "retrieved": "2026-09-21",
+      "lastModified": "Mon, 24 Aug 2026 14:26:34 GMT",
+      "release": "through 2026-06",
+      "license": "US public domain"
+    },
+    "giignl": {
+      "file": "giignl-2025-matrix.csv",
+      "pdfSha256": "47554f0b17d7853822b17749e2b3f44d767082e28f1f32c2bb66cb9dd0b47ca6",
+      "release": "Annual Report 2026 edition",
+      "license": "cited; public PDF, re-typed matrix"
+    },
+    "routes": {
+      "name": "searoute-ts",
+      "version": "2.3.0",
+      "network": "Eurostat 2025 maritime network (marnet), MIT-licensed distribution",
+      "units": "nautical miles",
+      "license": "MIT (code); Eurostat network"
+    }
+  },
+  "counts": {
+    "terminals": {
+      "terminals": 308,
+      "byKind": {
+        "export": 74,
+        "import": 234
+      },
+      "byKindStatus": {
+        "export:construction": 15,
+        "export:operating": 59,
+        "import:construction": 38,
+        "import:operating": 196
+      },
+      "countries": 74,
+      "usExport": 14,
+      "eiaTrains": 39,
+      "eiaTrainsJoined": 37,
+      "gemUnitsRead": 1198,
+      "unitsWithoutFacilityType": [
+        {
+          "terminal": "Klaipeda Small-Scale LNG Terminal",
+          "unit": null,
+          "country": "Lithuania",
+          "status": "operating",
+          "facilityType": null
+        },
+        {
+          "terminal": "Tangshan LNG Terminal (PetroChina)",
+          "unit": "Phase 2",
+          "country": "China",
+          "status": "operating",
+          "facilityType": null
+        }
+      ]
+    },
+    "cargoes": {
+      "vesselExportsSince2016": 9654,
+      "cargoesInWindow": 1868,
+      "mmcfInWindow": 6103865,
+      "countriesInWindow": 42,
+      "pairsInWindow": 220,
+      "detailRows": 3365,
+      "monthlyRows": 5408
+    },
+    "matrix": {
+      "exporters": 25,
+      "importers": 47,
+      "cells": 293,
+      "unroutedImporters": 0,
+      "mtRouted": 428.8
+    },
+    "routes": {
+      "routes": 470,
+      "byGrade": {
+        "doe": 218,
+        "giignl": 252
+      },
+      "redSeaExposed": 47,
+      "drawnClosed": 47,
+      "noSeaRoute": 1,
+      "unroutedDoePairs": 2,
+      "unroutedGiignlCells": 0,
+      "maxVertices": 157
+    }
+  },
+  "assumptions": [
+    "Terminal kind is export when GEM lists any operating or under-construction export unit, else import; a plant with both keeps its regas capacity as regasMtpa.",
+    "Mtpa and Bcf/d for US plants are the EIA workbook's own paired columns per train, summed over trains in commercial operation; GEM-only terminals carry Mtpa alone.",
+    "One arc per pair ends at the importing country's largest operating regas terminal by GEM capacity (fallbacks named in endpointRule); it does not split a country's volume across its terminals.",
+    "Routes are searoute-ts shortest paths; redSeaClosed blocks Bab el-Mandeb and is the variant drawn for periods from 2024-01 on pairs whose open route uses the strait.",
+    "US pairs come from the DOE grade only; the USA column of the GIIGNL matrix is not drawn a second time.",
+    "A route lists a chokepoint in via[] when its line passes within 40 km of the PortWatch pin: measured over every lane, threaded passages sit 1 to 27 km off (Hormuz and Malacca at 26.9 km, pinned mid-strait) and the nearest merely-passed pin is 45 km off, so the PRD's 25 km is widened to 40 km."
+  ],
+  "files": [
+    {
+      "path": "terminals.json",
+      "format": "JSON",
+      "sha256": "84328316b89d3433087289e0f256a3df08708cf97a63527453979fd1e769758d",
+      "bytes": 494784,
+      "gzip_bytes": 37910
+    },
+    {
+      "path": "cargoes.json",
+      "format": "JSON",
+      "sha256": "4c28e9227b45ad19a39ff12f14372a7f510dcfc2625c18dcc551916ea80eec03",
+      "bytes": 1377724,
+      "gzip_bytes": 123990
+    },
+    {
+      "path": "matrix.json",
+      "format": "JSON",
+      "sha256": "61ac5a009d75889c0ab75713a24d07ccf55186a546d6f8af82e603b5e20839ca",
+      "bytes": 25559,
+      "gzip_bytes": 3294
+    },
+    {
+      "path": "routes.json",
+      "format": "JSON",
+      "sha256": "89ef0b35aeed50de401fd3d9501547e2f778c76331d5ffd2972c2060b7167891",
+      "bytes": 695148,
+      "gzip_bytes": 62979
+    }
+  ],
+  "total_bytes": 2593215,
+  "reproduce": {
+    "command": "npm run build:lng",
+    "check": "node scripts/build-lng-bundle.mjs --check",
+    "raw": ".gev-cache/lng/ (git-ignored): GEM xlsx or feed subset, DOE and EIA workbooks, GIIGNL PDF, retrieved.json"
+  }
+}

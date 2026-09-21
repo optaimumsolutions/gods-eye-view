@@ -30,6 +30,7 @@ owns layers. Re-check `git status` before every edit to a shared file.
 | 7   | Episode scene packs                              | content                              | OPEN — the only oracle bridge, offline and per episode                                              |
 | 8   | `energy-datacenters`, US power load, bundled   | layers (worktree `commodities-datacenters`) | **BUILT** — v1 (five sites) `4ab9c96` on `feat/energy-datacenters`, PRD §8; v2 cards `76a334e`/`8f758b3`; v3 `1ccf37f` (2026-09-21, on `feat/commodities-shell`): fifteen sites, live EIA-930 grid and Open-Meteo weather on the cards and dossier, `/api/epoch/` proxy (no consumer yet — the refresh script is still open) |
 | 9   | Port dossier: camera + data panel, 20 ports   | layers + server + content (worktree `commodities-ports-dossier`) | OPEN — PRD §9 written 2026-09-17 from the grill (G1 to G6); not claimed; cut `feat/port-dossier` from `feat/commodities-shell` |
+| 10  | `commodity-lng`: LNG terminals, tiered cards, sea-routed cargo arcs | layers (worktree `commodities-lng`) | **CLAIMED 2026-09-21** — PRD §12 (mirror: Project Brain `05-prd.md`), decided in the 2026-09-21 grill (13 questions, all on the recommended branch). Worktree `commodities-lng` on `feat/commodity-lng`, cut from `feat/commodities-shell` at `a7245f2`; dev server 4175. Next: milestone 1 (bundle: GEM Sept 2025 terminals, EIA 2026-Q2 train table, DOE cargoes to Jun 2026, GIIGNL 2025 matrix, `searoute-ts` routes). Merges into `feat/commodities-shell`; `commodities` moves with row 1 m2 |
 | 11  | Gas production facilities: Gulf platforms (BSEE) first | layers + content (shell worktree, `feat/commodities-shell`) | **BUILT (first slice) 2026-09-21** — PRD §13 from the founder's pivot and grill; on `feat/commodities-shell` (founder's instruction: every update on the shell branch, no row worktree), token `2`. Milestone 1 `c6c92b2`: `scripts/build-gulf-platforms.mjs` + `src/data/local_data/bsee_gulf/` (1,315 installed structures, 120-month series, 608 KB gzip), the completeness rule and the one record shape. Milestone 2 `1e685f0`: marks sized by gas share and coloured by change against last year, three tiers, hover and selected cards, the panel line, `scripts/qa-gulf-platforms.mjs`. Milestone 3 `af342d1`: the dossier (ten-year chart, this-month ledger, identity, lifetime, sources) and the drawer chrome shared with the datacenters; QA 20 checks green (layer activation 755 ms apart from the bundle fetch, heap +50 MiB). Milestone 4 is the commit carrying this line. Four gates green at every commit. Next: milestone 5 (EIA regional backdrop, short grill first) |
 
 Definition of usable, pending founder confirmation of question 13: rows 1
@@ -363,6 +364,33 @@ panel. Ports outside the twenty: unchanged.
 
 **Acceptance.** PRD §9.4; headless check on Singapore (camera or satellite),
 Ras Tanura (satellite) and a port outside the twenty (no panel).
+
+### Row 10 — LNG terminals, tiered cards and sea-routed cargo arcs (FR-G10)
+
+**Layer.** `commodity-lng`, class `published`, one panel row `LNG · Terminals
+& Cargoes` with chips EXPORT, IMPORT, ROUTES. Liquefaction and regas
+terminals worldwide (GEM, Sept 2025; operating and under construction only),
+US export plants joined to the EIA quarterly train table and the DOE
+cargo-level export file; arcs in two grades, US terminal to country over the
+trailing twelve months (solid) and non-US country to country from the
+GIIGNL 2025 matrix (dashed, stamped annual). The struck EIA and NACEI
+terminal layers (R4.58) are never read; this row is the rebuilt LNG set row
+4 milestone 9 owed.
+
+**Draws.** Export markers sized by √Mtpa with ground rings, hollow while
+under construction; smaller import markers; one modelled shortest sea route
+per pair from `searoute-ts` precomputed at build (open and Red Sea-closed
+variants, the closed one from 2024-01), `PolylineArrow` for direction, width
+by volume, endpoints at each country's largest operating terminal, `via[]`
+chokepoints stored per route. Static; nothing animates.
+
+**Cards.** Label at global zoom, three-line card regional, dossier on click
+for US export plants (nameplate, trains, cargoes, utilization as arithmetic,
+24-month chart, Trains, Destinations, Shipping, Regulatory, Sources);
+GEM-grade card elsewhere; route cards name grade, period, distance and via.
+
+**Acceptance.** PRD §12.4; `scripts/qa-lng.mjs` and
+`.gev-logs/render-lng.mjs` per milestone in §12.8.
 
 ---
 
@@ -2951,6 +2979,350 @@ as render-weather.mjs, point it at http://localhost:4176/. If a render
 reports "Rendering has stopped" on the first load after adding modules,
 run it again. Ask me only when a decision is genuinely missing from §11.
 ```
+
+---
+
+## 12. Row 10 PRD — `commodity-lng`: LNG terminals, tiered cards and sea-routed cargo arcs (FR-G10)
+
+<!-- Mirror: Project Brain gods-eye-view/05-prd.md, last section. Keep both in sync via /prd. -->
+
+**Written:** 2026-09-21 · **Status:** decided in the 2026-09-21 grill (Q1 to
+Q13, every answer the recommended branch), build not started · **Mirror:**
+Project Brain `gods-eye-view/05-prd.md` · **Base:** cut from
+`feat/commodities-shell` at the commit the other session pushes today (the
+row 4 / row 8 landing), never earlier. Every source below was live-probed on
+2026-09-21; anything not decided in the grill is marked **assumption**.
+
+### 12.1 Summary
+
+One new layer, `commodity-lng` ("LNG · Terminals & Cargoes"), puts LNG
+liquefaction terminals on the globe with datacenter-depth cards, regas
+terminals as the other end of the trade, and sea-routed cargo arcs between
+them sized by volume and stamped with their period. US export facilities get
+the full dossier (train-level capacity, monthly cargoes, destinations,
+utilization); everything else gets a card that says what grade of data it
+carries. This is the rebuilt LNG set that row 4 milestone 9 owed, and the
+first sea-borne flow on the globe.
+
+### 12.2 Problem
+
+- The globe shows chokepoints and ports but nothing about **what** moves
+  through them. LNG is the one seaborne gas trade, the US is now the largest
+  exporter, and every free terminal layer in circulation labels Freeport,
+  Cameron and Golden Pass as **import** (struck in R4.58; the strike stands).
+- The founder wants to read three things off the map: where LNG is produced
+  (which plant, how big, how busy), where it goes (which country, which regas
+  terminal), and which straits and canals it passes on the way.
+- The free data exists but is split by grade: cargo-level monthly for US
+  origins (DOE), train-level capacity for US plants (EIA), operator and
+  capacity for the world (GEM), and only an annual country matrix for
+  non-US trade (GIIGNL). A layer that hides the seams would repeat the
+  inversion that stopped the LNG terminals layer; this one shows them.
+
+### 12.3 Target users
+
+- Jack, reading the physical globe beside the oracle console (R1).
+- An energy analyst asking of one plant: nameplate, trains in service and
+  building, cargoes in the last twelve months, utilization, top
+  destinations, and which source each number came from.
+
+### 12.4 Goals (verifiable)
+
+1. **Producers.** Every operating and under-construction liquefaction
+   terminal in GEM's Sept 2025 tracker is a marker with operator, capacity,
+   status and start year; the US ones carry EIA train-level capacity and
+   in-service dates. The unit test pins the count per status and asserts
+   zero US export terminals without a train table.
+2. **Flows.** Every US terminal-to-country pair with at least one cargo in
+   the trailing twelve months is a solid arc whose width is its MMcf, and
+   every non-US exporter-to-importer pair in the GIIGNL 2025 matrix is a
+   dashed arc whose width is its million tonnes. The QA script asserts both
+   counts and that the two grades are visually distinct (dash pattern).
+3. **Routes.** Every arc is a modelled sea route that never crosses land,
+   passes real chokepoints, and stores its `via` list; a Sabine Pass to
+   Japan route lists Panama on the open variant and Cape of Good Hope is
+   absent from it; a 2026 US to India pair draws the Red Sea-closed variant.
+   Asserted by unit tests on the bundle and by the QA script on the scene.
+4. **Cards.** A label at 7,000 km, a three-line card at 150 km, and on
+   click a dossier with four tiles, a 24-month chart and five sections for a
+   US export facility; a GEM-grade card for Ras Laffan that names GEM and
+   Sept 2025; a route card naming the grade, the period and the via list.
+   Asserted by the render check.
+5. **Honest and gated.** Every card and the panel meta line show the
+   source's own date, never the fetch time (R2, R3); `format`,
+   `check:boundaries`, `test` and `build` are green with the three count
+   pins moved; the attribution popover carries GEM (CC BY 4.0), DOE and EIA
+   (public domain), GIIGNL (cited) and Eurostat via searoute-ts (MIT).
+
+### 12.5 Non-goals
+
+- **Live LNG carrier positions.** Nothing keyless exists (AISStream needs a
+  key, MarineCadastre ends 2024, GFW and AISHub are gated). Row 2 owns live
+  hulls; Kpler, Vortexa, Spark and ICIS LNG Edge go in `UPGRADE.md`.
+- **Modelled cargo dots or animated dashes** (grill Q10). Arcs are static
+  with direction arrows. A cargo is a row in a card, not a guessed position.
+- **Proposed projects** (Q8). GEM tracks 1,207 LNG terminal projects; only
+  operating and under-construction get a marker.
+- **Splitting a country's volume across its terminals** (Q4). One arc per
+  pair to the largest operating terminal, labelled as such.
+- **Feedgas pipelines.** No join from a plant to row 4's network in v1; the
+  card names the state and the row 4 layer, nothing more.
+- **Editing the chokepoint or port layers** (Q13). The build computes the
+  `via` list now; surfacing "LNG through Hormuz" on the chokepoint card
+  waits for row 1 milestone 2, which owns that code.
+- **A month scrubber** (Q7). Trailing twelve months is the window; the
+  scrubber is a later milestone once the shell has one for any layer.
+- **Signals** (R11). Utilization is arithmetic on published numbers and is
+  labelled so.
+
+### 12.6 Requirements
+
+#### 12.6.1 Data and bundle (`src/data/local_data/lng/`)
+
+1. **Terminals** (`terminals.json`). One record per operating or
+   under-construction LNG terminal from the GEM Global Gas Infrastructure
+   Tracker, LNG terminals xlsx, **Sept 2025 release, CC BY 4.0** (download is
+   an email form with no account, so the xlsx is placed by hand under a
+   gitignored raw folder and the retrieval date recorded, as the Epoch
+   bundle does). Fields: `id, name, country, iso3, kind (export|import),
+   status (operating|construction), operator, owners[], capacityMtpa,
+   startYear, lat, lon, positionSource, source{name,release,license,
+   retrieved}`. GEM column names (Facility Type, Owner, Operator, Capacity
+   (Mtpa), Status, Start Year, Latitude, Longitude, Location accuracy) are
+   from prior use and are **asserted at build**, which fails on a rename.
+2. **US train table.** The EIA quarterly workbook
+   `U.S.liquefactioncapacity_2026_Q2.xlsx` (released 2026-06-30, next
+   3Q2026), sheet `Existing & Under Construction` (55 rows): project, train,
+   baseload and peak Bcf/d and Mtpa, status, in-service and commercial-start
+   dates, DOE-authorized quantity, FTA and non-FTA dockets. Joined to the
+   GEM record by a hand-kept `crosswalk.json` (GEM id, EIA project name, DOE
+   point-of-exit name, EIA API terminal code such as `YSPL`). The test
+   asserts every US export terminal resolves in all four columns.
+3. **US cargoes** (`cargoes.json`). From the DOE monthly file
+   `3. U.S. LNG Exports and Re-Exports Details (Jan 2016 - Jun 2026).xlsx`
+   on `energy.gov/hgeo/articles/natural-gas-imports-and-exports-monthly-2026`
+   (804 KB, Last-Modified 2026-08-24, no CORS, public domain). Sheet
+   `By Vessel and ISO Container`, 12,094 rows, of which 9,654 are
+   `Vessel` + `Exports`. Columns kept: departure date, terminal (Point of
+   Entry or Exit), country, tanker, volume MMcf, docket term, supplier. The
+   bundle carries (a) per-cargo rows for the trailing 24 months and (b) the
+   full monthly terminal-by-country aggregate since 2016. The script scrapes
+   the article page for the `3. ... Details` href because the filename
+   suffix (`_0`, `_1`) moves monthly, and fails loudly if no match.
+4. **Global matrix** (`matrix.json`). GIIGNL Annual Report 2026, public PDF,
+   page 11 "LNG Quantities (in MT) received in 2025": importer rows by ~24
+   exporter columns, world total 428 MT (Asia 271.0, China 67.0, Japan 65.9,
+   South Korea 48.7, India 25.3). Extracted once with a position-aware PDF
+   text pass (blank cells shift columns) into a CSV committed beside the
+   bundle with the PDF's sha256; the build asserts the row and column sums
+   against the report's printed totals. The members-only xlsx is the paid
+   upgrade; the Energy Institute workbook is the manual fallback (Cloudflare
+   blocks scripts; terms allow use with citation).
+5. **Routes** (`routes.json`). One LineString per drawn pair, computed at
+   build by `searoute-ts@2.3.0` (MIT, Eurostat 2025 marine network, explicit
+   Suez, Panama, Bab-el-Mandeb and Kiel restrictions, returns nautical
+   miles), **two variants per pair**: `open` and `redSeaClosed`
+   (Bab-el-Mandeb blocked, so Cape routing). Each variant stores distance,
+   `via[]` (chokepoints from the bundled gazetteer within 25 km of the
+   line), and the variant in use per period: `redSeaClosed` for periods from
+   2024-01 on any pair whose open route lists Bab-el-Mandeb, `open`
+   otherwise. Endpoints (Q4): the exporting terminal for US pairs, otherwise
+   the country's largest operating export terminal; and the importing
+   country's largest operating regas terminal, recorded as `endpointRule`.
+6. **Provenance.** `source.json` (per-input name, URL, release, licence,
+   retrieval date, sha256, row counts) and `README.md` (the refresh
+   procedure, including the two manual downloads) as the datacenters bundle
+   does. `vintage` is the DOE file's latest month; the panel meta reads
+   `Jul 2025 to Jun 2026 · DOE · 2-month lag`.
+7. **Build script.** `scripts/build-lng-bundle.mjs` (`npm run build:lng`)
+   downloads DOE and EIA, reads the GEM xlsx and the GIIGNL CSV from the raw
+   folder, runs searoute-ts, writes the five files, and prints a diff;
+   `--check` rebuilds in memory and exits non-zero unless byte-identical to
+   the committed bundle. Manifest counts are asserted so an upstream change
+   fails the build rather than moving the map.
+8. **Size gate, pre-committed.** Bundle under 8 MB uncompressed; routes
+   simplified to under 400 vertices each; activation under 900 ms and heap
+   growth under 60 MB on this box, measured by the QA script.
+
+#### 12.6.2 Layer (`src/layers/lng/`)
+
+9. **Modules**, on the datacenters pattern: portable `records.js`
+   (normalize, freeze, derive, formatters) and `source.js` (bundle fetch,
+   cached); Cesium-aware `model.js` (tiers, sizes, colours, overlay cards)
+   and `index.js` (entities, hover, click, chips, `getStats()`); `dossier.js`
+   with a pure `buildLngDossierModel`; `src/app/layers/lng.js` wiring.
+10. **Contract.** `freshnessClass: 'published'`; `getStats().asOf` and
+    `getStats().observation` from `createObservation` in
+    `src/layers/commodities/observation.js`, `observedAt` = the source's own
+    date per record; every `registerEntityContext` record carries
+    `properties.observation`. The hover service does not exist yet, so the
+    layer keeps its own hover highlight like datacenters and joins the row 1
+    retrofit list (R6 exception, recorded).
+11. **Export markers.** Pinned point (`HeightReference.NONE`, depth test
+    off) sized `8 + 0.9 × √Mtpa` px, clamped ground-polyline ring of
+    `3 km + 400 m × √Mtpa`; operating filled, under construction hollow with
+    the expected in-service year in the label. The horizon-occluder pass
+    from the chokepoints fix (`87dcf19`) is applied so far-side markers do
+    not paint through the planet.
+12. **Import markers.** Smaller pinned point in a second colour, no ring,
+    label only at regional tier and below.
+13. **Arcs.** One polyline per pair, `clampToGround`, `PolylineArrow`
+    material for direction, width 1.5 to 8 px by volume (log scale within
+    each grade), solid for the DOE grade and dashed for the GIIGNL grade,
+    drawn as one `GroundPolylinePrimitive` per grade if entity count costs
+    the activation gate.
+14. **Chips.** One panel row with chips `EXPORT`, `IMPORT`, `ROUTES`, all
+    on, through the panel's existing row-controls contract; persistence in
+    the layer-state string is an **assumption** to verify against the
+    options codec at milestone 3, otherwise session-only and the meta line
+    says so.
+15. **Tiers.** Above 2,500 km: labels for export terminals only,
+    `SABINE PASS · 30.0 Mtpa`. 300 to 2,500 km: three-line card (operator
+    and status; cargoes and MMcf over the window; top destination). Under
+    300 km: the plant card plus its train list, ending with the hint that the
+    marker opens the dossier.
+16. **Dossier** (US export facilities): kicker (rank by baseload, status),
+    title, four tiles (nameplate baseload Mtpa with Bcf/d; trains operating
+    and building; cargoes in the window; utilization = window MMcf ÷
+    baseload Bcf/d × 365 × 1,000, labelled arithmetic), an SVG chart of 24
+    monthly export bars with the baseload line, sections **Trains** (train,
+    baseload, peak, status, in-service), **Destinations** (top ten countries
+    with cargoes and MMcf), **Shipping** (distinct tankers, mean cargo
+    MMcf, cargoes per month), **Regulatory** (dockets, FTA and non-FTA
+    authorized quantities), **Sources**; buttons previous, fly to, zoom out,
+    next. Zero and null capacity must not throw (the row 8 dossier did).
+17. **Other cards.** Non-US export and every import terminal: name, country,
+    operator, capacity, status, start year, `GEM · Sept 2025`, and for
+    exporters their matrix row (top importers, MT); for importers their
+    inbound arcs. Route hover: origin, destination, period, volume, grade.
+    Route click: the same plus distance, via list, variant in use, and for
+    the DOE grade a twelve-month bar list.
+18. **Registration**, in the §2.2 order: `src/sources/reference.js`,
+    `src/app/constructCatalog.js`, `src/data/layerState.js` (first free
+    digit token; every letter but `v` is taken), `src/ui/layerPanel.js`
+    Commodities group label `LNG · Terminals & Cargoes`,
+    `scripts/package-boundaries.json` (three sections, inserted textually),
+    `scripts/format-scope.json` for each new test, `DATA_SOURCES.md`,
+    `src/data/dataCredits.js`, `docs/COMMODITIES.md`; the three count-pin
+    tests move by one. No voice enum change.
+19. **Checks.** Committed `scripts/qa-lng.mjs` on the `qa-gas-flows.mjs`
+    pattern (registers, enables, counts per chip, activation and heap gate,
+    a Sabine Pass click, no page errors, screenshots) and a gitignored
+    `.gev-logs/render-lng.mjs` for the three depths.
+
+### 12.7 Constraints & invariants
+
+- Product rules R1 to R13 in `docs/COMMODITIES-PLAN.md` §2.1, especially
+  R2 and R3 (own dates on every card), R11 (descriptive), R12 (free first,
+  keys server-side), R13 (additive; upstream untouched).
+- Engineering rules §2.2: file order, count pins, four gates, portable
+  modules, render check per layer, markers pinned not clamped.
+- R4.58 stands: the EIA `Lng_ImportExportTerminals_US_EIA` and NACEI layer 5
+  services are never read; GEM plus the EIA workbook replace them.
+- `20-decisions.md` 2026-09-21: `commodities` moves once, after row 1
+  milestone 2; this row merges into `feat/commodities-shell` and rides
+  (Q13/landing).
+- Ledger lock: the other session owns `feat/commodities-shell` until its
+  push lands; nothing is cut, staged or committed before that message.
+- Gotchas already paid for: ArcGIS page caps, clamped-ellipse outlines,
+  headless "Rendering has stopped" on first load after new modules (re-run),
+  new tests invisible to `npm run format` until listed in
+  `scripts/format-scope.json`, GPU-only render checks run alone.
+
+### 12.8 Milestones (smallest shippable first)
+
+0. **Claim and cut.** After the landing push: ledger row 10 CLAIMED and
+   this PRD as §12 in `docs/COMMODITIES-PLAN.md`, one commit on a new
+   worktree `~/commodities-lng`, branch `feat/commodity-lng`, dev server
+   4175. *Verify:* `git worktree list` shows the tree at the pushed base;
+   the ledger row names the worktree; no code touched, gates unaffected.
+1. **Bundle and records.** Raw inputs placed, build script, five bundle
+   files, `crosswalk.json`, `records.js`, `source.js`, tests. *Verify:*
+   `node scripts/build-lng-bundle.mjs --check` exits 0; `npm test` green
+   with pins for the count per kind and status, the DOE latest month
+   `2026-06`, zero unmapped DOE terminal names in the window, the GIIGNL
+   world total within 0.5 MT of 428, and three known routes within 5 % of
+   published distances (Sabine Pass to Tokyo Bay via Panama, via Cape;
+   Ras Laffan to Milford Haven via Suez).
+2. **Terminals on the globe.** Registration, markers, rings, tiers, plant
+   cards, credits. *Verify:* `scripts/qa-lng.mjs` passes registration,
+   counts, the label at 7,000 km and the three-line card at 150 km over
+   Sabine Pass; four gates green; count pins moved; attribution QA green.
+3. **Arcs and chips.** Routes drawn in both grades with arrows, chips,
+   hover highlight, route cards. *Verify:* QA asserts the route count per
+   grade, that toggling `ROUTES` removes them and restores them, that a
+   picked Sabine Pass to Japan arc's card lists Panama, that a 2026 pair to
+   India lists Cape of Good Hope, activation under 900 ms, heap under 60 MB.
+4. **Dossier.** Drawer for US export facilities. *Verify:* `dossier.test.mjs`
+   covers the model, the zero-capacity guard and the utilization
+   arithmetic; the render check clicks Sabine Pass and asserts four tiles,
+   24 bars and five sections; previous and next step through the nine US
+   plants in baseload order.
+5. **World.** Non-US exporters, importers, GEM-grade cards, dashed annual
+   arcs. *Verify:* Ras Laffan's card shows operator, Mtpa, status, start
+   year and `GEM · Sept 2025`; the Qatar to China arc is dashed and stamped
+   `annual 2025 · GIIGNL`; Sodegaura's card lists its inbound pairs.
+6. **Docs and landing.** `DATA_SOURCES.md`, `dataCredits.js`,
+   `docs/COMMODITIES.md` row, `UPGRADE.md` rows (AISStream, Kpler, Vortexa,
+   Spark, ICIS, GIIGNL xlsx, GEM GIS), ledger row 10 BUILT with the SHA,
+   merge into `feat/commodities-shell`, push origin and mirror. *Verify:*
+   four gates on the merge commit; `git log origin/feat/commodities-shell`
+   contains it; `/update-obsidian` run.
+7. **EIA refresh** (after row 4 milestone 1 lands the key path). Join the
+   293 `poe2` series `NGM_EPG0_ENG_Y{TERM}-N{CTRY}_MMCF` (CORS open, free
+   key, latest period 2026-06) through the server proxy so widths and the
+   meta stamp advance without a rebuild; the DOE bundle keeps the cargo
+   detail. *Verify:* with a key the meta line shows the API period; without
+   one the bundle stamp and a `bundle` note; a test pins the terminal-code
+   crosswalk.
+8. **Later, separate rows.** Chokepoint card line "LNG: n routes, x Mtpa
+   modelled" (row 1 milestone 2); month scrubber; LNG carriers as a chip on
+   row 2 once AISStream works (AIS ship type alone cannot identify an LNG
+   carrier; needs an IMO allowlist from the DOE tanker column).
+
+### 12.9 Risks & open questions
+
+- **GEM columns are unverified today** (form-gated download). → Milestone 1
+  asserts the schema; a rename is a build failure with the column named.
+- **Terminal name crosswalk is hand-kept** across GEM, EIA workbook, DOE
+  point-of-exit and EIA API codes. → The test asserts zero unmapped names in
+  the window; a new plant (Golden Pass ramping, 3 cargoes YTD) fails loudly.
+- **searoute-ts routes are shortest paths, not observed tracks.** Panama
+  draft limits and slot auctions are not modelled. → Every card says
+  "modelled shortest sea route"; the distance test catches gross errors;
+  `seaRouteAlternatives` is the hook for a later "second route" toggle.
+- **GIIGNL redistribution terms.** The public PDF is free to read; whether
+  a re-typed matrix may ship in a repo is unread. → Read the report's terms
+  at milestone 5; fallback is the Energy Institute workbook by manual
+  download with its citation line.
+- **Unit conversions.** Mtpa to Bcf/d is taken from the EIA workbook's own
+  paired columns per row; GEM-only terminals show Mtpa alone. → Recorded in
+  the bundle `assumptions`.
+- **Chip persistence** in the layer-state string. → Verify against the
+  options codec at milestone 3.
+- **Perf.** Roughly 300 US pairs and up to 200 global pairs; entities may
+  exceed the activation gate. → Fall back to one ground primitive per grade
+  as the gas layer does.
+- **Concurrency.** Two sessions share the clone; the landing push is in
+  flight. → Milestone 0 waits for the message; `git branch --show-current`
+  guards every commit.
+- **Open:** does searoute-ts run under Node 24 with its bundled network
+  offline (no CDN at build time)? Resolve at milestone 1 with a smoke run.
+- **Open:** whether the DOE monthly and the EIA `poe2` monthly totals agree
+  per terminal; if not, the dossier shows both with their names.
+
+### 12.10 Bootstrap from a fresh Claude Code session
+
+1. Wait for the landing push, then in `~/gods-eye-view`:
+   `git fetch origin && git worktree add ../commodities-lng -b feat/commodity-lng origin/feat/commodities-shell`.
+2. In `~/commodities-lng`: `npm ci`, then `npx vite --port 4175` in its own
+   window; 4173 stays with `commodities-shell`.
+3. Claim ledger row 10 and paste this PRD as §12 of
+   `docs/COMMODITIES-PLAN.md`; commit with the branch guard.
+4. Place the GEM xlsx and the GIIGNL CSV under the raw folder named in the
+   bundle `README.md`; run `node scripts/build-lng-bundle.mjs`.
+5. Work the milestones in order; each ends with the four gates and its
+   verify line above.
 
 ---
 

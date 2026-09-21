@@ -765,5 +765,15 @@
   "src/layers/production/bundledSource.test.mjs",
   "src/layers/production/model.test.mjs",
   "scripts/qa-gulf-platforms.mjs",
-  "src/layers/production/dossier.test.mjs"
+  "src/layers/production/dossier.test.mjs",
+  "scripts/extract-giignl-matrix.mjs",
+  "scripts/build-lng-bundle.mjs",
+  "scripts/lng/inputs.mjs",
+  "scripts/lng/terminals.mjs",
+  "scripts/lng/cargoes.mjs",
+  "scripts/lng/matrix.mjs",
+  "scripts/lng/endpoints.mjs",
+  "scripts/lng/routes.mjs",
+  "src/layers/lng/records.test.mjs",
+  "src/layers/lng/bundle.test.mjs"
 ]
