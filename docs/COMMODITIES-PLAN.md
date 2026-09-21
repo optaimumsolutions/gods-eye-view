@@ -32,6 +32,7 @@ owns layers. Re-check `git status` before every edit to a shared file.
 | 9   | Port dossier: camera + data panel, 20 ports   | layers + server + content (worktree `commodities-ports-dossier`) | OPEN — PRD §9 written 2026-09-17 from the grill (G1 to G6); not claimed; cut `feat/port-dossier` from `feat/commodities-shell` |
 | 10  | `commodity-lng`: LNG terminals, tiered cards, sea-routed cargo arcs | layers (worktree `commodities-lng`) | **BUILT 2026-09-21** — PRD §12 (mirror: Project Brain `05-prd.md`), milestones 0 to 6. Bundle `8b5c5b4` (`npm run build:lng`, `--check` byte-identical; 308 GEM terminals, EIA 2026-Q2 trains on 14 US plants, DOE cargoes through 2026-06, GIIGNL 2025 matrix 427.9 MT, 470 searoute-ts routes); layer, dossier, chips, docs in the commit carrying this line. `scripts/qa-lng.mjs` green (41 checks; activation 666 ms warm, heap +31 MiB); four gates green. Deviations in §12.11: GEM read from GEM's public tracker-map feed until the form-gated xlsx is placed (no operator column), via radius 40 km, chips session-only, EIA API codes null until milestone 7. Landed on `feat/commodities-shell` per the founder's 2026-09-21 rule. Next: milestone 7 (EIA `poe2` refresh once row 4 lands the key path) |
 | 11  | Gas production facilities: Gulf platforms (BSEE) first | layers + content (shell worktree, `feat/commodities-shell`) | **BUILT (first slice) 2026-09-21** — PRD §13 from the founder's pivot and grill; on `feat/commodities-shell` (founder's instruction: every update on the shell branch, no row worktree), token `2`. Milestone 1 `c6c92b2`: `scripts/build-gulf-platforms.mjs` + `src/data/local_data/bsee_gulf/` (1,315 installed structures, 120-month series, 608 KB gzip), the completeness rule and the one record shape. Milestone 2 `1e685f0`: marks sized by gas share and coloured by change against last year, three tiers, hover and selected cards, the panel line, `scripts/qa-gulf-platforms.mjs`. Milestone 3 `af342d1`: the dossier (ten-year chart, this-month ledger, identity, lifetime, sources) and the drawer chrome shared with the datacenters; QA 20 checks green (layer activation 755 ms apart from the bundle fetch, heap +50 MiB). Milestone 4 is the commit carrying this line. Four gates green at every commit. Next: milestone 5 (EIA regional backdrop, short grill first) |
+| 12  | Onshore production facilities: wells, leases and rigs, region by region | layers + content (shell worktree, `feat/commodities-shell`) | **CLAIMED (plan) 2026-09-21** — PRD §14 from the founder's direction the same day ("more important than the wells on the Gulf … region by region … lay out the entire plan first, do not build yet"); five live sweeps probed some twenty regulators plus the national and international sources (§14.4); eleven US regions ranked with their first slices (§14.5), one substrate, an international ladder after them; no code. Next: the founder settles O1 (where the history shards live) and confirms the order; then milestone 0/1 — the substrate with Williston (ND) |
 
 Definition of usable, pending founder confirmation of question 13: rows 1
 through 4. Rows 5 to 7 are context and content.
@@ -3667,3 +3668,578 @@ from the BSEE files archived in .gev-cache/bsee/ (re-download if absent);
 pin 2026-06 as the newest complete month; keep the bundle under 640 KB
 gzipped. Gates in order; commit on feat/commodities-shell, guarded by
 git branch --show-current; push origin and mirror."
+
+## 14. Row 12 PRD — Onshore production facilities: wells, leases and rigs, region by region (FR-G12)
+
+Written 2026-09-21 from the founder's direction the same day: "build out the
+same thing … for the on land rigs … this is more important than the wells on
+the Gulf … go region by region … each region can have its own immense data
+layer … lay out the entire plan first, do not build yet." Status: **PLAN.**
+Nothing is built; ledger row 12 is CLAIMED for the plan only. Building starts
+one region at a time on the founder's go, in the order of 14.5 unless the
+founder reorders it. The reading of "on land rigs" here is onshore production
+facilities — the wells and leases that produce, with drilling rigs and
+completions as the activity signals around them — because that is the thread
+row 11 started (real per-facility production, cards backed by filed numbers).
+
+### 14.1 Summary
+
+- A family of regional layers, `production-<region>`, one per producing basin
+  cluster (14.5): Appalachia, Permian, Haynesville, Anadarko, Eagle Ford,
+  Williston, Rockies, San Juan, Barnett, Alaska, California; then an
+  international ladder. Each draws every producing facility in its basin from
+  the state regulators' public bulk files — the well where the state reports
+  per well, the lease where it reports per lease (Texas oil), the LUW in
+  Louisiana, the PUN in Oklahoma — and gives each the card and balance sheet
+  the Gulf platforms have (§13): this month against last month and last year,
+  the trailing years, the lifetime.
+- One onshore substrate, built once with the first region (milestone 0/1):
+  the record shape extending row 11's, the location contract (id, datum,
+  surface hole), the completeness rule per source, the level-of-detail
+  contract for 10^4 to 10^5 facilities in one layer, the region bundle format
+  (facility index plus history shards), the builder framework
+  (`scripts/build-onshore.mjs --region <id>` with `--refresh`, `--replay`,
+  `--check`), a shared QA harness.
+- Two backdrops always on under the regions: EIA monthly production by state
+  and by play, drawn on EIA's own play and basin polygons; the rig count by
+  county (Baker Hughes, weekly). FracFocus completions of the last 90 days as
+  the "new gas coming" marks.
+- Every number on every surface is a filed number with its stamp (period,
+  source, cadence, lag); regions never mix cadences silently (Pennsylvania's
+  conventional wells are annual, Ohio's horizontals quarterly — the meta line
+  says so).
+- Regions are ranked in 14.5 by gas output × data quality × keyless-ness and
+  built one at a time, each to its own ladder of gate-clean commits and its
+  own QA script; `feat/commodities-shell` throughout (decision 2026-09-21).
+
+### 14.2 Problem
+
+- Row 11's Gulf platforms are ~2.6 Bcf/d. US gross withdrawals run ~125 Bcf/d
+  (marketed ~115, dry ~105; EIA-914 / STEO, 2026-06). The founder's question —
+  where the gas comes out of the ground, how much, changing how, by whom — is
+  an onshore question: Appalachia ~36 Bcf/d, Permian ~26 (gross, most of it
+  casinghead from oil wells), Haynesville ~16, Anadarko ~8, Eagle Ford ~7,
+  the Rockies ~6, the Bakken ~3.6. (Magnitudes approximate here; the builders
+  pin them from STEO Fig 43 and the state series.)
+- Roughly 900,000 active wells in the United States; the globe shows none.
+  The data is public and, for the big producers, monthly — but it sits with
+  some twenty regulators under twenty schemas, three datums, four cadences and
+  four reporting grains. The work is in the joins (production ↔ location),
+  the datums, the cadences and the completeness rules, not in the drawing.
+- What exists in the repo today is the substrate row 11 built for one region
+  (§13): the completeness rule, the record shape, the tiers, the cards, the
+  dossier chrome, the QA pattern and the activation gate. Row 12 generalises
+  it rather than starting over.
+
+### 14.3 Target user
+
+The row 11 operator, asking onshore questions: "Haynesville this month —
+which pads are up, which operators, against last year"; "what has the
+Permian's gas done in twelve months, county by county"; "who is drilling where
+right now" (rigs); "what comes on next" (completions). Descriptive, never a
+signal (R11 of the shell PRD).
+
+### 14.4 What the data actually is (probed 2026-09-21)
+
+Five sweeps probed the sources live on 2026-09-21 (Texas and the Gulf Coast
+states; the Mid-continent and Rockies; Appalachia and the Williston; the
+national backdrop with Alaska and California; international). VERIFIED means
+the URL answered and the payload or its listing was inspected; REPORTED means
+read about, not fetched; UNVERIFIED means neither.
+
+**Texas — Railroad Commission (RRC).** The bulk index
+`https://www.rrc.texas.gov/resource-center/research/data-sets-available-for-download/`
+is keyless and free (VERIFIED). Production is the **PDQ Dump**
+(`https://mft.rrc.texas.gov/link/1f5ddb8d-329a-4459-b7f8-177b4f5ee60d`): a
+3.40 GB zip dated 2026-08-27 (VERIFIED listing), >25 GB uncompressed, sixteen
+`}`-delimited `.dsv` tables with headers (schema in the 43-page PDQ Dump User
+Manual, VERIFIED), monthly on the last Saturday, 1993 to current, keyed by
+`OIL_GAS_CODE + DISTRICT_NO + LEASE_NO (+ GAS_WELL_NO)`: **oil is reported per
+lease, gas per gas-well id**; total gas = `LEASE_GAS_PROD_VOL` (gas wells) +
+`LEASE_CSGD_PROD_VOL` (casinghead from oil leases); no coordinates, no water,
+no days produced. Locations are the **county well shapefiles**
+(`https://mft.rrc.texas.gov/link/d551fb20-442e-4b67-84fa-ac3f23ecabb4`, 255
+zips `well001`–`well499` by RRC county code, refreshed twice weekly, all dated
+2026-09-21, 7.6 KB to 4.9 MB each, **NAD27** decimal degrees, API-keyed;
+VERIFIED). The join: `OG_WELL_COMPLETION` gives `API_COUNTY_CODE` +
+`API_UNIQUE_NO` per lease/well; prefix `42` to match the ten-digit API in the
+shapefiles. Gotcha: `mft.rrc.texas.gov/link/…` pages are public but
+JavaScript (GoAnywhere) — the underlying file endpoint must be captured once
+from a browser. Scale (REPORTED): ~35 Bcf/d gross, ~250,000 producing wells
+(~160,000 oil, ~90,000 gas). Public record, no formal licence.
+
+**Louisiana — SONRIS.** Rebuilt in October 2025 as an Oracle APEX app
+(`https://sonlite.dnr.state.la.us/ords/r/sonris_pub/sonris_public/home`,
+VERIFIED 200, content JavaScript-rendered). Production is per **LUW**
+(lease-unit-well code, one well or a unit) monthly (REPORTED); interactive
+reports export CSV; no bulk link was found (UNVERIFIED). The DOTD mirror of
+the wells (`https://maps.dotd.la.gov/ltrcserver/rest/services/LTRC_18_3GT/SONRIS/MapServer`)
+is keyless GeoJSON but frozen at April 2018 (VERIFIED, stale). Scale
+(REPORTED): ~10 Bcf/d, ~20,000 active wells, Haynesville dominant.
+
+**Arkansas.** The AOGC site 403s and `aogc2` is dead DNS; the state GIS
+office's wells layer (30,593 points, lat/lon, `TYPE`/`STATUS`/`PRODUCTION`
+flags, metadata 2017 with a 2026-03 data update REPORTED) is the keyless
+location path (VERIFIED metadata); production only as per-well XLS exports
+(REPORTED). ~1 Bcf/d, Fayetteville declining.
+
+**Mississippi, Alabama.** JavaScript apps, PDF production books, per-well
+pages, no bulk export (VERIFIED as such). Minor gas (~0.1 and ~0.25 Bcf/d).
+
+**North Dakota — DMR Oil & Gas Division.** The **Monthly Production Report**
+per-well workbook `https://www.dmr.nd.gov/oilgas/mpr/YYYY_MM.xlsx` (2026-06
+VERIFIED: 3.1 MB, sheet "Oil" 22,479 well × pool rows; columns `ReportDate`,
+`API_WELLNO`, `FileNo`, `Company`, `WellName`, `County`, `FieldName`, `Pool`,
+`Oil`, `Wtr`, `Days`, `Runs`, `Gas`, `GasSold`, `Flared`, **`Lat`, `Long`**),
+released about 45 days after month end; index `mprindex.asp` 2003–2026;
+Excel withheld for amended months (PDF canonical); confidential wells absent.
+The DMR ArcGIS wells service is **token-gated** (499; VERIFIED). No licence,
+state disclaimer. ~20,000 producing wells, ~3.5 Bcf/d, ~1.2 MMbbl/d.
+The cleanest single source found anywhere: one keyless file, coordinates and
+flaring inline, no join.
+
+**Pennsylvania — DEP.** Production report extracts
+(`https://greenport.pa.gov/ReportExtracts/OG/OilGasWellProdReport`, keyless
+HTML form with CSV export, VERIFIED): **unconventional wells monthly, newest
+Jul 2026** (~1.5–2 month lag); conventional wells **annual** (2025); history to
+1980; at most 13 periods per pull unless filtered by operator or permit
+(one request per period). Coordinates in the extract REPORTED; the sure join
+is `WELL_PERMIT_NUM` → PASDA "Oil Gas Locations – Conventional Unconventional"
+(monthly stamp `…2026_09.{zip,geojson,kmz}`, VERIFIED links). ~12–13,000
+producing unconventional, ~30,000 conventional reporters, ~20–21 Bcf/d.
+
+**West Virginia — DEP.** Annual per-well production 1985–2025 (`2025Production.xlsx`,
+VERIFIED link) and **H6A horizontal-well quarterly files, cumulative from Q1
+within each year** (newest 2026 Q1, VERIFIED pattern; difference the
+quarters); no coordinates (join API to the Well Location ZIP / Open Data
+Hub). ~2,500 horizontal + ~15,000 conventional, ~9 Bcf/d.
+
+**Ohio — ODNR.** Statewide wells shapefile refreshed every Saturday
+(`https://gis.ohiodnr.gov/geodata/Statewide/OGWells_statewide.zip`, VERIFIED
+via the ArcGIS item; 267k+ wells since 1860). Production: horizontals
+**quarterly**, verticals annual (Q1 2026 statewide 511 Bcf/quarter REPORTED)
+— the download URL is **unverified** after a site restructure (every
+`ohiodnr.gov` content page 404s to a fetcher). ~4,000 horizontal + ~40,000
+conventional, ~6 Bcf/d.
+
+**New York, Virginia, Kentucky, Michigan.** NY: Socrata wells with surface
+lat/lon (VERIFIED metadata) and annual production zips released ~July 1 after a
+six-month confidentiality (2025 posted 2026-07-01). VA: ASP.NET postback-only,
+State Plane VA South feet. KY: a first-rate monthly well shapefile with explicit
+redistribution rights (162,157 records, VERIFIED page) but production only per
+search page. MI: 403 / JavaScript. All ≤ 0.2 Bcf/d — location-only layers.
+
+**New Mexico — OCD.** Wells on ArcGIS REST
+(`https://gis.emnrd.nm.gov/arcgis/rest/services/OCDView/Wells_Public/FeatureServer/0`,
+keyless; 142,132 wells, 54,284 active — 25,274 gas, 24,948 oil, 2,621
+injection; lat/lon **NAD83**; spud, TVD/MD, pools, last production date;
+paginate at 6,000; VERIFIED counts). Production: the OCD anonymous FTP
+(`ftp://164.64.106.6/Public/OCD/OCD Interface v1.1/`, the hostname shown only
+as an image on the OCD page) — `volumes/wcproduction/wcproduction.zip`
+(**971 MB** XML dataset, `T_WC_VOL` = C-115 monthly volumes per well
+completion, files dated 2026-09-18/19, nightly refresh with a 45-day lag;
+VERIFIED listing) and `core/wellhistory/wellhistory.zip` (44 MB). C-115B
+venting and flaring per well-month sits on REST too. Gross withdrawals 2025
+≈ 11.4 Bcf/d (EIA) — the Delaware core and the San Juan. Hub disclaimer, no
+licence text.
+
+**Oklahoma — OCC / OTC.** Wells:
+`https://oklahoma.gov/content/dam/ok/en/occ/documents/og/ogdatafiles/rbdms-wells.csv`
+(keyless, nightly, 126.9 MB, 456,782 rows, 129,507 active — 68,996 oil,
+43,103 gas — `SH_LAT`/`SH_LON`, datum unstated; VERIFIED download) plus the
+completions workbook (spud, formation). **Production is not mappable
+keylessly:** OTC gross production is keyed by PUN inside the session-bound
+OkTAP app — no bulk file, bulk history only by a request form to OTC — the
+RBDMS file carries no PUN and no public PUN ↔ API crosswalk exists (vendors
+sell it). ≈ 7.9 Bcf/d.
+
+**Kansas — KGS.** `https://www.kgs.ku.edu/PRS/Ora_Archive/ks_wells.zip`
+(44 MB → 205 MB CSV, 519,568 wells, **NAD27**, updated 2026-09-11) and the
+lease masters with monthly **lease** production (`gas_leases_2020_present.zip`
+9.7 MB → 1.2 M rows; newest May 2026, ~3.5-month lag; wells and volume only —
+no water, no days; VERIFIED). Pre-1987 monthly history is IHS-licensed, no
+redistribution. ≈ 0.34 Bcf/d, Hugoton declining.
+
+**Colorado — ECMC.** `https://ecmc.state.co.us/documents/data/downloads/gis/WELLS_SHP.ZIP`
+(15.8 MB, daily, **NAD83 UTM 13N**, all statuses; VERIFIED; the site wants a
+browser User-Agent) and yearly production CSVs keyed by **receipt year**
+(`…/production/2025_prod_reports.zip` 13.6 MB → 157 MB, 759,328
+well-formation-month rows with days, gas, gas sales, flared/vented, water;
+no 2026 file yet, so the bulk lags 9–20 months and the current months exist
+only on COGIS web pages; VERIFIED). Metadata "no restrictions". ≈ 5.1 Bcf/d
+(DJ, Piceance).
+
+**Wyoming — WOGCC.** No verified keyless bulk: the Data Explorer is 404, the
+legacy ColdFusion site (`pipeline.wyo.gov`) is alive with per-well pages but
+no download menu was found, and WSGS's REST layer 12 is a raw well-header
+snapshot of 2025-01-03 (207,791 records; VERIFIED count). ≈ 3.3 Bcf/d
+(Pinedale/Jonah, Powder River). A browser session or a drop (R12.8).
+
+**Utah — DOGM.** `https://oilgas.ogm.utah.gov/pub/Database/Wells.zip`
+(2.3 MB, daily, 40,387 wells, 11,913 producing — 6,422 gas, 5,486 oil; 6,154
+on federal leases; **NAD83**; first production, horizontal flag, lease type)
+and `Production2025To2029.zip` (3 MB → 36 MB; per-well-formation monthly
+days, oil, gas, water; **newest 08/2026**, ~1–1.5-month lag; sibling zips
+back to 1984; VERIFIED). The cleanest of the seven. ≈ 0.93 Bcf/d (Uinta).
+
+**Montana — MBOGC.** Wells shapefile (`Wells.zip` 4.3 MB, 2026-09-17,
+VERIFIED) and a query-only Data Miner with CSV export per query — no bulk
+production dump. ≈ 0.14 Bcf/d.
+
+**Alaska — AOGCC.** Data Miner 4 (`http://aogweb.state.ak.us/DataMiner4/Forms/Production.aspx`,
+VERIFIED 200, plain http) answers well × month oil, gas and water per query
+with DataTables exports; the bulk page is DataDome-blocked (403). EIA's dnav
+carries Alaska gross withdrawals, repressuring and marketed production — the
+North Slope reinjects most of its gas. ~0.9 Bcf/d marketed.
+
+**California — CalGEM.** WellSTAR wells on ArcGIS REST and data.ca.gov
+(CC-BY, VERIFIED); the monthly per-well production bulk page is gone (404) and
+no bulk file was found (UNVERIFIED). Oil-heavy; ~0.4 Bcf/d.
+
+**National backdrop (all VERIFIED unless noted).** EIA API v2
+`natural-gas/prod/sum` (series `N9010{ST}2` gross, `N9050{ST}2` marketed,
+`N9070{ST}2` dry) and `petroleum/crd/crpdn` (`MCRFP{ST}2` kb/d): monthly,
+newest 2026-06 released 2026-08-31 (~2-month lag), `Access-Control-Allow-Origin:
+*`, `DEMO_KEY` works with a burst limit of 10 — register a free key for
+anything scheduled. Keyless dnav XLS (`NG_PROD_SUM_DC_NUS_MMCF_M.xls` 88 KB,
+`PET_CRD_CRPDN_ADC_MBBL_M.xls` 225 KB; no CORS header, read at build time).
+Play production: the Drilling Productivity Report is **frozen** (`dpr-data.xlsx`
+last modified 2024-05-13; standalone ended May 2024) — the current play and
+region series are the STEO figure workbooks `Fig43.xlsx` (dry shale gas by
+play, 97 KB, 2026-09-08), `Fig42.xlsx` (tight oil by play), `Fig44/45.xlsx`
+(gas and crude by the seven former DPR regions), keyed by sheet title because
+figure numbers shift between editions. Polygons: EIA ArcGIS
+`TightOil_ShaleGas_Plays_Lower48_EIA/FeatureServer/0` (50 plays, geoJSON, CORS,
+one query) and `SedimentaryBasins_US_EIA/FeatureServer/109` (JSON only), plus
+per-play boundary services of 2015–2018 vintage. Rigs: Baker Hughes weekly
+state/basin/county workbooks are free with attribution but **bot-protected**
+(403 to non-browsers; REPORTED contents) — a browser-saved weekly drop.
+FracFocus bulk: `https://www.fracfocusdata.org/digitaldownload/FracFocusCSV.zip`
+441 MB, rebuilt daily (2026-09-21), per-disclosure lat/lon with a `Projection`
+column (REPORTED fields), terms "may not be altered" — display as filed, link
+back, publish no derived layer. ONRR OGOR-B federal and Indian production:
+monthly by state/county (not lease), CC0 (catalog VERIFIED). USGS "Aggregated
+Oil & Gas Drilling and Production History" v1.1: 1-mile well-count and 2-mile
+production grids, public domain, frozen at 2022-09 (VERIFIED) — the only
+licence-clean national "where wells exist" backdrop; HIFLD's wells layer is
+gone from its portal (2025-08).
+
+**International (for the later ladder).** Canada: Petrinex public monthly
+volumetric extracts for Alberta and Saskatchewan
+(`https://www.petrinex.gov.ab.ca/publicdata/API/Files/{AB|SK}/Vol/{YYYY-MM}/CSV`,
+keyless GET, zip-in-zip CSV; SK 2026-06 = 39,718 wells; VERIFIED) with UWIs
+but no coordinates — join AER **ST37** (GeoDB 1.23 GB / SHP 532 MB, monthly;
+VERIFIED page) — under Crown copyright that allows non-commercial use with
+attribution and asks commercial users to "arrange first"; BC Energy Regulator
+per-well monthly `https://iris.bcogc.ca/download/prod_csv.zip` (123 MB,
+2026-09-01) + well index + a keyless surface-hole ArcGIS layer (VERIFIED).
+Argentina: Secretaría de Energía per-well monthly production (CC-BY-4.0,
+keyless, HTTP-only host, 200–330 MB yearly CSVs, rows through 2026-05) and a
+well-location CSV/SHP already in WGS84 with the same `idpozo` (VERIFIED) — the
+cleanest open package outside the US. Colombia: ANH field-month crude and gas
+on Socrata with inline lat/lon, CC BY-SA, tiny (VERIFIED). Brazil: ANP per-well
+monthly (mostly offshore; gov.br WAF; 2024+ only via an APEX export) with a
+coordinate master (VERIFIED header). Mexico: portals down or blocked. Norway
+(Sodir field-month, 2026-06) and the UK (NSTA PPRS polygons, layer 6, 2026-06)
+are offshore field-level, VERIFIED. Australia: no open per-well set (QLD
+aggregates; SA and NL are single-page apps). Not public anywhere: Russia, the
+Gulf states, China, most of Africa — GEM's Global Oil & Gas Extraction Tracker
+(6,481 active areas, CC BY 4.0, form-gated) is the field-level substitute.
+
+### 14.5 The regions — the sector split
+
+One layer per region; each region is one ladder (14.10). States feed more
+than one region (Texas five, New Mexico two, Louisiana two, Oklahoma two):
+one reader per state, sliced by district, county or basin into the regions'
+bundles.
+
+| # | Layer id | Basins / plays | States → sources (grain, cadence) | Facilities (approx.) | Gas (approx.) | First slice | Why this rank |
+|---|---|---|---|---|---|---|---|
+| 1 | `production-williston` | Bakken, Three Forks | ND MPR (well × pool, monthly, lat/long inline); MT wells shapefile + Data Miner per query | ~20,000 ND | ~3.6 Bcf/d, ~1.2 MMbbl/d | ND | The one verified end-to-end file: the substrate's first customer, proves 10^4 facilities before 10^5 |
+| 2 | `production-appalachia` | Marcellus, Utica | PA extracts (well: unconventional monthly Jul 2026, conventional annual) + PASDA locations; OH weekly wells ZIP + quarterly horizontals (URL to confirm); WV annual + H6A quarterly; NY annual | PA ~13,000 unconventional + ~30,000 conventional; OH ~4,000 + ~40,000; WV ~2,500 + ~15,000 | ~36 Bcf/d | PA unconventional | The largest gas region on earth, keyless monthly CSV for the wells that matter |
+| 3 | `production-permian` | Delaware, Midland, Central Basin Platform | TX PDQ districts 8, 8A, 7C (lease/gas-well, monthly) + county shapefiles; NM OCD REST wells (NAD83) + FTP C-115 monthly per completion (971 MB, 45-day lag) | TX ~90,000; NM ~54,000 active statewide (Lea, Eddy the core) | ~26 Bcf/d gross, ~6.5 MMbbl/d | TX districts 8/8A/7C (Reeves, Loving, Midland, Martin first), then NM Lea/Eddy | Biggest oil basin, second gas; the Texas reader built here serves rows 4, 5, 7 and 9 of this table; NM is fully keyless |
+| 4 | `production-haynesville` | Haynesville, Bossier | TX PDQ districts 5, 6 (Harrison, Panola, San Augustine, Shelby); LA SONRIS LUW (unverified export) | TX ~5,000 gas wells in the play; LA ~6,000 | ~16 Bcf/d | TX side | Pure gas; the LA half waits on the SONRIS export URL (O4) |
+| 5 | `production-eagle-ford` | Eagle Ford, Austin Chalk, Gulf Coast onshore | TX PDQ districts 1–4; south LA onshore; MS, AL | TX ~40,000 | ~7 Bcf/d, ~1.1 MMbbl/d | TX districts 1–4 | Same reader, third slice |
+| 6 | `production-rockies` | DJ-Niobrara, Piceance, Green River (Pinedale, Jonah), Powder River, Uinta | UT DOGM per-well monthly through 08/2026 (daily files); CO ECMC daily wells + receipt-year production CSVs (bulk lags 9–20 months; current months on web pages only); WY no verified bulk (2025-01 header snapshot; drop); MT per query | UT 11,913 producing; CO ~35,000; WY ~25,000 | ~9.4 Bcf/d gross 2025 (CO 5.1, WY 3.3, UT 0.9, MT 0.1) | UT, then CO | Two verified keyless states carry most of it; WY waits on a bulk path |
+| 7 | `production-anadarko` | Anadarko, SCOOP/STACK, Arkoma, Granite Wash, Hugoton, Fayetteville | OK OCC wells CSV (129,507 active, keyless) but OK volumes PUN-locked in OkTAP (request/drop, no public crosswalk); KS KGS lease monthly (May 2026); TX PDQ district 10; AR GIS wells + XLS production | OK ~129,000 active; KS ~130,000 (mostly stripper) | ~8.3 Bcf/d gross 2025 (OK 7.9, KS 0.3) + AR ~1 | OK wells as locations with the EIA state series; TX 10 and KS leases with volumes; OK volumes when a drop exists | The largest gas state here has no keyless production path — locations first, volumes by request |
+| 8 | `production-san-juan` | San Juan, Raton (CBM) | NM OCD (San Juan, Rio Arriba); CO ECMC (La Plata, Las Animas) | ~20,000 | ~2.5 Bcf/d, declining | NM | Small ladder on the NM and CO readers from rows 3 and 7 |
+| 9 | `production-barnett` | Barnett / Fort Worth Basin | TX PDQ districts 5, 7B, 9 | ~15,000 | ~2 Bcf/d | TX | Same reader, a week's ladder |
+| 10 | `production-alaska` | North Slope, Cook Inlet | AOGCC Data Miner (well × month, per query; bulk blocked) | ~3,000 | ~0.9 Bcf/d marketed (gross ~9, reinjected) | Cook Inlet + North Slope gross vs marketed | Gas is mostly reinjected; the gross/marketed story is the point |
+| 11 | `production-california` | San Joaquin, Los Angeles basins | CalGEM WellSTAR locations (CC-BY); production bulk unverified | ~30,000 | ~0.4 Bcf/d | locations + EIA state series | Oil basin; last of the US ladders |
+| — | location-only | NY, VA, KY, MI, AR, MS, AL | wells layers where keyless (NY Socrata, KY shapefile, AR GIS) | — | ≤ 0.2 Bcf/d each | — | Folded into their regions' late milestones as "wells exist here" marks with annual or no production |
+
+Backdrops (built once, milestone 9; drawn under every region): the EIA play
+polygons carrying STEO Fig 43 dry gas by play and Fig 42 tight oil, the state
+series (API v2 with a free key; dnav XLS fallback), the county rig count, the
+90-day FracFocus completions, the USGS 2022 well-density grid as the "wells
+exist here" wash where no region is loaded.
+
+International ladder (after the US regions; separate claims when reached):
+Canada WCSB (Montney, Duvernay, Deep Basin — Petrinex per-well monthly for
+AB/SK, BCER for BC; coordinates via ST37 and BC's surface-hole layer; the
+Crown-copyright non-commercial clause settled first), Argentina Neuquén /
+Vaca Muerta (per-well monthly + WGS84 locations, CC-BY-4.0), Colombia
+(field-level, Socrata); then an offshore field-level companion to row 11
+(Norway Sodir, UK NSTA, Brazil ANP); GEM GOGET as the world wash.
+
+### 14.6 Goals (verifiable)
+
+- **G1 Reconciliation.** Each region's current-month gas total is compared,
+  on the panel line and in every dossier's Sources section, with the EIA
+  series for the same month (state marketed / gross, play dry gas); the gap
+  is printed with its reason (gross at the wellhead vs marketed; annual
+  reporters excluded; confidential wells) and a committed check per region
+  asserts it stays inside the tolerance the region's builder records.
+- **G2 Fidelity.** Every number on a mark, card or dossier is a filed number
+  or a stated derivation (rate = volume ÷ days) with its stamp: period,
+  source, cadence class, lag. Nothing interpolated; a month not filed is a
+  gap.
+- **G3 Bytes.** `npm run build:onshore -- --region <id> --check` reproduces
+  the committed bundle bytes from `.gev-cache/onshore/`; the region index
+  ≤ 3 MB gzip; a history shard ≤ 64 KB gzip; committed data per region
+  ≤ 12 MB gzip unless O1 moves shards out of git.
+- **G4 Performance.** Layer activation ≤ 900 ms apart from the bundle fetch
+  (the row 11 split), heap growth ≤ 150 MiB, frame time ≤ 16 ms at the local
+  tier with 20,000 points in view, far side culled — measured by the region's
+  QA on a fresh dev server.
+- **G5 Coverage.** The panel's producing count equals the bundle's equals
+  the source's current-month rows, less the classes the meta line names
+  (confidential, unplaced, out of region, annual reporters).
+- **G6 Keyless and open.** Every source is a public file read at build time;
+  each is in `DATA_SOURCES.md` and the credits with its licence in
+  `source.json`; FracFocus is displayed as filed and linked, never altered;
+  Baker Hughes attributed; Petrinex's commercial clause resolved before any
+  Canadian bundle ships.
+
+### 14.7 Requirements (numbered R12.n)
+
+Substrate (milestone 0, shared by every region):
+
+- **R12.1 Facility grain and identity.** A facility is the finest unit its
+  source reports production for: a well (API-10/14, NDIC file number, PA
+  permit number, UWI), a lease (Texas oil: district + lease number), a gas
+  well id (Texas gas), a LUW (Louisiana), a PUN (Oklahoma, mapped to wells
+  where the completion list allows, else drawn at the unit). Pads are a
+  display grouping (surface holes within 50 m under one operator), never a
+  reporting unit; leases and units aggregate their wells in the dossier.
+- **R12.2 Location contract.** Surface-hole latitude/longitude converted to
+  WGS84 at build with a real transform (NAD27 → WGS84 moves tens of metres in
+  Texas; State Plane feet in Virginia; UTM in Arkansas and Louisiana; datum
+  unstated in North Dakota and Pennsylvania — assumed NAD83 and checked
+  against imagery); bottom hole and lateral where published, drawn at the
+  local tier; the datum and transform recorded per source in `source.json`;
+  a QA check places ten known pads per region on their imagery.
+- **R12.3 Production contract.** Monthly gas (Mcf), oil (bbl), water (bbl)
+  and days produced where filed; rates per calendar day and per producing
+  day both carried; row 11's completeness rule (rolling median with a floor
+  guard) with a per-source lookback chooses the current month per region;
+  annual and quarterly reporters contribute to lifetime and annual views and
+  are stamped by cadence — never folded into a monthly total silently;
+  cumulative quarterly files (WV H6A) differenced at build.
+- **R12.4 One record shape.** Extends row 11's (`current`, `prior`,
+  `lastYear`, `yoy`, `rank`, `declineFromPeakPct`, `observation`) with `grain`
+  (well/lease/unit), `kind` (horizontal/vertical/directional), `lateralFt`,
+  `formation`/`pool`, `firstProduction`, `status`, `pad`, `lease`/`unit`,
+  `operatorRank`, `cadence`, `flared` where filed (ND). Marks, cards, dossier,
+  panel line and analyst records all read this one shape (§13's rule).
+- **R12.5 Level-of-detail contract.** Global tier: one mark per region
+  (producing count, gas, yoy) on the EIA play silhouette. Regional tier
+  (< 2,500 km): county or field clusters — count and gas per month, sized and
+  coloured like row 11, ≤ 2,000 marks, the row 11 horizon pass at cluster
+  level. Local tier (< 300 km): pads, then wells, as a
+  `PointPrimitiveCollection` — not the Entity API, which row 11 measured at
+  ~0.45 ms per entity (100,000 entities would be 45 s) — labels for the top N
+  in view, hover card for any point, click → dossier; ≤ 20,000 points in
+  view by clipping to the viewport rectangle; laterals as polylines at
+  < 30 km.
+- **R12.6 Bundles.** Per region: `index.json` (facilities: location,
+  identity, current reading, yoy, rank; ≤ 3 MB gzip), `clusters.json`
+  (county/field aggregates, 120 months), `history/<shard>.json` (256 shards by
+  id hash; 120-month series for the shard's facilities; fetched on demand
+  when a dossier opens), `source.json` (files, sha256, rows, fetched,
+  licence, completeness table, transforms). Index and clusters under
+  `src/data/local_data/onshore/<region>/` as today; shards under
+  `public/data/onshore/<region>/history/` (copied verbatim, dynamic paths)
+  — or out of git per O1.
+- **R12.7 Builders.** `scripts/build-onshore.mjs --region <id>` runs the
+  state readers `scripts/onshore/<state>.mjs` a region needs (each downloads
+  or replays from `.gev-cache/onshore/<state>/`, stream-parses, emits a
+  normalised facility-month table and a location table), then assembles
+  (join, transform datums, completeness, clusters, shards, manifest);
+  `--check` reproduces bytes, `--refresh` pulls the newest files, `--replay`
+  reads the cache only. No reader loads a file over 200 MB into memory; the
+  Texas reader streams the 3.4 GB PDQ zip entry by entry with row 11's
+  `scripts/zip-entry.mjs`, keeping the trailing 120 cycle months for the
+  region's districts.
+- **R12.8 Browser-blocked sources.** Baker Hughes, AOGCC bulk, Michigan,
+  Mexico and any GoAnywhere endpoint that moves: a `drops/` convention — a
+  browser-saved file with URL, date and sha256 recorded in `source.json`;
+  the builder refuses to run a source without a fresh drop and the panel line
+  dates it ("RIGS AS OF 2026-09-12").
+- **R12.9 Backdrops.** EIA state series through API v2 with a registered free
+  key at build time (`DEMO_KEY` is for probes), dnav XLS as the fallback;
+  play and region series from the STEO workbooks keyed by sheet title; play
+  and basin polygons from the two EIA ArcGIS services; the county rig count
+  from the weekly drop; FracFocus jobs of the last 90 days as small marks
+  (as filed, linked); the USGS grid as a static wash. Each backdrop is its
+  own row control with its own stamp.
+- **R12.10 Cards and dossier.** Row 11's chrome (`src/layers/commodities/dossierChrome.js`)
+  and model pattern: tiles (gas with yoy, oil with BOE, wells or days,
+  depth or lateral), the ten-year chart with one point per filed month, the
+  this-month ledger against the prior month and last year, identity,
+  lifetime, sources with the reconciliation line, prev / fly / zoom out /
+  next; pad, lease and unit dossiers aggregate their facilities and list
+  them.
+- **R12.11 Panel.** One row per region in the Commodities group with its own
+  token; meta line `12,431 PRODUCING · 21.4 BCF/D · AS OF 2026-07 ·
+  UNCONVENTIONAL MONTHLY · CONVENTIONAL 2025 · AUG 38 % REPORTED · EIA
+  MARCELLUS 27.9 BCF/D`; legend by yoy class as row 11.
+- **R12.12 QA per region.** `scripts/qa-onshore-<region>.mjs` from a shared
+  harness: counts equal the bundle, far side zero, tiers switch, hover and
+  click resolve the top facility, dossier opens with one point per filed
+  month, activation split gate, heap, frame time, reconciliation, no page
+  errors; screenshots at three tiers.
+- **R12.13 Attribution and licence.** `DATA_SOURCES.md` and `dataCredits.js`
+  entries per source; licence text and any clause (FracFocus, Baker Hughes,
+  Petrinex) in `source.json` and honoured in the UI.
+- **R12.14 Invariants inherited.** Keyless first (R12 of the shell PRD),
+  descriptive never signals (R11), the observation contract stamps on every
+  surface, `feat/commodities-shell`, ledger claim before code, four gates per
+  commit, count pins, format scope, package boundaries (portable modules
+  never touch browser globals — `lookback`, not `window`).
+
+### 14.8 Non-goals
+
+- Paid data (Enverus, S&P, Wood Mackenzie, Rextag) and rig-level rig
+  locations (paid at Baker Hughes) — county counts only.
+- Real-time or SCADA readings; forecasts, type curves, decline modelling,
+  EUR — descriptive only.
+- Gathering and pipeline connections (row 4), processing plants (row 5),
+  emissions and satellite flaring (a later overlay), permits and DUC counts
+  beyond what FracFocus shows.
+- A national "every well at once" layer — the region is the unit, the
+  backdrop is the whole.
+- International regions inside this row — they are the ladder after the US
+  regions, each with its own claim.
+
+### 14.9 Constraints and invariants
+
+- §13.8 applies unchanged: keyless-first, build-time reads, descriptive
+  never signals, observation stamps, one worktree (`~/commodities-shell` on
+  `feat/commodities-shell`), ledger claim before code, four gates, the
+  activation gate split (layer apart from the bundle fetch; cold total
+  3,000 ms), count pins, format scope, package boundaries.
+- No region bundle exceeds G3 before O1 is settled; every reader streams;
+  no more than 2,000 entities per layer — the rest are primitives.
+- Regions never alter a filed number; a month not filed is a gap; cadences
+  never mix silently.
+- Texas is one reader sliced by district into five regions — never five
+  copies of the PDQ pipeline.
+
+### 14.10 Milestones (smallest shippable first; each region its own ladder)
+
+Each region ladder is four commits, gate-clean: **a** bundle + reconciliation
+(reader, assembler, `--check`, tests); **b** marks, tiers, panel, QA;
+**c** cards, dossier, history shards; **d** ledger, docs, credits.
+
+0. **Substrate** — `src/layers/onshore/{records,completeness,lod,shards,model}.js`,
+   `scripts/build-onshore.mjs`, `scripts/onshore/` reader contract, the QA
+   harness. Verify: unit tests; a synthetic 100,000-facility bundle renders
+   at the local tier inside G4 on a fresh server. Lands with milestone 1.
+1. **Williston (ND).** Verify: `npm run build:onshore -- --region williston
+   --check` reproduces bytes from the archived `2026_06.xlsx` (and the
+   trailing 120 months); the well count and gas equal the workbook's; the
+   panel line reconciles with EIA North Dakota marketed production; QA green.
+2. **Appalachia (PA unconventional first).** Verify: monthly extract for the
+   newest period reproduced; unconventional count and gas equal the extract;
+   reconciliation with EIA Pennsylvania and STEO Marcellus; OH and WV added as
+   their download URLs are confirmed (O5) and stamped by cadence.
+3. **Permian (TX districts 8/8A/7C).** Verify: the Texas reader streams the
+   PDQ zip and keeps only the cycle rows for the districts; gas = gas-well +
+   casinghead; leases drawn at the lease centroid with wells listed; NAD27
+   transform checked on ten pads; reconciliation with EIA Texas and STEO
+   Permian. The NM reader (REST wells + the FTP C-115 volumes, streamed) is
+   the ladder's second bundle commit; reconciliation with EIA New Mexico.
+4. **Haynesville (TX districts 5/6).** Verify as 3; LA joins when the SONRIS
+   export is confirmed in a browser session (O4).
+5. **Eagle Ford / Gulf Coast (TX districts 1–4).** Verify as 3.
+6. **Rockies (UT, CO, then WY, MT).** Verify per state as 1 (Utah's three
+   daily files first; Colorado's receipt-year files with the lag stated on
+   the meta line); reconciliation with EIA and STEO Niobrara.
+7. **Anadarko / Mid-continent (OK, KS, TX 10, AR).** Verify: Oklahoma wells
+   drawn from the OCC file with the EIA state series as their only volume
+   until an OTC drop exists (O6), and the meta line says so; Kansas leases
+   and TX district 10 with volumes; reconciliation with STEO Anadarko.
+8. **San Juan (NM, CO) and Barnett (TX 5/7B/9).** Small ladders on the
+   existing readers.
+9. **Backdrops.** EIA play/state series and polygons, rigs drop, FracFocus,
+   USGS wash. Verify: play polygons carry the STEO month; the rig drop's date
+   on the panel; FracFocus marks link to their disclosure.
+10. **Alaska and California; location-only states.**
+11. **International ladder** — Canada, Argentina, Colombia (per-well/field
+    monthly), then the offshore field-level companion (Norway, UK, Brazil),
+    then GEM GOGET as the world wash. Each claims its own ledger line.
+
+Before milestone 1 starts, the founder settles O1 (where shards live) and
+confirms the order above or reorders it.
+
+### 14.11 Risks and open questions
+
+- **O1 Repository weight (decide before milestone 1).** Twelve regions × up
+  to 12 MB gzip of history shards, refreshed monthly, would add ~1 GB a year
+  to `.git` (97 MB today; 16 MB of bundled data). Options: (a) commit index
+  and clusters only (≤ 3 MB gzip per region) and build shards at deploy from
+  the `.gev-cache` archives, reproducible by `--check`, the dossier degrading
+  to index-only when shards are absent; (b) an orphan `data` branch; (c) Git
+  LFS; (d) object storage with a manifest. Recommendation: (a).
+- **O2 Licences.** FracFocus "may not be altered" (display as filed); Baker
+  Hughes free with attribution (REPORTED — confirm the terms page from a
+  browser); Petrinex Crown copyright non-commercial (settle before Canada).
+- **O3 Texas automation.** The `mft.rrc.texas.gov/link/…` pages are
+  JavaScript; the file endpoint is captured once from a browser and recorded;
+  if it rotates monthly the drop convention (R12.8) applies.
+- **O4 Louisiana.** SONRIS is an APEX app since 2025-10; no bulk LUW export
+  verified; half of Haynesville waits on it.
+- **O5 Ohio and West Virginia.** Ohio's production download URL unverified
+  after the site restructure; WV's quarterly files are cumulative.
+- **O6 Oklahoma volumes.** OTC gross production is PUN-keyed inside a
+  session-bound app with no bulk file; bulk history only by a request form;
+  no public PUN ↔ API crosswalk. Oklahoma enters as locations with the EIA
+  state series, and its volumes only through a requested extract handled as
+  a drop (R12.8). Kansas is lease-grain with a 3.5-month lag and an IHS
+  clause on pre-1987 history.
+- **O7 Datums.** NAD27 Texas shapefiles, State Plane Virginia, UTM Arkansas /
+  Louisiana, unstated ND/PA/NY; proj4 at build; the ten-pad imagery check.
+- **O8 Reconciliation tolerance.** State filings are gross at the wellhead;
+  EIA marketed excludes reinjection, vented and flared; expect structural
+  gaps of −10 to −20 % in some states — recorded per region, never hidden.
+- **O9 Per-period exports** (PA 13-period cap, AK and KY per query): one
+  polite request per period, cached; never scripted against a login.
+- **O10 Confidential and tight-hole wells** (ND, TX, PA): absent from the
+  files, counted on the meta line as "not filed".
+- **Risk — the local tier at 20,000 points with labels and hover**: budget by
+  measurement in milestone 0 (a synthetic bundle), not by hope; the Entity
+  API is out for wells.
+- **Risk — the Texas PDQ dump** (3.4 GB monthly): a one-time monthly pull
+  archived in `.gev-cache/onshore/tx/`; the reader keeps ~1 % of it.
+
+### 14.12 Bootstrap from a fresh Claude Code session
+
+```text
+cd ~/commodities-shell && git branch --show-current   # feat/commodities-shell
+git pull --ff-only
+git status --porcelain                # another session may hold uncommitted docs; never stage what is not yours
+npm run doctor
+npx vite --port 4174 --strictPort --host 127.0.0.1   # a fresh server for timing gates
+claude
+```
+
+Prompt: "Row 12, milestones 0 and 1 (PRD §14): build the onshore substrate
+`src/layers/onshore/` and `scripts/build-onshore.mjs` with the North Dakota
+reader, from `https://www.dmr.nd.gov/oilgas/mpr/YYYY_MM.xlsx` archived in
+`.gev-cache/onshore/nd/` (trailing 120 months; re-download if absent); the
+completeness rule picks the current month; reconcile with EIA North Dakota;
+the index bundle under 3 MB gzipped; shards per O1's decision. Gates in
+order; commit on `feat/commodities-shell`, guarded by `git branch
+--show-current`; push origin and mirror; ledger row 12 milestone 1 BUILT with
+the SHA."
