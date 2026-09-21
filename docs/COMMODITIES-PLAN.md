@@ -3037,7 +3037,8 @@ operates them. Descriptive, never a signal (product rule R11).
 - **G2** Every number on a card carries the row-1 stamp with its lag; the
   "current" month is the completeness rule's output (R11.2) and the panel
   names the months still reporting.
-- **G3** The bundle is ≤ 600 KB gzipped and `npm run build:gulf-platforms`
+- **G3** The bundle is ≤ 640 KB gzipped (600 restated on 2026-09-21 when
+  BSEE's filed BOE joined the series) and `npm run build:gulf-platforms`
   reproduces the committed bytes from the archived raw files; `source.json`
   sha256 and byte counts are asserted by a test.
 - **G4** The four gates are green at every commit; the count-pinning tests
@@ -3052,7 +3053,9 @@ operates them. Descriptive, never a signal (product rule R11).
   `<complexId>-<structureNumber>`.
 - **R11.2** **Current month = newest complete month**: the latest month whose
   count of structures reporting any production is at least 90 % of the
-  median of the twelve preceding complete months. The bundle carries the
+  median of the twelve preceding months, that median being at least half
+  the median of the twelve before it (a bad season must not freeze the bar;
+  a dead tail must not lower it). The bundle carries the
   counts table for the trailing eight months; the panel prints the months
   still filling (`AS OF 2026-06 · JUL 48 % REPORTED · AUG 1 %`). Pinned by a
   test on the measured counts (348 / 331 / 159 / 2).
@@ -3135,7 +3138,7 @@ layer; never a bare `git stash`; the four gates at every commit
    the committed bytes from `.gev-cache/bsee/`; `completeness.test.mjs` pins
    2026-06 as the newest complete month from the measured counts;
    `records.test.mjs` proves the 120-month window, the lifetime summary and
-   the stamps; the bundle is ≤ 600 KB gzipped.
+   the stamps; the bundle is ≤ 640 KB gzipped.
 2. **Marks, tiers, panel.** Verify: the QA at global and regional — the
    producing count equals the bundle, idle installed structures draw grey,
    removed ones do not draw, activation under 900 ms, heap growth under
@@ -3163,9 +3166,21 @@ layer; never a bare `git stash`; the four gates at every commit
   names.
 - **"Current" is 60–90 days old.** → Said on every card and in the meta line;
   never hidden.
-- **Open:** BSEE's Pacific and Alaska regions (`REGION_CODE` G / P / Y) —
-  all rows in the file by default; the Pacific's few structures cost
-  nothing.
+- **Resolved 2026-09-21 — Gulf only.** The production file carries three
+  OCS regions but the structures file (and so every coordinate) is the
+  Gulf's: in 2026-06, Alaska's Northstar filed 547 MMcf/d gross (gas
+  reinjected counts as produced) and twelve Pacific platforms 25 MMcf/d,
+  none placeable. The bundle counts them by region (`counts.outOfRegion`)
+  and the Gulf's own unbundled gas by reason (removed / unplaced / absent
+  from the structures file — one structure, SS 63 #15, at 0.0 Bcf/d), so
+  the panel's Gulf total is honest without claiming the file's total.
+- **Learned the same day, and pinned by tests:** the first draft of the
+  completeness rule froze its baseline on the 2008 hurricane season and
+  named 2008-08 as current — the Gulf's reporter count has declined
+  structurally from ~1,800 to ~345 — hence the rolling median with a floor
+  guard in R11.2. And BSEE's filed BOE is not exactly oil + gas / 5.62
+  (47,571 filed where the convention gives 47,570), so BOE is carried as
+  filed and the convention only fills a blank.
 - **Open:** datum conversion — no by default (R11.12); revisit only if a
   mark visibly misses its platform in imagery.
 
@@ -3182,6 +3197,6 @@ claude
 Prompt: "Row 11, milestone 1 (PRD §13): write scripts/build-gulf-platforms.mjs
 and src/layers/production/{records,completeness,bundledSource}.js with tests,
 from the BSEE files archived in .gev-cache/bsee/ (re-download if absent);
-pin 2026-06 as the newest complete month; keep the bundle under 600 KB
+pin 2026-06 as the newest complete month; keep the bundle under 640 KB
 gzipped. Gates in order; commit on feat/commodities-shell, guarded by
 git branch --show-current; push origin and mirror."

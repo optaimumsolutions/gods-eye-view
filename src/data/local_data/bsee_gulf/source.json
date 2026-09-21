@@ -1,0 +1,103 @@
+{
+  "id": "bsee-gulf-platforms",
+  "name": "Gulf of Mexico OCS platform production, monthly per structure",
+  "category": "production",
+  "description": "Facility-level monthly production for the production-gulf-platforms layer: every installed OCS platform structure with coordinates, a trailing 120-month series and a lifetime summary. Current = the newest complete reporting month, by rule.",
+  "downloaded_at": "2026-09-21",
+  "license_note": "US Government public domain (BSEE, US Department of the Interior)",
+  "files": [
+    {
+      "path": "platforms.json",
+      "format": "JSON",
+      "structures": 1315,
+      "window_months": 120,
+      "sha256": "0a845ca976a781f31455ddb08249b8ebbe0dc766a91574334a24b9878174861f",
+      "bytes": 2683473,
+      "gzip_bytes": 607989
+    }
+  ],
+  "upstream": [
+    {
+      "url": "https://www.data.bsee.gov/Production/Files/ProdByPlatformRawData.zip",
+      "archive": "ProdByPlatformRawData.zip",
+      "entry": "ProdByPlatformRawData/mv_prod_by_platform_all.txt",
+      "entry_bytes": 218165545,
+      "entry_sha256": "fbbc052186140925a7c396a97ada40d7e1d793a91c7c3baa4a601ec3702c8024",
+      "rows": 1695490,
+      "hosted_by": "data.bsee.gov — Bureau of Safety and Environmental Enforcement, US Department of the Interior"
+    },
+    {
+      "url": "https://www.data.bsee.gov/Platform/Files/PlatStrucRawData.zip",
+      "archive": "PlatStrucRawData.zip",
+      "entry": "PlatStrucRawData/mv_platstruc_structures.txt",
+      "entry_bytes": 1517546,
+      "entry_sha256": "ccc37e8d75eff1786616919a3f90f3b65c9389e99c13d48fc454a744468fdfbb",
+      "rows": 7091,
+      "incidents_entry": "PlatStrucRawData/mv_platstruc_inccount.txt",
+      "incidents_sha256": "a92d2d5a7404c923fecedf31d29b5a1af3206baa9ea2ead71b28aed66ec683d8",
+      "hosted_by": "data.bsee.gov — Bureau of Safety and Environmental Enforcement, US Department of the Interior"
+    }
+  ],
+  "current_month": "2026-06",
+  "completeness": {
+    "rule": "newest month whose count of structures reporting any production is at least the threshold share of the median over the preceding lookback of months, that median being at least the floor share of the median over the lookback before it",
+    "threshold": 0.9,
+    "lookback": 12,
+    "floor": 0.5,
+    "medianReporters": 348,
+    "table": [
+      {
+        "month": "2026-08",
+        "reporters": 2,
+        "share": 0.006,
+        "complete": false
+      },
+      {
+        "month": "2026-07",
+        "reporters": 163,
+        "share": 0.468,
+        "complete": false
+      },
+      {
+        "month": "2026-06",
+        "reporters": 338,
+        "share": 0.971,
+        "complete": true
+      },
+      {
+        "month": "2026-05",
+        "reporters": 352,
+        "share": 1.011,
+        "complete": true
+      },
+      {
+        "month": "2026-04",
+        "reporters": 346,
+        "share": 0.994,
+        "complete": true
+      },
+      {
+        "month": "2026-03",
+        "reporters": 348,
+        "share": 1.003,
+        "complete": true
+      },
+      {
+        "month": "2026-02",
+        "reporters": 350,
+        "share": 1.014,
+        "complete": true
+      },
+      {
+        "month": "2026-01",
+        "reporters": 348,
+        "share": 1.019,
+        "complete": true
+      }
+    ]
+  },
+  "reproduce": {
+    "command": "npm run build:gulf-platforms",
+    "raw_archive": "Both zips are archived verbatim under .gev-cache/bsee/ (git-ignored); --replay rebuilds from them, --check diffs against the committed bytes."
+  }
+}

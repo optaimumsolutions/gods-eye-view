@@ -757,5 +757,10 @@
   "src/layers/gasFlows/records.test.mjs",
   "src/layers/gasFlows/bundledSource.test.mjs",
   "src/layers/gasFlows/model.test.mjs",
-  "scripts/qa-gas-flows.mjs"
+  "scripts/qa-gas-flows.mjs",
+  "scripts/zip-entry.mjs",
+  "scripts/build-gulf-platforms.mjs",
+  "src/layers/production/completeness.test.mjs",
+  "src/layers/production/records.test.mjs",
+  "src/layers/production/bundledSource.test.mjs"
 ]
