@@ -21,6 +21,7 @@ const PANEL_GROUPS = [
       'commodity-ports',
       'energy-datacenters',
       'commodity-gas-flows',
+      'production-gulf-platforms',
     ],
   },
   {
@@ -77,6 +78,9 @@ const PANEL_LABELS = {
   // a monthly total published ~80 days in arrears, and right now there is no
   // measure at all -- only the geometry it will eventually be drawn on.
   'commodity-gas-flows': 'Gas · Border Crossings (geometry)',
+  // Row 11: monthly production per platform structure as filed with BSEE;
+  // "current" is the newest complete reporting month, named on the row.
+  'production-gulf-platforms': 'Gas · Gulf Platforms (BSEE)',
 };
 
 function panelLabel(layer) {

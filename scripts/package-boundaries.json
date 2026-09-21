@@ -1831,12 +1831,18 @@
       "src/scenes/sharing.js",
       "src/ui/sceneSharing.js",
       "src/app/layers/gasFlows.js",
+      "src/app/layers/gulfPlatforms.js",
+      "src/layers/production/index.js",
+      "src/layers/production/model.js",
       "src/layers/gasFlows/index.js",
       "src/layers/gasFlows/model.js",
       "src/layers/gasFlows/bundledSource.js",
       "src/layers/gasFlows/records.js",
       "src/layers/gasFlows/coerce.js",
-      "src/layers/gasFlows/naceiCells.js"
+      "src/layers/gasFlows/naceiCells.js",
+      "src/layers/production/bundledSource.js",
+      "src/layers/production/records.js",
+      "src/layers/production/completeness.js"
     ],
     "external": [
       "@mapbox/vector-tile",
@@ -2252,12 +2258,18 @@
       "src/sources/featureSource.js",
       "src/sources/overpassRoads.js",
       "src/app/layers/gasFlows.js",
+      "src/app/layers/gulfPlatforms.js",
+      "src/layers/production/index.js",
+      "src/layers/production/model.js",
       "src/layers/gasFlows/index.js",
       "src/layers/gasFlows/model.js",
       "src/layers/gasFlows/bundledSource.js",
       "src/layers/gasFlows/records.js",
       "src/layers/gasFlows/coerce.js",
-      "src/layers/gasFlows/naceiCells.js"
+      "src/layers/gasFlows/naceiCells.js",
+      "src/layers/production/bundledSource.js",
+      "src/layers/production/records.js",
+      "src/layers/production/completeness.js"
     ],
     "external": [
       "cesium",
@@ -2567,7 +2579,10 @@
       "src/layers/gasFlows/bundledSource.js",
       "src/layers/gasFlows/records.js",
       "src/layers/gasFlows/coerce.js",
-      "src/layers/gasFlows/naceiCells.js"
+      "src/layers/gasFlows/naceiCells.js",
+      "src/layers/production/bundledSource.js",
+      "src/layers/production/records.js",
+      "src/layers/production/completeness.js"
     ],
     "external": []
   },

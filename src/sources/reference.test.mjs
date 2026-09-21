@@ -19,6 +19,7 @@ test('reference factories retain compatibility without starting acquisition or s
     'ports',
     'datacenters',
     'gasFlows',
+    'gulfPlatforms',
   ]);
   assert.notEqual(first.earthquakes, second.earthquakes);
   assert.notEqual(first.cables, second.cables);

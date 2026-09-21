@@ -238,6 +238,13 @@ export const DATA_CREDITS = [
       '(2017)',
   },
   {
+    key: 'gulf-platforms',
+    html:
+      'Gulf of Mexico platform production: ' +
+      '<a href="https://www.data.bsee.gov/" target="_blank" rel="noopener">BSEE, US Department of the Interior</a> ' +
+      '(production by platform and platform structures, US public domain)',
+  },
+  {
     key: 'dams',
     html:
       'Dams: ' +
