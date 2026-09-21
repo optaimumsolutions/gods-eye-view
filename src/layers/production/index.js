@@ -501,7 +501,11 @@ export function createGulfPlatformsLayer({
 
     async update() {
       if (!_enabled || !_dataSource) return false;
-      if (_snapshot) return false; // A static bundle: read once, then restyle only.
+      // A static bundle: read once, then restyle only. `true`, not `false`:
+      // the data manager treats a false update as a rejected enable and runs
+      // the disable cleanup, so a second enable used to leave the marks
+      // hidden (found by the onshore QA's disable/enable pass, 2026-09-21).
+      if (_snapshot) return true;
       _request?.abort();
       const request = new AbortController();
       _request = request;
