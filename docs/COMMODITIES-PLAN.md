@@ -24,12 +24,13 @@ owns layers. Re-check `git status` before every edit to a shared file.
 | 1   | Shell, observation contract, hover, class groups | shell (worktree `commodities-shell`) | CLAIMED 2026-09-17 — PRD §7; worktree `commodities-shell` on `feat/commodities-shell`; milestone 1 (observation contract) BUILT 2026-09-18, four gates green; next: milestone 2, retrofit 0a and 0b |
 | 2   | `commodity-tankers`                              | layers                               | BLOCKED — AISStream rejects the saved key; verify or rotate on the Account page, enter via POWER UP |
 | 3   | Weather forecast and overlays (`weather-forecast` first) | layers                               | **SPECCED 2026-09-21** — PRD §11 from the weather grill (W1 to W9): AIFS ENS via Open-Meteo at the six basins, two market regions and the Gulf, browser-direct, keyless, token `3`; six milestones (point layer → asset-card lines → WN2 challenger → AIFS field → truth overlays → beyond the US). Not claimed; cut `feat/weather-forecast` from `feat/commodities-shell`; needs no key |
-| 4   | `commodity-gas-flows`, gas cross-border crossings | layers                               | **BUILT (substrate) 2026-09-21** — PRD §10. Data layer `f665031`: `scripts/build-gas-bundle.mjs` + `src/data/local_data/eia_energy/` (32,892 features to 234 systems; 99 filings to 60 marks) and the `src/layers/gasFlows/` pure modules. Render layer `4919e03`: PENCIL pips and hairline, token `l`, GRID off by default after the milestone-5 gate breached (~500 MiB to draw; `scripts/qa-gas-flows.mjs` 18/18). Four gates green at every commit. Open: no UI chip calls `setNetworkEnabled` yet. Next: milestone 1 (EIA key) — everything else is blocked on it |
+| 4   | `commodity-gas-flows`, gas cross-border crossings | layers                               | **BUILT (substrate) 2026-09-21** — PRD §10. Data layer `f665031`: `scripts/build-gas-bundle.mjs` + `src/data/local_data/eia_energy/` (32,892 features to 234 systems; 99 filings to 60 marks) and the `src/layers/gasFlows/` pure modules. Render layer `4919e03`: PENCIL pips and hairline, token `l`, GRID off by default after the milestone-5 gate breached (~500 MiB to draw; `scripts/qa-gas-flows.mjs` 18/18). Four gates green at every commit. Open: no UI chip calls `setNetworkEnabled` yet. Volumes: decided 2026-09-21 to bundle EIA's keyless dnav monthly point-of-entry series (POE1 imports, POE2 exports, 1973 → 2026-06, verified) instead of waiting for an API key, which becomes the refresh path; milestone 1 is re-scoped accordingly and follows row 11's first slice |
 | 5   | News pinned to assets                            | layers + server                      | OPEN — needs the assets from row 4                                                                  |
 | 6   | Trade-flow arcs                                  | layers + server                      | OPEN                                                                                                |
 | 7   | Episode scene packs                              | content                              | OPEN — the only oracle bridge, offline and per episode                                              |
 | 8   | `energy-datacenters`, US power load, bundled   | layers (worktree `commodities-datacenters`) | **BUILT** — v1 (five sites) `4ab9c96` on `feat/energy-datacenters`, PRD §8; v2 cards `76a334e`/`8f758b3`; v3 `1ccf37f` (2026-09-21, on `feat/commodities-shell`): fifteen sites, live EIA-930 grid and Open-Meteo weather on the cards and dossier, `/api/epoch/` proxy (no consumer yet — the refresh script is still open) |
 | 9   | Port dossier: camera + data panel, 20 ports   | layers + server + content (worktree `commodities-ports-dossier`) | OPEN — PRD §9 written 2026-09-17 from the grill (G1 to G6); not claimed; cut `feat/port-dossier` from `feat/commodities-shell` |
+| 11  | Gas production facilities: Gulf platforms (BSEE) first | layers + content (shell worktree, `feat/commodities-shell`) | **CLAIMED 2026-09-21** — PRD §13 from the founder's pivot and grill; built in `~/commodities-shell` on `feat/commodities-shell` (founder's instruction: every update on the shell branch, no row worktree), token `2`; no code yet. Next: milestone 1 (bundle + records) |
 
 Definition of usable, pending founder confirmation of question 13: rows 1
 through 4. Rows 5 to 7 are context and content.
@@ -364,6 +365,18 @@ panel. Ports outside the twenty: unchanged.
 Ras Tanura (satellite) and a port outside the twenty (no panel).
 
 ---
+
+### Row 11 — Gas production facilities: Gulf platforms first (FR-G11)
+
+Real, published production per facility, stamped with its lag. First slice:
+every installed platform structure on the federal Outer Continental Shelf,
+from BSEE's public bulk files — monthly gas, oil, water, BOE and producing
+wells since 1957, coordinates, operator, water depth, incidents — drawn where
+it stands, sized by gas per day in the newest *complete* reporting month,
+coloured by change against the same month a year earlier, with a card and a
+dossier (ten-year chart, lifetime summary). EIA state and play series are the
+backdrop in a later milestone; North Dakota wells and Texas leases follow.
+PRD §13.
 
 ## 5. Non-goals
 
@@ -2938,3 +2951,237 @@ as render-weather.mjs, point it at http://localhost:4176/. If a render
 reports "Rendering has stopped" on the first load after adding modules,
 run it again. Ask me only when a decision is genuinely missing from §11.
 ```
+
+---
+
+## 13. Row 11 PRD — Gas production facilities: Gulf of Mexico platforms first (FR-G11)
+
+**Written:** 2026-09-21 · **Status:** current, claimed, no code · **Branch:**
+`feat/commodities-shell` in `~/commodities-shell` — the founder wants every
+update on the shell branch, so this row has no worktree of its own ·
+**Mirror:** Project Brain `gods-eye-view/05-prd.md` "Row 11 PRD (FR-G11)" ·
+**Provenance:** the founder's pivot on 2026-09-21 ("map gas production
+facilities with cards backed with real data … location, a visual card,
+production and balance sheet of historical and current production") and a
+three-question grill the same day; every source below live-probed
+2026-09-21.
+
+### 13.1 Summary
+
+A layer of gas production facilities whose cards carry real, published
+production — not capacity, not 2017 attributes. The first slice is every
+installed platform structure on the federal Outer Continental Shelf, from
+BSEE's public bulk files: monthly gas, oil, water, BOE and producing-well
+counts per structure since 1957, with coordinates, operator, water depth,
+install date and incidents of non-compliance. A platform is drawn where it
+stands, sized by its gas in the newest *complete* reporting month, coloured by
+its change against the same month a year earlier, and opens to a dossier with
+a ten-year chart and a lifetime summary. EIA's regional series (state and
+play, keyless) become the always-on backdrop in a later milestone; North
+Dakota wells and Texas leases are the next slices.
+
+### 13.2 Problem
+
+- The gas layer that landed on 2026-09-21 is a substrate: places without
+  numbers. The founder needs to evaluate production, not geometry.
+- Row 4 milestone 9 ("plants") would draw processing plants from 2017
+  capacity fields — exactly the static picture the founder rejected.
+- Free data for per-facility, current gas production is uneven: nothing is
+  real-time; regulators publish monthly with a one-to-three-month lag;
+  onshore processing throughput is not published at all. The one national
+  source with coordinates, history and monthly facility-level volumes in a
+  single download is BSEE.
+
+### 13.3 Target user
+
+The founder as analyst: which facilities produce how much gas now, how that
+compares with a year ago and with the facility's own history, and who
+operates them. Descriptive, never a signal (product rule R11).
+
+### 13.4 What the data actually is (probed 2026-09-21)
+
+- `https://www.data.bsee.gov/Production/Files/ProdByPlatformRawData.zip`
+  (20.8 MB zip → `mv_prod_by_platform_all.txt`, 218 MB, 1,695,490 rows): one
+  row per platform structure per month — `COMPLEX_ID_NUM`,
+  `STRUCTURE_NUMBER`, `AREA_CODE`, `BLOCK_NUMBER`, `LEASE_NUMBER`,
+  `STRUCTURE_NAME`, `INSTALL_DATE`, `REMOVAL_DATE`, `PF_OPERATOR`,
+  `PRODUCTION_DATE`, `PRODUCING_WELLS`, `BOPD`, `MCFPD`, `BOEPD`, `BWPD`,
+  `REGION_CODE`. 6,184 structures ever; production from 1957-01.
+- `https://www.data.bsee.gov/Platform/Files/PlatStrucRawData.zip` (1.8 MB):
+  `mv_platstruc_structures.txt`, 7,091 structures with `LATITUDE` /
+  `LONGITUDE` (7,083 filled), `WATER_DEPTH`, `STRUC_TYPE_CODE`,
+  `MAJ_STRUC_FLAG`, `INSTALL_DATE`, `REMOVAL_DATE`, `BUS_ASC_NAME` (operator),
+  `NAD_YEAR_CD`; 1,315 still installed. `mv_platstruc_inccount.txt`:
+  incidents of non-compliance per structure.
+- **Reporting is incomplete for the newest months.** Measured: 2026-05 348
+  structures with gas (2,570 MMcf/d); 2026-06 331 (2,603 MMcf/d); 2026-07
+  159 (1,270); 2026-08 2 (21). The newest month with rows is not the current
+  month.
+- Median producing history 136 months, maximum 846. In the partial 2026-08
+  file the two reporters are B (Helix) GC 237 at 12.1 MMcf/d and A (Brutus)
+  GC 158 at 8.8, both Talos, in 2,200–2,900 ft of water.
+- Licence: US Government public domain (BSEE, Department of the Interior).
+  No key and no CORS question: the bulk files are read at build time.
+- EIA backdrop (milestone 5), all keyless: dnav XLS gross withdrawals by
+  state `NG_PROD_SUM_A_EPG0_FGW_MMCF_M.xls` (169 KB) and marketed production
+  `…VGM…` (174 KB); the Drilling Productivity Report `dpr-data.xlsx`
+  (156 KB); API v2 `natural-gas/prod/sum` answers with `DEMO_KEY` (Texas
+  gross withdrawals 2026-06: 1,174,698 MMcf).
+
+### 13.5 Goals (verifiable)
+
+- **G1** Every structure with gas in the newest complete month is on the map
+  at its coordinates: `getStats().producing` equals the bundle's count, and
+  the committed QA clicks the top producer and screenshots a dossier with a
+  120-point chart.
+- **G2** Every number on a card carries the row-1 stamp with its lag; the
+  "current" month is the completeness rule's output (R11.2) and the panel
+  names the months still reporting.
+- **G3** The bundle is ≤ 600 KB gzipped and `npm run build:gulf-platforms`
+  reproduces the committed bytes from the archived raw files; `source.json`
+  sha256 and byte counts are asserted by a test.
+- **G4** The four gates are green at every commit; the count-pinning tests
+  move by one; `scripts/qa-gulf-platforms.mjs` passes — marks, tiers,
+  dossier, no page errors, activation under 900 ms against a fresh server.
+
+### 13.6 Requirements
+
+- **R11.1** Facility = platform **structure** (`COMPLEX_ID_NUM` +
+  `STRUCTURE_NUMBER`), because production is filed at that grain; a complex
+  with several structures draws several marks; the id is
+  `<complexId>-<structureNumber>`.
+- **R11.2** **Current month = newest complete month**: the latest month whose
+  count of structures reporting any production is at least 90 % of the
+  median of the twelve preceding complete months. The bundle carries the
+  counts table for the trailing eight months; the panel prints the months
+  still filling (`AS OF 2026-06 · JUL 48 % REPORTED · AUG 1 %`). Pinned by a
+  test on the measured counts (348 / 331 / 159 / 2).
+- **R11.3** Drawn: installed structures only (`REMOVAL_DATE` blank; 1,315).
+  Producing in the current month → an INK mark sized by √(MCF/d) between
+  4 and 22 px; installed with no gas this month → a 4 px hollow grey pip.
+  Removed structures are counted in the panel and never drawn.
+- **R11.4** Colour is the change against the same month a year earlier, in
+  classes and descriptive: up (> +10 %), flat, down (< −10 %), new (no
+  prior-year row), quiet (no production in either month). Never a trend
+  arrow, never a forecast.
+- **R11.5** Every reading is a `createObservation` with `observedAt` = the
+  production month's last day, `publishedAt` = the retrieval date, class
+  `published`; stamps read `as of 2026-06 · N d lag`.
+- **R11.6** Card (regional tier, hover and select): structure and complex
+  name, area/block, operator, water depth; **gas MCF/d** headline with its
+  YoY class; oil bbl/d, water bbl/d, BOE/d, producing wells; the stamp.
+- **R11.7** Dossier (click): Identity (structure, complex, lease, field, type,
+  installed, incidents of non-compliance); This month (all five quantities
+  against the prior month and the same month last year, as arithmetic);
+  Ten-year chart (gas headline, oil secondary, 120 monthly points, stamped);
+  Lifetime (first month, peak month and value, cumulative gas and oil,
+  months producing, decline from peak as a percentage); Sources (both BSEE
+  files, retrieval date, the completeness table).
+- **R11.8** Bundle `src/data/local_data/bsee_gulf/`: `platforms.json`
+  (installed structures with identity, coordinates, lifetime summary and the
+  trailing-120-month series for gas, oil, water, BOE and wells),
+  `source.json` (upstream file names and sizes, sha256 of the raw text,
+  retrieval date, newest complete month, counts table), `README.md`. Raw
+  zips archived under `.gev-cache/bsee/` (git-ignored). Build:
+  `scripts/build-gulf-platforms.mjs` as `npm run build:gulf-platforms`,
+  replayable from the archive with a streamed parse — the 218 MB text is
+  never held whole and never bundled.
+- **R11.9** Portable modules `src/layers/production/{records,completeness,bundledSource}.js`
+  import no Cesium; render in `src/layers/production/index.js`, model in
+  `model.js`, dossier in `dossier.js`, following the datacenters layer
+  (three tiers at the datacenters heights, overlay entries, context store,
+  fly-to on click).
+- **R11.10** Layer id `production-gulf-platforms`, token `2` (digits are
+  free; `1` is LNG, `3` weather; every letter is taken), panel group
+  Commodities, label `Gas · Gulf Platforms (BSEE)`; registered in
+  `constructCatalog`, `layerState`, `reference`, `layerPanel`, both
+  registries, `DATA_SOURCES.md` and `dataCredits.js` (BSEE, US public
+  domain).
+- **R11.11** Panel meta line
+  `331 PRODUCING · 2.6 BCF/D · AS OF 2026-06 · 1,315 INSTALLED · JUL 48 % REPORTED`;
+  legend: size = gas per day, colour = vs the same month last year.
+- **R11.12** Coordinates are used as published; `NAD_YEAR_CD` is recorded per
+  structure and shown in the dossier, not converted (the 27/83 datum shift
+  is tens of metres in the Gulf, below the mark's footprint).
+
+### 13.7 Non-goals
+
+- Real-time or daily production (no free source). Interstate pipeline
+  informational postings are the only near-real-time route — public under
+  FERC rules but spread over ~40 bulletin boards with no API — named here,
+  not attempted.
+- Onshore facilities in v1: North Dakota wells and Texas leases are
+  milestones 6 and 7 with their own addenda. Processing plants publish no
+  throughput and are not a facility layer.
+- Lease economics, ownership shares, royalties; incident details beyond the
+  count; forecasts, decline modelling, type curves.
+- Editing the row-4 layer: its border-crossing volumes are a separate,
+  already-decided change (the keyless dnav bundle, §0 row 4).
+
+### 13.8 Constraints and invariants
+
+Product rules R11 (descriptive, never signals) and R12 (keyless — satisfied
+at build time); the row-1 observation contract for every stamp; portable
+modules import no Cesium; this row builds on `feat/commodities-shell` by the
+founder's instruction (no row worktree) with the ledger claimed before code;
+the count-pinning tests move with the layer; both registries and
+the format scope in the same commit as the files; attribution lands with the
+layer; never a bare `git stash`; the four gates at every commit
+(`.gev-logs/gate-at.ps1` in the shell worktree proves one commit's tree).
+
+### 13.9 Milestones (smallest shippable first)
+
+1. **Bundle and records.** Verify: `npm run build:gulf-platforms` reproduces
+   the committed bytes from `.gev-cache/bsee/`; `completeness.test.mjs` pins
+   2026-06 as the newest complete month from the measured counts;
+   `records.test.mjs` proves the 120-month window, the lifetime summary and
+   the stamps; the bundle is ≤ 600 KB gzipped.
+2. **Marks, tiers, panel.** Verify: the QA at global and regional — the
+   producing count equals the bundle, idle installed structures draw grey,
+   removed ones do not draw, activation under 900 ms, heap growth under
+   100 MiB, no page errors.
+3. **Cards and dossier.** Verify: the QA hovers the top producer (card lines
+   match the bundle), clicks it (five dossier sections, 120-point chart,
+   lifetime block, sources) and screenshots all three tiers.
+4. **Ledger, docs, credits; push.** Verify: ledger row 11 BUILT with SHAs;
+   `DATA_SOURCES.md` and the credits footer name BSEE; the QA script is
+   committed.
+5. **EIA regional backdrop.** A short grill first, then state and play cards
+   — gross withdrawals, marketed production, DPR rigs and new-well
+   productivity, consumption by sector, storage, net trade: the state balance
+   sheet — on the keyless play polygons.
+6. **North Dakota wells** (DMR monthly per well, public CSV).
+7. **Texas leases** (RRC PDQ bulk plus the well shapefiles for coordinates).
+
+### 13.10 Risks and open questions
+
+- **Completeness drifts** (a month fills late, a file is re-cut). → R11.2's
+  rule plus a test on the counts table; the panel names the months still
+  filling.
+- **Structure vs complex identity** (several structures share a complex and
+  names repeat: "A", "B"). → One mark per structure; the card shows both
+  names.
+- **"Current" is 60–90 days old.** → Said on every card and in the meta line;
+  never hidden.
+- **Open:** BSEE's Pacific and Alaska regions (`REGION_CODE` G / P / Y) —
+  all rows in the file by default; the Pacific's few structures cost
+  nothing.
+- **Open:** datum conversion — no by default (R11.12); revisit only if a
+  mark visibly misses its platform in imagery.
+
+### 13.11 Bootstrap from a fresh Claude Code session
+
+```powershell
+cd C:\Users\jgewi\commodities-shell   # feat/commodities-shell — the founder wants every update here
+git status --porcelain                # another session may hold uncommitted docs; never stage what is not yours
+npm run doctor
+npx vite --port 4174 --strictPort --host 127.0.0.1   # 4173 is usually another session's long-lived server; timing gates need a fresh one
+claude
+```
+
+Prompt: "Row 11, milestone 1 (PRD §13): write scripts/build-gulf-platforms.mjs
+and src/layers/production/{records,completeness,bundledSource}.js with tests,
+from the BSEE files archived in .gev-cache/bsee/ (re-download if absent);
+pin 2026-06 as the newest complete month; keep the bundle under 600 KB
+gzipped. Gates in order; commit on feat/commodities-shell, guarded by
+git branch --show-current; push origin and mirror."
