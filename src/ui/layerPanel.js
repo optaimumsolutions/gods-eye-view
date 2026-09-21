@@ -16,7 +16,12 @@ const FEED_STATE_LABELS = Object.freeze({
 const PANEL_GROUPS = [
   {
     label: 'Commodities',
-    ids: ['commodity-chokepoints', 'commodity-ports', 'energy-datacenters'],
+    ids: [
+      'commodity-chokepoints',
+      'commodity-ports',
+      'energy-datacenters',
+      'commodity-gas-flows',
+    ],
   },
   {
     label: 'Movement',
@@ -68,6 +73,10 @@ const PANEL_LABELS = {
   'commodity-chokepoints': 'Chokepoints · Tanker Transits',
   'commodity-ports': 'Ports · Tanker Calls',
   'energy-datacenters': 'Data Centers · US Power',
+  // R4.54: "Flows" implies something continuous and current. The measure is
+  // a monthly total published ~80 days in arrears, and right now there is no
+  // measure at all -- only the geometry it will eventually be drawn on.
+  'commodity-gas-flows': 'Gas · Border Crossings (geometry)',
 };
 
 function panelLabel(layer) {

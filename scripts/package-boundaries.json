@@ -1829,7 +1829,14 @@
       "src/director/sharing/lifetime.js",
       "src/director/authoring.js",
       "src/scenes/sharing.js",
-      "src/ui/sceneSharing.js"
+      "src/ui/sceneSharing.js",
+      "src/app/layers/gasFlows.js",
+      "src/layers/gasFlows/index.js",
+      "src/layers/gasFlows/model.js",
+      "src/layers/gasFlows/bundledSource.js",
+      "src/layers/gasFlows/records.js",
+      "src/layers/gasFlows/coerce.js",
+      "src/layers/gasFlows/naceiCells.js"
     ],
     "external": [
       "@mapbox/vector-tile",
@@ -2243,7 +2250,14 @@
       "src/sources/overpassFeaturesRecords.js",
       "src/sources/overpassFeatures.js",
       "src/sources/featureSource.js",
-      "src/sources/overpassRoads.js"
+      "src/sources/overpassRoads.js",
+      "src/app/layers/gasFlows.js",
+      "src/layers/gasFlows/index.js",
+      "src/layers/gasFlows/model.js",
+      "src/layers/gasFlows/bundledSource.js",
+      "src/layers/gasFlows/records.js",
+      "src/layers/gasFlows/coerce.js",
+      "src/layers/gasFlows/naceiCells.js"
     ],
     "external": [
       "cesium",
@@ -2549,7 +2563,11 @@
       "src/layers/datacenters/live.js",
       "src/layers/datacenters/liveSource.js",
       "src/layers/earthquakes/records.js",
-      "src/layers/submarineCables/bundledSource.js"
+      "src/layers/submarineCables/bundledSource.js",
+      "src/layers/gasFlows/bundledSource.js",
+      "src/layers/gasFlows/records.js",
+      "src/layers/gasFlows/coerce.js",
+      "src/layers/gasFlows/naceiCells.js"
     ],
     "external": []
   },

@@ -229,6 +229,15 @@ export const DATA_CREDITS = [
       '(CC BY 4.0)',
   },
   {
+    key: 'gas-flows',
+    html:
+      'Gas border crossings (geometry only): pipelines from the ' +
+      '<a href="https://atlas.eia.gov/" target="_blank" rel="noopener">U.S. Energy Information Administration</a> ' +
+      '(public domain, January 2020); crossings from ' +
+      '<a href="https://geoappext.nrcan.gc.ca/arcgis/rest/services/NACEI/energy_infrastructure_of_north_america_en/MapServer" target="_blank" rel="noopener">NACEI, Natural Resources Canada</a> ' +
+      '(2017)',
+  },
+  {
     key: 'dams',
     html:
       'Dams: ' +

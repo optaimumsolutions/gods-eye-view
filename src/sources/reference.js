@@ -3,6 +3,7 @@ import { createBundledCableSource } from '../layers/submarineCables/bundledSourc
 import { createPortWatchChokepointSource } from '../layers/chokepoints/source.js';
 import { createPortWatchPortSource } from '../layers/ports/source.js';
 import { createBundledDatacenterSource } from '../layers/datacenters/source.js';
+import { createBundledGasSource } from '../layers/gasFlows/bundledSource.js';
 
 /** Construct the existing reference feeds independently of application setup. */
 export function createReferenceSources() {
@@ -12,5 +13,6 @@ export function createReferenceSources() {
     chokepoints: createPortWatchChokepointSource(),
     ports: createPortWatchPortSource(),
     datacenters: createBundledDatacenterSource(),
+    gasFlows: createBundledGasSource(),
   };
 }

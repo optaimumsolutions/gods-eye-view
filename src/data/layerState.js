@@ -335,6 +335,11 @@ export const LAYER_STATE_REGISTRY = Object.freeze([
     disposition: 'enabled-only',
   }),
   Object.freeze({
+    id: 'commodity-gas-flows',
+    token: 'l',
+    disposition: 'enabled-only',
+  }),
+  Object.freeze({
     id: 'commodity-ports',
     token: 'o',
     disposition: 'enabled-only',

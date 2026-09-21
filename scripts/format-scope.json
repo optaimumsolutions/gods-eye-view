@@ -755,5 +755,7 @@
   "src/layers/gasFlows/coerce.test.mjs",
   "src/layers/gasFlows/naceiCells.test.mjs",
   "src/layers/gasFlows/records.test.mjs",
-  "src/layers/gasFlows/bundledSource.test.mjs"
+  "src/layers/gasFlows/bundledSource.test.mjs",
+  "src/layers/gasFlows/model.test.mjs",
+  "scripts/qa-gas-flows.mjs"
 ]
