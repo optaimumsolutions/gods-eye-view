@@ -1,0 +1,44 @@
+{
+  "id": "eia-energy-gas",
+  "name": "US natural gas transmission network and North American border crossings",
+  "category": "infrastructure",
+  "description": "Bundled geometry for the commodity-gas-flows layer: EIA public-domain transmission linework and NACEI border-crossing points. Geometry only — every current number in this layer comes from EIA monthly filings at runtime, not from these files.",
+  "downloaded_at": "2026-09-18",
+  "license_note": "Both datasets are US and Canadian government public-domain / open-licence energy data. The pipeline linework is EIA public-domain data republished as an ArcGIS hosted VIEW owned by \"Federal_User_Community\" (org FiaPA4ga0iQKduv3, Esri's federal data community; item 9833ca6c8103490b8ad145a30f0522ee, created 2020-04-30, 3.6M+ views). Its item licenseInfo reads \"This work is licensed under the Esri Master License Agreement\" and its accessInformation credits EIA — an Esri MLA notice wrapped around public-domain federal data. It is a curated community host rather than EIA infrastructure, so the manifest counts below are asserted on every rebuild and a substitution fails loudly.",
+  "files": [
+    {
+      "path": "gas-network.json",
+      "url": "https://services2.arcgis.com/FiaPA4ga0iQKduv3/arcgis/rest/services/Natural_Gas_Interstate_and_Intrastate_Pipelines_1/FeatureServer/0",
+      "format": "JSON",
+      "feature_count": 32892,
+      "systems": 234,
+      "vintage": "2020-01",
+      "vintage_evidence": "shapefile NaturalGas_Pipelines_US_202001; .shp.xml CreaDate 20200427; zip Last-Modified 2020-04-27",
+      "vintage_claim_rejected": "the service advertises editingInfo.dataLastEditDate 2025-07-01, which is a re-upload stamp and is ignored here",
+      "hosted_by": "services2.arcgis.com/FiaPA4ga0iQKduv3 — ArcGIS hosted view, owner \"Federal_User_Community\" (Esri federal data community), not an eia.gov endpoint",
+      "coverage_hole": "This view serves only TYPEPIPE Interstate (17,996) and Intrastate (14,896) = 32,892. The source shapefile carries 32,961 records because it also holds 69 Gathering features, which the view filters out silently — a query for TYPEPIPE='Gathering' returns count 0. The 69-record gap is a dropped pipe class, not dropped geometry.",
+      "upstream_sha256": "61d2526f5d63deb4914983c72494fd640b9ca6c6fa24e683442bf49e096f3923",
+      "sha256": "6aad559f7b6e470d6576c75a23e625465958d4e3822a0e008cc75b48d1e046df",
+      "bytes": 3692381,
+      "gzip_bytes": 929642
+    },
+    {
+      "path": "gas-crossings.json",
+      "url": "https://geoappext.nrcan.gc.ca/arcgis/rest/services/NACEI/energy_infrastructure_of_north_america_en/MapServer/2",
+      "format": "JSON",
+      "feature_count": 99,
+      "crossings": 60,
+      "vintage": "2017",
+      "vintage_evidence": "Period field holds 2017 (71 records) and 201706 (28, the Canadian NEB/ONÉ filings); the NACEI FTP carries only 201606, 201701 and 201708",
+      "hosted_by": "geoappext.nrcan.gc.ca — Natural Resources Canada",
+      "upstream_sha256": "14e40d76cdf3392707ddabb483d6ec9b37af7db3c28a27228c46203e6e9ce648",
+      "sha256": "8a20a94571376576199953137760454044239103b6a74900402cc889e4f599c0",
+      "bytes": 70745,
+      "gzip_bytes": 9343
+    }
+  ],
+  "reproduce": {
+    "command": "npm run build:gas-pipelines",
+    "raw_archive": "Pages are archived verbatim under .gev-cache/ (git-ignored). Rebuild from an archive with --replay-network <dir> / --replay-crossings <dir>; upstream_sha256 is taken over the concatenated pages and recomputed on every run."
+  }
+}

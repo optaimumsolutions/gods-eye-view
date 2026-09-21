@@ -747,5 +747,13 @@
   "src/layers/datacenters/records.test.mjs",
   "src/layers/datacenters/live.test.mjs",
   "src/layers/datacenters/liveSource.test.mjs",
-  "src/layers/datacenters/dossier.test.mjs"
+  "src/layers/datacenters/dossier.test.mjs",
+  "scripts/arcgis-paging.mjs",
+  "scripts/build-gas-network.mjs",
+  "scripts/build-gas-crossings.mjs",
+  "scripts/build-gas-bundle.mjs",
+  "src/layers/gasFlows/coerce.test.mjs",
+  "src/layers/gasFlows/naceiCells.test.mjs",
+  "src/layers/gasFlows/records.test.mjs",
+  "src/layers/gasFlows/bundledSource.test.mjs"
 ]
