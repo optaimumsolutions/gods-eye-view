@@ -1,5 +1,8 @@
 import * as Cesium from 'cesium';
-import { createGulfPlatformsLayer } from '../../layers/production/index.js';
+import {
+  createGulfDossier,
+  createGulfPlatformsLayer,
+} from '../../layers/production/index.js';
 import { overlayHost } from './overlayHost.js';
 import {
   clearSelectedEntityContextForLayer,
@@ -9,12 +12,24 @@ import {
 } from '../../data/contextStore.js';
 
 /**
- * Wire the bundled Gulf platform records to the application overlay host and
- * context store. The dossier drawer arrives with row 11 milestone 3; until
- * then a click selects, shows the card and flies, and opens nothing.
+ * Wire the bundled Gulf platform records to the application overlay host,
+ * context store and the dossier drawer. The drawer's buttons call back into
+ * the layer, so the drawer never touches the camera or the store itself.
+ * Without a document (unit tests) the layer runs without a drawer.
  */
 export function createApplicationGulfPlatforms(options) {
-  return createGulfPlatformsLayer({
+  let layer = null;
+  const dossier =
+    typeof document !== 'undefined'
+      ? createGulfDossier({
+          document,
+          onClose: () => layer?.clearPlatform(),
+          onFlyTo: (row) => layer?.flyToPlatform(row?.id),
+          onZoomOut: (row) => layer?.zoomOutFromPlatform(row?.id),
+          onStep: (delta) => layer?.stepPlatform(delta),
+        })
+      : null;
+  layer = createGulfPlatformsLayer({
     overlayHost,
     context: {
       registerEntityContext,
@@ -22,9 +37,10 @@ export function createApplicationGulfPlatforms(options) {
       clearSelectedEntityContextForLayer,
       removeEntityContextsForLayer,
     },
-    dossier: null,
+    dossier,
     screenSpaceEventHandlerFactory: (canvas) =>
       new Cesium.ScreenSpaceEventHandler(canvas),
     ...options,
   });
+  return layer;
 }

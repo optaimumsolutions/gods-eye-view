@@ -26,6 +26,7 @@ export * from './model.js';
 export * from './records.js';
 export * from './completeness.js';
 export { createBundledGulfSource } from './bundledSource.js';
+export { buildGulfDossierModel, createGulfDossier } from './dossier.js';
 
 /** The bundle never changes at runtime; the poll is the manager's formality. */
 const UPDATE_INTERVAL_MS = 6 * 60 * 60_000;

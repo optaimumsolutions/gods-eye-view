@@ -764,5 +764,6 @@
   "src/layers/production/records.test.mjs",
   "src/layers/production/bundledSource.test.mjs",
   "src/layers/production/model.test.mjs",
-  "scripts/qa-gulf-platforms.mjs"
+  "scripts/qa-gulf-platforms.mjs",
+  "src/layers/production/dossier.test.mjs"
 ]
