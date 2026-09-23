@@ -1,9 +1,10 @@
 # PLAN — Commodities Globe: rules, features and layout for rows 1 to 8
 
-**Version:** 1.3 · **Date:** 2026-09-21 · **Status:** decisions locked in the
+**Version:** 1.4 · **Date:** 2026-09-23 · **Status:** decisions locked in the
 2026-09-17 grill; built so far — rows 0a, 0b, 1 (milestone 1), 4 (substrate)
 and 8 (v3), see the §0 ledger for commits; row 3 re-specced in the
-2026-09-21 weather grill (§11)
+2026-09-21 weather grill (§11); row 13 (hosting at commodities.optaimum.com)
+specced in the 2026-09-23 hosting grill (§15), which supersedes R1 and R7
 **Owner:** Jack Gewirz
 **Companions:** [`COMMODITIES.md`](COMMODITIES.md) (verified endpoints, source
 notes), [`../UPGRADE.md`](../UPGRADE.md) (paid enhancement per stream)
@@ -33,6 +34,7 @@ owns layers. Re-check `git status` before every edit to a shared file.
 | 10  | `commodity-lng`: LNG terminals, tiered cards, sea-routed cargo arcs | layers (worktree `commodities-lng`) | **BUILT 2026-09-21** — PRD §12 (mirror: Project Brain `05-prd.md`), milestones 0 to 6. Bundle `8b5c5b4` (`npm run build:lng`, `--check` byte-identical; 308 GEM terminals, EIA 2026-Q2 trains on 14 US plants, DOE cargoes through 2026-06, GIIGNL 2025 matrix 427.9 MT, 470 searoute-ts routes); layer, dossier, chips, docs in the commit carrying this line. `scripts/qa-lng.mjs` green (41 checks; activation 666 ms warm, heap +31 MiB); four gates green. Deviations in §12.11: GEM read from GEM's public tracker-map feed until the form-gated xlsx is placed (no operator column), via radius 40 km, chips session-only, EIA API codes null until milestone 7. Landed on `feat/commodities-shell` per the founder's 2026-09-21 rule. Next: milestone 7 (EIA `poe2` refresh once row 4 lands the key path) |
 | 11  | Gas production facilities: Gulf platforms (BSEE) first | layers + content (shell worktree, `feat/commodities-shell`) | **BUILT (first slice) 2026-09-21** — PRD §13 from the founder's pivot and grill; on `feat/commodities-shell` (founder's instruction: every update on the shell branch, no row worktree), token `2`. Milestone 1 `c6c92b2`: `scripts/build-gulf-platforms.mjs` + `src/data/local_data/bsee_gulf/` (1,315 installed structures, 120-month series, 608 KB gzip), the completeness rule and the one record shape. Milestone 2 `1e685f0`: marks sized by gas share and coloured by change against last year, three tiers, hover and selected cards, the panel line, `scripts/qa-gulf-platforms.mjs`. Milestone 3 `af342d1`: the dossier (ten-year chart, this-month ledger, identity, lifetime, sources) and the drawer chrome shared with the datacenters; QA 20 checks green (layer activation 755 ms apart from the bundle fetch, heap +50 MiB). Milestone 4 is the commit carrying this line. Four gates green at every commit. Next: milestone 5 (EIA regional backdrop, short grill first) |
 | 12  | Onshore production facilities: wells, leases and rigs, region by region | layers + content (shell worktree, `feat/commodities-shell`) | **BUILT (milestones 0 and 1, Williston) 2026-09-21** — PRD §14 from the founder's direction the same day; five live sweeps probed some twenty regulators (§14.4); eleven regions ranked (§14.5). The founder's "build out the basins one at a time" started the ladder in the §14.5 order with O1 taken as recommended (option a: index and clusters committed, history shards built from the archive, not committed). Milestone 1a `c4ec135`: `scripts/build-onshore.mjs` + `scripts/onshore/{nd,eia,regions}.mjs`, `src/layers/onshore/{records,shards,bundledSource}.js`, `src/data/local_data/onshore/williston/` (24,154 North Dakota wells over 120 months, 17,915 producing in 2026-07 at 3.30 Bcf/d and 1.17 MMbbl/d; 518 fields; index 2.5 MB gzip; `--check` byte-identical; 94 % of EIA gross withdrawals, 100 % of marketed). Milestones 1b and 1c `f66463a`: `production-williston` (token `4`) — region card at global, 518 field marks at regional, 24,154 well points (`PointPrimitiveCollection`, clipped to the view) at local, hover and selected cards, the dossier with the ten-year chart from an on-demand shard, `scripts/qa-onshore-williston.mjs` on the shared harness (32 checks: activation 659 ms apart from the 16 MB fetch, heap +35 MiB, layer frame cost 1.8 ms). `836c325` fixes the second enable of the rows 4 and 11 layers (found by this QA). Build notes §14.13. Next: region 2, Appalachia (PA unconventional) |
+| 13  | Hosted site: globe + console behind one login at `commodities.optaimum.com` | ops + shell + server (`feat/commodities-shell`; oracle twin FR-D17) | **CLAIMED 2026-09-23 — SPECCED** — PRD §15 from the founder's hosting grill (H1 to H17): VPS `globe.service` behind tunnel `oracle` + Access app `Commodities`, origin JWT check fail-closed, strip + console proxy in production, VPS-gated deploys, separate prod keys; invitees with founder parity and stamped trades (M2); oracle JSON routes on the globe (M3, supersedes R7); WebSocket event hub (M4); cutover of `oracle.optaimum.com` (M5). Not built. Next: M1 |
 
 Definition of usable, pending founder confirmation of question 13: rows 1
 through 4. Rows 5 to 7 are context and content.
@@ -60,14 +62,14 @@ provenance; change a rule by re-opening its question, not by drifting.
 
 | #   | Rule                                                                                                                                                                                                                                                                      | From     |
 | --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| R1  | Local host, one user, SaaS-shaped interface. No tenancy, billing or public deployment in v1. Free-tier and non-commercial sources are therefore legal; the swap list for a second user is `UPGRADE.md`.                                                                   | Q1, Q8   |
+| R1  | Local host, one user, SaaS-shaped interface. No tenancy, billing or public deployment in v1. Free-tier and non-commercial sources are therefore legal; the swap list for a second user is `UPGRADE.md`. **Superseded 2026-09-23 by §15 (H1, H4):** hosted privately on the VPS for the founder plus an allowlist; tenancy and billing stay out. | Q1, Q8   |
 | R2  | Every layer declares one **freshness class**: `live` (observation under 15 minutes old), `daily` (under 24 hours), `published` (older, including static reference datasets, whose "as of" is their vintage). All classes go on the map; none is hidden.                   | Q2       |
 | R3  | Every observation carries its own timestamps: `observedAt` (when the thing happened or was measured), `validAt` (forecasts only), `publishedAt` (when the source released it), `fetchedAt` (when we read it). Cards show the observation time, never only the fetch time. | Q2       |
 | R4  | Hover cards exist on **commodity layers only**. Upstream layers keep their click cards.                                                                                                                                                                                   | Q3       |
 | R5  | **Hover is the quick look**: name, observation timestamp with age, headline number. **Click is the full card**, as today. Hover stays silent while a tool or the cockpit owns the pointer, the same rule click follows.                                                   | Q6       |
 | R6  | The shared observation contract and hover service are built **before any further layer**, and rows 0a and 0b are retrofitted to it.                                                                                                                                       | Q5       |
-| R7  | The globe is **physical only**. Oracle prices, risk indices and briefs appear on their own pages, never on the map. The one bridge is row 7: dated episodes exported once each as scene packs.                                                                            | Q7       |
-| R8  | **This repo is the shell.** The Vite dev server proxies the console's pages under one origin; a shared navigation strip appears on every page. The console-side change (relative links plus the strip) gets its own ledger row in the oracle repo before anyone edits it. | Q9       |
+| R7  | The globe is **physical only**. Oracle prices, risk indices and briefs appear on their own pages, never on the map. The one bridge is row 7: dated episodes exported once each as scene packs. **Superseded 2026-09-23 by §15 (H6):** oracle store numbers appear on the globe through read-only routes, labelled as the oracle's; signals, briefs and theses stay off the map. | Q7       |
+| R8  | **This repo is the shell.** The Vite dev server proxies the console's pages under one origin; a shared navigation strip appears on every page. The console-side change (relative links plus the strip) gets its own ledger row in the oracle repo before anyone edits it. **Extended 2026-09-23 by §15 (H2):** the preview server carries the same proxy in production. | Q9       |
 | R9  | The layer panel shows freshness as **three class-named groups**: `Commodities · Live`, `Commodities · Daily`, `Commodities · Published`. Every row's meta line is its "as of" stamp.                                                                                      | Q11      |
 | R10 | Tankers are a **separate commodity layer** reading the same AIS snapshot; upstream Live Vessels is untouched. Enabling both draws tankers twice, and the panel says so.                                                                                                   | Q12      |
 | R11 | Descriptive, never signals. Cards show counts, deviations, percentiles and timestamps. No panel recommends anything. Matches the oracle's standing mission gate.                                                                                                          | standing |
@@ -409,8 +411,10 @@ PRD §13.
 
 ## 5. Non-goals
 
-- Tenancy, login, billing, public hosting. Recorded in `UPGRADE.md` for later.
-- Any oracle number on the globe page. Prices and briefs stay on their pages.
+- Tenancy, billing, public (login-free) hosting. Recorded in `UPGRADE.md` for
+  later. Private hosting behind one login is row 13 (§15).
+- Oracle signals, briefs or trade theses on the globe page. Store readings
+  may appear through the §15 routes (R7 superseded).
 - Editing upstream layer internals for hover, filters or styling.
 - Trade signals, alerts framed as entries or exits, recommendations.
 - Commodities beyond oil and gas until the four systems rows are usable.
@@ -424,7 +428,11 @@ PRD §13.
   rotate on the Account page, enter via POWER UP. Row 2 waits on it.
 - **Console proxy paths.** The console's root page maps to `/market`; confirm
   that the console's own absolute links can go relative without breaking its
-  60-second reload and 15-second log poll.
+  60-second reload and 15-second log poll. Checked 2026-09-23: the only
+  absolute page link that moves is `href="/"`; the fetches (`/ask`,
+  `/logs.json`, `/trade`, `/grill`, `/trade_close`) stay path-preserved (§15.7).
+- **Row 13 open items** are in §15.11 (long `/grill` streams through
+  Cloudflare, VPS load during gated deploys, the licence pass before invitees).
 - **Port cameras.** Which of the twenty ports publish a public still is
   unknown until the row 9 research pass; the satellite fallback keeps the
   panel complete either way.
@@ -4346,3 +4354,286 @@ What was built, and where it departs from the text above:
   grouping, laterals, county clusters as a tier (they are in the bundle and
   the analyst records only), the EIA play polygon under the region mark
   (milestone 9).
+
+---
+
+## 15. Row 13 PRD — Hosted commodities site: globe and console behind one login at commodities.optaimum.com (FR-G13)
+
+**Status:** SPECCED 2026-09-23 from the founder's hosting grill (H1 to H17
+below). Not built. Oracle-side twin: `optaimumsolutions/commodities`
+`PRD-market-console.md` ledger row FR-D17, which points here.
+
+### 15.1 The grill (2026-09-23), H1 to H17
+
+| #   | Question                          | Decision                                                                                                   | Rejected                                                                  |
+| --- | --------------------------------- | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| H1  | Where the globe runs              | The OVH VPS, as a second systemd service beside `console.service`, through the existing tunnel `oracle`   | Cloudflare Pages + Workers (17 Node providers to port, 25 MB file cap); another Node host |
+| H2  | Screen layout                     | One site, top nav strip: globe at `/`, console pages proxied at `/market`, `/gas`, `/weather`, `/trades`  | Split screen; strip plus docked pane; two subdomains                     |
+| H3  | Hostname strategy                 | A new hostname; `oracle.optaimum.com` keeps serving the console alone until the new site is proven       | Taking over `oracle.optaimum.com`; the apex (held by the dead `optaimum` tunnel) |
+| H4  | Audience                          | The founder plus a named allowlist of emails                                                               | Founder only; multi-tenant SaaS with sign-up and billing                  |
+| H5  | Invitee rights                    | **Parity with the founder**, including trade submit and close, chat, grill and voice                      | Read-only; chat without trades; trades hidden                             |
+| H6  | What feeds the globe              | The oracle store through a read-only API, beside each layer's own live feeds                              | Keep them separate (row 1 as planned); store plus model signals on the map |
+| H7  | Who serves that API               | Curated JSON routes in `tools/market_map.py`; the oracle owns the contract                                | Datasette on :8001 (raw schema, arbitrary SQL); Node reading SQLite directly |
+| H8  | Deploy path                       | A git checkout on the VPS, built there; laptop build caches copied up once                               | Build on the laptop and rsync; GitHub Actions over SSH                    |
+| H9  | Release gate                      | The four gates run on the VPS in a staging release; only a green release goes live                       | Laptop gates then tag; build-only                                          |
+| H10 | Provider keys                     | Separate production keys, Google key referrer-locked to the hostname, budget caps on each                 | Reusing the laptop `.env`; keyless first                                   |
+| H11 | Trade book with several users     | One shared book; every submit, close and grill stamped with the verified email                          | Per-user books; unstamped                                                  |
+| H12 | Origin trust                      | The globe server verifies the Cloudflare Access JWT on every request and fails closed                    | Trusting the email header; Access alone                                    |
+| H13 | Login                             | Email one-time PIN, 24-hour session, invitees as an Access group                                        | Google SSO; 1-week session                                                 |
+| H14 | Liveness and monitoring           | Founder: "eventually avoid the use of crons … websockets for events". Push now over a WebSocket hub; the ingest crons stay until phase 2 folds them into one scheduler daemon | A 5-minute health cron; external uptime checker; crons forever |
+| H15 | Browser on an update event        | Globe layers refresh in place; console pages show a "new data · refresh" pill                           | Auto-reloading console pages; badge only                                   |
+| H16 | First shippable slice             | Hosted shell, founder-only (M1), then invitees, then oracle data, then events                           | Invitees in the first launch; finish row 1 first                           |
+| H17 | Hostname                          | `commodities.optaimum.com`                                                                                 | `globe.optaimum.com`; `app.optaimum.com`                                   |
+
+### 15.2 Summary
+
+The globe and the Oil Oracle console become one private web product at
+`https://commodities.optaimum.com`. Both run on the VPS that already holds the
+canonical store; Cloudflare Tunnel publishes them and Cloudflare Access gates
+them, and the globe server re-checks every login itself. The globe shows the
+oracle's own numbers through curated read-only routes, and a WebSocket hub
+pushes "source updated" and health events to every open page.
+
+### 15.3 Problem
+
+- The globe runs only on the laptop (`npm run dev`), so it is invisible away
+  from the desk and to anyone else. The console is already hosted
+  (FR-D5, `oracle.optaimum.com`), so the two halves of the product live on
+  different machines and different URLs.
+- The globe cannot show the oracle's numbers: rule R7 kept them apart, and the
+  store lives on the VPS.
+- Freshness is polled: the console reloads every 60 seconds and polls logs
+  every 15; the planned strip polls `/logs.json` every 60. Nobody is told when
+  a feed stops.
+
+### 15.4 Target users
+
+- **The founder**, daily, on any device, as the operator of both halves.
+- **Invitees**: a short allowlist of teammates or pilot clients, by email,
+  with the founder's full rights (H5).
+
+### 15.5 Goals (verifiable)
+
+- **G13.1 One login, one origin.** After one Access login, the globe and all
+  five console pages load under `commodities.optaimum.com` with the strip; an
+  anonymous request to any path, including `/api/*` and the WebSocket
+  upgrade, gets the Access login redirect, never content.
+- **G13.2 Fail closed.** A request that reaches the globe server without a
+  valid Access JWT for this application's audience gets 403. Checked by
+  `curl http://127.0.0.1:<port>/` on the VPS, which must return 403.
+- **G13.3 Safe deploys.** A commit that fails any of the four gates never
+  goes live; rolling back to the previous release takes under one minute.
+- **G13.4 Attribution.** From M2 on, every trade submit, close and grill in
+  the store carries the verified email of the person who made it, and the
+  Slack page names them.
+- **G13.5 Same numbers.** From M3 on, a globe card fed by an oracle route
+  shows the same value and observation time as the console for that source.
+- **G13.6 Pushed freshness.** From M4 on, a completed ingest write reaches an
+  open browser as an event within 5 seconds; a stopped service or a missed
+  source heartbeat turns the strip STALE or OFFLINE and pages Slack once, and
+  pages again once on recovery.
+
+### 15.6 Non-goals
+
+- Sign-up, billing, tenancy, per-user trade books, per-user usage caps.
+- Replacing the ingest and backup crons: that is phase 2, its own PRD.
+- Porting the globe to Cloudflare Pages or Workers.
+- Model signals, briefs or trade theses drawn on the globe (H6 rejected).
+- A mobile layout beyond "loads and is usable".
+- Any public page without login.
+
+### 15.7 Requirements (R13.n)
+
+**Hosting (M1)**
+
+1. **Service.** `globe.service` (systemd) runs the production build with
+   `vite preview` from `/srv/gods-eye-view/current` on `127.0.0.1:8020` as a
+   dedicated system user `globe` that cannot read `~/oracle/.env`. Node 24 LTS
+   per `package.json` engines.
+2. **Preview config.** The preview server keeps every provider middleware
+   (they already register `configurePreviewServer`), sets `allowedHosts` to
+   include `commodities.optaimum.com` (today only `localhost`, `127.0.0.1`,
+   `.local`), and carries the row 1 proxy in `preview.proxy`: `/market` to
+   the console root, and `/gas`, `/weather`, `/trades`, `/ask`, `/grill`,
+   `/trade`, `/trade_close`, `/logs.json` path-preserved to
+   `127.0.0.1:8011`. With the console down, `/` still renders and proxied
+   routes answer a plain 502 page.
+3. **Strip.** Row 1 R11 pulled forward: fixed top strip on the globe and on
+   every console page, links GLOBE, MARKET, GAS, WEATHER, TRADES, CHAT, the
+   right end showing `mirror as of HH:MMZ · LIVE | STALE | OFFLINE`. Until M4
+   it polls `/logs.json` every 60 seconds.
+4. **Console side (FR-D17a).** Console links become relative to the proxy
+   (`href="/"` becomes `/market`; `/gas`, `/weather`, `/trades` stay),
+   `fetch('/ask' | '/logs.json' | '/trade' | '/grill' | '/trade_close')`
+   stay path-preserved, and each console page renders the strip. The console
+   still works unchanged at `oracle.optaimum.com`.
+5. **Tunnel and Access, in this order.** Create the Access application
+   `Commodities` for `commodities.optaimum.com` with policy `Founder`
+   (email one-time PIN, 24-hour session) **before** adding the public
+   hostname `commodities.optaimum.com` to tunnel `oracle`, pointing at
+   `http://localhost:8020`. Record the team domain and the application
+   audience (AUD) tag in the service's env file.
+6. **Origin check.** A new server module (outside upstream files, R13)
+   verifies `Cf-Access-Jwt-Assertion` on every HTTP request and on the
+   WebSocket upgrade: RS256 signature against
+   `https://<team>.cloudflareaccess.com/cdn-cgi/access/certs` (cached, re-fetched
+   on unknown `kid`), `aud` equal to the application tag, `exp` in the future.
+   Failure answers 403. It removes any inbound `X-Oracle-User` header and sets
+   `X-Oracle-User: <verified email>` on requests it proxies to the console.
+7. **Production keys.** `/etc/gods-eye-view/globe.env` (root-owned, mode 0640,
+   group `globe`) holds new Google Maps, Cesium ion and OpenAI keys. The Google
+   key is HTTP-referrer-restricted to `https://commodities.optaimum.com/*`;
+   each key has a budget alert and a hard cap. Laptop keys stay dev-only. Keys
+   baked into the bundle at build time are read from this file by the deploy
+   script, never committed.
+8. **Deploy.** `scripts/deploy-vps.sh <sha>` (new): fetch, check out `<sha>`
+   into `/srv/gods-eye-view/releases/<sha>`, `npm ci`, run `format:check`,
+   `check:boundaries`, `npm test` and `npm run build` under `nice`/`ionice`,
+   then atomically repoint the `current` symlink and restart the service.
+   Any failure leaves `current` untouched. Rollback repoints `current` to the
+   previous release. The live release is the `production` tag.
+9. **Bundles on the VPS.** The laptop's `.gev-cache/` inputs (ND archive, GEM,
+   GIIGNL, EIA extracts) are copied once to `/srv/gods-eye-view/cache` and
+   linked into each release so `npm run build:onshore -- --replay`,
+   `build:lng`, `build:gas-pipelines` and `build:gulf-platforms` run there.
+   Git-ignored shards (`public/data/onshore/<region>/history/`) are rebuilt
+   per release from that cache.
+
+**Invitees and attribution (M2)**
+
+10. **Access group.** An Access group `Commodities invitees` (emails) is added
+    to the `Commodities` application. `oracle.optaimum.com` stays
+    Founder-only until the M5 cutover.
+11. **Stamping.** askd adds `booked_by`, `closed_by` and `requested_by`
+    columns (trades, closes, grills) filled from `X-Oracle-User`. A request
+    that arrives with no `X-Oracle-User` came through `oracle.optaimum.com`,
+    whose policy admits only the founder, and is stamped with the founder's
+    email. The trade card shows the stamp; the Slack page names it.
+12. **Licence pass.** Before the first invitee, every source in
+    `DATA_SOURCES.md` and `UPGRADE.md` is marked allowed or not for viewing by
+    people other than the founder (R1 assumed one user). Sources that are not
+    allowed are switched off for the hosted build.
+
+**Oracle data on the globe (M3)**
+
+13. **Routes (FR-D17b).** `market_map.py` gains read-only JSON routes under
+    `/api/oracle/`: `freshness` (per source: last observed, last published,
+    expected cadence), `chokepoints` (transits by chokepoint and day),
+    `basins` (the weather basin readings), `gas-flows` (the natgas `move/*`
+    series). Each record carries the row 1 observation fields (`observedAt`,
+    `publishedAt`, `validAt` where a forecast). GET only; the routes open the
+    store read-only.
+14. **Proxy and layers.** The preview proxy forwards `/api/oracle/` to the
+    console. The chokepoint, gas-flow and weather layers read these routes
+    when present and label the source "Oil Oracle store" on their cards;
+    their existing live feeds stay as the fallback.
+
+**Events (M4)**
+
+15. **Hub.** A WebSocket endpoint `/api/events` on the globe server (same
+    origin, JWT-checked at upgrade) fans out JSON events:
+    `source.updated {source, observedAt, publishedAt, rows}`,
+    `health {component, state: live|stale|offline}`, and a 30-second
+    `heartbeat`. On connect it sends the current state of every source.
+16. **Publish side.** A second listener on `127.0.0.1:8021`, not routed by
+    the tunnel, accepts `POST /publish`. `ingest/refresh.py` posts one
+    `source.updated` after each source's successful write; `console.service`
+    and `askd.service` are probed from the hub itself.
+17. **Staleness.** The hub derives each source's deadline from its expected
+    cadence (the `freshness` route) plus grace. A missed deadline emits
+    `health stale`; the first transition each way pages Slack through a small
+    localhost endpoint on askd that reuses `refresh.slack()`, so the Slack
+    token stays in the oracle's env.
+18. **Browsers.** The strip switches from polling to the hub. Globe layers
+    tied to a source re-fetch and restyle in place with no camera change.
+    Console pages show a "new data · refresh" pill in the strip instead of
+    reloading, and drop their own 60-second reload while the hub is
+    connected.
+
+**Cutover (M5)**
+
+19. After seven clean days on the new site, `oracle.optaimum.com` redirects
+    (301) to `https://commodities.optaimum.com/market`, and the old Access
+    application is removed after the redirect is verified.
+
+### 15.8 Rules this row changes
+
+- **R1** (local host, one user, no public deployment): superseded for this
+  row. The product is hosted privately for the founder plus an allowlist.
+  Tenancy and billing remain out.
+- **R7** (no oracle number on the map): superseded by H6. Oracle numbers
+  appear on the globe through the §15.7 routes, labelled as the oracle's.
+  Model signals, briefs and theses stay off the map.
+- **R8** (the Vite dev server proxies the console): extended to the preview
+  server in production.
+- §5 non-goals "Tenancy, login, billing, public hosting" and "Any oracle
+  number on the globe page" narrow to "Tenancy, billing, public hosting" and
+  "Oracle signals or briefs on the globe page".
+
+### 15.9 Constraints and invariants
+
+- Everything lands on `feat/commodities-shell` with a ledger claim first;
+  commits are guarded by `git branch --show-current`; the four gates pass.
+- R13 additive: the JWT check, hub, strip and deploy script are new modules;
+  the only upstream-owned edits are `server/standalone/vite.config.js` and
+  `build/vite.js` for `allowedHosts` and `preview.proxy`.
+- Console-side changes go through the oracle ledger (FR-D17). The VPS
+  `~/oracle` is not a git checkout and is sometimes ahead of git: diff with
+  `--strip-trailing-cr` before any scp.
+- Never run ingest from the desk (oracle rule). The hub only listens.
+- Keys never in chat, never in git; the Access application exists before
+  its public hostname.
+- Gates and bundle builds must not overlap the daily (23:00Z) and slow
+  (02:00Z) refresh tiers.
+
+### 15.10 Milestones (smallest first, each with its check)
+
+- **M0 Claim.** Ledger row 13 here and FR-D17 in the oracle. *Check:* both
+  ledgers show the claim.
+- **M1 Hosted shell, founder only** (R13.1 to R13.9, FR-D17a). *Check:*
+  anonymous `curl -I https://commodities.optaimum.com/{,market,api/health}`
+  all redirect to the Access login; `curl http://127.0.0.1:8020/` on the VPS
+  returns 403; in the founder's browser the globe renders, every strip link
+  loads its console page, and the strip badge matches `/logs.json`; a
+  deliberately failing commit leaves `current` unchanged; rollback under one
+  minute.
+- **M2 Invitees and attribution** (R13.10 to R13.12). *Check:* one invitee
+  logs in with a PIN and books then closes a throwaway trade; both rows carry
+  their email; the Slack line names them; `oracle.optaimum.com` still
+  refuses them; the licence pass is committed.
+- **M3 Oracle data on the globe** (R13.13, R13.14, FR-D17b). *Check:* for
+  one chokepoint and one basin, the globe card and the console show the same
+  value and observation time; each route answers in under 500 ms.
+- **M4 Events** (R13.15 to R13.18, FR-D17c). *Check:* a fast-tier refresh
+  shows `source.updated` in an open browser within 5 seconds; stopping
+  `console.service` turns the strip OFFLINE and pages Slack once, and
+  starting it pages recovery once; no console page reloads itself while the
+  hub is connected.
+- **M5 Cutover** (R13.19). *Check:* `oracle.optaimum.com/gas` answers 301 to
+  `/gas` on the new host after login.
+- **Phase 2 (separate PRD).** One scheduler daemon replaces the fast, daily,
+  slow, brief and backup crons and emits the same events.
+
+### 15.11 Risks and open questions
+
+- **Parity (H5).** Any invitee can book or close trades that page Slack and
+  can start hour-long grills. Accepted by the founder; mitigated only by
+  stamping (R13.11). Revisit before the allowlist grows past a handful.
+- **Licences (R13.12).** Several sources were chosen under R1's one-user
+  assumption (TxDOT cameras, Petrinex, FracFocus, CCTV feeds). Resolved by
+  the M2 licence pass.
+- **Keys in the bundle.** Google and Cesium tokens ship to every browser.
+  Resolved by the referrer lock and caps (R13.7).
+- **Long streams through Cloudflare.** `/ask` and `/grill` can run up to an
+  hour. Cloudflare returns 524 if no response starts within 100 seconds.
+  Resolve by timing one grill through `oracle.optaimum.com` before M1 and
+  confirming headers flush immediately.
+- **VPS load.** Tests and builds share eight cores with ingest and Ollama.
+  Resolve by measuring one full gated deploy under `nice` in M1.
+- **One box.** The VPS is a single point of failure for both halves. The
+  store has daily backups; the globe is rebuildable from git plus the cache
+  copy. Accepted for now.
+- **Access details.** The team domain and AUD tag are read from the
+  Cloudflare dashboard at M1; the founder does the dashboard steps.
+- **Shared clone.** Other sessions build layers on this branch; the preview
+  config edit and strip must be claimed in §0 before editing.
