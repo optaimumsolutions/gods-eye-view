@@ -125,6 +125,8 @@ html.gev-strip-shift body {
   transform: translateZ(0);
 }
 html.gev-strip-flow body { margin-top: var(--gev-strip-height); }
+/* The console's chat drawer is pinned to the top of the window. */
+html.gev-strip-flow #chatbox { top: var(--gev-strip-height); height: calc(100% - var(--gev-strip-height)); }
 #gev-strip {
   position: fixed; top: 0; left: 0; right: 0; z-index: 2147483000;
   height: var(--gev-strip-height); box-sizing: border-box;
@@ -145,6 +147,22 @@ html.gev-strip-flow body { margin-top: var(--gev-strip-height); }
   #gev-strip .gev-fresh { display: none; }
 }
 `;
+
+/** The hash the CHAT link carries; on a console page it opens the chat drawer. */
+export const CHAT_HASH = '#ask';
+
+/**
+ * Open the console's chat drawer (`#chatbox`, toggled by `#chatbtn`) and
+ * focus its question box. Returns false on pages without one (the globe).
+ */
+export function openConsoleChat(doc = globalThis.document) {
+  const button = doc.getElementById('chatbtn');
+  if (!button) return false;
+  const box = doc.getElementById('chatbox');
+  if (!box || !box.classList.contains('open')) button.click();
+  doc.getElementById('chatq')?.focus();
+  return true;
+}
 
 /** Build and attach the strip. Idempotent; returns the element. */
 export function mountStrip(
@@ -186,6 +204,12 @@ export function mountStrip(
   nav.appendChild(fresh);
   // Outside <body>, so the shifted body cannot clip or move it.
   root.insertBefore(nav, doc.body);
+
+  const chatFromHash = () => {
+    if (loc?.hash === CHAT_HASH) openConsoleChat(doc);
+  };
+  chatFromHash();
+  globalThis.addEventListener?.('hashchange', chatFromHash);
 
   subscribeFreshness((freshness) => {
     fresh.dataset.state = freshness.state;

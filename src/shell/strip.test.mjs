@@ -7,6 +7,7 @@ import {
   formatFreshness,
   formatUtcClock,
   freshnessFromLogs,
+  openConsoleChat,
   subscribeFreshness,
 } from '../../public/gev-shell/strip.mjs';
 
@@ -156,4 +157,30 @@ test('subscribeFreshness polls /logs.json, reports failures as OFFLINE and stops
   assert.deepEqual(seen, ['live', 'offline', 'offline']);
   stop();
   assert.equal(cleared, true);
+});
+
+test('the CHAT link opens the console chat drawer once and focuses the question', () => {
+  const log = [];
+  const element = (id, open = false) => ({
+    classList: { contains: (name) => name === 'open' && open },
+    click: () => log.push(`click ${id}`),
+    focus: () => log.push(`focus ${id}`),
+  });
+  const page = (boxOpen) => ({
+    getElementById: (id) =>
+      ({
+        chatbtn: element('chatbtn'),
+        chatbox: element('chatbox', boxOpen),
+        chatq: element('chatq'),
+      })[id] ?? null,
+  });
+  assert.equal(openConsoleChat(page(false)), true);
+  assert.deepEqual(log.splice(0), ['click chatbtn', 'focus chatq']);
+  assert.equal(openConsoleChat(page(true)), true, 'already open: no toggle');
+  assert.deepEqual(log.splice(0), ['focus chatq']);
+  assert.equal(
+    openConsoleChat({ getElementById: () => null }),
+    false,
+    'the globe has no chat drawer',
+  );
 });
