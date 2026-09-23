@@ -34,7 +34,7 @@ owns layers. Re-check `git status` before every edit to a shared file.
 | 10  | `commodity-lng`: LNG terminals, tiered cards, sea-routed cargo arcs | layers (worktree `commodities-lng`) | **BUILT 2026-09-21** — PRD §12 (mirror: Project Brain `05-prd.md`), milestones 0 to 6. Bundle `8b5c5b4` (`npm run build:lng`, `--check` byte-identical; 308 GEM terminals, EIA 2026-Q2 trains on 14 US plants, DOE cargoes through 2026-06, GIIGNL 2025 matrix 427.9 MT, 470 searoute-ts routes); layer, dossier, chips, docs in the commit carrying this line. `scripts/qa-lng.mjs` green (41 checks; activation 666 ms warm, heap +31 MiB); four gates green. Deviations in §12.11: GEM read from GEM's public tracker-map feed until the form-gated xlsx is placed (no operator column), via radius 40 km, chips session-only, EIA API codes null until milestone 7. Landed on `feat/commodities-shell` per the founder's 2026-09-21 rule. Next: milestone 7 (EIA `poe2` refresh once row 4 lands the key path) |
 | 11  | Gas production facilities: Gulf platforms (BSEE) first | layers + content (shell worktree, `feat/commodities-shell`) | **BUILT (first slice) 2026-09-21** — PRD §13 from the founder's pivot and grill; on `feat/commodities-shell` (founder's instruction: every update on the shell branch, no row worktree), token `2`. Milestone 1 `c6c92b2`: `scripts/build-gulf-platforms.mjs` + `src/data/local_data/bsee_gulf/` (1,315 installed structures, 120-month series, 608 KB gzip), the completeness rule and the one record shape. Milestone 2 `1e685f0`: marks sized by gas share and coloured by change against last year, three tiers, hover and selected cards, the panel line, `scripts/qa-gulf-platforms.mjs`. Milestone 3 `af342d1`: the dossier (ten-year chart, this-month ledger, identity, lifetime, sources) and the drawer chrome shared with the datacenters; QA 20 checks green (layer activation 755 ms apart from the bundle fetch, heap +50 MiB). Milestone 4 is the commit carrying this line. Four gates green at every commit. Next: milestone 5 (EIA regional backdrop, short grill first) |
 | 12  | Onshore production facilities: wells, leases and rigs, region by region | layers + content (shell worktree, `feat/commodities-shell`) | **BUILT (milestones 0 and 1, Williston) 2026-09-21** — PRD §14 from the founder's direction the same day; five live sweeps probed some twenty regulators (§14.4); eleven regions ranked (§14.5). The founder's "build out the basins one at a time" started the ladder in the §14.5 order with O1 taken as recommended (option a: index and clusters committed, history shards built from the archive, not committed). Milestone 1a `c4ec135`: `scripts/build-onshore.mjs` + `scripts/onshore/{nd,eia,regions}.mjs`, `src/layers/onshore/{records,shards,bundledSource}.js`, `src/data/local_data/onshore/williston/` (24,154 North Dakota wells over 120 months, 17,915 producing in 2026-07 at 3.30 Bcf/d and 1.17 MMbbl/d; 518 fields; index 2.5 MB gzip; `--check` byte-identical; 94 % of EIA gross withdrawals, 100 % of marketed). Milestones 1b and 1c `f66463a`: `production-williston` (token `4`) — region card at global, 518 field marks at regional, 24,154 well points (`PointPrimitiveCollection`, clipped to the view) at local, hover and selected cards, the dossier with the ten-year chart from an on-demand shard, `scripts/qa-onshore-williston.mjs` on the shared harness (32 checks: activation 659 ms apart from the 16 MB fetch, heap +35 MiB, layer frame cost 1.8 ms). `836c325` fixes the second enable of the rows 4 and 11 layers (found by this QA). Build notes §14.13. Next: region 2, Appalachia (PA unconventional) |
-| 13  | Hosted site: globe + console behind one login at `commodities.optaimum.com` | ops + shell + server (`feat/commodities-shell`; oracle twin FR-D17) | **M1 IN PROGRESS 2026-09-23 (M1a laptop-only code claimed by this session: `server/hosting/`, `public/gev-shell/`, `deploy/`, `scripts/*-vps.sh`, `build/vite.js` allowedHosts, `server/standalone/vite.config.js` plugin list)**; PHASE 0 DONE — PRD §15 (grill H1–H17). Phase 0: row 12 gated and pushed with the row 11 clock-drift test fix `d1fdf22` (four gates green, 4,337 pass); VPS probed; long-stream first byte OK. System validation §15.13 found V1–V12: full env template (V2), Node 24 from NodeSource not apt (V4), 85 MB shards not the 950 MB cache (V5), `X-Oracle-Proxy-Key` for stamping (V6), **natgas ingest unscheduled on the VPS, so FR-N5 moves ahead of M3 and the gas route becomes `gas-storage`** (V7), cadence table + `ingest_log` hook (V8, V9), per-source grace (V10). Remaining work and revised next steps: §15.14 |
+| 13  | Hosted site: globe + console behind one login at `commodities.optaimum.com` | ops + shell + server (`feat/commodities-shell`; oracle twin FR-D17) | **M1 IN PROGRESS 2026-09-23 — M1a BUILT `9d61cd6`** (four gates green, 4,371 pass / 0 fail; access guard + console proxy + strip + deploy files, §15.15, `docs/HOSTING.md`). **Next: M1b** console FR-D17a (strip tag, `/market` link, header forwarding), then M1c VPS. PHASE 0 DONE — PRD §15 (grill H1–H17). Phase 0: row 12 gated and pushed with the row 11 clock-drift test fix `d1fdf22` (four gates green, 4,337 pass); VPS probed; long-stream first byte OK. System validation §15.13 found V1–V12: full env template (V2), Node 24 from NodeSource not apt (V4), 85 MB shards not the 950 MB cache (V5), `X-Oracle-Proxy-Key` for stamping (V6), **natgas ingest unscheduled on the VPS, so FR-N5 moves ahead of M3 and the gas route becomes `gas-storage`** (V7), cadence table + `ingest_log` hook (V8, V9), per-source grace (V10). Remaining work and revised next steps: §15.14 |
 
 Definition of usable, pending founder confirmation of question 13: rows 1
 through 4. Rows 5 to 7 are context and content.
@@ -4930,7 +4930,7 @@ Vite's own preview source, and the oracle code paths that row 13 touches.
 | ---- | --------------------------------------------------------------------------------------------------------- | ------------------------- | ------------- | ---------------------- |
 | 0    | Confirm the 13:53Z answer rendered in the browser (long-stream check)                                     | browser                   | M1 sign-off   | founder                |
 | 1    | Claims: row 13 M1 IN PROGRESS; FR-D17a IN PROGRESS                                                         | both ledgers              | M1            | session                |
-| 2    | M1a, laptop only: `accessJwt` + tests, preview wiring (allowedHosts, proxy, guard), strip with `subscribeFreshness`, `deploy/` with the generated env template, `deploy-vps.sh` / `rollback-vps.sh`. Verified with `vite preview` and a locally signed JWT. | globe repo                | M1c           | session                |
+| 2    | ~~M1a~~ **BUILT `9d61cd6` (§15.15)**, laptop only: `accessJwt` + tests, preview wiring (allowedHosts, proxy, guard), strip with `subscribeFreshness`, `deploy/` with the generated env template, `deploy-vps.sh` / `rollback-vps.sh`. Verified with `vite preview` and a locally signed JWT. | globe repo                | M1c           | session                |
 | 3    | M1b: console `href="/"` to `/market`, the strip, forwarding of `X-Oracle-User` + `X-Oracle-Proxy-Key` to askd | oracle repo               | M1 verify, M2 | session                |
 | 4    | M1c, VPS: Node 24 from NodeSource, user `globe`, `/srv/gods-eye-view`, clone, shards rsync, first gated deploy on Linux | VPS                       | M1 verify     | session (commands shown first) |
 | 5    | Keys: new browser + server Google keys, Cesium ion, OpenAI, budget caps                                    | provider consoles         | full M1 look  | founder                |
@@ -4953,3 +4953,69 @@ Vite's own preview source, and the oracle code paths that row 13 touches.
 3. FR-N5 (step 8) moves ahead of M3, because the gas route and the console's
    own `/gas` page both depend on it. It can run in parallel with M1 in the
    oracle lane.
+
+### 15.15 Build notes: M1a, laptop-only code (2026-09-23)
+
+Built as `9d61cd6` on `feat/commodities-shell`; how-to in
+[`HOSTING.md`](HOSTING.md).
+
+- **Access guard** (`server/hosting/accessJwt.js`, `accessGuard.js`): RS256
+  against `https://<team>.cloudflareaccess.com/cdn-cgi/access/certs` (cached;
+  re-fetched on an unknown `kid` at most once a minute), audience, issuer,
+  `exp`/`nbf`/`iat` with 60 s leeway, email required. Token from
+  `Cf-Access-Jwt-Assertion`, then the `CF_Authorization` cookie. Modes: `off`
+  (no `GEV_ACCESS_*`, development), `verify`, and `deny` when
+  `GEV_REQUIRE_ACCESS=1` or only one of team/audience is set (fail closed).
+  Installed with `enforce: 'pre'` and `order: 'pre'` in dev and preview.
+  `verifyUpgrade()` is ready for the M4 hub.
+- **Console proxy** (`server/hosting/consoleProxy.js`): **deviation from
+  R13.2**: its own streaming `node:http` middleware, not Vite's
+  `preview.proxy`. Vite installs `preview.proxy` after plugin middleware, so
+  `api-not-found` would answer 404 for `/api/oracle/*` first, and the proxy
+  must set identity headers. It forwards `X-Oracle-User` (the verified email)
+  and `X-Oracle-Proxy-Key` (`GEV_PROXY_KEY`, only with a user), and never
+  forwards cookies, the Access token or client-set identity headers. It
+  never buffers or times out. When the console is down it answers 502.
+  `GEV_CONSOLE_URL`, `GEV_CONSOLE_PROXY=0`.
+- **Strip** (`public/gev-shell/strip.mjs`, `server/hosting/navStrip.js`):
+  **deviation from R13.3** (was `src/shell/nav.js`). One plain module served
+  from the globe's public directory, so console pages proxied under the same
+  origin load the same file (FR-D17a adds one `<script type="module">` tag).
+  It is injected into the globe page only when `GEV_NAV_STRIP=1` at build
+  time, so dev and the headless QA scripts keep the upstream layout. The
+  globe's absolutely positioned chrome shifts as one block: the body gets
+  `top` plus `transform`, and the strip sits outside `<body>`. Freshness
+  reuses the console's own rule: `/logs.json` already carries per-source
+  tolerance hours (`tol` = `SRC_TOL_H`, which **corrects §15.13 V8**: a
+  cadence table exists; M3's `freshness` route reuses it). A source is stale
+  past 2× its tolerance, the store is stale with no ingest for 75 minutes,
+  and a failed fetch is OFFLINE. All reads go through `subscribeFreshness()`.
+- **Allowed hosts**: `build/vite.js` gains `extraAllowedHosts`, fed from
+  `GEV_ALLOWED_HOSTS` by `server/standalone/vite.config.js`. Preview inherits
+  `server.allowedHosts`.
+- **Rate limits** (new, V13): behind the tunnel every request comes from
+  loopback, so the per-IP `GEV_RATELIMIT_*` limiters would be one shared
+  bucket. `clientKey()` now prefers `req.gevUser` (set only by the guard).
+- **Deploy**: `deploy/globe.service` (hardened, loopback `:8020`), the
+  generated `deploy/globe.env.example` (drift-tested), and
+  `scripts/deploy-vps.sh`. The deploy runs the gates in a clean environment,
+  builds with the production file, refuses the ingest windows, swaps
+  atomically, and rolls back unless an unauthenticated local GET answers 403.
+  Plus `scripts/rollback-vps.sh`.
+- **Upstream-owned edits** (R13): `build/vite.js`,
+  `server/standalone/vite.config.js`, `server/providers/common/rate-limit.js`,
+  and `src/tooling/viteBuild.test.mjs` (the plugin-order pin now expects the
+  three hosting plugins first).
+- **Verified**: 34 new tests, including `src/tooling/hostingPreview.test.mjs`,
+  a real build served by `vite preview` with a locally signed token. Every
+  route answers 403 without it, the identity reaches the console,
+  `/api/oracle/*` beats `api-not-found`, and the hosted name passes the host
+  check while any other name is refused. Visual check
+  `.gev-logs/render-strip.mjs` against the desk console on 8011: strip 30 px
+  at the top, `#cesiumContainer` and canvas at top 30 / height 870 of 900, no
+  page errors, badge `mirror as of 21:49Z · STALE (7)` (the 09-04 snapshot),
+  and MARKET loads the real console page through the proxy.
+- **Next (M1b, oracle repo FR-D17a)**: add the strip script tag to the
+  console pages, change `href="/"` to `/market`, and forward
+  `X-Oracle-User` + `X-Oracle-Proxy-Key` on the upstream requests to askd.
+  Then M1c on the VPS per `HOSTING.md`.
