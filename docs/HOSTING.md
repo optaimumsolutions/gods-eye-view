@@ -23,8 +23,12 @@ request.
 
 Console routes under the globe's origin: `GET /market` (the console root),
 `/gas`, `/weather`, `/trades`, `/logs.json`, `/api/oracle/*` (reserved for M3),
-and `POST /ask`, `/grill`, `/trade`, `/trade_close`. Answers stream; the proxy
-never buffers or times out. With the console down, those paths answer a plain
+and `POST /ask`, `/grill`, `/trade`, `/trade_close`; since FR-D19 also
+`GET /ask/<id>` (job poll) and `POST /ask/<id>/cancel`. `/ask` and `/grill`
+return a job id at once (Cloudflare cuts a response that has not started
+within 100 s, which is why they no longer stream). The proxy never buffers,
+caches or times out, and adds `X-Gev-Shell: 1` so console pages include the
+strip. With the console down, those paths answer a plain
 502 page and the globe keeps working.
 
 ## Try it locally

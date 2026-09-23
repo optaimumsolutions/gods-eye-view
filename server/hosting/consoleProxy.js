@@ -7,13 +7,20 @@ import { PROXY_KEY_HEADER, USER_HEADER } from './accessGuard.js';
  * A small streaming pass-through instead of Vite's `preview.proxy`: Vite
  * installs its proxy after plugin middleware, so the api-not-found handler
  * would swallow `/api/oracle/*`, and the proxy must stamp the verified
- * identity on every request it forwards. Answers from `/ask` and `/grill`
- * stream for up to an hour, so nothing here buffers or times out.
+ * identity on every request it forwards. Nothing here buffers, caches or
+ * times out: since FR-D19 (oracle FR-J1) `/ask` and `/grill` answer small
+ * JSON at once and the page polls `GET /ask/<id>` (cancel: `POST
+ * /ask/<id>/cancel`), but a streamed answer would still pass straight through.
  */
 
 const PAGE_PATHS = new Set(['/gas', '/weather', '/trades', '/logs.json']);
 const POST_PATHS = new Set(['/ask', '/grill', '/trade', '/trade_close']);
 const ORACLE_API_PREFIX = '/api/oracle/';
+// FR-D19 (oracle FR-J1) async ask jobs: poll and cancel.
+const ASK_JOB = /^\/ask\/\d+$/;
+const ASK_JOB_CANCEL = /^\/ask\/\d+\/cancel$/;
+/** Tells the console the page is served inside the globe shell (strip tag). */
+export const SHELL_HEADER = 'x-gev-shell';
 
 const HOP_BY_HOP = new Set([
   'connection',
@@ -34,6 +41,7 @@ const NOT_FORWARDED = new Set([
   'cf-access-jwt-assertion',
   USER_HEADER,
   PROXY_KEY_HEADER,
+  SHELL_HEADER,
 ]);
 
 /** The console path for a request, or null when the globe serves it. */
@@ -49,9 +57,14 @@ export function consoleRoute(method, url) {
     if (pathname === '/market' || pathname === '/market/') return `/${search}`;
     if (PAGE_PATHS.has(pathname)) return pathname + search;
     if (pathname.startsWith(ORACLE_API_PREFIX)) return pathname + search;
+    if (ASK_JOB.test(pathname)) return pathname + search;
     return null;
   }
-  if (method === 'POST' && POST_PATHS.has(pathname)) return pathname + search;
+  if (
+    method === 'POST' &&
+    (POST_PATHS.has(pathname) || ASK_JOB_CANCEL.test(pathname))
+  )
+    return pathname + search;
   return null;
 }
 
@@ -63,6 +76,7 @@ export function upstreamHeaders(incoming, { user, proxyKey, targetHost }) {
     headers[name] = value;
   }
   headers.host = targetHost;
+  headers[SHELL_HEADER] = '1';
   if (user) {
     headers[USER_HEADER] = user;
     if (proxyKey) headers[PROXY_KEY_HEADER] = proxyKey;

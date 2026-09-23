@@ -23,6 +23,11 @@ test('console routes: pages, POST relays and the reserved oracle API; nothing el
     ['POST', '/grill', '/grill'],
     ['POST', '/trade', '/trade'],
     ['POST', '/trade_close', '/trade_close'],
+    ['GET', '/ask/42', '/ask/42'],
+    ['POST', '/ask/42/cancel', '/ask/42/cancel'],
+    ['POST', '/ask/42', null],
+    ['GET', '/ask/42/cancel', null],
+    ['GET', '/ask/x', null],
     ['GET', '/', null],
     ['GET', '/api/opensky', null],
     ['GET', '/ask', null],
@@ -44,6 +49,7 @@ test('upstream headers drop hop-by-hop, cookies, the Access token and spoofed id
       'cf-access-jwt-assertion': 'secret',
       'x-oracle-user': 'spoof@example.com',
       'x-oracle-proxy-key': 'guess',
+      'x-gev-shell': 'spoof',
       'content-type': 'application/json',
       'content-length': '12',
       accept: '*/*',
@@ -59,6 +65,7 @@ test('upstream headers drop hop-by-hop, cookies, the Access token and spoofed id
     'content-length': '12',
     accept: '*/*',
     host: '127.0.0.1:8011',
+    'x-gev-shell': '1',
     'x-oracle-user': 'jack@optaimum.com',
     'x-oracle-proxy-key': 'k3y',
   });
@@ -70,7 +77,11 @@ test('upstream headers drop hop-by-hop, cookies, the Access token and spoofed id
       targetHost: 'h',
     },
   );
-  assert.deepEqual(anonymous, { host: 'h' }, 'no key without a verified user');
+  assert.deepEqual(
+    anonymous,
+    { host: 'h', 'x-gev-shell': '1' },
+    'no key without a verified user',
+  );
 });
 
 async function listen(handler) {
@@ -130,6 +141,7 @@ test('a real round trip: rewrite, body relay, identity, streaming and the offlin
   assert.equal(seen.at(-1).headers['x-oracle-user'], 'invitee@example.com');
   assert.equal(seen.at(-1).headers['x-oracle-proxy-key'], 'k3y');
   assert.equal(seen.at(-1).headers.cookie, undefined);
+  assert.equal(seen.at(-1).headers['x-gev-shell'], '1');
 
   const trade = await fetch(`${globe.origin}/trade`, {
     method: 'POST',
