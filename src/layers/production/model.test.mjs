@@ -138,7 +138,8 @@ test('colours follow the shared commodity vocabulary and every class has one', (
   assert.equal(YOY_CSS.flat, '#39d5ff');
 });
 
-test('ambient text: nothing at global, labels for producers at regional, cards at local, never for idle pips', () => {
+test('ambient text: nothing at global, labels for producers at regional, cards at local, never for idle pips', (t) => {
+  t.mock.timers.enable({ apis: ['Date'], now: NOW }); // the card's lag stamp reads the clock
   const snap = snapshot([
     structure('1-1', { series: series(40_000, 30_000) }),
     structure('3-1', { series: series(0, 500) }),

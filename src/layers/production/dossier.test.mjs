@@ -97,7 +97,8 @@ const rowValue = (model, sectionPrefix, label) =>
     .find((s) => s.title.startsWith(sectionPrefix))
     ?.rows.find(([k]) => k === label)?.[1] ?? null;
 
-test('the dossier leads with the month, compared three ways, and stamps it', () => {
+test('the dossier leads with the month, compared three ways, and stamps it', (t) => {
+  t.mock.timers.enable({ apis: ['Date'], now: NOW }); // the stamp's lag reads the clock
   const snap = snapshot([
     structure('251-1', { series: SERIES, lifetime: LIFETIME }),
   ]);
