@@ -40,6 +40,12 @@ test('explicit build inputs preserve browser-only defines, plugin order and loop
     createBrowserViteConfig({ host: '::', port: '4800' }).server.port,
     4800,
   );
+  // Row 13: the hosted hostname is added to the loopback list, never replacing it.
+  assert.deepEqual(
+    createBrowserViteConfig({ extraAllowedHosts: ['commodities.optaimum.com'] })
+      .server.allowedHosts,
+    ['localhost', '127.0.0.1', '.local', 'commodities.optaimum.com'],
+  );
 });
 
 test('build helper does not discover environment values or construct local providers', () => {
@@ -62,8 +68,13 @@ test('root config retains existing named exports and standalone provider order',
   for (const [name, value] of Object.entries(providers))
     assert.equal(compatibility[name], value, name);
   const config = standaloneConfig({ mode: 'test' });
+  // Row 13 hosting plugins run first: Access guard, console proxy, strip.
   assert.deepEqual(
-    config.plugins.slice(2, -1).map((plugin) => plugin.name),
+    config.plugins.slice(2, 5).map((plugin) => plugin.name),
+    ['gev-access-guard', 'gev-console-proxy', 'gev-nav-strip'],
+  );
+  assert.deepEqual(
+    config.plugins.slice(5, -1).map((plugin) => plugin.name),
     providers.localProviderPlugins().map((plugin) => plugin.name),
   );
   assert.equal(config.plugins.at(-2).name, 'gev-key-setup');

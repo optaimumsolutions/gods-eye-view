@@ -1,0 +1,30 @@
+# God's Eye View globe, hosted beside the Oil Oracle console (row 13, plan §15).
+# Install: sudo cp deploy/globe.service /etc/systemd/system/ && sudo systemctl daemon-reload
+# Loopback only: Cloudflare Tunnel "oracle" is the one way in (commodities.optaimum.com).
+[Unit]
+Description=God's Eye View globe (hosted commodities site, row 13)
+After=network-online.target console.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=globe
+Group=globe
+WorkingDirectory=/srv/gods-eye-view/current
+EnvironmentFile=/etc/gods-eye-view/globe.env
+Environment=NODE_ENV=production
+ExecStart=/usr/bin/node node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 8020 --strictPort
+Restart=always
+RestartSec=3
+# Hardening: the providers only write caches and logs inside the release.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/srv/gods-eye-view
+ProtectKernelTunables=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+
+[Install]
+WantedBy=multi-user.target

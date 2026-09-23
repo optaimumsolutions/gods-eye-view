@@ -789,5 +789,19 @@
   "src/layers/onshore/model.test.mjs",
   "src/layers/onshore/bundledSource.test.mjs",
   "src/layers/onshore/dossier.test.mjs",
-  "src/layers/onshore/fixtures.mjs"
+  "src/layers/onshore/fixtures.mjs",
+  "server/hosting/accessJwt.js",
+  "server/hosting/accessGuard.js",
+  "server/hosting/consoleProxy.js",
+  "server/hosting/navStrip.js",
+  "server/hosting/plugins.js",
+  "public/gev-shell/strip.mjs",
+  "src/hosting/accessJwt.test.mjs",
+  "src/hosting/accessGuard.test.mjs",
+  "src/hosting/consoleProxy.test.mjs",
+  "src/shell/strip.test.mjs",
+  "src/testSupport/accessTokens.mjs",
+  "src/tooling/hostingPreview.test.mjs",
+  "src/tooling/hostingEnvTemplate.test.mjs",
+  "scripts/hosting/env-template.mjs"
 ]

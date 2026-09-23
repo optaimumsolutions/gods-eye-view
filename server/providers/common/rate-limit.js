@@ -27,8 +27,12 @@ export function makeOptInRateLimiter(envValue) {
  * Client key for rate limiting. Uses the real socket peer address only — we do
  * NOT trust X-Forwarded-For (client-controlled; a rotating value would mint fresh
  * quota and grow the limiter map). This is a localhost dev proxy, so the socket
- * address is the real client.
+ * address is the real client. Hosted behind Cloudflare Tunnel (row 13) every
+ * request arrives from the tunnel's loopback address, so the email the Access
+ * guard verified (`req.gevUser`, never a client header) keys the quota instead.
  */
 export function clientKey(req) {
+  if (typeof req.gevUser === 'string' && req.gevUser)
+    return `user:${req.gevUser}`;
   return String(req.socket?.remoteAddress || 'local');
 }
