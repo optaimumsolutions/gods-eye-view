@@ -4637,3 +4637,190 @@ pushes "source updated" and health events to every open page.
   Cloudflare dashboard at M1; the founder does the dashboard steps.
 - **Shared clone.** Other sessions build layers on this branch; the preview
   config edit and strip must be claimed in §0 before editing.
+
+### 15.12 Bootstrap from a fresh Claude Code session
+
+Two prompts. The first builds M1 and lays the hooks the event system plugs
+into; the second builds the events (M4) once M1 and the M3 `freshness` route
+exist. Founder-only steps are marked **[founder]**: the session prepares them
+and waits, it never performs them.
+
+```text
+cd ~/commodities-shell && git branch --show-current   # feat/commodities-shell
+git status --porcelain     # other sessions share this tree; never stage what is not yours
+git log --oneline origin/feat/commodities-shell..HEAD  # unpushed commits (row 12 + row 13 PRD)
+claude
+```
+
+**Prompt 1 — Row 13 M1: hosted shell, founder only, event-ready**
+
+```text
+Row 13, milestone 1 (PRD §15 in docs/COMMODITIES-PLAN.md; oracle twin FR-D17a
+in ~/commodities/PRD-market-console.md). Run /obsidian first. Read §15 whole
+before touching anything; the decisions H1–H17 are settled, do not re-open them.
+
+Goal: the globe and the console live at https://commodities.optaimum.com for
+the founder only, behind Cloudflare Access, with the origin verifying the
+Access JWT, and with the seams the M4 event hub will plug into already in place.
+
+0. Pre-flight (stop and report if any fails)
+   a. The branch is ahead of origin with row 12 commits whose gates never
+      finished. With the founder's go, run the gates for them
+      (.gev-logs/gate-at.ps1 per the vault's 40-tooling.md), then push
+      feat/commodities-shell to origin and mirror. The VPS clones from origin,
+      so nothing below works until this is pushed.
+   b. Long streams: read the /grill and /ask handlers in
+      ~/commodities/tools/market_map.py and confirm response headers are sent
+      before the upstream answers. [founder] Time one grill through
+      https://oracle.optaimum.com and report time-to-first-byte; Cloudflare
+      returns 524 after 100 s with no response.
+   c. VPS read-only probe (ssh -i ~/.ssh/oil_oracle_laptop_ed25519
+      ubuntu@15.204.118.186): free -h, df -h, ss -ltnp, crontab -l. Ports 8020
+      and 8021 must be free. Never run ingest; never touch ~/oracle without
+      diff --strip-trailing-cr against git first.
+
+1. Claim: ledger row 13 → "M1 IN PROGRESS"; oracle FR-D17 → "FR-D17a IN
+   PROGRESS". Commit each, guarded by git branch --show-current.
+
+2. Globe repo (additive, R13; name every test file when running node --test):
+   a. server/hosting/accessJwt.js + test: verifyAccessJwt(token, {teamDomain,
+      aud, now}) with node:crypto only (JWK → createPublicKey, RSA-SHA256),
+      certs cached from https://<team>.cloudflareaccess.com/cdn-cgi/access/certs
+      and re-fetched on an unknown kid; checks aud and exp. Export
+      accessGuard(req, res, next) for HTTP and verifyUpgrade(req) for the
+      WebSocket upgrade M4 will add. Fails closed with 403. Strips inbound
+      X-Oracle-User and sets it from the verified email.
+      Test with a locally generated RSA key and JWKS fixture; no network.
+   b. Preview wiring: env-driven so dev is unchanged —
+      GEV_ALLOWED_HOSTS adds commodities.optaimum.com to allowedHosts
+      (build/vite.js is localhost-only today); GEV_ACCESS_TEAM and
+      GEV_ACCESS_AUD enable the guard (absent = dev, guard off);
+      preview.proxy maps /market to the console root and /gas, /weather,
+      /trades, /ask, /grill, /trade, /trade_close, /logs.json path-preserved
+      to http://127.0.0.1:8011, and reserves /api/oracle/ for M3. The guard
+      runs before every provider middleware. With the console down, / still
+      renders and proxied paths return a plain 502 page.
+   c. src/shell/nav.js + index.html: the row 1 R11 strip (GLOBE, MARKET, GAS,
+      WEATHER, TRADES, CHAT; right end "mirror as of HH:MMZ · LIVE | STALE |
+      OFFLINE"), HUD offset by --gev-strip-height. All freshness reads go
+      through ONE function, subscribeFreshness(callback), whose M1
+      implementation polls /logs.json every 60 s. M4 swaps its body for the
+      WebSocket; nothing else in the UI may poll.
+   d. deploy/: globe.service (User=globe, WorkingDirectory
+      /srv/gods-eye-view/current, EnvironmentFile /etc/gods-eye-view/globe.env,
+      vite preview --host 127.0.0.1 --port 8020 --strictPort, Restart=always),
+      globe.env.example (variable NAMES only: GOOGLE_MAPS_API_KEY,
+      CESIUM_ION_TOKEN, OPENAI_API_KEY, GEV_ALLOWED_HOSTS, GEV_ACCESS_TEAM,
+      GEV_ACCESS_AUD, GEV_EVENTS_PUBLISH_PORT=8021 reserved for M4), and
+      scripts/deploy-vps.sh <sha>: releases/<sha> checkout, npm ci, link
+      /srv/gods-eye-view/cache into .gev-cache, rebuild git-ignored shards,
+      format:check, check:boundaries, npm test, build, all under nice -n 10
+      ionice -c3, refusing to start inside 22:45–23:30Z or 01:45–02:30Z; on
+      green, atomic ln -sfn to current + systemctl restart globe + tag
+      production; on red, current untouched. scripts/rollback-vps.sh repoints
+      to the previous release.
+   e. package-boundaries.json lines inserted textually; DATA_SOURCES and
+      count pins untouched (no layer added). Four gates green; commit.
+
+3. Oracle repo, FR-D17a: in tools/market_map.py, href="/" becomes /market and
+   every page renders the same strip markup (a static copy is fine for M1;
+   it reads /logs.json). oracle.optaimum.com must still work unchanged.
+   Commit on main, then deploy per the FR-D5 recipe: diff the VPS copy
+   with --strip-trailing-cr first, scp, sudo systemctl restart console.
+
+4. VPS setup (show every command before running it): Node 24 LTS from
+   NodeSource; system user globe (no shell, cannot read /home/ubuntu/oracle);
+   /srv/gods-eye-view/{repo,releases,cache}; clone origin; rsync the laptop
+   .gev-cache/ up to cache/; /etc/gods-eye-view/globe.env root:globe 0640 from
+   the example. [founder] creates the new production keys (Google key
+   referrer-locked to https://commodities.optaimum.com/*, budget caps on all
+   three) and writes them into globe.env over ssh — never in chat.
+   Run deploy-vps.sh on the pushed SHA; measure its wall time and peak memory.
+
+5. Cloudflare, strictly in this order [founder, session writes the click path]:
+   a. Access → Applications → self-hosted "Commodities" for
+      commodities.optaimum.com, policy Founder (jack@optaimum.com, one-time
+      PIN), session 24 h. Copy the team domain and the AUD tag into globe.env,
+      restart globe.
+   b. Only then: tunnel "oracle" → Public hostname commodities.optaimum.com →
+      http://localhost:8020. Check the zone's Network → WebSockets switch is
+      on (the default); the M4 hub needs it.
+
+6. Verify (M1 checks, record results in plan §15.13 build notes):
+   curl -I https://commodities.optaimum.com/, /market and any /api/ path →
+   Access login redirect; on the VPS curl -i http://127.0.0.1:8020/ → 403; founder's
+   browser: globe renders, every strip link loads, badge matches /logs.json;
+   deploy a deliberately failing commit → current unchanged; rollback under
+   one minute.
+
+7. Close: ledger row 13 → "M1 BUILT <sha>", FR-D17a DONE; push origin and
+   mirror, oracle main; /update-obsidian (decisions, gotchas, 40-tooling
+   deploy recipe, STATE Next = M2).
+
+Stop and ask only for: the gate/push go in 0a, the founder steps marked
+[founder], or a change that would edit an upstream layer's internals.
+```
+
+**Prompt 2 — Row 13 M4: the web events (after M1, and after M3's
+`/api/oracle/freshness` route exists)**
+
+```text
+Row 13, milestone 4 (PRD §15.7 R13.15–R13.18; oracle FR-D17c). Run /obsidian.
+Prerequisites, verify first: M1 BUILT; GET /api/oracle/freshness returns each
+source's last observedAt, publishedAt and expected cadence; the zone's
+Network → WebSockets switch is on.
+
+Event contract (freeze it in plan §15 before coding; both repos use it):
+  source.updated {type, source, observedAt, publishedAt, rows, at}
+  health         {type, component: console|askd|ingest:<source>|globe,
+                  state: live|stale|offline, since, at}
+  heartbeat      {type, at}                 every 30 s
+  snapshot       {type, sources:[...], health:[...], at}   on connect
+
+1. Globe repo:
+   a. server/events/hub.js + tests: attaches to the preview server's
+      httpServer on path /api/events; every upgrade passes
+      accessJwt.verifyUpgrade or gets 403 before the handshake; fans out JSON
+      to clients; sends snapshot on connect. Use the `ws` package (MIT,
+      8.21.x): it is a devDependency today, so move it to dependencies in the
+      same commit and say why.
+   b. server/events/publish.js: a second http listener bound to
+      127.0.0.1:${GEV_EVENTS_PUBLISH_PORT} (8021, never tunnelled) accepting
+      POST /publish with a source.updated body; rejects anything not from
+      127.0.0.1 and any body that fails the contract.
+   c. server/events/deadlines.js + tests: reads /api/oracle/freshness at start
+      and hourly; deadline = last observedAt + cadence × 1.5 (grace per source
+      in one table); a missed deadline emits health stale; probes
+      127.0.0.1:8011/logs.json and askd /health every 30 s for offline.
+      Transitions only (not repeats) go to Slack via askd's relay (step 2b).
+   d. Swap subscribeFreshness to the WebSocket with jittered reconnect and a
+      fallback to the 60 s poll after three failed reconnects; the strip shows
+      OFFLINE while disconnected.
+   e. Layers: a small registry maps oracle sources to globe layers
+      (chokepoints, gas flows, weather); on source.updated the mapped layer
+      re-fetches and restyles in place — no camera change, no re-enable.
+   f. Console pages: the strip shows a "new data · refresh" pill on any
+      source.updated; no automatic reload.
+
+2. Oracle repo (FR-D17c; diff VPS vs git before every scp; never ingest
+   desk-side):
+   a. ingest/refresh.py: after each source's successful write, POST
+      source.updated to http://127.0.0.1:8021/publish with a 2 s timeout;
+      failure logs one line and never fails the ingest.
+   b. askd: POST /notify on localhost only, body {text}, forwarded with
+      refresh.slack(); rate-limited to one message per component per 10 min.
+   c. market_map.py: drop the 60 s page reload while the page's hub socket
+      is open (the strip script signals it).
+
+3. Deploy both (deploy-vps.sh for the globe; FR-D5 recipe for the console),
+   then verify the M4 checks: trigger one fast-tier refresh by waiting for
+   the :00/:30 cron (do not run ingest by hand) and confirm an open browser
+   receives source.updated within 5 s of the write; sudo systemctl stop
+   console → strip OFFLINE and one Slack page; start → one recovery page; no
+   console page reloads while connected; an unauthenticated
+   wscat -c wss://commodities.optaimum.com/api/events is refused.
+
+4. Close: ledger row 13 → "M4 BUILT <sha>", FR-D17c DONE; build notes in
+   §15.13; /update-obsidian. Phase 2 (one scheduler daemon replacing the
+   crons, emitting the same events) is a separate PRD — do not start it.
+```
