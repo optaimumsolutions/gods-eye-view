@@ -34,7 +34,7 @@ owns layers. Re-check `git status` before every edit to a shared file.
 | 10  | `commodity-lng`: LNG terminals, tiered cards, sea-routed cargo arcs | layers (worktree `commodities-lng`) | **BUILT 2026-09-21** — PRD §12 (mirror: Project Brain `05-prd.md`), milestones 0 to 6. Bundle `8b5c5b4` (`npm run build:lng`, `--check` byte-identical; 308 GEM terminals, EIA 2026-Q2 trains on 14 US plants, DOE cargoes through 2026-06, GIIGNL 2025 matrix 427.9 MT, 470 searoute-ts routes); layer, dossier, chips, docs in the commit carrying this line. `scripts/qa-lng.mjs` green (41 checks; activation 666 ms warm, heap +31 MiB); four gates green. Deviations in §12.11: GEM read from GEM's public tracker-map feed until the form-gated xlsx is placed (no operator column), via radius 40 km, chips session-only, EIA API codes null until milestone 7. Landed on `feat/commodities-shell` per the founder's 2026-09-21 rule. Next: milestone 7 (EIA `poe2` refresh once row 4 lands the key path) |
 | 11  | Gas production facilities: Gulf platforms (BSEE) first | layers + content (shell worktree, `feat/commodities-shell`) | **BUILT (first slice) 2026-09-21** — PRD §13 from the founder's pivot and grill; on `feat/commodities-shell` (founder's instruction: every update on the shell branch, no row worktree), token `2`. Milestone 1 `c6c92b2`: `scripts/build-gulf-platforms.mjs` + `src/data/local_data/bsee_gulf/` (1,315 installed structures, 120-month series, 608 KB gzip), the completeness rule and the one record shape. Milestone 2 `1e685f0`: marks sized by gas share and coloured by change against last year, three tiers, hover and selected cards, the panel line, `scripts/qa-gulf-platforms.mjs`. Milestone 3 `af342d1`: the dossier (ten-year chart, this-month ledger, identity, lifetime, sources) and the drawer chrome shared with the datacenters; QA 20 checks green (layer activation 755 ms apart from the bundle fetch, heap +50 MiB). Milestone 4 is the commit carrying this line. Four gates green at every commit. Next: milestone 5 (EIA regional backdrop, short grill first) |
 | 12  | Onshore production facilities: wells, leases and rigs, region by region | layers + content (shell worktree, `feat/commodities-shell`) | **BUILT (milestones 0 and 1, Williston) 2026-09-21** — PRD §14 from the founder's direction the same day; five live sweeps probed some twenty regulators (§14.4); eleven regions ranked (§14.5). The founder's "build out the basins one at a time" started the ladder in the §14.5 order with O1 taken as recommended (option a: index and clusters committed, history shards built from the archive, not committed). Milestone 1a `c4ec135`: `scripts/build-onshore.mjs` + `scripts/onshore/{nd,eia,regions}.mjs`, `src/layers/onshore/{records,shards,bundledSource}.js`, `src/data/local_data/onshore/williston/` (24,154 North Dakota wells over 120 months, 17,915 producing in 2026-07 at 3.30 Bcf/d and 1.17 MMbbl/d; 518 fields; index 2.5 MB gzip; `--check` byte-identical; 94 % of EIA gross withdrawals, 100 % of marketed). Milestones 1b and 1c `f66463a`: `production-williston` (token `4`) — region card at global, 518 field marks at regional, 24,154 well points (`PointPrimitiveCollection`, clipped to the view) at local, hover and selected cards, the dossier with the ten-year chart from an on-demand shard, `scripts/qa-onshore-williston.mjs` on the shared harness (32 checks: activation 659 ms apart from the 16 MB fetch, heap +35 MiB, layer frame cost 1.8 ms). `836c325` fixes the second enable of the rows 4 and 11 layers (found by this QA). Build notes §14.13. Next: region 2, Appalachia (PA unconventional) |
-| 13  | Hosted site: globe + console behind one login at `commodities.optaimum.com` | ops + shell + server (`feat/commodities-shell`; oracle twin FR-D17) | **M1 IN PROGRESS 2026-09-23 — M1a BUILT `9d61cd6`** (four gates green, 4,371 pass / 0 fail; access guard + console proxy + strip + deploy files, §15.15, `docs/HOSTING.md`). **Next: M1b** console FR-D17a (strip tag, `/market` link, header forwarding), then M1c VPS. PHASE 0 DONE — PRD §15 (grill H1–H17). Phase 0: row 12 gated and pushed with the row 11 clock-drift test fix `d1fdf22` (four gates green, 4,337 pass); VPS probed; long-stream first byte OK. System validation §15.13 found V1–V12: full env template (V2), Node 24 from NodeSource not apt (V4), 85 MB shards not the 950 MB cache (V5), `X-Oracle-Proxy-Key` for stamping (V6), **natgas ingest unscheduled on the VPS, so FR-N5 moves ahead of M3 and the gas route becomes `gas-storage`** (V7), cadence table + `ingest_log` hook (V8, V9), per-source grace (V10). Remaining work and revised next steps: §15.14 |
+| 13  | Hosted site: globe + console behind one login at `commodities.optaimum.com` | ops + shell + server (`feat/commodities-shell`; oracle twin FR-D17) | **M1 IN PROGRESS 2026-09-23 — M1a BUILT `9d61cd6`; M1b BUILT** (globe `b73db97` + `447bd8f`, four gates green 4,372 pass / 0 fail; oracle `2e46883` on main, not deployed; header forwarding came with FR-D19 `6b4a081`; §15.16). **Next: M1c** on the VPS per `docs/HOSTING.md` (deploy the console change with it). PHASE 0 DONE — PRD §15 (grill H1–H17). Phase 0: row 12 gated and pushed with the row 11 clock-drift test fix `d1fdf22` (four gates green, 4,337 pass); VPS probed; long-stream first byte OK. System validation §15.13 found V1–V12: full env template (V2), Node 24 from NodeSource not apt (V4), 85 MB shards not the 950 MB cache (V5), `X-Oracle-Proxy-Key` for stamping (V6), **natgas ingest unscheduled on the VPS, so FR-N5 moves ahead of M3 and the gas route becomes `gas-storage`** (V7), cadence table + `ingest_log` hook (V8, V9), per-source grace (V10). Remaining work and revised next steps: §15.14 |
 
 Definition of usable, pending founder confirmation of question 13: rows 1
 through 4. Rows 5 to 7 are context and content.
@@ -4638,10 +4638,13 @@ pushes "source updated" and health events to every open page.
   Resolved by the referrer lock and caps (R13.7).
 - **Long streams through Cloudflare.** `/ask` and `/grill` can run up to an
   hour. Cloudflare returns 524 if no response starts within 100 seconds.
-  *Phase 0:* headers flush immediately (first byte is not at risk); a
-  194-second silent gap mid-answer completed without a tunnel error. The
-  founder confirms it rendered; if not, askd emits a keep-alive line every
-  30 seconds during the model call.
+  ~~*Phase 0:* headers flush immediately (first byte is not at risk); a
+  194-second silent gap mid-answer completed without a tunnel error.~~
+  **Wrong, corrected 2026-09-23:** the 13:42Z phone test FAILED with a
+  Cloudflare 524 at 100 s, and the answer landed only in the VPS chat log
+  (oracle ledger FR-D19). **Resolved by FR-D19 / FR-J1 (`6b4a081`, live
+  15:41Z):** `/ask` and `/grill` answer a job id at once, and the page polls
+  `GET /ask/<id>` every 10 s. The globe proxy carries both job routes (M1b).
 - **One ask at a time.** askd holds a single lock over one CPU-bound model;
   a second ask or grill gets 409 "busy". With invitees at parity, one
   person's hour-long grill blocks everyone (§15.13 V12).
@@ -4895,8 +4898,9 @@ Vite's own preview source, and the oracle code paths that row 13 touches.
   edits start from a clean base.
 - Ports 8020 and 8021 are free; askd `/health` answers 200; `ws` 8.21.3 (MIT)
   is already installed as a devDependency.
-- Long streams: askd sends its headers before the model call and the console
-  relays them at once, so there is no first-byte 524. A `/ask` at 13:53Z on
+- ~~Long streams: askd sends its headers before the model call and the console
+  relays them at once, so there is no first-byte 524.~~ **Wrong: see §15.11;
+  the 13:42Z test 524'd. FR-D19's async jobs replaced streaming.** A `/ask` at 13:53Z on
   2026-09-23 sat silent for at least 194 s inside the model call and completed
   with no cloudflared error. The founder still confirms it rendered.
 - The store fits two of the three M3 routes: `chokepoint_transits`
@@ -4931,7 +4935,7 @@ Vite's own preview source, and the oracle code paths that row 13 touches.
 | 0    | Confirm the 13:53Z answer rendered in the browser (long-stream check)                                     | browser                   | M1 sign-off   | founder                |
 | 1    | Claims: row 13 M1 IN PROGRESS; FR-D17a IN PROGRESS                                                         | both ledgers              | M1            | session                |
 | 2    | ~~M1a~~ **BUILT `9d61cd6` (§15.15)**, laptop only: `accessJwt` + tests, preview wiring (allowedHosts, proxy, guard), strip with `subscribeFreshness`, `deploy/` with the generated env template, `deploy-vps.sh` / `rollback-vps.sh`. Verified with `vite preview` and a locally signed JWT. | globe repo                | M1c           | session                |
-| 3    | M1b: console `href="/"` to `/market`, the strip, forwarding of `X-Oracle-User` + `X-Oracle-Proxy-Key` to askd | oracle repo               | M1 verify, M2 | session                |
+| 3    | ~~M1b~~ **BUILT (§15.16)**: console `href="/"` to `/market`, the strip, forwarding of `X-Oracle-User` + `X-Oracle-Proxy-Key` to askd | oracle repo               | M1 verify, M2 | session                |
 | 4    | M1c, VPS: Node 24 from NodeSource, user `globe`, `/srv/gods-eye-view`, clone, shards rsync, first gated deploy on Linux | VPS                       | M1 verify     | session (commands shown first) |
 | 5    | Keys: new browser + server Google keys, Cesium ion, OpenAI, budget caps                                    | provider consoles         | full M1 look  | founder                |
 | 6    | Cloudflare: Access app `Commodities` first, then the public hostname                                       | Cloudflare dashboard      | M1 verify     | founder                |
@@ -5019,3 +5023,39 @@ Built as `9d61cd6` on `feat/commodities-shell`; how-to in
   console pages, change `href="/"` to `/market`, and forward
   `X-Oracle-User` + `X-Oracle-Proxy-Key` on the upstream requests to askd.
   Then M1c on the VPS per `HOSTING.md`.
+
+### 15.16 Build notes: M1b, the console inside the shell (2026-09-23)
+
+- **Coordination.** Another session built FR-D19 / FR-J1 (async ask:
+  `asks` table, askd jobs, `GET /ask/<id>` polled every 10 s,
+  `POST /ask/<id>/cancel`) in `tools/market_map.py` and `ask_server.py` at
+  the same time. FR-D17a waited for its commit (`6b4a081`, live on the VPS
+  since 15:41Z). At this session's request, that commit already forwards
+  `X-Oracle-User` and `X-Oracle-Proxy-Key` from the console's upstream
+  helpers (`_poll_job`, `_relay_json`) to askd; askd ignores them until
+  FR-D17b (M2).
+- **Globe** (`b73db97`): the proxy carries `GET /ask/<id>` and
+  `POST /ask/<id>/cancel`, never caches (the console's `Cache-Control:
+  no-store` passes through), and sets `X-Gev-Shell: 1` on every proxied
+  request, stripping any client-sent copy. (`447bd8f`): the strip's CHAT
+  link (`/market#ask`) opens the console chat drawer (`#chatbtn` / `#chatbox`
+  / `#chatq`) on load and on `hashchange`. The flow layout moves the drawer
+  below the strip.
+- **Console** (oracle `2e46883`, FR-D17a): `/market` and `/market/` serve the
+  root, so the renamed link works on both hosts. The nav `map` link points
+  to `/market`. The strip tag goes before `</head>` only when
+  `X-Gev-Shell: 1` is present, so direct `oracle.optaimum.com` pages are
+  byte-identical. **Not deployed:** it has no effect until the globe is
+  hosted, so it ships with M1c.
+- **Verified.** A second console on `:8012` from the edited file:
+  `/`, `/market`, `/market/`, `/gas`, `/weather` and `/trades` carry the tag
+  only with the header, and all share the renamed nav. A local globe
+  preview proxied to it with `.gev-logs/render-strip.mjs`: the strip is on
+  all four console pages with its own link current, the body is offset
+  30 px, and `/market#ask` opens the drawer at top 30 with `#chatq`
+  focused. Four gates green on `447bd8f` (4,372 pass / 0 fail).
+- **Found, not fixed (console, pre-existing):** `/market` throws
+  `TypeError: Cannot read properties of null (reading 'addEventListener')`
+  at `.strip .tile .pin`, because a price tile has no pin button. It happens
+  identically on the old desk console and without the strip; reported to the
+  console lane.
