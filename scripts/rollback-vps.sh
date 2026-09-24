@@ -16,10 +16,11 @@ say() { printf '[rollback %s] %s\n' "$(date -u +%H:%M:%SZ)" "$*"; }
 die() { say "FAILED: $*"; exit 1; }
 
 [ "$(id -u)" -eq 0 ] || die "run with sudo"
-CURRENT=$(readlink -f "$BASE/current" 2>/dev/null || true)
-PREVIOUS=$(readlink -f "$BASE/previous" 2>/dev/null || true)
+CURRENT=$(readlink -e "$BASE/current" 2>/dev/null || true)
+PREVIOUS=$(readlink -e "$BASE/previous" 2>/dev/null || true)
 [ -n "$PREVIOUS" ] && [ -d "$PREVIOUS" ] || die "no previous release recorded"
 [ -f "$PREVIOUS/dist/index.html" ] || die "previous release has no build: $PREVIOUS"
+[ "$PREVIOUS" != "$CURRENT" ] || die "previous is the live release; nothing to roll back to"
 
 ln -sfn "$PREVIOUS" "$BASE/current.next"
 mv -Tf "$BASE/current.next" "$BASE/current"

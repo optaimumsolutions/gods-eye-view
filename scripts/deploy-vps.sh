@@ -63,7 +63,9 @@ say "fetching origin"
 as_user git -C "$REPO" fetch --quiet --tags origin
 SHA=$(as_user git -C "$REPO" rev-parse --verify --quiet "$REF^{commit}") || die "unknown ref: $REF"
 DEST="$RELEASES/$SHA"
-CURRENT=$(readlink -f "$BASE/current" 2>/dev/null || true)
+# -e, not -f: GNU readlink -f prints a path for a missing link, which made the
+# first deploy record previous -> current.
+CURRENT=$(readlink -e "$BASE/current" 2>/dev/null || true)
 if [ "$CURRENT" = "$DEST" ]; then
   say "$SHA is already live"
   exit 0
@@ -137,7 +139,7 @@ say "LIVE: $SHA"
 
 # Keep the newest $KEEP releases, never the current or previous one.
 LIVE=$(readlink -f "$BASE/current")
-PREV=$(readlink -f "$BASE/previous" 2>/dev/null || true)
+PREV=$(readlink -e "$BASE/previous" 2>/dev/null || true)
 count=0
 while IFS= read -r dir; do
   [ -n "$dir" ] || continue
