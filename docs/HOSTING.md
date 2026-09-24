@@ -65,7 +65,8 @@ curl -fsSL https://deb.nodesource.com/setup_24.x | sudo -E bash -
 sudo apt-get install -y nodejs
 sudo useradd --system --home /srv/gods-eye-view --shell /usr/sbin/nologin globe
 sudo install -d -o globe -g globe /srv/gods-eye-view /srv/gods-eye-view/releases /srv/gods-eye-view/shards
-sudo -u globe git clone https://github.com/optaimumsolutions/gods-eye-view.git /srv/gods-eye-view/repo
+# -b: main has no deploy/ folder; the deploy script checks out each release by sha anyway
+sudo -u globe git clone -b feat/commodities-shell https://github.com/optaimumsolutions/gods-eye-view.git /srv/gods-eye-view/repo
 sudo install -d -m 0750 -o root -g globe /etc/gods-eye-view
 sudo install -m 0640 -o root -g globe /srv/gods-eye-view/repo/deploy/globe.env.example /etc/gods-eye-view/globe.env
 sudo cp /srv/gods-eye-view/repo/deploy/globe.service /etc/systemd/system/ && sudo systemctl daemon-reload
@@ -76,11 +77,15 @@ From the laptop, the git-ignored onshore history (85 MB; the 950 MB
 `.gev-cache/` stays on the laptop):
 
 ```sh
-rsync -a public/data/onshore/williston/history/ ubuntu@15.204.118.186:/tmp/williston-history/
-# then on the VPS
-sudo install -d -o globe -g globe /srv/gods-eye-view/shards/williston
-sudo rsync -a --chown=globe:globe /tmp/williston-history/ /srv/gods-eye-view/shards/williston/
+# Git Bash on the laptop has no rsync: stream a tarball, then compare md5 lists
+cd public/data/onshore/williston/history
+ssh -i ~/.ssh/oil_oracle_laptop_ed25519 ubuntu@15.204.118.186 'sudo install -d -o globe -g globe /srv/gods-eye-view/shards/williston'
+tar czf - . | ssh -i ~/.ssh/oil_oracle_laptop_ed25519 ubuntu@15.204.118.186 'sudo -u globe tar xzf - -C /srv/gods-eye-view/shards/williston'
 ```
+
+`GEV_PROXY_KEY` is generated on the VPS and never printed:
+`K=$(openssl rand -hex 32); sudo sed -i "s/^GEV_PROXY_KEY=$/GEV_PROXY_KEY=$K/" /etc/gods-eye-view/globe.env`.
+`journalctl -u globe` needs `sudo` (the ubuntu user is not in `adm`).
 
 ## Deploy and roll back
 
