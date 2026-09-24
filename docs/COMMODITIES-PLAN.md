@@ -34,7 +34,7 @@ owns layers. Re-check `git status` before every edit to a shared file.
 | 10  | `commodity-lng`: LNG terminals, tiered cards, sea-routed cargo arcs | layers (worktree `commodities-lng`) | **BUILT 2026-09-21** — PRD §12 (mirror: Project Brain `05-prd.md`), milestones 0 to 6. Bundle `8b5c5b4` (`npm run build:lng`, `--check` byte-identical; 308 GEM terminals, EIA 2026-Q2 trains on 14 US plants, DOE cargoes through 2026-06, GIIGNL 2025 matrix 427.9 MT, 470 searoute-ts routes); layer, dossier, chips, docs in the commit carrying this line. `scripts/qa-lng.mjs` green (41 checks; activation 666 ms warm, heap +31 MiB); four gates green. Deviations in §12.11: GEM read from GEM's public tracker-map feed until the form-gated xlsx is placed (no operator column), via radius 40 km, chips session-only, EIA API codes null until milestone 7. Landed on `feat/commodities-shell` per the founder's 2026-09-21 rule. Next: milestone 7 (EIA `poe2` refresh once row 4 lands the key path) |
 | 11  | Gas production facilities: Gulf platforms (BSEE) first | layers + content (shell worktree, `feat/commodities-shell`) | **BUILT (first slice) 2026-09-21** — PRD §13 from the founder's pivot and grill; on `feat/commodities-shell` (founder's instruction: every update on the shell branch, no row worktree), token `2`. Milestone 1 `c6c92b2`: `scripts/build-gulf-platforms.mjs` + `src/data/local_data/bsee_gulf/` (1,315 installed structures, 120-month series, 608 KB gzip), the completeness rule and the one record shape. Milestone 2 `1e685f0`: marks sized by gas share and coloured by change against last year, three tiers, hover and selected cards, the panel line, `scripts/qa-gulf-platforms.mjs`. Milestone 3 `af342d1`: the dossier (ten-year chart, this-month ledger, identity, lifetime, sources) and the drawer chrome shared with the datacenters; QA 20 checks green (layer activation 755 ms apart from the bundle fetch, heap +50 MiB). Milestone 4 is the commit carrying this line. Four gates green at every commit. Next: milestone 5 (EIA regional backdrop, short grill first) |
 | 12  | Onshore production facilities: wells, leases and rigs, region by region | layers + content (shell worktree, `feat/commodities-shell`) | **BUILT (milestones 0 and 1, Williston) 2026-09-21** — PRD §14 from the founder's direction the same day; five live sweeps probed some twenty regulators (§14.4); eleven regions ranked (§14.5). The founder's "build out the basins one at a time" started the ladder in the §14.5 order with O1 taken as recommended (option a: index and clusters committed, history shards built from the archive, not committed). Milestone 1a `c4ec135`: `scripts/build-onshore.mjs` + `scripts/onshore/{nd,eia,regions}.mjs`, `src/layers/onshore/{records,shards,bundledSource}.js`, `src/data/local_data/onshore/williston/` (24,154 North Dakota wells over 120 months, 17,915 producing in 2026-07 at 3.30 Bcf/d and 1.17 MMbbl/d; 518 fields; index 2.5 MB gzip; `--check` byte-identical; 94 % of EIA gross withdrawals, 100 % of marketed). Milestones 1b and 1c `f66463a`: `production-williston` (token `4`) — region card at global, 518 field marks at regional, 24,154 well points (`PointPrimitiveCollection`, clipped to the view) at local, hover and selected cards, the dossier with the ten-year chart from an on-demand shard, `scripts/qa-onshore-williston.mjs` on the shared harness (32 checks: activation 659 ms apart from the 16 MB fetch, heap +35 MiB, layer frame cost 1.8 ms). `836c325` fixes the second enable of the rows 4 and 11 layers (found by this QA). Build notes §14.13. Next: region 2, Appalachia (PA unconventional) |
-| 13  | Hosted site: globe + console behind one login at `commodities.optaimum.com` | ops + shell + server (`feat/commodities-shell`; oracle twin FR-D17) | **M1c BUILT 2026-09-24**: `globe.service` LIVE on the VPS at 127.0.0.1:8020 (fail-closed, 403 everywhere until Access is configured), first gated deploy 3 min 39 s with 4,402 tests green on Linux; rollback 1.1 s (after fix `ca8e374`); console FR-D17a deployed. **Next: the founder** creates the Access app `Commodities` then the hostname, and the production keys (§15.12 steps 4–5). M1a BUILT `9d61cd6`; M1b BUILT (globe `b73db97` + `447bd8f`, oracle `2e46883`). PRD §15, rewritten 2026-09-24 with an agent brief at §15.0 and every amendment folded in; status table §15.12, build record §15.14, runbook `docs/HOSTING.md`. Since then: failing-commit drill passed (G13.3); **M2 stamping BUILT + deployed** (oracle `2c7c168`). Founder next: Access app then hostname, keys (§15.12 steps 4–5). **M3 oracle routes DONE** (oracle `8a32523`, live). **M3 globe side IN PROGRESS 2026-09-24** (this session: chokepoint layer prefers `/api/oracle/chokepoints`). Session after: M2 licence pass |
+| 13  | Hosted site: globe + console behind one login at `commodities.optaimum.com` | ops + shell + server (`feat/commodities-shell`; oracle twin FR-D17) | **M1c BUILT 2026-09-24**: `globe.service` LIVE on the VPS at 127.0.0.1:8020 (fail-closed, 403 everywhere until Access is configured), first gated deploy 3 min 39 s with 4,402 tests green on Linux; rollback 1.1 s (after fix `ca8e374`); console FR-D17a deployed. **Next: the founder** creates the Access app `Commodities` then the hostname, and the production keys (§15.12 steps 4–5). M1a BUILT `9d61cd6`; M1b BUILT (globe `b73db97` + `447bd8f`, oracle `2e46883`). PRD §15, rewritten 2026-09-24 with an agent brief at §15.0 and every amendment folded in; status table §15.12, build record §15.14, runbook `docs/HOSTING.md`. Since then: failing-commit drill passed (G13.3); **M2 stamping BUILT + deployed** (oracle `2c7c168`). Founder next: Access app then hostname, keys (§15.12 steps 4–5). **M3 oracle routes DONE** (oracle `8a32523`, live). **M3: routes live; chokepoint layer reads the oracle store** (`1711e03`, deployed; card and console agree on Hormuz −84% vs 90d, 2026-09-20). Session next: basin reading on the onshore region card (completes the M3 check), then M2 licence pass |
 
 Definition of usable, pending founder confirmation of question 13: rows 1
 through 4. Rows 5 to 7 are context and content.
@@ -4399,7 +4399,7 @@ ubuntu user has passwordless sudo; no inbound port except 22)
 | `cloudflared.service` | tunnel `oracle` (dashboard-managed, account Jack@optaimum.com) | `oracle.optaimum.com` → `:8011` behind Access app "Oracle console", policy Founder. Row 13 adds `commodities.optaimum.com` → `:8020`. |
 | `globe.service` (row 13) | `vite preview` on `127.0.0.1:8020` from `/srv/gods-eye-view/current`, user `globe` | Config `/etc/gods-eye-view/globe.env` (root:globe 0640). |
 | Ports reserved | `8020` globe, `8021` M4 publish listener (localhost only) | Both were free on 2026-09-24. |
-| Crons (ubuntu) | fast `*/30`, daily `23:00Z`, slow `02:00Z` (`ingest/refresh.py --tier …`, flock-guarded), brief `10:00Z`, backup `23:30Z`, chroma tar Sun `04:00Z` | Never run ingest from the laptop. Never build or run gates in 22:45–23:30Z or 01:45–02:30Z. Since 2026-09-24 (oracle `90ead34`, FR-J3) the natgas lanes run in the tiers: `ng_spot` + `ng_storage` daily, `ng_cot` Saturday and `ng_monthly` on the 2nd in slow, plus a Thu/Fri fast-tier storage catch-up; `oracle_natgas.db` catches up from the next daily run. |
+| Crons (ubuntu) | fast `*/30`, daily `23:00Z`, slow `02:00Z` (`ingest/refresh.py --tier …`, flock-guarded), wire `15,45 * * * *` (`--tier wire`: natgas GDELT + embed, own lock, since 2026-09-24), brief `10:00Z`, backup `23:30Z`, chroma tar Sun `04:00Z` | Never run ingest from the laptop. Never build or run gates in 22:45–23:30Z or 01:45–02:30Z. Since 2026-09-24 (oracle `90ead34`, FR-J3) the natgas lanes run in the tiers: `ng_spot` + `ng_storage` daily, `ng_cot` Saturday and `ng_monthly` on the 2nd in slow, plus a Thu/Fri fast-tier storage catch-up; `oracle_natgas.db` catches up from the next daily run. |
 
 **Request path in production**
 
@@ -4774,7 +4774,7 @@ pushes "source updated" and health events to every open page.
 | 6 | M1 verify (§15.10) and close | all | session + founder | open |
 | 7 | FR-N5 / FR-J3: schedule the `ng_*` ingest (also fixes today's stale `/gas`) | oracle + crontab | oracle lane | **DONE** oracle `90ead34` (journal-memory session): natgas lanes in the refresh tiers |
 | 8 | M2: invitee group, askd stamp columns + key check, licence pass | both + dashboard | session + founder | **stamping BUILT + deployed** (oracle `2c7c168`, §15.14); open: licence pass (session), invitee group (founder), the invitee test |
-| 9 | M3: `freshness`, `chokepoints`, `basins` routes; layers prefer them; `gas-storage` after step 7 | both | session | open |
+| 9 | M3: `freshness`, `chokepoints`, `basins` routes; layers prefer them; `gas-storage` after step 7 | both | session | **routes BUILT + live** (oracle `8a32523`, all four incl. `gas-storage`); **chokepoint layer BUILT + deployed** `1711e03`; open: a basin reading on the globe (onshore region card) for the M3 check |
 | 10 | M4: hub, publish listener, `refresh.py` hook, deadlines, strip and layer wiring | both | session | open |
 | 11 | M5: 301 after seven clean days | dashboard | founder | open |
 | 12 | Phase 2 PRD: one scheduler daemon | new PRD | grill first | open |
@@ -4881,3 +4881,32 @@ oracle ledger cite them.
   store migrated; live `/trades` and `/ask/<id>` carry the fields. Rows from
   before the change keep NULL stamps. Left for M2: the licence pass, the
   invitee Access group, and the invitee test.
+- **M3 routes, oracle `8a32523` (2026-09-24, FR-D17b).** New
+  `tools/oracle_api.py`, hooked into `market_map.py` `do_GET`; GET only,
+  stores opened read-only; records carry `observedAt` / `validAt` /
+  `publishedAt` (null where the store does not record it) / `fetchedAt`.
+  `freshness` reads `SRC_TOL_H` (grace defaults to the tolerance,
+  `gdelt_news` 6 h; critical = quotes, eia_spot, ng_spot, ng_storage),
+  `chokepoints?days=`, `basins` (six basins: observed TMIN, AIFS_ENS
+  TMIN/FRZDD 14 d with p10/p90, `frzdd14`), `gas-storage?weeks=` (EIA weekly
+  by region; FR-J3 made it current, week of 09-18). Live on the VPS: 4–25 ms
+  per route (target < 500 ms), 404 for unknown routes, POST refused;
+  `/gas` and the route agree (L48 3,351 Bcf). Found: `bsee_shutins` has not
+  written for ~17 days; EU tables are empty by design (FR-N3 non-goal).
+- **M3 chokepoint layer `1711e03` (2026-09-24).** New portable
+  `src/layers/chokepoints/oracleSource.js`: the route's series feed the same
+  `buildChokepointSnapshot`, so the deviation math is unchanged;
+  `createPreferredChokepointSource` falls back to live PortWatch on any
+  failure, and when the store's newest day is over 14 days old (a stale
+  laptop mirror never beats live PortWatch); aborts never trigger the
+  fallback. The card source line and `getStats().source` name whichever
+  answered. 7 new tests; four gates green (4,409 / 0 fail). End to end
+  before Access exists: the local production build with
+  `GEV_CONSOLE_URL` through an ssh tunnel to the VPS console read the
+  canonical store (28 of 28, newest 2026-09-20, source "IMF PortWatch via
+  Oil Oracle store"; Hormuz −84% vs 90d, the console tile says the same);
+  with the tunnel closed the proxy answered 502 and the layer fell back to
+  PortWatch with the same reading. Gated deploy on the VPS 3 min 44 s,
+  4,409 tests, 0 fail; `previous` = `ca8e374`. One console-side oddity: its
+  brief line says Hormuz −85% where its tile says −84% (the console's own
+  rounding, not the route).
