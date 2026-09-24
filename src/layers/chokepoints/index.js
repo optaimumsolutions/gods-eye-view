@@ -82,6 +82,8 @@ export function createChokepointsLayer({
   let _lastUpdate = null;
   let _lastError = null;
   let _latestDate = null;
+  // Row 13 M3: 'IMF PortWatch via Oil Oracle store' when the oracle route answered
+  let _sourceLabel = 'IMF PortWatch';
   let _enabled = false;
   const _rowById = new Map();
   const _positionById = new Map();
@@ -206,7 +208,7 @@ export function createChokepointsLayer({
       id: `${CHOKEPOINT_LAYER_ID}:${row.id}`,
       layerId: CHOKEPOINT_LAYER_ID,
       layerName: layer.name,
-      source: 'IMF PortWatch',
+      source: _sourceLabel,
       dataSource: _dataSource,
       label: row.latestDate
         ? `${row.name} · tanker transits ${formatDeviation(row.deviationPct)} vs ${row.baselineDays}d`
@@ -359,6 +361,7 @@ export function createChokepointsLayer({
           return false;
         const rows = Array.isArray(snapshot?.rows) ? snapshot.rows : null;
         if (!rows) throw new Error('Malformed chokepoint snapshot');
+        _sourceLabel = snapshot.source || 'IMF PortWatch';
 
         const entries = [];
         const applied = [];
@@ -440,6 +443,7 @@ export function createChokepointsLayer({
         lastUpdate: _lastUpdate,
         error: _lastError,
         latestDate: _latestDate,
+        source: _sourceLabel,
       };
     },
   };
