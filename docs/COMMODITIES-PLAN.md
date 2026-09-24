@@ -34,7 +34,7 @@ owns layers. Re-check `git status` before every edit to a shared file.
 | 10  | `commodity-lng`: LNG terminals, tiered cards, sea-routed cargo arcs | layers (worktree `commodities-lng`) | **BUILT 2026-09-21** — PRD §12 (mirror: Project Brain `05-prd.md`), milestones 0 to 6. Bundle `8b5c5b4` (`npm run build:lng`, `--check` byte-identical; 308 GEM terminals, EIA 2026-Q2 trains on 14 US plants, DOE cargoes through 2026-06, GIIGNL 2025 matrix 427.9 MT, 470 searoute-ts routes); layer, dossier, chips, docs in the commit carrying this line. `scripts/qa-lng.mjs` green (41 checks; activation 666 ms warm, heap +31 MiB); four gates green. Deviations in §12.11: GEM read from GEM's public tracker-map feed until the form-gated xlsx is placed (no operator column), via radius 40 km, chips session-only, EIA API codes null until milestone 7. Landed on `feat/commodities-shell` per the founder's 2026-09-21 rule. Next: milestone 7 (EIA `poe2` refresh once row 4 lands the key path) |
 | 11  | Gas production facilities: Gulf platforms (BSEE) first | layers + content (shell worktree, `feat/commodities-shell`) | **BUILT (first slice) 2026-09-21** — PRD §13 from the founder's pivot and grill; on `feat/commodities-shell` (founder's instruction: every update on the shell branch, no row worktree), token `2`. Milestone 1 `c6c92b2`: `scripts/build-gulf-platforms.mjs` + `src/data/local_data/bsee_gulf/` (1,315 installed structures, 120-month series, 608 KB gzip), the completeness rule and the one record shape. Milestone 2 `1e685f0`: marks sized by gas share and coloured by change against last year, three tiers, hover and selected cards, the panel line, `scripts/qa-gulf-platforms.mjs`. Milestone 3 `af342d1`: the dossier (ten-year chart, this-month ledger, identity, lifetime, sources) and the drawer chrome shared with the datacenters; QA 20 checks green (layer activation 755 ms apart from the bundle fetch, heap +50 MiB). Milestone 4 is the commit carrying this line. Four gates green at every commit. Next: milestone 5 (EIA regional backdrop, short grill first) |
 | 12  | Onshore production facilities: wells, leases and rigs, region by region | layers + content (shell worktree, `feat/commodities-shell`) | **BUILT (milestones 0 and 1, Williston) 2026-09-21** — PRD §14 from the founder's direction the same day; five live sweeps probed some twenty regulators (§14.4); eleven regions ranked (§14.5). The founder's "build out the basins one at a time" started the ladder in the §14.5 order with O1 taken as recommended (option a: index and clusters committed, history shards built from the archive, not committed). Milestone 1a `c4ec135`: `scripts/build-onshore.mjs` + `scripts/onshore/{nd,eia,regions}.mjs`, `src/layers/onshore/{records,shards,bundledSource}.js`, `src/data/local_data/onshore/williston/` (24,154 North Dakota wells over 120 months, 17,915 producing in 2026-07 at 3.30 Bcf/d and 1.17 MMbbl/d; 518 fields; index 2.5 MB gzip; `--check` byte-identical; 94 % of EIA gross withdrawals, 100 % of marketed). Milestones 1b and 1c `f66463a`: `production-williston` (token `4`) — region card at global, 518 field marks at regional, 24,154 well points (`PointPrimitiveCollection`, clipped to the view) at local, hover and selected cards, the dossier with the ten-year chart from an on-demand shard, `scripts/qa-onshore-williston.mjs` on the shared harness (32 checks: activation 659 ms apart from the 16 MB fetch, heap +35 MiB, layer frame cost 1.8 ms). `836c325` fixes the second enable of the rows 4 and 11 layers (found by this QA). Build notes §14.13. Next: region 2, Appalachia (PA unconventional) |
-| 13  | Hosted site: globe + console behind one login at `commodities.optaimum.com` | ops + shell + server (`feat/commodities-shell`; oracle twin FR-D17) | **M1c BUILT 2026-09-24**: `globe.service` LIVE on the VPS at 127.0.0.1:8020 (fail-closed, 403 everywhere until Access is configured), first gated deploy 3 min 39 s with 4,402 tests green on Linux; rollback 1.1 s (after fix `ca8e374`); console FR-D17a deployed. **Next: the founder** creates the Access app `Commodities` then the hostname, and the production keys (§15.12 steps 4–5). M1a BUILT `9d61cd6`; M1b BUILT (globe `b73db97` + `447bd8f`, oracle `2e46883`). PRD §15, rewritten 2026-09-24 with an agent brief at §15.0 and every amendment folded in; status table §15.12, build record §15.14, runbook `docs/HOSTING.md`. After M1c: founder keys + Cloudflare Access app then hostname (§15.12 steps 4–5); FR-N5 natgas cron ahead of M3 |
+| 13  | Hosted site: globe + console behind one login at `commodities.optaimum.com` | ops + shell + server (`feat/commodities-shell`; oracle twin FR-D17) | **M1c BUILT 2026-09-24**: `globe.service` LIVE on the VPS at 127.0.0.1:8020 (fail-closed, 403 everywhere until Access is configured), first gated deploy 3 min 39 s with 4,402 tests green on Linux; rollback 1.1 s (after fix `ca8e374`); console FR-D17a deployed. **Next: the founder** creates the Access app `Commodities` then the hostname, and the production keys (§15.12 steps 4–5). M1a BUILT `9d61cd6`; M1b BUILT (globe `b73db97` + `447bd8f`, oracle `2e46883`). PRD §15, rewritten 2026-09-24 with an agent brief at §15.0 and every amendment folded in; status table §15.12, build record §15.14, runbook `docs/HOSTING.md`. Since then: failing-commit drill passed (G13.3); **M2 stamping BUILT + deployed** (oracle `2c7c168`). Founder next: Access app then hostname, keys (§15.12 steps 4–5). Session next: M2 licence pass, M3 routes (FR-J3 natgas cron landed) |
 
 Definition of usable, pending founder confirmation of question 13: rows 1
 through 4. Rows 5 to 7 are context and content.
@@ -4399,7 +4399,7 @@ ubuntu user has passwordless sudo; no inbound port except 22)
 | `cloudflared.service` | tunnel `oracle` (dashboard-managed, account Jack@optaimum.com) | `oracle.optaimum.com` → `:8011` behind Access app "Oracle console", policy Founder. Row 13 adds `commodities.optaimum.com` → `:8020`. |
 | `globe.service` (row 13) | `vite preview` on `127.0.0.1:8020` from `/srv/gods-eye-view/current`, user `globe` | Config `/etc/gods-eye-view/globe.env` (root:globe 0640). |
 | Ports reserved | `8020` globe, `8021` M4 publish listener (localhost only) | Both were free on 2026-09-24. |
-| Crons (ubuntu) | fast `*/30`, daily `23:00Z`, slow `02:00Z` (`ingest/refresh.py --tier …`, flock-guarded), brief `10:00Z`, backup `23:30Z`, chroma tar Sun `04:00Z` | Never run ingest from the laptop. Never build or run gates in 22:45–23:30Z or 01:45–02:30Z. The `ng_*` natgas ingest is NOT scheduled (FR-N5 / FR-J3 open), so `oracle_natgas.db` is stale. |
+| Crons (ubuntu) | fast `*/30`, daily `23:00Z`, slow `02:00Z` (`ingest/refresh.py --tier …`, flock-guarded), brief `10:00Z`, backup `23:30Z`, chroma tar Sun `04:00Z` | Never run ingest from the laptop. Never build or run gates in 22:45–23:30Z or 01:45–02:30Z. Since 2026-09-24 (oracle `90ead34`, FR-J3) the natgas lanes run in the tiers: `ng_spot` + `ng_storage` daily, `ng_cot` Saturday and `ng_monthly` on the 2nd in slow, plus a Thu/Fri fast-tier storage catch-up; `oracle_natgas.db` catches up from the next daily run. |
 
 **Request path in production**
 
@@ -4752,8 +4752,9 @@ pushes "source updated" and health events to every open page.
   (TxDOT cameras, Petrinex, FracFocus, CCTV feeds). Resolved by the M2 pass.
 - **Keys in the bundle.** Google and Cesium tokens reach every signed-in
   browser; resolved by the referrer lock and caps.
-- **Natgas freshness.** The `ng_*` ingest is unscheduled, so gas data is days
-  to weeks old; FR-N5 / FR-J3 must land before M3's gas route.
+- **Natgas freshness.** Scheduled since `90ead34` (FR-J3); confirm
+  `storage_weekly` and spot are current in `oracle_natgas.db` before
+  shipping M3's `gas-storage` route.
 - **VPS load.** Gates and builds share eight cores with ingest and Ollama;
   measured on the first deploy (§15.14).
 - **One box.** The VPS is a single point of failure for both halves; the
@@ -4771,8 +4772,8 @@ pushes "source updated" and health events to every open page.
 | 4 | Keys: Google browser + server, Cesium ion, OpenAI, budget caps; written into `globe.env` over ssh | provider consoles | founder | open |
 | 5 | Cloudflare: Access app `Commodities` first, then the hostname; team + AUD into `globe.env`, restart | dashboard | founder | open |
 | 6 | M1 verify (§15.10) and close | all | session + founder | open |
-| 7 | FR-N5 / FR-J3: schedule the `ng_*` ingest (also fixes today's stale `/gas`) | oracle + crontab | oracle lane | **claimed 2026-09-24** by the journal-memory session (`6ac2ea3`) |
-| 8 | M2: invitee group, askd stamp columns + key check, licence pass | both + dashboard | session + founder | open |
+| 7 | FR-N5 / FR-J3: schedule the `ng_*` ingest (also fixes today's stale `/gas`) | oracle + crontab | oracle lane | **DONE** oracle `90ead34` (journal-memory session): natgas lanes in the refresh tiers |
+| 8 | M2: invitee group, askd stamp columns + key check, licence pass | both + dashboard | session + founder | **stamping BUILT + deployed** (oracle `2c7c168`, §15.14); open: licence pass (session), invitee group (founder), the invitee test |
 | 9 | M3: `freshness`, `chokepoints`, `basins` routes; layers prefer them; `gas-storage` after step 7 | both | session | open |
 | 10 | M4: hub, publish listener, `refresh.py` hook, deadlines, strip and layer wiring | both | session | open |
 | 11 | M5: 301 after seven clean days | dashboard | founder | open |
@@ -4862,4 +4863,21 @@ oracle ledger cite them.
   as release 2 (3 min 36 s, green). Rollback to `1cef46f` and back each took
   1.1 s with 403 throughout (G13.3). Live: `ca8e374`, tag `production`.
   Still open for the M1 check: the founder's keys and Cloudflare steps, the
-  browser look, and a deliberately failing commit.
+  browser look. **Failing-commit drill (15:38Z):** a local-only commit with a
+  prettier error, deployed by sha, stopped at the format gate with "the live
+  release is unchanged"; `current` stayed `ca8e374`, 403 throughout; the drill
+  branch and release were removed. G13.3 is met.
+- **M2 stamping, oracle `2c7c168` (2026-09-24, FR-D17b).** askd `actor()`
+  trusts `X-Oracle-User` only with a constant-time match of
+  `X-Oracle-Proxy-Key` against `GEV_PROXY_KEY` in the oracle `.env` (copied
+  from `globe.env` on the VPS, never printed; read per request), else stamps
+  the founder. `trades.booked_by` / `closed_by` and `asks.requested_by` via
+  `eia_client` MIGRATIONS, applied by askd's boot. The trade card shows the
+  stamps; the TP/SL Slack page names the booker; the desk mirror read
+  tolerates an older store. Checked on a store copy seeded with the old
+  schema (10/10: no header, key unset, matching key, wrong key, malformed
+  email, close, `/trades`, job payload, asks row, `POST /ask`); deployed
+  15:56Z after a clean VPS diff (backups `*.pre-fr-d17b`); the canonical
+  store migrated; live `/trades` and `/ask/<id>` carry the fields. Rows from
+  before the change keep NULL stamps. Left for M2: the licence pass, the
+  invitee Access group, and the invitee test.
