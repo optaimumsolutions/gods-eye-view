@@ -4862,13 +4862,69 @@ work) before editing. Show VPS commands before running them. Record the
 result in §15.14 and the ledger, push, then /update-obsidian.
 ```
 
-**M4 event contract** (freeze before coding; both repos use it):
-`source.updated {type, source, observedAt, publishedAt, rows, at}` ·
-`health {type, component: console|askd|ingest:<source>|globe, state:
-live|stale|offline, since, at}` · `heartbeat {type, at}` every 30 s ·
-`snapshot {type, sources: [...], health: [...], at}` on connect. The `ws`
-package (MIT, 8.21.x) is a devDependency today; move it to dependencies in
-the M4 commit.
+**M4 event contract — FROZEN 2026-09-25** (both repos code against this; a
+change bumps `v` and is recorded here first).
+
+- **Hub.** `GET /api/events` upgraded to a WebSocket on the globe server,
+  same origin as the page (`wss://commodities.optaimum.com/api/events`). The
+  upgrade passes `accessGuard.verifyUpgrade()` or gets `HTTP/1.1 403` and the
+  socket is closed; the hub runs only when `GEV_EVENTS_PUBLISH_PORT` is set
+  (production), otherwise the upgrade gets 404 and the strip keeps polling.
+  Server to browser only: text frames, one JSON object each; frames a browser
+  sends are ignored. Every frame carries `v: 1`, `type`, and `at` (ISO 8601
+  UTC with `Z`, the hub's clock when it sent the frame).
+- **`snapshot`** on connect: `{v, type: 'snapshot', sources: [Source],
+  health: [Health], at}`. `Source` = `{source, observedAt, fetchedAt,
+  lastRunAt, lastRunRows, toleranceHours, graceHours, critical, state:
+  live|stale|unknown, deadline}` (the `/api/oracle/freshness` record plus
+  `deadline` = `fetchedAt` + `toleranceHours` + `graceHours`, null without a
+  write).
+- **`source.updated`** `{v, type: 'source.updated', source, observedAt,
+  publishedAt, rows, runAt, at}`: one per `ingest_log` row the publish side
+  reports. `rows` = `rows_written` (0 is a run that wrote nothing: browsers
+  refresh only on `rows > 0`); `runAt` = `ingest_log.run_at`; `observedAt`
+  from the hub's freshness read right after the publish (null when the
+  source has no observed column or the read failed); `publishedAt` null until
+  the store records it.
+- **`health`** `{v, type: 'health', component, state, since, detail, at}`.
+  `component` = `console` | `askd` | `ingest:<source>` | `globe`; `state` =
+  `live` | `stale` | `offline` (`ingest:*` uses live/stale; `console`/`askd`
+  live/offline); `since` = when this state began; `detail` a short reason or
+  null. Sent once per transition, and in every `snapshot`.
+- **`heartbeat`** `{v, type: 'heartbeat', at}` every 30 s.
+- **Publish side** (oracle to hub, never tunnelled): `POST
+  http://127.0.0.1:8021/publish`, `Content-Type: application/json`,
+  `X-Oracle-Proxy-Key: <GEV_PROXY_KEY>`, body `{items: [{source, runAt,
+  rows}]}` (1 to 200 items, 64 KB cap). Answers `202 {accepted}`; 403 on a
+  wrong key, 400 on a malformed body. `GET /health` answers the hub's
+  counters. `ingest/refresh.py` posts after each successful `run(job)` with a
+  2 s timeout; a failure prints one line and never fails the ingest.
+- **Probes and deadlines.** Every 20 s the hub reads `/api/oracle/freshness`
+  through `GEV_CONSOLE_URL` (also right after a publish; a failed read is a
+  failed console probe) and `GET <GEV_ASKD_URL>/health` (default
+  `http://127.0.0.1:8014`). Two consecutive failures = `offline`, one
+  success = `live`. A source whose `deadline` passes turns
+  `ingest:<source>` stale; a new write turns it live.
+- **Paging.** Transitions of `console`, `askd` and `critical` sources page
+  Slack once each way through askd `POST /relay/slack` (localhost,
+  `X-Oracle-Proxy-Key` checked, body `{text}`, answers 202, reuses
+  `refresh.slack()`); at most 12 pages an hour. A first observation never
+  pages, so a globe restart does not re-page a condition that began before
+  it. askd cannot relay its own outage: that page is queued and sent with
+  the recovery.
+- **Browser.** `subscribeFreshness()` prefers the hub, falls back to polling
+  `/logs.json` while the socket is down (retry 5 s doubling to 60 s), sets
+  `window.__gevHubLive` while connected, and dispatches `gev:source-updated`
+  (`CustomEvent`, detail = the frame) on `window`. Console pages show a
+  "new data · refresh" pill; the market and gas pages skip their 60 s reload
+  while `window.__gevHubLive` is true. The globe refreshes mapped layers in
+  place (`src/hosting/liveRefresh.js`: `portwatch` -> chokepoints, the basin
+  weather sources -> the Williston card).
+
+The `ws` package (MIT, 8.21.x) moves from devDependencies to dependencies in
+the M4 commit. Code: `server/hosting/eventContract.js` (frames, publish
+parsing), `eventHub.js`, `eventsPlugin.js`; oracle `ingest/refresh.py`
+(publish) and `tools/ask_server.py` (`/relay/slack`).
 
 ### 15.13 Validation findings (phase 0, 2026-09-23), for reference
 
