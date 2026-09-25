@@ -124,12 +124,17 @@ export const GROUPS = [
     ],
   },
   {
-    title: 'Reserved for milestone 4 (event hub).',
+    title: 'Event hub (milestone 4). Setting the port switches the hub on.',
     entries: [
       [
         'GEV_EVENTS_PUBLISH_PORT',
         '8021',
         'Localhost-only publish listener; never tunnelled.',
+      ],
+      [
+        'GEV_ASKD_URL',
+        'http://127.0.0.1:8014',
+        'askd: probed by the hub, and its /relay/slack pages health transitions.',
       ],
     ],
   },

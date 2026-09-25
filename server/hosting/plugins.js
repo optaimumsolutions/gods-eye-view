@@ -1,20 +1,24 @@
 import { accessGuardPlugin } from './accessGuard.js';
 import { consoleProxyPlugin } from './consoleProxy.js';
+import { eventsPlugin } from './eventsPlugin.js';
 import { licencePlugin } from './licences.js';
 import { navStripPlugin } from './navStrip.js';
 
 /**
  * The hosted-site plugins (plan §15, row 13), in the order they must run:
  * the Access guard first, then the licence switch (M2), then the console
- * proxy, then the strip injection. With no hosting variables set they change
- * nothing but the console proxy.
+ * proxy, then the strip injection, then the event hub (M4), which checks the
+ * same guard at the WebSocket upgrade. With no hosting variables set they
+ * change nothing but the console proxy.
  */
 export function hostingPlugins({ env = process.env, fetchImpl } = {}) {
+  const access = accessGuardPlugin({ env, fetchImpl });
   return [
-    accessGuardPlugin({ env, fetchImpl }),
+    access,
     licencePlugin({ env }),
     consoleProxyPlugin({ env }),
     navStripPlugin({ env }),
+    eventsPlugin({ env, guard: access.api.guard }),
   ];
 }
 

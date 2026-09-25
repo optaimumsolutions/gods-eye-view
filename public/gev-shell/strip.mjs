@@ -78,9 +78,101 @@ export function formatFreshness(freshness) {
   return `${freshness.host} as of ${when} · ${label}${extra}`;
 }
 
+/** The event hub's path on the globe server (plan §15.12, M4 contract). */
+export const EVENTS_PATH = '/api/events';
+export const HUB_RETRY_MS = 5_000;
+export const HUB_RETRY_MAX_MS = 60_000;
+/** The event a hub `source.updated` frame becomes on `window` (detail = frame). */
+export const SOURCE_UPDATED_EVENT = 'gev:source-updated';
+
+/** The hub's WebSocket URL for this page; null outside a served page. */
+export function hubUrl(loc = globalThis.location) {
+  if (!loc?.host || !/^https?:$/.test(loc.protocol || '')) return null;
+  const scheme = loc.protocol === 'https:' ? 'wss' : 'ws';
+  return `${scheme}://${loc.host}${EVENTS_PATH}`;
+}
+
+/** What the strip knows from the hub: source records and component health. */
+export function createHubState() {
+  return { sources: new Map(), health: new Map() };
+}
+
+/** Fold one hub frame into the state; true when the strip should re-render. */
+export function applyHubFrame(state, frame) {
+  switch (frame?.type) {
+    case 'snapshot':
+      state.sources = new Map(
+        (frame.sources ?? []).map((record) => [record.source, { ...record }]),
+      );
+      state.health = new Map(
+        (frame.health ?? []).map((entry) => [entry.component, entry]),
+      );
+      return true;
+    case 'source.updated': {
+      const record = state.sources.get(frame.source) ?? {
+        source: frame.source,
+      };
+      if (frame.runAt) record.lastRunAt = frame.runAt;
+      if (frame.rows > 0 && frame.runAt) record.fetchedAt = frame.runAt;
+      if (frame.observedAt) record.observedAt = frame.observedAt;
+      state.sources.set(frame.source, record);
+      return true;
+    }
+    case 'health':
+      state.health.set(frame.component, frame);
+      return true;
+    case 'heartbeat':
+      return true;
+    default:
+      return false;
+  }
+}
+
 /**
- * The one freshness feed. Calls `callback(freshness)` now and on every poll;
- * returns an unsubscribe function. Milestone 4 replaces the polling body.
+ * Reduce the hub's state to the strip's freshness, in the same shape as
+ * freshnessFromLogs: OFFLINE when the console is down; STALE when a source
+ * missed its deadline, askd is down, or nothing was ingested for 75 minutes.
+ */
+export function freshnessFromHub(state, now = Date.now()) {
+  if (!state || state.health.get('console')?.state === 'offline')
+    return { state: 'offline', asOf: null, host: null, stale: [] };
+  let latest = null;
+  for (const record of state.sources.values()) {
+    const at = Date.parse(record.lastRunAt ?? record.fetchedAt);
+    if (Number.isFinite(at) && (latest === null || at > latest)) latest = at;
+  }
+  const stale = [];
+  for (const entry of state.health.values()) {
+    if (entry.component?.startsWith('ingest:') && entry.state === 'stale')
+      stale.push(entry.component.slice('ingest:'.length));
+    else if (entry.component === 'askd' && entry.state === 'offline')
+      stale.push('askd');
+  }
+  stale.sort();
+  if (latest === null)
+    return { state: 'stale', asOf: null, host: 'store', stale };
+  const fresh = now - latest <= LATEST_INGEST_MAX_AGE_MS && stale.length === 0;
+  return {
+    state: fresh ? 'live' : 'stale',
+    asOf: latest,
+    host: 'store',
+    stale,
+  };
+}
+
+function dispatchSourceUpdated(target, frame) {
+  const Event = globalThis.CustomEvent;
+  if (typeof Event !== 'function' || !target?.dispatchEvent) return;
+  target.dispatchEvent(new Event(SOURCE_UPDATED_EVENT, { detail: frame }));
+}
+
+/**
+ * The one freshness feed. Calls `callback(freshness)` now and on every
+ * change; returns an unsubscribe function. It prefers the event hub (M4):
+ * once the hub's snapshot arrives the /logs.json polling stops,
+ * `window.__gevHubLive` is true, and every `source.updated` is re-dispatched
+ * as `gev:source-updated` and passed to `onEvent`. While the socket is down
+ * it polls /logs.json every 60 s and retries the hub (5 s, doubling to 60 s).
  */
 export function subscribeFreshness(
   callback,
@@ -90,9 +182,29 @@ export function subscribeFreshness(
     intervalMs = POLL_INTERVAL_MS,
     setIntervalImpl = globalThis.setInterval,
     clearIntervalImpl = globalThis.clearInterval,
+    setTimeoutImpl = globalThis.setTimeout,
+    clearTimeoutImpl = globalThis.clearTimeout,
+    WebSocketImpl = globalThis.WebSocket,
+    url = hubUrl(),
+    target = globalThis,
+    onEvent = () => {},
   } = {},
 ) {
   let stopped = false;
+  let timer = null;
+  let socket = null;
+  let retryTimer = null;
+  let retryMs = HUB_RETRY_MS;
+  let hub = null;
+
+  const setHubLive = (live) => {
+    try {
+      if (target) target.__gevHubLive = live;
+    } catch {
+      /* a frozen global: the console simply keeps its reload */
+    }
+  };
+
   const poll = async () => {
     let freshness;
     try {
@@ -106,13 +218,87 @@ export function subscribeFreshness(
     } catch {
       freshness = freshnessFromLogs(null);
     }
-    if (!stopped) callback(freshness);
+    if (!stopped && !hub) callback(freshness);
   };
-  poll();
-  const timer = setIntervalImpl(poll, intervalMs);
+  const startPolling = () => {
+    if (timer !== null) return;
+    poll();
+    timer = setIntervalImpl(poll, intervalMs);
+  };
+  const stopPolling = () => {
+    if (timer === null) return;
+    clearIntervalImpl(timer);
+    timer = null;
+  };
+
+  const scheduleRetry = () => {
+    if (stopped || retryTimer !== null) return;
+    retryTimer = setTimeoutImpl(() => {
+      retryTimer = null;
+      connect();
+    }, retryMs);
+    retryMs = Math.min(retryMs * 2, HUB_RETRY_MAX_MS);
+  };
+
+  function connect() {
+    if (stopped || !url || typeof WebSocketImpl !== 'function') return;
+    let ws;
+    try {
+      ws = new WebSocketImpl(url);
+    } catch {
+      scheduleRetry();
+      return;
+    }
+    socket = ws;
+    ws.onmessage = (message) => {
+      if (socket !== ws || stopped) return;
+      let frame;
+      try {
+        frame = JSON.parse(message.data);
+      } catch {
+        return;
+      }
+      if (frame?.type === 'snapshot') {
+        hub = createHubState();
+        retryMs = HUB_RETRY_MS;
+        stopPolling();
+        setHubLive(true);
+      }
+      if (!hub || !applyHubFrame(hub, frame)) return;
+      if (frame.type === 'source.updated') {
+        dispatchSourceUpdated(target, frame);
+        onEvent(frame);
+      }
+      callback(freshnessFromHub(hub, now()));
+    };
+    ws.onclose = () => {
+      if (socket !== ws) return;
+      socket = null;
+      hub = null;
+      setHubLive(false);
+      if (stopped) return;
+      startPolling();
+      scheduleRetry();
+    };
+    ws.onerror = () => {};
+  }
+
+  startPolling();
+  connect();
   return () => {
     stopped = true;
-    clearIntervalImpl(timer);
+    stopPolling();
+    if (retryTimer !== null) clearTimeoutImpl(retryTimer);
+    retryTimer = null;
+    const ws = socket;
+    socket = null;
+    hub = null;
+    setHubLive(false);
+    try {
+      ws?.close();
+    } catch {
+      /* already closed */
+    }
   };
 }
 
@@ -142,6 +328,9 @@ html.gev-strip-flow #chatbox { top: var(--gev-strip-height); height: calc(100% -
 #gev-strip .gev-fresh[data-state='live'] { color: #4ade80; }
 #gev-strip .gev-fresh[data-state='stale'] { color: #fbbf24; }
 #gev-strip .gev-fresh[data-state='offline'] { color: #f87171; }
+#gev-strip .gev-pill { margin-left: auto; font: inherit; letter-spacing: 0.04em; color: #0b0f14; background: #38bdf8; border: 0; border-radius: 10px; padding: 3px 10px; cursor: pointer; }
+#gev-strip .gev-pill[hidden] { display: none; }
+#gev-strip .gev-pill:not([hidden]) + .gev-fresh { margin-left: 10px; }
 @media (max-width: 640px) {
   #gev-strip a { padding: 6px 6px; }
   #gev-strip .gev-fresh { display: none; }
@@ -196,6 +385,16 @@ export function mountStrip(
     if (link.id === current) anchor.setAttribute('aria-current', 'page');
     nav.appendChild(anchor);
   }
+  // H15: console pages show "new data · refresh" instead of reloading; the
+  // globe refreshes its layers in place (src/hosting/liveRefresh.js).
+  const onGlobe = Boolean(doc.getElementById('cesiumContainer'));
+  const pill = doc.createElement('button');
+  pill.type = 'button';
+  pill.className = 'gev-pill';
+  pill.textContent = 'new data · refresh';
+  pill.hidden = true;
+  pill.addEventListener('click', () => loc?.reload?.());
+  nav.appendChild(pill);
   const fresh = doc.createElement('span');
   fresh.className = 'gev-fresh';
   fresh.dataset.state = 'offline';
@@ -211,13 +410,23 @@ export function mountStrip(
   chatFromHash();
   globalThis.addEventListener?.('hashchange', chatFromHash);
 
-  subscribeFreshness((freshness) => {
-    fresh.dataset.state = freshness.state;
-    fresh.textContent = formatFreshness(freshness);
-    fresh.title = freshness.stale.length
-      ? `Past twice their tolerance: ${freshness.stale.join(', ')}`
-      : '';
-  });
+  subscribeFreshness(
+    (freshness) => {
+      fresh.dataset.state = freshness.state;
+      fresh.textContent = formatFreshness(freshness);
+      fresh.title = freshness.stale.length
+        ? `Late: ${freshness.stale.join(', ')}`
+        : '';
+    },
+    {
+      onEvent: (frame) => {
+        if (!onGlobe && frame.rows > 0) {
+          pill.hidden = false;
+          pill.title = `${frame.source} wrote ${frame.rows} rows`;
+        }
+      },
+    },
+  );
   return nav;
 }
 

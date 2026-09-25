@@ -1,5 +1,6 @@
 import { LayerLifecycle } from '../data/lifecycle.js';
 import { LayerPresentation } from './layerPresentation.js';
+import { installLiveRefresh } from '../hosting/liveRefresh.js';
 /** Register the application layer catalog before allowing state restoration. */
 export function createApplicationData({
   scene: { viewer, mapStackController },
@@ -22,6 +23,8 @@ export function createApplicationData({
   });
   const presentation = new LayerPresentation(dataManager);
   defer(() => presentation.destroy());
+  // Row 13 M4: store writes pushed by the event hub refresh mapped layers.
+  defer(installLiveRefresh(dataManager));
   onData?.(dataManager);
   if (!catalog?.layers || !catalog?.metadata)
     throw new TypeError('An application layer catalog is required');

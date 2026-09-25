@@ -15,6 +15,7 @@ without a valid one.
 | Product strip | `public/gev-shell/strip.mjs`, `server/hosting/navStrip.js` | off unless `GEV_NAV_STRIP=1` | on (set at build time) |
 | Allowed hosts | `build/vite.js` `extraAllowedHosts` | loopback only | + `GEV_ALLOWED_HOSTS` |
 | Rate limits | `server/providers/common/rate-limit.js` | per socket address | per verified email |
+| Event hub (M4) | `server/hosting/eventContract.js`, `eventHub.js`, `eventsPlugin.js` | off unless `GEV_EVENTS_PUBLISH_PORT` is set | WebSocket `/api/events` (Access-checked at upgrade) + publish listener on `127.0.0.1:8021` |
 | Licence switch (M2) | `server/hosting/licences.js`, `licencePolicy.js` | every source on | `GEV_LICENCE_PROFILE=hosted`: the rows [`LICENCES.md`](LICENCES.md) marks OFF are switched off at build and run time |
 
 Plugin order (`server/hosting/plugins.js`): guard, then the licence switch
@@ -136,6 +137,28 @@ GEV_URL=http://127.0.0.1:4176/ node .gev-logs/render-onshore-basin.mjs     # bas
 
 On Windows, stopping those background jobs can leave `ssh.exe` / `node.exe`
 listening: check `netstat -ano`, confirm the PID's command line, `taskkill`.
+
+## Event hub (M4)
+
+Contract: plan §15.12. With `GEV_EVENTS_PUBLISH_PORT=8021` in `globe.env` the
+globe server runs the hub: browsers connect to `wss://…/api/events` (the
+Access guard checks the upgrade; anonymous upgrades get 403), the oracle's
+`ingest/refresh.py` posts each job's new `ingest_log` rows to
+`http://127.0.0.1:8021/publish` with `X-Oracle-Proxy-Key`, and the hub reads
+`/api/oracle/freshness` and askd's `/health` every 20 s. Health transitions
+of the console, askd and the critical sources page Slack through askd's
+localhost `POST /relay/slack` (`GEV_ASKD_URL`, default
+`http://127.0.0.1:8014`); the Slack token stays in the oracle's `.env`.
+
+On the VPS, before Access exists (the guard refuses every upgrade until then):
+
+```sh
+curl -s 127.0.0.1:8021/health          # hub counters: clients, sources, health, published, pages
+# after the next fast tier (:00/:30), "published" grows by that tier's ingest_log rows
+```
+
+The strip falls back to polling `/logs.json` whenever the socket is down, and
+console pages keep their 60 s reload unless `window.__gevHubLive` is true.
 
 ## Verify (M1)
 

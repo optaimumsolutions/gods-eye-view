@@ -9,6 +9,10 @@ import {
   freshnessFromLogs,
   openConsoleChat,
   subscribeFreshness,
+  applyHubFrame,
+  createHubState,
+  freshnessFromHub,
+  hubUrl,
 } from '../../public/gev-shell/strip.mjs';
 
 // Shape of the VPS console's /logs.json on 2026-09-23 (trimmed).
@@ -183,4 +187,156 @@ test('the CHAT link opens the console chat drawer once and focuses the question'
     false,
     'the globe has no chat drawer',
   );
+});
+
+/** A socket the test drives: `server.send(frame)`, `server.close()`. */
+function fakeSocketFactory() {
+  const sockets = [];
+  class FakeSocket {
+    constructor(url) {
+      this.url = url;
+      this.closed = false;
+      sockets.push(this);
+    }
+    close() {
+      this.closed = true;
+    }
+    serverSend(frame) {
+      this.onmessage?.({ data: JSON.stringify(frame) });
+    }
+    serverClose() {
+      this.onclose?.();
+    }
+  }
+  return { FakeSocket, sockets };
+}
+
+test('hubUrl follows the page: wss on https, none outside a page', () => {
+  assert.equal(
+    hubUrl({ protocol: 'https:', host: 'commodities.optaimum.com' }),
+    'wss://commodities.optaimum.com/api/events',
+  );
+  assert.equal(
+    hubUrl({ protocol: 'http:', host: '127.0.0.1:4176' }),
+    'ws://127.0.0.1:4176/api/events',
+  );
+  assert.equal(hubUrl(undefined), null);
+  assert.equal(hubUrl({ protocol: 'file:', host: '' }), null);
+});
+
+test('hub frames: snapshot, writes, deadlines and outages drive the strip', () => {
+  const state = createHubState();
+  applyHubFrame(state, {
+    type: 'snapshot',
+    sources: [
+      { source: 'quotes', lastRunAt: '2026-09-23T14:30:00.000Z' },
+      { source: 'portwatch', lastRunAt: '2026-09-23T02:01:00.000Z' },
+    ],
+    health: [
+      { component: 'console', state: 'live' },
+      { component: 'askd', state: 'live' },
+      { component: 'ingest:quotes', state: 'live' },
+    ],
+  });
+  assert.deepEqual(freshnessFromHub(state, NOW), {
+    state: 'live',
+    asOf: Date.parse('2026-09-23T14:30:00Z'),
+    host: 'store',
+    stale: [],
+  });
+  applyHubFrame(state, {
+    type: 'source.updated',
+    source: 'quotes',
+    rows: 4,
+    runAt: '2026-09-23T14:44:00.000Z',
+  });
+  assert.equal(
+    freshnessFromHub(state, NOW).asOf,
+    Date.parse('2026-09-23T14:44:00Z'),
+  );
+  applyHubFrame(state, {
+    type: 'health',
+    component: 'ingest:quotes',
+    state: 'stale',
+  });
+  applyHubFrame(state, { type: 'health', component: 'askd', state: 'offline' });
+  const late = freshnessFromHub(state, NOW);
+  assert.equal(late.state, 'stale');
+  assert.deepEqual(late.stale, ['askd', 'quotes']);
+  applyHubFrame(state, {
+    type: 'health',
+    component: 'console',
+    state: 'offline',
+  });
+  assert.equal(freshnessFromHub(state, NOW).state, 'offline');
+  assert.equal(applyHubFrame(state, { type: 'mystery' }), false);
+});
+
+test('subscribeFreshness prefers the hub, falls back to polling, and retries', async () => {
+  const { FakeSocket, sockets } = fakeSocketFactory();
+  const target = new EventTarget();
+  const dispatched = [];
+  target.addEventListener('gev:source-updated', (event) =>
+    dispatched.push(event.detail),
+  );
+  const events = [];
+  const seen = [];
+  let polls = 0;
+  let intervalCleared = 0;
+  const retries = [];
+  const settled = () => new Promise((resolve) => setImmediate(resolve));
+  const stop = subscribeFreshness((freshness) => seen.push(freshness.state), {
+    fetchImpl: async () => {
+      polls += 1;
+      return Response.json(LOGS);
+    },
+    now: () => NOW,
+    setIntervalImpl: () => 11,
+    clearIntervalImpl: () => {
+      intervalCleared += 1;
+    },
+    setTimeoutImpl: (fn, ms) => {
+      retries.push(ms);
+      return { fn };
+    },
+    clearTimeoutImpl: () => {},
+    WebSocketImpl: FakeSocket,
+    url: 'ws://127.0.0.1:4176/api/events',
+    target,
+    onEvent: (frame) => events.push(frame.source),
+  });
+  await settled();
+  assert.equal(polls, 1, 'polls at once so the strip is never blank');
+  assert.equal(sockets.length, 1);
+  assert.equal(sockets[0].url, 'ws://127.0.0.1:4176/api/events');
+
+  sockets[0].serverSend({
+    type: 'snapshot',
+    sources: [{ source: 'quotes', lastRunAt: '2026-09-23T14:40:00.000Z' }],
+    health: [{ component: 'console', state: 'live' }],
+  });
+  assert.equal(target.__gevHubLive, true);
+  assert.equal(intervalCleared, 1, 'polling stops once the hub answers');
+  sockets[0].serverSend({
+    type: 'source.updated',
+    source: 'quotes',
+    rows: 4,
+    runAt: '2026-09-23T14:44:00.000Z',
+  });
+  assert.deepEqual(events, ['quotes']);
+  assert.equal(dispatched.length, 1);
+  assert.equal(dispatched[0].rows, 4);
+  assert.equal(seen.at(-1), 'live');
+
+  // The hub goes away: polling resumes and the socket is retried, backing off.
+  sockets[0].serverClose();
+  assert.equal(target.__gevHubLive, false);
+  await settled();
+  assert.equal(polls, 2);
+  assert.deepEqual(retries, [5_000]);
+  sockets.length = 0;
+  const firstRetry = retries.length;
+  stop();
+  assert.equal(target.__gevHubLive, false);
+  assert.equal(retries.length, firstRetry);
 });

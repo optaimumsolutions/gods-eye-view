@@ -812,5 +812,12 @@
   "src/hosting/withheld/lngMatrixUrl.js",
   "src/hosting/licences.test.mjs",
   "src/hosting/licenceSwitches.test.mjs",
-  "src/layers/lng/matrixUrl.js"
+  "src/layers/lng/matrixUrl.js",
+  "server/hosting/eventContract.js",
+  "server/hosting/eventHub.js",
+  "server/hosting/eventsPlugin.js",
+  "src/hosting/liveRefresh.js",
+  "src/hosting/eventHub.test.mjs",
+  "src/hosting/events.test.mjs",
+  "src/hosting/liveRefresh.test.mjs"
 ]
