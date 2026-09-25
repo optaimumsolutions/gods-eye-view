@@ -1,6 +1,6 @@
 # PLAN — Commodities Globe: rules, features and layout for rows 1 to 8
 
-**Version:** 1.5 · **Date:** 2026-09-25 · **Status:** decisions locked in the
+**Version:** 1.6 · **Date:** 2026-09-25 · **Status:** decisions locked in the
 2026-09-17 grill; built so far — rows 0a, 0b, 1 (milestone 1), 4 (substrate)
 and 8 (v3), see the §0 ledger for commits; row 3 re-specced in the
 2026-09-21 weather grill (§11); row 13 (hosting at commodities.optaimum.com)
@@ -34,7 +34,7 @@ owns layers. Re-check `git status` before every edit to a shared file.
 | 10  | `commodity-lng`: LNG terminals, tiered cards, sea-routed cargo arcs | layers (worktree `commodities-lng`) | **BUILT 2026-09-21** — PRD §12 (mirror: Project Brain `05-prd.md`), milestones 0 to 6. Bundle `8b5c5b4` (`npm run build:lng`, `--check` byte-identical; 308 GEM terminals, EIA 2026-Q2 trains on 14 US plants, DOE cargoes through 2026-06, GIIGNL 2025 matrix 427.9 MT, 470 searoute-ts routes); layer, dossier, chips, docs in the commit carrying this line. `scripts/qa-lng.mjs` green (41 checks; activation 666 ms warm, heap +31 MiB); four gates green. Deviations in §12.11: GEM read from GEM's public tracker-map feed until the form-gated xlsx is placed (no operator column), via radius 40 km, chips session-only, EIA API codes null until milestone 7. Landed on `feat/commodities-shell` per the founder's 2026-09-21 rule. Next: milestone 7 (EIA `poe2` refresh once row 4 lands the key path) |
 | 11  | Gas production facilities: Gulf platforms (BSEE) first | layers + content (shell worktree, `feat/commodities-shell`) | **BUILT (first slice) 2026-09-21** — PRD §13 from the founder's pivot and grill; on `feat/commodities-shell` (founder's instruction: every update on the shell branch, no row worktree), token `2`. Milestone 1 `c6c92b2`: `scripts/build-gulf-platforms.mjs` + `src/data/local_data/bsee_gulf/` (1,315 installed structures, 120-month series, 608 KB gzip), the completeness rule and the one record shape. Milestone 2 `1e685f0`: marks sized by gas share and coloured by change against last year, three tiers, hover and selected cards, the panel line, `scripts/qa-gulf-platforms.mjs`. Milestone 3 `af342d1`: the dossier (ten-year chart, this-month ledger, identity, lifetime, sources) and the drawer chrome shared with the datacenters; QA 20 checks green (layer activation 755 ms apart from the bundle fetch, heap +50 MiB). Milestone 4 is the commit carrying this line. Four gates green at every commit. Next: milestone 5 (EIA regional backdrop, short grill first) |
 | 12  | Onshore production facilities: wells, leases and rigs, region by region | layers + content (shell worktree, `feat/commodities-shell`) | **BUILT (milestones 0 and 1, Williston) 2026-09-21** — PRD §14 from the founder's direction the same day; five live sweeps probed some twenty regulators (§14.4); eleven regions ranked (§14.5). The founder's "build out the basins one at a time" started the ladder in the §14.5 order with O1 taken as recommended (option a: index and clusters committed, history shards built from the archive, not committed). Milestone 1a `c4ec135`: `scripts/build-onshore.mjs` + `scripts/onshore/{nd,eia,regions}.mjs`, `src/layers/onshore/{records,shards,bundledSource}.js`, `src/data/local_data/onshore/williston/` (24,154 North Dakota wells over 120 months, 17,915 producing in 2026-07 at 3.30 Bcf/d and 1.17 MMbbl/d; 518 fields; index 2.5 MB gzip; `--check` byte-identical; 94 % of EIA gross withdrawals, 100 % of marketed). Milestones 1b and 1c `f66463a`: `production-williston` (token `4`) — region card at global, 518 field marks at regional, 24,154 well points (`PointPrimitiveCollection`, clipped to the view) at local, hover and selected cards, the dossier with the ten-year chart from an on-demand shard, `scripts/qa-onshore-williston.mjs` on the shared harness (32 checks: activation 659 ms apart from the 16 MB fetch, heap +35 MiB, layer frame cost 1.8 ms). `836c325` fixes the second enable of the rows 4 and 11 layers (found by this QA). Build notes §14.13. Next: region 2, Appalachia (PA unconventional) |
-| 13  | Hosted site: globe + console behind one login at `commodities.optaimum.com` | ops + shell + server (`feat/commodities-shell`; oracle twin FR-D17) | **M1 BUILT except the browser check; M2 stamping BUILT; M3 BUILT (check met) — 2026-09-25.** Live on the VPS: globe `2a00477` (`globe.service` :8020, fail-closed 403 until Access exists; gated deploys, rollback 1.1 s, failing-commit drill passed), console with FR-D17a/b (oracle `2c7c168` stamping, `8a32523` `/api/oracle/*`). **Blocked on the founder:** Access app `Commodities` then the hostname, production keys (§15.12 steps 4–5). **CLAIMED 2026-09-25 (session jgewi-13):** M2 licence pass (step 8), then M4 events (step 10, oracle FR-D17c). Agents start at §15.0; status §15.12; change log and build record §15.14 |
+| 13  | Hosted site: globe + console behind one login at `commodities.optaimum.com` | ops + shell + server (`feat/commodities-shell`; oracle twin FR-D17) | **M1 BUILT except the browser check; M2 stamping + licence pass BUILT; M3 BUILT (check met); M4 BUILT + deployed (VPS checks met) — 2026-09-25.** Live on the VPS: globe `05ebd94` (`globe.service` :8020, fail-closed 403 on every request and upgrade until Access exists; M4 hub with publish listener :8021; `GEV_LICENCE_PROFILE=hosted` keeps the 20 sources [`LICENCES.md`](LICENCES.md) marks OFF out of the build), console + askd + `refresh.py` at oracle `07cd056` (FR-D17a/b/c). **Blocked on the founder:** keys, the Access app `Commodities` then the hostname (§15.12 steps 4–5), the invitee group, and a decision on the console's uncleared sources (yfinance, Polymarket, PortWatch tiles: LICENCES.md §D). Agents start at §15.0; status §15.12; change log and build record §15.14 |
 
 Definition of usable, pending founder confirmation of question 13: rows 1
 through 4. Rows 5 to 7 are context and content.
@@ -4361,7 +4361,9 @@ What was built, and where it departs from the text above:
 
 **Status (2026-09-25):** M1 built and live on the VPS except the browser
 check, which waits for the founder's Cloudflare Access app and keys; M2
-stamping built; M3 built with its check met; M4 and M5 open. Decided in the
+stamping and the licence pass built (invitee group and the console-source
+decision are the founder's); M3 built with its check met; M4 built and
+deployed, its VPS checks met; M5 open. Decided in the
 founder's hosting grill of 2026-09-23 (H1 to H17). Oracle-side twin:
 `optaimumsolutions/commodities` `PRD-market-console.md` row FR-D17, which
 points here. This section is the single source of truth for row 13: the
@@ -4377,13 +4379,13 @@ over older handoffs; re-verify anything marked *check*.
 
 | What | State |
 | --- | --- |
-| Globe on the VPS | `globe.service` LIVE, release `2a00477` (`previous` `1711e03`, tag `production`), `/srv/gods-eye-view/current`. Every request answers 403 (guard in `deny` mode) until `GEV_ACCESS_TEAM` + `GEV_ACCESS_AUD` are set. |
-| `/etc/gods-eye-view/globe.env` | Set: `GEV_REQUIRE_ACCESS=1`, `GEV_ALLOWED_HOSTS`, `GEV_NAV_STRIP=1`, `GEV_CONSOLE_URL`, `GEV_PROXY_KEY` (generated, never printed). Empty: team, AUD, every provider key, `GEV_RATELIMIT_*`. |
-| Console on the VPS | `tools/market_map.py` = oracle git HEAD at `8a32523` or later (FR-D17a strip tag, `/market`, `/api/oracle/*` via `tools/oracle_api.py`). |
-| askd on the VPS | `tools/ask_server.py` = `2c7c168` (stamps); `~/oracle/.env` holds the same `GEV_PROXY_KEY`; `oracle.db` migrated (`trades.booked_by/closed_by`, `asks.requested_by`). |
+| Globe on the VPS | `globe.service` LIVE, release `05ebd94` (`previous` `31e8dee`, tag `production`), `/srv/gods-eye-view/current`. Every request and every WebSocket upgrade answers 403 (guard in `deny` mode) until `GEV_ACCESS_TEAM` + `GEV_ACCESS_AUD` are set. The M4 hub runs inside it (publish listener `127.0.0.1:8021`, `curl -s 127.0.0.1:8021/health`). |
+| `/etc/gods-eye-view/globe.env` | Set: `GEV_REQUIRE_ACCESS=1`, `GEV_ALLOWED_HOSTS`, `GEV_NAV_STRIP=1`, `GEV_CONSOLE_URL`, `GEV_PROXY_KEY` (generated, never printed), `GEV_EVENTS_PUBLISH_PORT=8021`, `GEV_LICENCE_PROFILE=hosted` (since 2026-09-25; the deploy refuses to build without it). Empty: team, AUD, every provider key, `GEV_RATELIMIT_*`, `GEV_LICENCE_ON_FILE`. `GEV_ASKD_URL` defaults to `http://127.0.0.1:8014`. |
+| Console on the VPS | `tools/market_map.py` = oracle `07cd056` (FR-D17a strip tag, `/market`, `/api/oracle/*` via `tools/oracle_api.py`, FR-J6 journal card, FR-D17c reload guard). |
+| askd on the VPS | `tools/ask_server.py` = `07cd056` (stamps, `/relay/slack`); the journal session's `b7cee16` (FR-J7) deploys after 21:30Z on 2026-09-25. `~/oracle/.env` holds the same `GEV_PROXY_KEY`; `oracle.db` migrated. `ingest/refresh.py` = `07cd056` (publishes to the hub). |
 | Cloudflare | Nothing done for row 13 yet: no Access app `Commodities`, no hostname. `oracle.optaimum.com` unchanged. |
 | Founder-owned next | §15.12 steps 4–5 (keys, then Access app FIRST, then hostname). |
-| Session-owned next | §15.12 step 8 (M2 licence pass), then step 10 (M4). |
+| Session-owned next | None blocked on the session: M2's licence pass and M4 are built and deployed. After the founder's Access app: the M1 browser check and M4's checks through the public hostname; M5 after seven clean days. |
 
 **Two repos, one product**
 
@@ -4468,6 +4470,22 @@ browser ──HTTPS──▶ Cloudflare Access (login: email one-time PIN, 24 h)
   to the global-tier region card; optional (no line on any failure or a
   store more than 5 days old). Wired in `src/app/layers/onshore.js`;
   `getStats().basinWeather`.
+- `server/hosting/licences.js` + `licencePolicy.js` (M2): with
+  `GEV_LICENCE_PROFILE=hosted` the rows [`LICENCES.md`](LICENCES.md) marks
+  OFF are switched off: provider switches and blanked keys forced by
+  `applyLicenceEnv()` in `server/standalone/vite.config.js` before the keys
+  are read, stub modules under `src/hosting/withheld/` swapped in at build
+  time, pruned public files, 451 on withheld routes, and `isWithheld(id)`
+  (`src/hosting/withheld.js`: `import.meta.env.GEV_WITHHELD` in the browser,
+  `process.env.GEV_WITHHELD` on the server). `GEV_LICENCE_ON_FILE` re-enables
+  a row. The deploy refuses to build without the profile.
+- `server/hosting/eventContract.js`, `eventHub.js`, `eventsPlugin.js` (M4):
+  the hub at `/api/events` (upgrade checked by `verifyUpgrade()`), the
+  publish listener on `127.0.0.1:8021`, probes and deadlines, Slack pages
+  through askd `/relay/slack`; on when `GEV_EVENTS_PUBLISH_PORT` is set.
+  `public/gev-shell/strip.mjs` `subscribeFreshness()` prefers the hub;
+  `src/hosting/liveRefresh.js` refreshes the chokepoint and Williston layers
+  on `gev:source-updated`.
 - Tests: `src/tooling/hostingPreview.test.mjs` runs a real build under
   `vite preview` with a locally signed token (~1 s);
   `src/layers/chokepoints/oracleSource.test.mjs`,
@@ -4484,7 +4502,9 @@ browser ──HTTPS──▶ Cloudflare Access (login: email one-time PIN, 24 h)
   `_poll_job` forward `X-Oracle-User` + `X-Oracle-Proxy-Key` to askd.
   Freshness tolerance per source lives in `SRC_TOL_H` and is published in
   `/logs.json` as `tol`; this is the cadence table the strip and the M3
-  `freshness` route reuse.
+  `freshness` route reuse. FR-D17c: `CHAT_UI`'s 60 s reload
+  (market and gas) and the `STRIP_UI` countdown pause while
+  `window.__gevHubLive` is true.
 - `tools/oracle_api.py` (FR-D17b, M3): the read-only `/api/oracle/*` routes,
   hooked into `market_map.py` `do_GET` (6 lines + one import). `route(path,
   SRC_TOL_H)` returns (status, JSON); stores opened `mode=ro`. `CRITICAL`
@@ -4498,10 +4518,17 @@ browser ──HTTPS──▶ Cloudflare Access (login: email one-time PIN, 24 h)
   `start_job` carry it. Columns come from `ingest/eia_client.py`
   `MIGRATIONS` (replayed by every `eia.db()`, so askd's boot applies them).
   `ingest/trade_mtm.py`'s TP/SL Slack page names the booker; the console
-  trade card shows booked by / closed by.
+  trade card shows booked by / closed by. FR-D17c (`07cd056`): `POST
+  /relay/slack` (key-checked like `actor()`, answers 202, posts through
+  `refresh.slack()` on a thread) is the hub's paging path.
 - `ingest/refresh.py`: runs each job as a subprocess; the jobs write
-  `ingest_log (source, run_at, rows_written, raw_path, note)`. The M4 publish
-  hook goes after each successful `run(job)`; no ingest script changes.
+  `ingest_log (source, run_at, rows_written, raw_path, note)`. FR-D17c
+  (`07cd056`): `ingest_rowid()` before each job, and after a successful
+  `run(job)` `publish()` posts that job's rows to `127.0.0.1:8021/publish`
+  (2 s timeout, one printed line on failure, never fails the ingest; no
+  ingest-script changes). Rows written outside `refresh.run` (the journal's
+  `journal_close` / `journal_morning`) reach the hub through its 20 s
+  freshness read instead.
 - `refresh.slack()`: the one Slack path (bot token + channel in the oracle's
   `.env`); the M4 relay reuses it so the token never leaves the oracle.
 
@@ -4569,6 +4596,19 @@ browser ──HTTPS──▶ Cloudflare Access (login: email one-time PIN, 24 h)
   2026-09-07 (tolerance 36 h); `eu_storage` / `eu_lng` are empty by design
   (FR-N3 non-goal); the console's brief line and tile round Hormuz
   differently (−85% vs −84%).
+- The VPS runs `scripts/deploy-vps.sh` from the clone's working tree, which
+  `git fetch` does not move: `sudo -u globe git -C /srv/gods-eye-view/repo
+  pull --ff-only` before deploying a commit that changes the script (it was
+  7 commits behind on 2026-09-25).
+- An upgraded WebSocket still counts as an HTTP-server connection, so
+  `httpServer.close()` waits for it; end the sockets first
+  (`eventsPlugin` `api.state.close()`), or a test hangs until its timeout.
+- Pushing `main` from the shared oracle tree also pushes the other
+  session's local commits (`07cd056` carried FR-J7's `8a3308a`); say so.
+- Terms pages for IMF, TfL, mass.gov, HSL and Baker Hughes refuse automated
+  reads; the licence pass used archived copies and marks them in
+  `LICENCES.md`. A new source gets a `LICENCES.md` row (and a
+  `licencePolicy.js` row if not cleared) before it ships hosted.
 - Known console bug, not ours: `/market` throws `TypeError … addEventListener`
   at `.strip .tile .pin` (a price tile without a pin button), with or
   without the strip.
@@ -4820,8 +4860,15 @@ pushes "source updated" and health events to every open page.
 - **One ask at a time.** askd serves one model call at a time; one person's
   hour-long grill blocks everyone's chat (409 "busy"). Stamping shows who
   holds it.
-- **Licences.** Several sources were chosen under a one-user assumption
-  (TxDOT cameras, Petrinex, FracFocus, CCTV feeds). Resolved by the M2 pass.
+- **Licences.** Resolved for the globe by the M2 pass (2026-09-25,
+  [`LICENCES.md`](LICENCES.md)): 20 sources are off on the hosted site until
+  a licence or permission is on file (`GEV_LICENCE_ON_FILE`). Among them are
+  PortWatch (the chokepoint and port layers; IMF asks for permission before
+  commercial reuse) and keyless Esri (OSM is the keyless basemap). FracFocus
+  is cleared (bulk file, shown as filed); Petrinex needs consent. **Still
+  open:** the console pages the proxy serves carry yfinance quotes
+  (not allowed), Polymarket odds and PortWatch tiles (permission first):
+  founder decision before the first invitee.
 - **Keys in the bundle.** Google and Cesium tokens reach every signed-in
   browser; resolved by the referrer lock and caps.
 - **Natgas freshness.** Scheduled since `90ead34` (FR-J3); confirm
@@ -4845,9 +4892,9 @@ pushes "source updated" and health events to every open page.
 | 5 | Cloudflare: Access app `Commodities` first, then the hostname; team + AUD into `globe.env`, restart | dashboard | founder | open |
 | 6 | M1 verify (§15.10) and close | all | session + founder | partly done: VPS 403, gated deploys, failing-commit drill and 1.1 s rollback passed; open: the anonymous `curl -I` redirects and the browser look (after steps 4–5) |
 | 7 | FR-N5 / FR-J3: schedule the `ng_*` ingest (also fixes today's stale `/gas`) | oracle + crontab | oracle lane | **DONE** oracle `90ead34` (journal-memory session): natgas lanes in the refresh tiers |
-| 8 | M2: invitee group, askd stamp columns + key check, licence pass | both + dashboard | session + founder | **stamping BUILT + deployed** (oracle `2c7c168`, §15.14); open: licence pass (session; **CLAIMED 2026-09-25**, jgewi-13), invitee group (founder), the invitee test |
+| 8 | M2: invitee group, askd stamp columns + key check, licence pass | both + dashboard | session + founder | **stamping BUILT + deployed** (oracle `2c7c168`); **licence pass DONE** `31e8dee` (deployed 2026-09-25): [`LICENCES.md`](LICENCES.md) judges every source, 20 rows OFF on the hosted site (`GEV_LICENCE_PROFILE=hosted`); open: invitee group (founder), the invitee test, and the founder's decision on the console's uncleared sources (LICENCES.md §D: yfinance, Polymarket, PortWatch tiles) |
 | 9 | M3: `freshness`, `chokepoints`, `basins` routes; layers prefer them; `gas-storage` after step 7 | both | session | **routes BUILT + live** (oracle `8a32523`, all four incl. `gas-storage`); **chokepoint layer** `1711e03` and **onshore basin line** `2a00477` BUILT + deployed; **M3 check met** 2026-09-25 (card = console for Hormuz and Bakken, routes 4–25 ms) |
-| 10 | M4: hub, publish listener, `refresh.py` hook, deadlines, strip and layer wiring | both | session | **CLAIMED 2026-09-25** (jgewi-13), after step 8 |
+| 10 | M4: hub, publish listener, `refresh.py` hook, deadlines, strip and layer wiring | both | session | **BUILT + deployed 2026-09-25**: globe `05ebd94`, oracle `07cd056` (FR-D17c); contract frozen `9d00ed1`. Met: publish to an open browser in 285–668 ms (production build through a tunnel), console stop/start paged Slack once each way (VPS), the first scheduled publish (wire tier, `gdelt_natgas` row 16:06:07Z) reached the VPS hub within seconds, anonymous upgrade 403 at the origin, no console reload while the hub is up. Open until Access exists: the same through `wss://commodities.optaimum.com` (Access refusing an anonymous upgrade; a fast-tier write in the founder's browser) |
 | 11 | M5: 301 after seven clean days | dashboard | founder | open |
 | 12 | Phase 2 PRD: one scheduler daemon | new PRD | grill first | open |
 
@@ -4970,10 +5017,15 @@ oracle ledger cite them.
 | 09-24 16:24 | oracle | `8a32523` | FR-D17b routes `/api/oracle/*` (`tools/oracle_api.py`) | live 4–25 ms; `/gas` = route |
 | 09-24 16:42 | globe | `1711e03` | chokepoint layer prefers the oracle route | 4,409 / 0 fail; tunnel end-to-end + fallback |
 | 09-25 14:14 | globe | `2a00477` | onshore region card basin line | 4,415 / 0 fail; tunnel end-to-end; M3 check met |
+| 09-25 15:18 | globe | `31e8dee` | M2 licence pass: [`LICENCES.md`](LICENCES.md) + the hosted switch (`GEV_LICENCE_PROFILE=hosted`, 20 rows OFF); `globe.env` gained the profile first | 4,415 / 0 fail laptop and VPS; hosted build carries no restricted asset (checked on the VPS release) |
+| 09-25 | globe | `9d00ed1` | M4 event contract frozen (§15.12) before the hub code | — |
+| 09-25 15:35 | oracle | `07cd056` on VPS | FR-D17c: `refresh.py` publish hook, askd `/relay/slack`, console reload yields to the hub | VPS files diffed clean against `07cd056~1` (backups `*.pre-fr-d17c`); relay 403 without the key; pages 200 |
+| 09-25 15:38 | globe | `05ebd94` | M4 hub: `/api/events`, publish listener :8021, probes, deadlines, paging; strip on the hub; layers refresh in place | 4,430 / 0 fail laptop and VPS; real browser through a tunnel: publish to page 285–668 ms; VPS console stop/start paged once each way |
 
 Ledger and doc commits in between (`292794a`, `cb46ff2`, `d62549f`,
-`db471c3`, oracle `7575548`, `d085cf3`, `cfbea89`, `5414679`, `8e43858`)
-only record the rows above.
+`db471c3`, `c61e5fe`, oracle `7575548`, `d085cf3`, `cfbea89`, `5414679`,
+`8e43858`, `81ba3e4`, and the close-out commits of 2026-09-25) only record
+the rows above.
 
 **Build record**
 
@@ -5076,3 +5128,65 @@ only record the rows above.
   2026-09-24), and the chokepoint card equals the console tile (Hormuz −84%
   vs 90d, 2026-09-20); every route answers in 4–25 ms. With the console
   unreachable the card has no line and all 17,915 wells still draw.
+- **M2 licence pass `31e8dee` (2026-09-25, R13.12).** Five research passes
+  read the terms of every source in `DATA_SOURCES.md` and `UPGRADE.md`, plus
+  four hosts the code calls that those files omit, live on 2026-09-25
+  (archived copies where a site refused automated reads). The verdict per
+  source, with the decisive words and links, is [`LICENCES.md`](LICENCES.md). The use case judged: a
+  company product shown to invitees who may be pilot clients, i.e.
+  commercial use that makes the data available to third parties. 20 rows
+  are OFF on the hosted site; the rows at risk resolved as TxDOT OFF (no
+  reuse licence), Petrinex ASK-FIRST (not built), FracFocus cleared (bulk
+  file, shown as filed), cameras split (Austin, Caltrans, NSW, Fintraffic,
+  Calgary, DriveBC own cameras on; TxDOT, Tallinn, Warendorf, Ontario 511,
+  Tark Tee, TfL without a key, DriveBC partner cameras off). Surprises:
+  PortWatch (IMF asks for permission before commercial reuse), keyless Esri
+  (needs an ArcGIS account, so OSM is the keyless basemap), Open-Meteo's free
+  API, GIIGNL, OpenSky, the public overpass-api.de and Google News RSS.
+  Enforced by `GEV_LICENCE_PROFILE=hosted` (`server/hosting/licences.js`);
+  `GEV_LICENCE_ON_FILE` re-enables a row once its permission is on file.
+  20 new tests (`src/hosting/licences.test.mjs`, `licenceSwitches.test.mjs`),
+  including a fixture build proving a stubbed module's asset never reaches
+  `dist`, and an integrity test tying every policy row to a real file,
+  switch or check and to an OFF row in `LICENCES.md`. Checked on a real
+  hosted build: `cable-geo`, `landing-point-geo` and `matrix` absent,
+  `events/bhote-koshi-2026` pruned, no flood-path vertex in the bundle; under
+  `vite preview` `/api/adsbdb`, `/api/oracle/chokepoints` and the event pack
+  answer 451, Metro Transit 404, MBTA 200. The VPS `globe.env` gained
+  `GEV_LICENCE_PROFILE=hosted` and `GEV_LICENCE_ON_FILE=`, the VPS clone was
+  fast-forwarded so the new deploy guard runs, and the gated deploy went LIVE
+  in 4 min 18 s (4,415 tests, 4,414 pass, 0 fail, 1 skipped on Linux); the
+  live release has no restricted asset and still answers 403 everywhere.
+  **Not switchable from the globe:** the console pages carry yfinance quotes
+  (NOT-ALLOWED), Polymarket odds and PortWatch tiles (ASK-FIRST); founder
+  decision before the first invitee (LICENCES.md §D).
+- **M4 events, globe `05ebd94` + oracle `07cd056` (2026-09-25, R13.15–R13.18,
+  FR-D17c).** Contract frozen first (`9d00ed1`, §15.12). Globe: the hub
+  (`eventHub.js`: snapshot, per-row `source.updated` carrying the store's
+  `observedAt`, health, 30 s heartbeat; console and askd probed every 20 s,
+  offline after two failures; deadline = last write + tolerance + grace;
+  console, askd and critical-source transitions page once each way through
+  askd, 12 an hour, a first observation never pages), `eventsPlugin.js`
+  (`/api/events` upgraded only after `verifyUpgrade()`; key-checked
+  `POST /publish` and `GET /health` on `127.0.0.1:8021`), the strip on the
+  hub with a `/logs.json` fallback and a "new data · refresh" pill on console
+  pages, and `liveRefresh.js` (chokepoints and the Williston card refresh in
+  place). Oracle (diffed clean, backups `*.pre-fr-d17c`, askd and console
+  restarted 15:35Z with no job running): `refresh.py` publishes each job's
+  new `ingest_log` rows, askd `POST /relay/slack`, the market and gas pages
+  keep their reload only while the hub is down. 26 new tests, including a
+  real `vite preview` with a signed token (anonymous and forged upgrades 403,
+  snapshot, publish to socket well inside 5 s, 426 for a plain GET). Real
+  browser through an ssh tunnel to the VPS console: the globe page went
+  hub-live and received a publish in 285–668 ms with the store's
+  `observedAt`; `/gas` showed the pill and did not reload; no page errors.
+  VPS: gated deploy LIVE in 3 min 38 s (4,430 tests, 4,429 pass, 0 fail);
+  anonymous `/api/events` and the upgrade answer 403; the hub reads 30
+  sources (`bsee_shutins` stale, the known finding). **M4 check on the VPS:**
+  `systemctl stop console` turned the hub's console OFFLINE and paged once in
+  25 s; `start` paged the recovery once in 20 s (relay accepted both, no
+  Slack failure logged). The first scheduled publish came from the 15:45Z
+  wire tier once its GDELT back-off ended: `ingest_log` row 2752
+  (`gdelt_natgas`, 16:06:07Z) was counted by the hub by 16:06:14Z, with no
+  "event publish skipped" line in any refresh log (the 15:30Z fast tier had
+  started before the new `refresh.py` was in place).
