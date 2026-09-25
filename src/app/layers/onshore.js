@@ -2,6 +2,7 @@ import * as Cesium from 'cesium';
 import {
   createOnshoreDossier,
   createOnshoreLayer,
+  createOracleBasinWeatherSource,
   createShardStore,
 } from '../../layers/onshore/index.js';
 import { overlayHost } from './overlayHost.js';
@@ -62,6 +63,8 @@ export function createApplicationOnshore({ region, source, ...options } = {}) {
       removeEntityContextsForLayer,
     },
     dossier,
+    // Row 13 M3: the region card's basin line from the Oil Oracle store
+    basinWeather: createOracleBasinWeatherSource(),
     screenSpaceEventHandlerFactory: (canvas) =>
       new Cesium.ScreenSpaceEventHandler(canvas),
     ...options,

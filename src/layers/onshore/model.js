@@ -228,9 +228,22 @@ function baseEntry(id, position, accent, priority) {
   };
 }
 
-/** Global tier: the region's one card. */
-export function createRegionOverlayEntry(snapshot, position) {
+/**
+ * Global tier: the region's one card. `weatherLine` is the optional basin
+ * reading from the Oil Oracle store (row 13 M3, `basinWeather.js`).
+ */
+export function createRegionOverlayEntry(
+  snapshot,
+  position,
+  weatherLine = null,
+) {
   const c = snapshot.counts;
+  const details = [
+    `${formatInt(c.producing)} wells producing · ${(c.gasMcfdTotal / 1e6).toFixed(2)} Bcf/d gas · ${(c.oilBbldTotal / 1e6).toFixed(2)} MMbbl/d oil`,
+    snapshot.asOf,
+  ];
+  if (weatherLine) details.push(weatherLine);
+  details.push('zoom in for fields, then wells');
   return {
     ...baseEntry(
       `region:${snapshot.regionId}`,
@@ -240,11 +253,7 @@ export function createRegionOverlayEntry(snapshot, position) {
     ),
     variant: 'card',
     title: snapshot.region.name.toUpperCase(),
-    details: [
-      `${formatInt(c.producing)} wells producing · ${(c.gasMcfdTotal / 1e6).toFixed(2)} Bcf/d gas · ${(c.oilBbldTotal / 1e6).toFixed(2)} MMbbl/d oil`,
-      snapshot.asOf,
-      'zoom in for fields, then wells',
-    ].map(clampLine),
+    details: details.map(clampLine),
   };
 }
 

@@ -37,6 +37,11 @@ import {
   mapClusterAnalystRecord,
   onshoreMetaLine,
 } from './records.js';
+import {
+  basinWeatherLine,
+  currentBasinReading,
+  pickBasinReading,
+} from './basinWeather.js';
 export * from './model.js';
 export * from './records.js';
 export * from './shards.js';
@@ -45,6 +50,7 @@ export {
   ONSHORE_REGION_IDS,
 } from './bundledSource.js';
 export { buildOnshoreDossierModel, createOnshoreDossier } from './dossier.js';
+export * from './basinWeather.js';
 
 /** The bundle never changes at runtime; the poll is the manager's formality. */
 const UPDATE_INTERVAL_MS = 6 * 60 * 60_000;
@@ -68,6 +74,7 @@ export function createOnshoreLayer({
   overlayHost,
   context,
   dossier = null,
+  basinWeather = null,
   screenSpaceEventHandlerFactory,
 } = {}) {
   if (!region?.id || !region?.layerId)
@@ -103,6 +110,10 @@ export function createOnshoreLayer({
   let _horizonCullRemovers = [];
   let _foreignSelectionListener = null;
   let _snapshot = null;
+  // Row 13 M3: the Oil Oracle store's reading for this region's basin
+  let _basinReading = null;
+  let _weatherRequest = null;
+  let _weatherWarned = false;
   let _rows = [];
   let _fields = [];
   let _entries = [];
@@ -360,7 +371,13 @@ export function createOnshoreLayer({
     }
     if (_tier === ONSHORE_TIER_GLOBAL) {
       if (_regionPin)
-        entries.push(createRegionOverlayEntry(_snapshot, _regionPin.position));
+        entries.push(
+          createRegionOverlayEntry(
+            _snapshot,
+            _regionPin.position,
+            basinWeatherLine(_basinReading),
+          ),
+        );
     } else if (_tier === ONSHORE_TIER_REGIONAL) {
       for (const field of _fields) {
         const pin = _fieldPins.get(field.id);
@@ -383,6 +400,41 @@ export function createOnshoreLayer({
       }
     }
     _entries = selectOverlayCohort(entries, ONSHORE_OVERLAY_COHORT_LIMIT);
+  }
+
+  /**
+   * Row 13 M3: the region card's basin line from `/api/oracle/basins`.
+   * Optional: any failure (no console, an older console, a stale store)
+   * leaves the card without the line, never the layer without its data.
+   */
+  async function refreshBasinWeather() {
+    if (!basinWeather || !_snapshot) return;
+    _weatherRequest?.abort();
+    const request = new AbortController();
+    _weatherRequest = request;
+    try {
+      const readings = await basinWeather.getReadings({
+        signal: request.signal,
+      });
+      if (request.signal.aborted) return;
+      _basinReading = currentBasinReading(
+        pickBasinReading(readings, _snapshot?.region?.basins),
+      );
+    } catch (e) {
+      if (request.signal.aborted) return;
+      _basinReading = null;
+      if (!_weatherWarned) {
+        _weatherWarned = true;
+        console.info(
+          `[Data:Onshore:${region.id}] Oil Oracle basins unavailable: ${e?.message}`,
+        );
+      }
+    } finally {
+      if (_weatherRequest === request) _weatherRequest = null;
+    }
+    if (!_enabled || !_snapshot) return;
+    rebuildEntries();
+    publishOverlay();
   }
 
   function publishOverlay() {
@@ -763,6 +815,8 @@ export function createOnshoreLayer({
       _lastUpdate = null;
       _lastError = null;
       _snapshot = null;
+      _weatherRequest?.abort();
+      _basinReading = null;
       _tier = ONSHORE_TIER_GLOBAL;
       _enabled = false;
       _historyState = 'idle';
@@ -801,7 +855,10 @@ export function createOnshoreLayer({
       // rejected enable and runs the disable cleanup, which is how a second
       // enable of a bundled layer used to leave its marks hidden (found by
       // the onshore QA's disable/enable pass, 2026-09-21).
-      if (_snapshot) return true;
+      if (_snapshot) {
+        refreshBasinWeather();
+        return true;
+      }
       _request?.abort();
       const request = new AbortController();
       _request = request;
@@ -820,6 +877,7 @@ export function createOnshoreLayer({
         _lastUpdate = Date.now();
         _lastError = null;
         refreshTier({ force: true });
+        refreshBasinWeather();
         console.log(
           `[Data:Onshore:${region.id}] Updated: ${snapshot.counts.producing} producing of ${rows.length} wells, ${_fields.length} fields (${snapshot.asOf})`,
         );
@@ -860,6 +918,8 @@ export function createOnshoreLayer({
       _fields = [];
       _entries = [];
       _snapshot = null;
+      _weatherRequest?.abort();
+      _basinReading = null;
       _regionPin = null;
       _rowById.clear();
       _fieldById.clear();
@@ -909,6 +969,7 @@ export function createOnshoreLayer({
         // The count the panel prints is producing wells; the meta line
         // carries the rest (R12.11).
         count: counts?.producing ?? 0,
+        basinWeather: _basinReading,
         countLabel: counts ? `${counts.producing} producing` : null,
         facilities: counts?.facilities ?? 0,
         reported: counts?.reported ?? 0,
