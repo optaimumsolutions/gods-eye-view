@@ -68,13 +68,14 @@ test('root config retains existing named exports and standalone provider order',
   for (const [name, value] of Object.entries(providers))
     assert.equal(compatibility[name], value, name);
   const config = standaloneConfig({ mode: 'test' });
-  // Row 13 hosting plugins run first: Access guard, console proxy, strip.
+  // Row 13 hosting plugins run first: Access guard, licence switch, console
+  // proxy, strip.
   assert.deepEqual(
-    config.plugins.slice(2, 5).map((plugin) => plugin.name),
-    ['gev-access-guard', 'gev-console-proxy', 'gev-nav-strip'],
+    config.plugins.slice(2, 6).map((plugin) => plugin.name),
+    ['gev-access-guard', 'gev-licences', 'gev-console-proxy', 'gev-nav-strip'],
   );
   assert.deepEqual(
-    config.plugins.slice(5, -1).map((plugin) => plugin.name),
+    config.plugins.slice(6, -1).map((plugin) => plugin.name),
     providers.localProviderPlugins().map((plugin) => plugin.name),
   );
   assert.equal(config.plugins.at(-2).name, 'gev-key-setup');

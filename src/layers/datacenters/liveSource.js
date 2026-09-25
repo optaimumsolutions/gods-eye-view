@@ -13,6 +13,7 @@ import {
   normalizeSiteWeather,
   openMeteoUrl,
 } from './live.js';
+import { isWithheld } from '../../hosting/withheld.js';
 
 /** Grid data is hourly and weather moves slowly; ten minutes is plenty. */
 export const DATACENTER_LIVE_TTL_MS = 10 * 60_000;
@@ -51,7 +52,9 @@ export function createDatacenterLiveSource({
       .map((s) => s.balancingAuthority)
       .filter((id) => typeof id === 'string' && id);
     const gridUrl = eiaGridUrl(authorities, { now: fetchedAt });
-    const weatherUrl = openMeteoUrl(sites);
+    // The hosted licence profile withholds the free Open-Meteo API (its terms
+    // are non-commercial; docs/LICENCES.md): the cards keep grid and Epoch facts.
+    const weatherUrl = isWithheld('open-meteo') ? null : openMeteoUrl(sites);
 
     const [gridResult, weatherResult] = await Promise.allSettled([
       gridUrl ? readJson(fetchImpl, gridUrl, signal) : Promise.resolve(null),

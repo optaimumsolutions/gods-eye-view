@@ -59,6 +59,16 @@ export const GROUPS = [
         'The Oil Oracle console the globe proxies.',
       ],
       ['GEV_CONSOLE_PROXY', '', 'Set to 0 to switch the console proxy off.'],
+      [
+        'GEV_LICENCE_PROFILE',
+        'hosted',
+        'Switches off the sources docs/LICENCES.md marks OFF, at build and run time. The deploy refuses to build without it.',
+      ],
+      [
+        'GEV_LICENCE_ON_FILE',
+        '',
+        'Comma-separated licencePolicy.js ids whose licence or permission is on file (recorded in docs/LICENCES.md).',
+      ],
     ],
   },
   {
@@ -131,6 +141,8 @@ export const DEVELOPMENT_ONLY = new Set([
   'PORT',
   'GEV_LAUNCHER',
   'GEV_KEY_SETUP_EXTERNAL_KEYS',
+  // Computed from GEV_LICENCE_PROFILE at start-up (server/hosting/licences.js).
+  'GEV_WITHHELD',
 ]);
 
 function* files(root, directory) {

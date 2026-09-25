@@ -803,5 +803,14 @@
   "src/testSupport/accessTokens.mjs",
   "src/tooling/hostingPreview.test.mjs",
   "src/tooling/hostingEnvTemplate.test.mjs",
-  "scripts/hosting/env-template.mjs"
+  "scripts/hosting/env-template.mjs",
+  "server/hosting/licences.js",
+  "server/hosting/licencePolicy.js",
+  "src/hosting/withheld.js",
+  "src/hosting/withheld/submarineCables.js",
+  "src/hosting/withheld/bhoteKoshiFloodPath.js",
+  "src/hosting/withheld/lngMatrixUrl.js",
+  "src/hosting/licences.test.mjs",
+  "src/hosting/licenceSwitches.test.mjs",
+  "src/layers/lng/matrixUrl.js"
 ]

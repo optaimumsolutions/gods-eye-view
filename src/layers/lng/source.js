@@ -5,6 +5,9 @@ import {
   normalizeRoutes,
   normalizeTerminals,
 } from './records.js';
+import { LNG_MATRIX_URL } from './matrixUrl.js';
+
+export { LNG_MATRIX_URL };
 
 /**
  * The bundled LNG set: four static JSON files under
@@ -23,10 +26,6 @@ export const LNG_TERMINALS_URL = new URL(
 ).href;
 export const LNG_CARGOES_URL = new URL(
   '../../data/local_data/lng/cargoes.json',
-  import.meta.url,
-).href;
-export const LNG_MATRIX_URL = new URL(
-  '../../data/local_data/lng/matrix.json',
   import.meta.url,
 ).href;
 export const LNG_ROUTES_URL = new URL(
@@ -61,7 +60,10 @@ export function createBundledLngSource({
       const [terminals, cargoes, matrix, routes] = await Promise.all([
         readJson(terminalsUrl, { fetchImpl, signal, label: 'terminals' }),
         readJson(cargoesUrl, { fetchImpl, signal, label: 'cargoes' }),
-        readJson(matrixUrl, { fetchImpl, signal, label: 'matrix' }),
+        // No URL = the hosted build withholds the GIIGNL matrix.
+        matrixUrl
+          ? readJson(matrixUrl, { fetchImpl, signal, label: 'matrix' })
+          : null,
         readJson(routesUrl, { fetchImpl, signal, label: 'routes' }),
       ]);
       const snapshot = buildLngSnapshot({

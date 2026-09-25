@@ -67,19 +67,25 @@ async function fetchRegionalNews(place) {
     gl: 'US',
     ceid: 'US:en',
   });
-  try {
-    const xml = await fetchRegionalText(
-      `https://news.google.com/rss/search?${rssParams}`,
-      {
-        headers: { 'User-Agent': 'GodsEyeView/0.1' },
-        timeoutMs: 12_000,
-      },
-    );
-    const articles = normalizeRssArticles(xml, 5);
-    if (articles.length)
-      return { status: 'ready', query, articles, source: 'Google News RSS' };
-  } catch {
-    /* fall through to the existing free index */
+  // GOOGLE_NEWS_RSS_ENABLED=0 (the hosted licence profile, docs/LICENCES.md:
+  // the feed is for personal, non-commercial readers) goes straight to GDELT.
+  const googleNews =
+    String(process.env.GOOGLE_NEWS_RSS_ENABLED || '1').trim() !== '0';
+  if (googleNews) {
+    try {
+      const xml = await fetchRegionalText(
+        `https://news.google.com/rss/search?${rssParams}`,
+        {
+          headers: { 'User-Agent': 'GodsEyeView/0.1' },
+          timeoutMs: 12_000,
+        },
+      );
+      const articles = normalizeRssArticles(xml, 5);
+      if (articles.length)
+        return { status: 'ready', query, articles, source: 'Google News RSS' };
+    } catch {
+      /* fall through to the existing free index */
+    }
   }
   const params = new URLSearchParams({
     query: `"${String(query).replace(/["\\]/g, ' ').trim()}"`,

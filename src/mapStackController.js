@@ -1,5 +1,6 @@
 import { MapSourceController } from './maps/controller.js';
 import { createDefaultMapSources } from './maps/defaultSources.js';
+export { keylessStackId } from './maps/defaultSources.js';
 import { governorRequestRender } from './renderGovernor.js';
 export { MAP_STACKS } from './maps/catalog.js';
 export { photorealUnavailableReason } from './maps/availability.js';

@@ -38,7 +38,9 @@ Rules that hold for every upgrade:
 4. **Attribute it.** Add the license row to `DATA_SOURCES.md` and the credit to
    `src/data/dataCredits.js`. Check redistribution rights: most paid feeds
    forbid showing raw data to anonymous viewers, which rules out public
-   deployments.
+   deployments. Record the verdict for the hosted site in
+   `docs/LICENCES.md`; a source not cleared for invitees gets a row in
+   `server/hosting/licencePolicy.js` so the hosted build switches it off.
 5. **Gate it.** Run `npm run format:check`, `npm run check:boundaries`,
    `npm test`, and `npm run build` before merging.
 

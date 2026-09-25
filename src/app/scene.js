@@ -3,7 +3,7 @@ import * as Cesium from 'cesium';
 import { createApplicationViewer } from '../app/viewer.js';
 import { registerDataCredits } from '../data/dataCredits.js';
 import { configureCreditKeyboardAccess } from '../creditKeyboard.js';
-import { MapStackController } from '../mapStackController.js';
+import { MapStackController, keylessStackId } from '../mapStackController.js';
 import { loadPhotorealisticTileset } from '../mapStartup.js';
 import { initLogoGaze } from '../logoGaze.js';
 import {
@@ -96,7 +96,7 @@ export async function createApplicationScene({
     ...mapOptions,
     googleTileset: tileset,
     cesiumToken,
-    initialStack: tileset ? 'photoreal' : 'esri-imagery',
+    initialStack: tileset ? 'photoreal' : keylessStackId(),
     // Task 5 (height-datum fix): rebroadcast stack changes as a window
     // CustomEvent so data layers (CCTV per-regime ground resolution) can
     // react without coupling MapStackController to layer modules. Fires on
@@ -110,7 +110,7 @@ export async function createApplicationScene({
     onError: (message) => console.warn('[MapStack]', message),
   });
   defer(() => mapStackController.destroy());
-  await mapStackController.setStack(tileset ? 'photoreal' : 'esri-imagery', {
+  await mapStackController.setStack(tileset ? 'photoreal' : keylessStackId(), {
     silent: true,
   });
 

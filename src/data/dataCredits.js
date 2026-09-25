@@ -251,7 +251,9 @@ export const DATA_CREDITS = [
       '<a href="https://www.dmr.nd.gov/oilgas/mpr/" target="_blank" rel="noopener">North Dakota DMR Oil and Gas Division</a> ' +
       '(Monthly Production Report, public record); reconciled with ' +
       '<a href="https://www.eia.gov/dnav/ng/ng_prod_sum_a_EPG0_FGW_mmcf_m.htm" target="_blank" rel="noopener">EIA state production series</a> ' +
-      '(US public domain)',
+      "(US public domain); the region card's basin weather line comes from the Oil Oracle store: " +
+      '<a href="https://www.ecmwf.int/en/forecasts/datasets/open-data" target="_blank" rel="noopener">ECMWF AIFS ENS open data</a> ' +
+      '(CC BY 4.0) and NOAA GHCN-Daily (US public domain)',
   },
   {
     key: 'lng',

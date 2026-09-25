@@ -30,6 +30,10 @@ FORCE_WINDOW=0
 [ "${2:-}" = "--force-window" ] && FORCE_WINDOW=1
 [ "$(id -u)" -eq 0 ] || die "run with sudo (the swap and the restart need root)"
 [ -r "$ENV_FILE" ] || die "missing $ENV_FILE (start from deploy/globe.env.example)"
+# The licence pass (plan §15.7 R13.12): a hosted build without the profile
+# would ship sources docs/LICENCES.md marks OFF.
+grep -qx 'GEV_LICENCE_PROFILE=hosted' "$ENV_FILE" ||
+  die "$ENV_FILE must set GEV_LICENCE_PROFILE=hosted (docs/LICENCES.md)"
 command -v node >/dev/null || die "node is not installed"
 case "$(node -p 'process.versions.node.split(".")[0]')" in
   24 | 26) ;;

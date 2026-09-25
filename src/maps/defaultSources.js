@@ -8,6 +8,19 @@ import {
   ESRI_ATTRIBUTION_HTML,
 } from './imagery.js';
 import { createWorldTerrain, createKeylessTerrain } from './terrain.js';
+import { isWithheld } from '../hosting/withheld.js';
+
+/** Why the hosted site offers no Esri stack (docs/LICENCES.md). */
+export const ESRI_WITHHELD_MESSAGE =
+  'Esri Satellite is withheld on the hosted site: keyless World Imagery needs an ArcGIS account for commercial use (docs/LICENCES.md)';
+
+/**
+ * The keyless landing stack: Esri imagery, or OSM where the hosted licence
+ * profile withholds keyless Esri.
+ */
+export function keylessStackId() {
+  return isWithheld('esri-world-imagery') ? 'osm' : 'esri-imagery';
+}
 
 /** Select sources and setup guidance without putting provider branches in the controller. */
 export function createDefaultMapSources({
@@ -18,6 +31,7 @@ export function createDefaultMapSources({
   const ionToken = String(cesiumToken || '').trim();
   const hasIon = Boolean(ionToken);
   const hasGoogle = Boolean(String(googleApiKey || '').trim());
+  const esriWithheld = isWithheld('esri-world-imagery');
   const terrain = {
     id: hasIon ? 'world' : 'keyless',
     create: hasIon
@@ -25,18 +39,25 @@ export function createDefaultMapSources({
       : createKeylessTerrain,
   };
   return {
-    defaultId: googleTileset ? 'photoreal' : 'esri-imagery',
+    defaultId: googleTileset ? 'photoreal' : keylessStackId(),
     unknownId: 'photoreal',
     recoveryId: googleTileset ? 'photoreal' : null,
     state: { hasCesiumIonToken: hasIon },
     sources: MAP_STACKS.map((descriptor) => {
-      const common = {
-        descriptor,
-        available: !descriptor.requiresIon || hasIon,
-        unavailableReason: descriptor.requiresIon
-          ? keySetupRequirement('cesium-ion')
-          : null,
-      };
+      const common =
+        esriWithheld && descriptor.id === 'esri-imagery'
+          ? {
+              descriptor,
+              available: false,
+              unavailableReason: ESRI_WITHHELD_MESSAGE,
+            }
+          : {
+              descriptor,
+              available: !descriptor.requiresIon || hasIon,
+              unavailableReason: descriptor.requiresIon
+                ? keySetupRequirement('cesium-ion')
+                : null,
+            };
       if (descriptor.kind === 'photoreal')
         return {
           ...common,

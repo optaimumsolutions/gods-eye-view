@@ -1,6 +1,6 @@
 import {
   OVERPASS_MAX_RESPONSE_BYTES,
-  OVERPASS_UPSTREAMS,
+  activeOverpassUpstreams,
   OVERPASS_USER_AGENT,
   OVERPASS_TIMEOUT_MS,
 } from './constants.js';
@@ -73,7 +73,7 @@ async function fetchOverpassPayload(
   body,
   maxResponseBytes = OVERPASS_MAX_RESPONSE_BYTES,
   {
-    endpoints = OVERPASS_UPSTREAMS,
+    endpoints = activeOverpassUpstreams(),
     fetchImpl = fetch,
     readBody = readResponseTextCapped,
     simplify = simplifyOverpassPayloadBody,

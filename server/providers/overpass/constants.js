@@ -29,6 +29,19 @@ const OVERPASS_UPSTREAMS = [
 ];
 
 /**
+ * The mirrors in use. OVERPASS_MAIN_ENABLED=0 (the hosted licence profile,
+ * docs/LICENCES.md) skips the overpass-api.de instances, whose operators ask
+ * commercial users to go elsewhere; the community mirrors remain.
+ */
+function activeOverpassUpstreams(env = process.env) {
+  if (String(env.OVERPASS_MAIN_ENABLED || '1').trim() !== '0')
+    return OVERPASS_UPSTREAMS;
+  return OVERPASS_UPSTREAMS.filter(
+    (url) => !/(^|\.)overpass-api\.de$/.test(new URL(url).hostname),
+  );
+}
+
+/**
  * TTL for FRESH cached Overpass responses (ms). Road geometry is static for
  * months — the original 45 s TTL forced a public-mirror round-trip on nearly
  * every viewport revisit and left nothing to serve when the mirrors 502
@@ -143,6 +156,7 @@ export {
   OVERPASS_SIMPLIFY_TOLERANCE_DEG,
   OVERPASS_MAX_RESPONSE_BYTES,
   OVERPASS_UPSTREAMS,
+  activeOverpassUpstreams,
   OVERPASS_USER_AGENT,
   OVERPASS_TIMEOUT_MS,
 };

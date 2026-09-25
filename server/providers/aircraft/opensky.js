@@ -354,6 +354,26 @@ export function openSkyProxy() {
         const requestedMode = normalizeOpenSkyAuthMode(
           process.env.OPENSKY_AUTH_MODE,
         );
+        // OPENSKY_ENABLED=0 (the hosted licence profile, docs/LICENCES.md:
+        // OpenSky licenses for-profit use only in writing): never call
+        // OpenSky; answer from the adsb.lol regional fallback instead.
+        if (String(process.env.OPENSKY_ENABLED || '1').trim() === '0') {
+          if (
+            await serveAdsbLolPointFallback(
+              req,
+              res,
+              requestedMode,
+              'opensky_disabled_regional_fallback',
+            )
+          )
+            return;
+          res.writeHead(503, {
+            'Content-Type': 'application/json',
+            'Cache-Control': 'no-store',
+          });
+          res.end(JSON.stringify({ error: 'OpenSky is switched off here' }));
+          return;
+        }
         const now = Date.now();
         const inCooldown = now < _openskyCooldownUntil;
         // Fresh-enough cache (adaptive TTL) OR any cache during a 429

@@ -15,9 +15,11 @@ without a valid one.
 | Product strip | `public/gev-shell/strip.mjs`, `server/hosting/navStrip.js` | off unless `GEV_NAV_STRIP=1` | on (set at build time) |
 | Allowed hosts | `build/vite.js` `extraAllowedHosts` | loopback only | + `GEV_ALLOWED_HOSTS` |
 | Rate limits | `server/providers/common/rate-limit.js` | per socket address | per verified email |
+| Licence switch (M2) | `server/hosting/licences.js`, `licencePolicy.js` | every source on | `GEV_LICENCE_PROFILE=hosted`: the rows [`LICENCES.md`](LICENCES.md) marks OFF are switched off at build and run time |
 
-Plugin order (`server/hosting/plugins.js`): guard, then console proxy, then the
-strip, then the providers, then `api-not-found`. Vite runs plugin middleware
+Plugin order (`server/hosting/plugins.js`): guard, then the licence switch
+(451 for withheld routes), then console proxy, then the strip, then the
+providers, then `api-not-found`. Vite runs plugin middleware
 before its own host check, proxy and static files, so the guard covers every
 request.
 
@@ -56,6 +58,11 @@ it as `/etc/gods-eye-view/globe.env`, owner `root:globe`, mode `0640`. Keys go
 in over ssh, never through chat. The Google browser key and the Cesium token
 are baked into the bundle at build time, so they reach every signed-in browser:
 lock the Google key to `https://commodities.optaimum.com/*`.
+
+`GEV_LICENCE_PROFILE=hosted` must be set (the deploy refuses to build without
+it): it keeps the sources that [`LICENCES.md`](LICENCES.md) marks OFF out of the
+bundle and off the server. When a licence or permission arrives, add the row's
+id to `GEV_LICENCE_ON_FILE`, record it in `LICENCES.md`, and redeploy.
 
 ## VPS setup (once)
 

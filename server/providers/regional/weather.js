@@ -4,6 +4,9 @@ import { normalizeRegionalWeather } from '../../../src/data/regionalModel.js';
 const WEATHER_EFFECTS_MAX_RESPONSE_BYTES = 512 * 1024;
 
 async function fetchRegionalWeather(point) {
+  // OPEN_METEO_ENABLED=0 (the hosted licence profile, docs/LICENCES.md: the
+  // free API is non-commercial only): no reading, the same as an outage.
+  if (String(process.env.OPEN_METEO_ENABLED || '1').trim() === '0') return null;
   const params = new URLSearchParams({
     latitude: point.latitude.toFixed(5),
     longitude: point.longitude.toFixed(5),

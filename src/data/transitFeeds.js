@@ -26,6 +26,8 @@
  * node:test. No Cesium, no Node built-ins.
  */
 
+import { isWithheld } from '../hosting/withheld.js';
+
 /** Transit modes the layer colors. `routeMode` hints refine a feed's default. */
 export const TRANSIT_MODES = Object.freeze([
   'bus',
@@ -278,7 +280,11 @@ export const TRANSIT_FEED_REGISTRY = Object.freeze([
  * and never appears in a coverage check.
  */
 export const TRANSIT_ENABLED_FEEDS = Object.freeze(
-  TRANSIT_FEED_REGISTRY.filter((feed) => feed.defaultEnabled === true),
+  TRANSIT_FEED_REGISTRY.filter(
+    // The hosted licence profile withholds feeds without a reuse licence
+    // (docs/LICENCES.md); getTransitFeed re-checks at call time on the server.
+    (feed) => feed.defaultEnabled === true && !isWithheld(`transit:${feed.id}`),
+  ),
 );
 
 const FEED_BY_ID = new Map(
@@ -301,6 +307,7 @@ export const TRANSIT_FEED_ID_PATTERN = /^[a-z0-9][a-z0-9-]{1,63}$/;
  */
 export function getTransitFeed(id) {
   if (typeof id !== 'string' || !TRANSIT_FEED_ID_PATTERN.test(id)) return null;
+  if (isWithheld(`transit:${id}`)) return null;
   return FEED_BY_ID.get(id) || null;
 }
 

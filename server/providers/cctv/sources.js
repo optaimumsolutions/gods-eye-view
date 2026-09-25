@@ -742,6 +742,8 @@ export async function loadDriveBcSourcesFromOpenData() {
     const rows = await resp.json();
     if (!Array.isArray(rows)) return [];
 
+    const thirdPartyDriveBcOff =
+      String(process.env.CCTV_DRIVEBC_THIRD_PARTY || '1').trim() === '0';
     const cameras = [];
     for (const row of rows) {
       if (row?.is_on !== true || row?.should_appear !== true) continue;
@@ -763,6 +765,9 @@ export async function loadDriveBcSourcesFromOpenData() {
       const region = String(row.region_name || '').trim();
       const imageUrl = DRIVEBC_IMAGE_URL(row.id);
       const credit = driveBcImageCredit(row.credit);
+      // CCTV_DRIVEBC_THIRD_PARTY=0 (the hosted licence profile,
+      // docs/LICENCES.md): OGL-BC does not cover a partner's own images.
+      if (credit && thirdPartyDriveBcOff) continue;
       cameras.push({
         id: cameraId,
         name: String(row.name || '').trim() || `DriveBC camera ${row.id}`,
