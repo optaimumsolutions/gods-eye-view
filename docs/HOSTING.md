@@ -22,7 +22,9 @@ before its own host check, proxy and static files, so the guard covers every
 request.
 
 Console routes under the globe's origin: `GET /market` (the console root),
-`/gas`, `/weather`, `/trades`, `/logs.json`, `/api/oracle/*` (reserved for M3),
+`/gas`, `/weather`, `/trades`, `/logs.json`, `/api/oracle/*` (M3, live since
+2026-09-24: `freshness`, `chokepoints`, `basins`, `gas-storage`; the chokepoint
+layer and the Williston card read them and fall back when they fail),
 and `POST /ask`, `/grill`, `/trade`, `/trade_close`; since FR-D19 also
 `GET /ask/<id>` (job poll) and `POST /ask/<id>/cancel`. `/ask` and `/grill`
 return a job id at once (Cloudflare cuts a response that has not started
@@ -111,6 +113,22 @@ The live commit carries the local tag `production`.
    is on (the default); milestone 4 needs it.
 
 The console went briefly public during FR-D5 because the hostname came first.
+
+## Check end to end before Access exists
+
+The VPS globe refuses everything until the Access app is configured, so check
+the production path from the laptop against the live console:
+
+```sh
+ssh -i ~/.ssh/oil_oracle_laptop_ed25519 -N -L 8012:127.0.0.1:8011 ubuntu@15.204.118.186 &
+npm run build
+GEV_CONSOLE_URL=http://127.0.0.1:8012 npx vite preview --port 4176 --strictPort --host 127.0.0.1 &
+GEV_URL=http://127.0.0.1:4176/ node .gev-logs/render-chokepoints-url.mjs   # source: IMF PortWatch via Oil Oracle store
+GEV_URL=http://127.0.0.1:4176/ node .gev-logs/render-onshore-basin.mjs     # basinWeather: Bakken …
+```
+
+On Windows, stopping those background jobs can leave `ssh.exe` / `node.exe`
+listening: check `netstat -ano`, confirm the PID's command line, `taskkill`.
 
 ## Verify (M1)
 

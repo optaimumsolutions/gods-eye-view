@@ -1,6 +1,6 @@
 # PLAN — Commodities Globe: rules, features and layout for rows 1 to 8
 
-**Version:** 1.4 · **Date:** 2026-09-23 · **Status:** decisions locked in the
+**Version:** 1.5 · **Date:** 2026-09-25 · **Status:** decisions locked in the
 2026-09-17 grill; built so far — rows 0a, 0b, 1 (milestone 1), 4 (substrate)
 and 8 (v3), see the §0 ledger for commits; row 3 re-specced in the
 2026-09-21 weather grill (§11); row 13 (hosting at commodities.optaimum.com)
@@ -34,7 +34,7 @@ owns layers. Re-check `git status` before every edit to a shared file.
 | 10  | `commodity-lng`: LNG terminals, tiered cards, sea-routed cargo arcs | layers (worktree `commodities-lng`) | **BUILT 2026-09-21** — PRD §12 (mirror: Project Brain `05-prd.md`), milestones 0 to 6. Bundle `8b5c5b4` (`npm run build:lng`, `--check` byte-identical; 308 GEM terminals, EIA 2026-Q2 trains on 14 US plants, DOE cargoes through 2026-06, GIIGNL 2025 matrix 427.9 MT, 470 searoute-ts routes); layer, dossier, chips, docs in the commit carrying this line. `scripts/qa-lng.mjs` green (41 checks; activation 666 ms warm, heap +31 MiB); four gates green. Deviations in §12.11: GEM read from GEM's public tracker-map feed until the form-gated xlsx is placed (no operator column), via radius 40 km, chips session-only, EIA API codes null until milestone 7. Landed on `feat/commodities-shell` per the founder's 2026-09-21 rule. Next: milestone 7 (EIA `poe2` refresh once row 4 lands the key path) |
 | 11  | Gas production facilities: Gulf platforms (BSEE) first | layers + content (shell worktree, `feat/commodities-shell`) | **BUILT (first slice) 2026-09-21** — PRD §13 from the founder's pivot and grill; on `feat/commodities-shell` (founder's instruction: every update on the shell branch, no row worktree), token `2`. Milestone 1 `c6c92b2`: `scripts/build-gulf-platforms.mjs` + `src/data/local_data/bsee_gulf/` (1,315 installed structures, 120-month series, 608 KB gzip), the completeness rule and the one record shape. Milestone 2 `1e685f0`: marks sized by gas share and coloured by change against last year, three tiers, hover and selected cards, the panel line, `scripts/qa-gulf-platforms.mjs`. Milestone 3 `af342d1`: the dossier (ten-year chart, this-month ledger, identity, lifetime, sources) and the drawer chrome shared with the datacenters; QA 20 checks green (layer activation 755 ms apart from the bundle fetch, heap +50 MiB). Milestone 4 is the commit carrying this line. Four gates green at every commit. Next: milestone 5 (EIA regional backdrop, short grill first) |
 | 12  | Onshore production facilities: wells, leases and rigs, region by region | layers + content (shell worktree, `feat/commodities-shell`) | **BUILT (milestones 0 and 1, Williston) 2026-09-21** — PRD §14 from the founder's direction the same day; five live sweeps probed some twenty regulators (§14.4); eleven regions ranked (§14.5). The founder's "build out the basins one at a time" started the ladder in the §14.5 order with O1 taken as recommended (option a: index and clusters committed, history shards built from the archive, not committed). Milestone 1a `c4ec135`: `scripts/build-onshore.mjs` + `scripts/onshore/{nd,eia,regions}.mjs`, `src/layers/onshore/{records,shards,bundledSource}.js`, `src/data/local_data/onshore/williston/` (24,154 North Dakota wells over 120 months, 17,915 producing in 2026-07 at 3.30 Bcf/d and 1.17 MMbbl/d; 518 fields; index 2.5 MB gzip; `--check` byte-identical; 94 % of EIA gross withdrawals, 100 % of marketed). Milestones 1b and 1c `f66463a`: `production-williston` (token `4`) — region card at global, 518 field marks at regional, 24,154 well points (`PointPrimitiveCollection`, clipped to the view) at local, hover and selected cards, the dossier with the ten-year chart from an on-demand shard, `scripts/qa-onshore-williston.mjs` on the shared harness (32 checks: activation 659 ms apart from the 16 MB fetch, heap +35 MiB, layer frame cost 1.8 ms). `836c325` fixes the second enable of the rows 4 and 11 layers (found by this QA). Build notes §14.13. Next: region 2, Appalachia (PA unconventional) |
-| 13  | Hosted site: globe + console behind one login at `commodities.optaimum.com` | ops + shell + server (`feat/commodities-shell`; oracle twin FR-D17) | **M1c BUILT 2026-09-24**: `globe.service` LIVE on the VPS at 127.0.0.1:8020 (fail-closed, 403 everywhere until Access is configured), first gated deploy 3 min 39 s with 4,402 tests green on Linux; rollback 1.1 s (after fix `ca8e374`); console FR-D17a deployed. **Next: the founder** creates the Access app `Commodities` then the hostname, and the production keys (§15.12 steps 4–5). M1a BUILT `9d61cd6`; M1b BUILT (globe `b73db97` + `447bd8f`, oracle `2e46883`). PRD §15, rewritten 2026-09-24 with an agent brief at §15.0 and every amendment folded in; status table §15.12, build record §15.14, runbook `docs/HOSTING.md`. Since then: failing-commit drill passed (G13.3); **M2 stamping BUILT + deployed** (oracle `2c7c168`). Founder next: Access app then hostname, keys (§15.12 steps 4–5). **M3 oracle routes DONE** (oracle `8a32523`, live). **M3: routes live; chokepoint layer reads the oracle store** (`1711e03`, deployed; card and console agree on Hormuz −84% vs 90d, 2026-09-20). **M3 BUILT 2026-09-25** (onshore region card basin line `2a00477`, deployed; M3 check met). Session next: M2 licence pass, then M4 events hub |
+| 13  | Hosted site: globe + console behind one login at `commodities.optaimum.com` | ops + shell + server (`feat/commodities-shell`; oracle twin FR-D17) | **M1 BUILT except the browser check; M2 stamping BUILT; M3 BUILT (check met) — 2026-09-25.** Live on the VPS: globe `2a00477` (`globe.service` :8020, fail-closed 403 until Access exists; gated deploys, rollback 1.1 s, failing-commit drill passed), console with FR-D17a/b (oracle `2c7c168` stamping, `8a32523` `/api/oracle/*`). **Blocked on the founder:** Access app `Commodities` then the hostname, production keys (§15.12 steps 4–5). **Session next:** M2 licence pass (step 8), then M4 events (step 10). Agents start at §15.0; status §15.12; change log and build record §15.14 |
 
 Definition of usable, pending founder confirmation of question 13: rows 1
 through 4. Rows 5 to 7 are context and content.
@@ -4359,8 +4359,10 @@ What was built, and where it departs from the text above:
 
 ## 15. Row 13 PRD — Hosted commodities site: globe and console behind one login at commodities.optaimum.com (FR-G13)
 
-**Status:** M1 in progress (M1a and M1b built; M1c, the VPS, next). Decided in
-the founder's hosting grill of 2026-09-23 (H1 to H17). Oracle-side twin:
+**Status (2026-09-25):** M1 built and live on the VPS except the browser
+check, which waits for the founder's Cloudflare Access app and keys; M2
+stamping built; M3 built with its check met; M4 and M5 open. Decided in the
+founder's hosting grill of 2026-09-23 (H1 to H17). Oracle-side twin:
 `optaimumsolutions/commodities` `PRD-market-console.md` row FR-D17, which
 points here. This section is the single source of truth for row 13: the
 requirements below are current, with every earlier amendment folded in.
@@ -4368,8 +4370,20 @@ requirements below are current, with every earlier amendment folded in.
 ### 15.0 Agent brief: the system as it is (read this first)
 
 Written for a coding agent resuming this row cold. Everything here was
-verified against the running system on 2026-09-23/24. Trust it over older
-handoffs; re-verify anything marked *check*.
+verified against the running system on 2026-09-23 to 2026-09-25. Trust it
+over older handoffs; re-verify anything marked *check*.
+
+**Live state (2026-09-25)**
+
+| What | State |
+| --- | --- |
+| Globe on the VPS | `globe.service` LIVE, release `2a00477` (`previous` `1711e03`, tag `production`), `/srv/gods-eye-view/current`. Every request answers 403 (guard in `deny` mode) until `GEV_ACCESS_TEAM` + `GEV_ACCESS_AUD` are set. |
+| `/etc/gods-eye-view/globe.env` | Set: `GEV_REQUIRE_ACCESS=1`, `GEV_ALLOWED_HOSTS`, `GEV_NAV_STRIP=1`, `GEV_CONSOLE_URL`, `GEV_PROXY_KEY` (generated, never printed). Empty: team, AUD, every provider key, `GEV_RATELIMIT_*`. |
+| Console on the VPS | `tools/market_map.py` = oracle git HEAD at `8a32523` or later (FR-D17a strip tag, `/market`, `/api/oracle/*` via `tools/oracle_api.py`). |
+| askd on the VPS | `tools/ask_server.py` = `2c7c168` (stamps); `~/oracle/.env` holds the same `GEV_PROXY_KEY`; `oracle.db` migrated (`trades.booked_by/closed_by`, `asks.requested_by`). |
+| Cloudflare | Nothing done for row 13 yet: no Access app `Commodities`, no hostname. `oracle.optaimum.com` unchanged. |
+| Founder-owned next | §15.12 steps 4–5 (keys, then Access app FIRST, then hostname). |
+| Session-owned next | §15.12 step 8 (M2 licence pass), then step 10 (M4). |
 
 **Two repos, one product**
 
@@ -4392,12 +4406,12 @@ ubuntu user has passwordless sudo; no inbound port except 22)
 | Piece | Where | Notes |
 | --- | --- | --- |
 | Canonical store | `~/oracle/oracle.db`, `~/oracle/oracle_natgas.db`, `~/oracle/index/chroma` | `~/oracle` is NOT a git checkout and is sometimes ahead of git. Before any scp: `diff --strip-trailing-cr` VPS vs git. |
-| `console.service` | `tools/market_map.py` on `127.0.0.1:8011` | Pages `/` (= `/market`, `/market/`), `/gas`, `/weather`, `/trades`; `GET /logs.json`, `GET /ask/<id>`; `POST /ask`, `/grill`, `/trade`, `/trade_close`, `/ask/<id>/cancel`. Redeploy = scp the file + `sudo systemctl restart console`. |
-| `askd.service` | `tools/ask_server.py` on `127.0.0.1:8014` | One model call at a time (`LOCK`, 409 "busy"). Async jobs since FR-J1: `POST /ask` answers `{id}` at once; the page polls `GET /ask/<id>` every 10 s. Jobs are rows in `oracle.db` `asks`. |
+| `console.service` | `tools/market_map.py` on `127.0.0.1:8011` | Pages `/` (= `/market`, `/market/`), `/gas`, `/weather`, `/trades`; `GET /logs.json`, `GET /ask/<id>`, `GET /api/oracle/{freshness,chokepoints,basins,gas-storage}`; `POST /ask`, `/grill`, `/trade`, `/trade_close`, `/ask/<id>/cancel`. Redeploy = diff, scp the file(s) + `sudo systemctl restart console`; keep a `*.pre-<fr>` backup. |
+| `askd.service` | `tools/ask_server.py` on `127.0.0.1:8014` | One model call at a time (`LOCK`, 409 "busy"). Async jobs since FR-J1: `POST /ask` answers `{id}` at once; the page polls `GET /ask/<id>` every 10 s. Jobs are rows in `oracle.db` `asks`. Stamps every trade, close and job with an email (FR-D17b). Check `curl -s 127.0.0.1:8014/health` shows `"running": null` before a restart (a restart marks in-flight jobs interrupted). |
 | Ollama | `127.0.0.1:11434`, `qwen3:14b` | CPU-bound; shares the cores with ingest and builds. |
 | Datasette | `127.0.0.1:8001` | Read-only raw store; not the globe's API (H7). |
 | `cloudflared.service` | tunnel `oracle` (dashboard-managed, account Jack@optaimum.com) | `oracle.optaimum.com` → `:8011` behind Access app "Oracle console", policy Founder. Row 13 adds `commodities.optaimum.com` → `:8020`. |
-| `globe.service` (row 13) | `vite preview` on `127.0.0.1:8020` from `/srv/gods-eye-view/current`, user `globe` | Config `/etc/gods-eye-view/globe.env` (root:globe 0640). |
+| `globe.service` (row 13) | `vite preview` on `127.0.0.1:8020` from `/srv/gods-eye-view/current`, user `globe` (cannot read `~/oracle`) | Config `/etc/gods-eye-view/globe.env` (root:globe 0640). Node 24.21.0 from NodeSource. Repo clone `/srv/gods-eye-view/repo` on `feat/commodities-shell`; releases are git worktrees under `releases/<sha>`; shards in `shards/williston/`. `journalctl -u globe` needs `sudo`. |
 | Ports reserved | `8020` globe, `8021` M4 publish listener (localhost only) | Both were free on 2026-09-24. |
 | Crons (ubuntu) | fast `*/30`, daily `23:00Z`, slow `02:00Z` (`ingest/refresh.py --tier …`, flock-guarded), wire `15,45 * * * *` (`--tier wire`: natgas GDELT + embed, own lock, since 2026-09-24), brief `10:00Z`, backup `23:30Z`, chroma tar Sun `04:00Z` | Never run ingest from the laptop. Never build or run gates in 22:45–23:30Z or 01:45–02:30Z. Since 2026-09-24 (oracle `90ead34`, FR-J3) the natgas lanes run in the tiers: `ng_spot` + `ng_storage` daily, `ng_cot` Saturday and `ng_monthly` on the 2nd in slow, plus a Thu/Fri fast-tier storage catch-up; `oracle_natgas.db` catches up from the next daily run. |
 
@@ -4443,9 +4457,23 @@ browser ──HTTPS──▶ Cloudflare Access (login: email one-time PIN, 24 h)
   `node scripts/hosting/env-template.mjs`; a test fails on drift),
   `scripts/deploy-vps.sh`, `scripts/rollback-vps.sh`. Runbook:
   [`HOSTING.md`](HOSTING.md).
+- `src/layers/chokepoints/oracleSource.js` (M3): reads
+  `/api/oracle/chokepoints` into the same `buildChokepointSnapshot`;
+  `createPreferredChokepointSource` falls back to live PortWatch on any
+  failure or a store more than 14 days old. Wired in
+  `src/sources/reference.js`; the card and `getStats().source` name the
+  answering source.
+- `src/layers/onshore/basinWeather.js` (M3): reads `/api/oracle/basins`,
+  matches the bundle's `region.basins` (Williston -> Bakken), adds one line
+  to the global-tier region card; optional (no line on any failure or a
+  store more than 5 days old). Wired in `src/app/layers/onshore.js`;
+  `getStats().basinWeather`.
 - Tests: `src/tooling/hostingPreview.test.mjs` runs a real build under
-  `vite preview` with a locally signed token (~1 s). Visual:
-  `.gev-logs/render-strip.mjs` (gitignored).
+  `vite preview` with a locally signed token (~1 s);
+  `src/layers/chokepoints/oracleSource.test.mjs`,
+  `src/layers/onshore/basinWeather.test.mjs`. Visual (gitignored):
+  `.gev-logs/render-strip.mjs`, `render-chokepoints-url.mjs`,
+  `render-onshore-basin.mjs` (`GEV_URL`, `OUT_DIR`).
 
 **Code map (oracle)**
 
@@ -4457,6 +4485,20 @@ browser ──HTTPS──▶ Cloudflare Access (login: email one-time PIN, 24 h)
   Freshness tolerance per source lives in `SRC_TOL_H` and is published in
   `/logs.json` as `tol`; this is the cadence table the strip and the M3
   `freshness` route reuse.
+- `tools/oracle_api.py` (FR-D17b, M3): the read-only `/api/oracle/*` routes,
+  hooked into `market_map.py` `do_GET` (6 lines + one import). `route(path,
+  SRC_TOL_H)` returns (status, JSON); stores opened `mode=ro`. `CRITICAL`
+  (quotes, eia_spot, ng_spot, ng_storage), `GRACE_H` (gdelt_news 6 h),
+  `OBSERVED` (source -> table for observedAt). A new `SRC_TOL_H` source
+  shows up in `freshness` automatically.
+- `tools/ask_server.py` (FR-D17b, M2): `actor(headers)` returns the
+  `X-Oracle-User` email only with a constant-time match of
+  `X-Oracle-Proxy-Key` against `GEV_PROXY_KEY` in `.env` (read per request),
+  else `jack@optaimum.com`; `insert_trade`, `_close_trade`, `Job` and
+  `start_job` carry it. Columns come from `ingest/eia_client.py`
+  `MIGRATIONS` (replayed by every `eia.db()`, so askd's boot applies them).
+  `ingest/trade_mtm.py`'s TP/SL Slack page names the booker; the console
+  trade card shows booked by / closed by.
 - `ingest/refresh.py`: runs each job as a subprocess; the jobs write
   `ingest_log (source, run_at, rows_written, raw_path, note)`. The M4 publish
   hook goes after each successful `run(job)`; no ingest script changes.
@@ -4472,8 +4514,21 @@ browser ──HTTPS──▶ Cloudflare Access (login: email one-time PIN, 24 h)
   --port 4176 --strictPort --host 127.0.0.1` with a console on 8011
   (`~/commodities/.venv/Scripts/python.exe tools/market_map.py`).
 - Deploy: `sudo /srv/gods-eye-view/repo/scripts/deploy-vps.sh <sha>` (the
-  commit must be pushed to origin); roll back:
+  commit must be pushed to origin); about 3.5–4 min. Run it detached so an
+  ssh drop cannot kill it: `sudo bash -c 'nohup …/deploy-vps.sh <sha> >
+  /srv/gods-eye-view/deploy-N.log 2>&1 &'`, then poll the log's last line
+  for `LIVE` or `FAILED`. Roll back:
   `sudo /srv/gods-eye-view/repo/scripts/rollback-vps.sh`.
+- End-to-end check before Access exists: `ssh -N -L
+  8012:127.0.0.1:8011 ubuntu@15.204.118.186` (the VPS console), then
+  `GEV_CONSOLE_URL=http://127.0.0.1:8012 npx vite preview --port 4176
+  --strictPort --host 127.0.0.1` on a fresh `npm run build`, then
+  `GEV_URL=http://127.0.0.1:4176/ node .gev-logs/render-<x>.mjs`.
+- Oracle commits on this laptop need an identity:
+  `git -c user.name="Jack Gewirz" -c user.email=jack@optaimum.com commit …`.
+- Oracle route probe on the VPS without deploying: scp the module to
+  `/tmp`, load it with `importlib`, point `DB`/`NG_DB` at `~/oracle`, read
+  `SRC_TOL_H` from `market_map.py` with `ast` (not a regex).
 
 **Lessons that cost time (do not relearn them)**
 
@@ -4497,6 +4552,23 @@ browser ──HTTPS──▶ Cloudflare Access (login: email one-time PIN, 24 h)
 - `gdelt_news` is rate-limited and legitimately skips runs; staleness needs
   per-source grace, and only `critical` sources page.
 - Only the market page auto-reloads (60 s); `/weather` and `/trades` never do.
+- GNU `readlink -f` prints a path for a missing symlink; the first deploy
+  recorded `previous -> current` until `ca8e374` switched to `readlink -e`.
+- The VPS clone must be on `feat/commodities-shell`: `main` has no
+  `deploy/`. Git Bash on the laptop has no `rsync`: stream `tar` over ssh.
+- On this laptop, stopping a background task leaves its `ssh.exe` or
+  `node.exe` child holding the port; check the PID's command line, then
+  `taskkill`. A tool call reported "rejected" by an interrupt may still have
+  run to the end: check git and the VPS before re-running it.
+- Bash-tool heredocs over ~8 KB fail, and backslashes inside them are
+  eaten: write scripts with the Write tool, then run them.
+- The oracle tree is shared with the journal-memory session (FR-J*): message
+  it (cross-session) before editing `market_map.py`, `ask_server.py`,
+  `eia_client.py` or `refresh.py`, and stage only your own files.
+- Open oracle findings: `bsee_shutins` has not written since about
+  2026-09-07 (tolerance 36 h); `eu_storage` / `eu_lng` are empty by design
+  (FR-N3 non-goal); the console's brief line and tile round Hormuz
+  differently (−85% vs −84%).
 - Known console bug, not ours: `/market` throws `TypeError … addEventListener`
   at `.strip .tile .pin` (a price tile without a pin button), with or
   without the strip.
@@ -4771,7 +4843,7 @@ pushes "source updated" and health events to every open page.
 | 3 | M1c: Node 24, user `globe`, `/srv/gods-eye-view`, clone, `globe.env`, service, shards, first gated deploy; deploy the console's `2e46883` | VPS | session | **BUILT 2026-09-24** (§15.14) |
 | 4 | Keys: Google browser + server, Cesium ion, OpenAI, budget caps; written into `globe.env` over ssh | provider consoles | founder | open |
 | 5 | Cloudflare: Access app `Commodities` first, then the hostname; team + AUD into `globe.env`, restart | dashboard | founder | open |
-| 6 | M1 verify (§15.10) and close | all | session + founder | open |
+| 6 | M1 verify (§15.10) and close | all | session + founder | partly done: VPS 403, gated deploys, failing-commit drill and 1.1 s rollback passed; open: the anonymous `curl -I` redirects and the browser look (after steps 4–5) |
 | 7 | FR-N5 / FR-J3: schedule the `ng_*` ingest (also fixes today's stale `/gas`) | oracle + crontab | oracle lane | **DONE** oracle `90ead34` (journal-memory session): natgas lanes in the refresh tiers |
 | 8 | M2: invitee group, askd stamp columns + key check, licence pass | both + dashboard | session + founder | **stamping BUILT + deployed** (oracle `2c7c168`, §15.14); open: licence pass (session), invitee group (founder), the invitee test |
 | 9 | M3: `freshness`, `chokepoints`, `basins` routes; layers prefer them; `gas-storage` after step 7 | both | session | **routes BUILT + live** (oracle `8a32523`, all four incl. `gas-storage`); **chokepoint layer** `1711e03` and **onshore basin line** `2a00477` BUILT + deployed; **M3 check met** 2026-09-25 (card = console for Hormuz and Bakken, routes 4–25 ms) |
@@ -4822,7 +4894,32 @@ oracle ledger cite them.
 - **V12** one ask at a time (§15.11).
 - **V13** rate limits keyed on the verified email behind the tunnel (§15.0).
 
-### 15.14 Build record
+### 15.14 Change log and build record
+
+**Change log, in order** (both repos; every commit pushed; VPS state as of
+2026-09-25)
+
+| When (UTC) | Repo | Commit | Change | Verified by |
+| --- | --- | --- | --- | --- |
+| 09-23 | globe | `9d61cd6` | M1a: access guard, console proxy, strip, deploy + rollback scripts, env template | 34 tests incl. real `vite preview` with a signed token |
+| 09-23 | globe | `b73db97` `447bd8f` | M1b: job routes through the proxy, `X-Gev-Shell`, CHAT opens the drawer | 4,372 tests; strip on all console pages |
+| 09-23 | oracle | `2e46883` | FR-D17a: `/market` alias, nav, conditional strip tag | second console on :8012 |
+| 09-24 12:53 | VPS | — | M1c: Node 24, user `globe`, dirs, clone, `globe.env`, service, shards (md5 equal) | commands in `HOSTING.md` |
+| 09-24 12:55 | oracle | `2e46883` on VPS | console FR-D17a deployed | pages 200; tag only with `X-Gev-Shell` |
+| 09-24 12:58 | globe | `1cef46f` | §15 rewrite with the §15.0 agent brief; first gated deploy | VPS gates 4,402 / 0 fail; 403 on every path |
+| 09-24 | globe | `f3ef513` | runbook fixes (clone branch, tar over ssh, key recipe) | — |
+| 09-24 13:04 | globe | `ca8e374` | deploy/rollback: `readlink -e`, refuse a self-swap | deployed through the gates; rollback 1.1 s each way |
+| 09-24 15:38 | VPS | — | failing-commit drill (local-only commit) | format gate stopped it; live unchanged |
+| 09-24 15:56 | oracle | `2c7c168` | FR-D17b stamping (askd, migrations, Slack line, card) | 10/10 on a store copy; store migrated; 16:09 fast tier clean |
+| 09-24 16:24 | oracle | `8a32523` | FR-D17b routes `/api/oracle/*` (`tools/oracle_api.py`) | live 4–25 ms; `/gas` = route |
+| 09-24 16:42 | globe | `1711e03` | chokepoint layer prefers the oracle route | 4,409 / 0 fail; tunnel end-to-end + fallback |
+| 09-25 14:14 | globe | `2a00477` | onshore region card basin line | 4,415 / 0 fail; tunnel end-to-end; M3 check met |
+
+Ledger and doc commits in between (`292794a`, `cb46ff2`, `d62549f`,
+`db471c3`, oracle `7575548`, `d085cf3`, `cfbea89`, `5414679`, `8e43858`)
+only record the rows above.
+
+**Build record**
 
 - **Phase 0 (2026-09-23).** Row 12 gated and pushed with `d1fdf22`; VPS
   probed read-only; validation V1–V13.
