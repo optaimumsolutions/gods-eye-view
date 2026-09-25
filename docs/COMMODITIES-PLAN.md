@@ -1,10 +1,10 @@
 # PLAN — Commodities Globe: rules, features and layout for rows 1 to 8
 
-**Version:** 1.6 · **Date:** 2026-09-25 · **Status:** decisions locked in the
+**Version:** 1.7 · **Date:** 2026-09-25 · **Status:** decisions locked in the
 2026-09-17 grill; built so far — rows 0a, 0b, 1 (milestone 1), 4 (substrate)
 and 8 (v3), see the §0 ledger for commits; row 3 re-specced in the
 2026-09-21 weather grill (§11); row 13 (hosting at commodities.optaimum.com)
-specced in the 2026-09-23 hosting grill (§15; coding agents start at §15.0), which supersedes R1 and R7
+specced in the 2026-09-23 hosting grill (§15; coding agents start at §15.0), which supersedes R1 and R7; row 14 (the natural-gas intelligence loop) specced 2026-09-25 (§16)
 **Owner:** Jack Gewirz
 **Companions:** [`COMMODITIES.md`](COMMODITIES.md) (verified endpoints, source
 notes), [`../UPGRADE.md`](../UPGRADE.md) (paid enhancement per stream)
@@ -35,6 +35,7 @@ owns layers. Re-check `git status` before every edit to a shared file.
 | 11  | Gas production facilities: Gulf platforms (BSEE) first | layers + content (shell worktree, `feat/commodities-shell`) | **BUILT (first slice) 2026-09-21** — PRD §13 from the founder's pivot and grill; on `feat/commodities-shell` (founder's instruction: every update on the shell branch, no row worktree), token `2`. Milestone 1 `c6c92b2`: `scripts/build-gulf-platforms.mjs` + `src/data/local_data/bsee_gulf/` (1,315 installed structures, 120-month series, 608 KB gzip), the completeness rule and the one record shape. Milestone 2 `1e685f0`: marks sized by gas share and coloured by change against last year, three tiers, hover and selected cards, the panel line, `scripts/qa-gulf-platforms.mjs`. Milestone 3 `af342d1`: the dossier (ten-year chart, this-month ledger, identity, lifetime, sources) and the drawer chrome shared with the datacenters; QA 20 checks green (layer activation 755 ms apart from the bundle fetch, heap +50 MiB). Milestone 4 is the commit carrying this line. Four gates green at every commit. Next: milestone 5 (EIA regional backdrop, short grill first) |
 | 12  | Onshore production facilities: wells, leases and rigs, region by region | layers + content (shell worktree, `feat/commodities-shell`) | **BUILT (milestones 0 and 1, Williston) 2026-09-21** — PRD §14 from the founder's direction the same day; five live sweeps probed some twenty regulators (§14.4); eleven regions ranked (§14.5). The founder's "build out the basins one at a time" started the ladder in the §14.5 order with O1 taken as recommended (option a: index and clusters committed, history shards built from the archive, not committed). Milestone 1a `c4ec135`: `scripts/build-onshore.mjs` + `scripts/onshore/{nd,eia,regions}.mjs`, `src/layers/onshore/{records,shards,bundledSource}.js`, `src/data/local_data/onshore/williston/` (24,154 North Dakota wells over 120 months, 17,915 producing in 2026-07 at 3.30 Bcf/d and 1.17 MMbbl/d; 518 fields; index 2.5 MB gzip; `--check` byte-identical; 94 % of EIA gross withdrawals, 100 % of marketed). Milestones 1b and 1c `f66463a`: `production-williston` (token `4`) — region card at global, 518 field marks at regional, 24,154 well points (`PointPrimitiveCollection`, clipped to the view) at local, hover and selected cards, the dossier with the ten-year chart from an on-demand shard, `scripts/qa-onshore-williston.mjs` on the shared harness (32 checks: activation 659 ms apart from the 16 MB fetch, heap +35 MiB, layer frame cost 1.8 ms). `836c325` fixes the second enable of the rows 4 and 11 layers (found by this QA). Build notes §14.13. Next: region 2, Appalachia (PA unconventional) |
 | 13  | Hosted site: globe + console behind one login at `commodities.optaimum.com` | ops + shell + server (`feat/commodities-shell`; oracle twin FR-D17) | **M1 BUILT except the browser check; M2 stamping + licence pass BUILT; M3 BUILT (check met); M4 BUILT + deployed (VPS checks met) — 2026-09-25.** Live on the VPS: globe `05ebd94` (`globe.service` :8020, fail-closed 403 on every request and upgrade until Access exists; M4 hub with publish listener :8021; `GEV_LICENCE_PROFILE=hosted` keeps the 20 sources [`LICENCES.md`](LICENCES.md) marks OFF out of the build), console + askd + `refresh.py` at oracle `07cd056` (FR-D17a/b/c). **Blocked on the founder:** keys, the Access app `Commodities` then the hostname (§15.12 steps 4–5), the invitee group, and a decision on the console's uncleared sources (yfinance, Polymarket, PortWatch tiles: LICENCES.md §D). Agents start at §15.0; status §15.12; change log and build record §15.14 |
+| 14  | Natural-gas intelligence loop: the God's Eye View look, regional supply cards with main contributors, live supply feeds into the Oil Oracle, scored learning | shell + layers + server + oracle (`feat/commodities-shell`; oracle twins FR-N14 to FR-N17) | **SPECCED 2026-09-25**, not claimed. PRD §16 from the founder's direction after seeing the hosted build: the keyless hosted globe landed on OSM street tiles (the "Google map" look); region cards show totals, not contributors; nothing from the globe feeds the model. Start with the founder decisions in §16.4 (keyless imagery, NYMEX vendor, what the learning loop scores under gate d8, daily supply source, region order), then M0 the look, M1 contributors on Williston and the Gulf |
 
 Definition of usable, pending founder confirmation of question 13: rows 1
 through 4. Rows 5 to 7 are context and content.
@@ -4385,7 +4386,7 @@ over older handoffs; re-verify anything marked *check*.
 | askd on the VPS | `tools/ask_server.py` = `07cd056` (stamps, `/relay/slack`); the journal session's `b7cee16` (FR-J7) deploys after 21:30Z on 2026-09-25. `~/oracle/.env` holds the same `GEV_PROXY_KEY`; `oracle.db` migrated. `ingest/refresh.py` = `07cd056` (publishes to the hub). |
 | Cloudflare | Nothing done for row 13 yet: no Access app `Commodities`, no hostname. `oracle.optaimum.com` unchanged. |
 | Founder-owned next | §15.12 steps 4–5 (keys, then Access app FIRST, then hostname). |
-| Session-owned next | None blocked on the session: M2's licence pass and M4 are built and deployed. After the founder's Access app: the M1 browser check and M4's checks through the public hostname; M5 after seven clean days. |
+| Session-owned next | Row 13: after the founder's Access app, the M1 browser check and M4's checks through the public hostname; M5 after seven clean days. **The next program is row 14 (§16):** founder decisions (§16.4) first, then M0 (the God's Eye View look on the hosted site) and M1 (main contributors on the region cards). |
 
 **Two repos, one product**
 
@@ -5190,3 +5191,259 @@ the rows above.
   (`gdelt_natgas`, 16:06:07Z) was counted by the hub by 16:06:14Z, with no
   "event publish skipped" line in any refresh log (the 15:30Z fast tier had
   started before the new `refresh.py` was in place).
+
+---
+
+## 16. Row 14 PRD — Natural-gas intelligence loop: the God's Eye View look, regional supply cards with main contributors, live supply feeds into the Oil Oracle, scored learning (FR-G14)
+
+**Status (2026-09-25): SPECCED, not claimed.** Written the same day from
+the founder's direction after seeing the hosted build. Oracle twin:
+`optaimumsolutions/commodities` `PRD-natgas-vertical.md` rows FR-N14 to
+FR-N17, which point here. Builds on rows 11 and 12 (§13, §14), row 13's
+hosting, licence pass and event hub (§15), and the oracle's natgas vertical
+and journal/memory programs (FR-N*, FR-J*); it does not re-spec them. **Start
+with the founder decisions in 16.4 (a short grill), then M0.**
+
+### 16.0 Founder direction (2026-09-25)
+
+> "The globe is no longer the same UI as the initial God's Eye View project;
+> it looks more like a Google map, which I do not like. … The system we built
+> doesn't contain cards to depict the individual production of, say, a
+> region, main contributors and whatnot. Setting all these up with the live
+> feed was something I wanted to do, in order to feed the Oracle model and
+> help the overall system become a complete learning and self-improving
+> system that will grow and understand the underlying commodity of gas,
+> initially specifically in relation to future gas contracts and gas in the
+> US, NYMEX pricing."
+
+### 16.1 What exists today (verified 2026-09-25)
+
+| Area | Today | The gap |
+| --- | --- | --- |
+| The look | The hosted profile withholds keyless Esri imagery (§15, `LICENCES.md`), and neither the laptop `.env` nor `globe.env` holds a Google or Cesium key, so the hosted globe lands on the **OSM street stack**: that is the "Google map" look. Local development (full profile) still lands on Esri satellite imagery. With a Google key the default is Photorealistic 3D Tiles, the original God's Eye View look. | No licence-clean satellite default without a key. |
+| Regional production | Row 11: 1,315 Gulf structures with per-platform cards and dossier. Row 12: **Williston only** (1 of 11 regions in §14.5). Its region card shows totals: wells producing, Bcf/d, MMbbl/d, the as-of month, the basin weather line. Every well record already carries its operator (`records.js`). | No contributors: no ranking of operators, fields or counties, no share, no account of what drove the change. No national supply view. Ten regions unbuilt. |
+| Live gas data on the globe | LNG (bundled, monthly to quarterly), border crossings (monthly), chokepoints (withheld on the hosted site), weather (row 3, specced). | No daily supply signal: production is filed monthly with a one- to three-month lag. |
+| Oracle store | `oracle_natgas.db`: Henry Hub spot, weekly storage by region, EIA-NG monthlies (dry production by state, trade, prices), NG COT, the pipeline-projects tracker; the NG strip in `futures_daily` via yfinance (FR-J2); weather ensembles and basin freeze (FR-W, FR-B); the journal (close 21:30Z, morning 10:00Z) and memory (FR-J6, FR-J7); gate v2 (FR-J8, decision d8: no forecasts, targets, sizing or hedge language). | The globe's physical supply data never reaches the store: the model's supply view is EIA state monthlies. The NG curve comes from yfinance, which is not licensed for invitees (`LICENCES.md` §D; Yahoo's terms forbid automated collection). Nothing the model says is scored against an official print (only the weather models are, `wx_skill.py`). |
+
+### 16.2 Goals (verifiable)
+
+- **G14.1 The God's Eye View look.** With the founder's Google key the hosted
+  default is Photorealistic 3D Tiles; without a key the keyless default is
+  satellite imagery, never a street map. *Verify:* the hosted build and the
+  laptop dev server, default camera, screenshot shows imagery;
+  `mapStackController.getActiveId()` is `photoreal` (key) or the chosen
+  imagery stack (no key).
+- **G14.2 Main contributors on every built region.** The region card names
+  the top operators and top fields (or counties) by gas, with shares, the
+  change against last month and last year, and who drove that change; the
+  contributors' changes sum to the region's change. *Verify:* Williston's
+  top-five operator volumes sum to within 0.1% of the same operators' per-well
+  totals in the bundle; the change line reconciles to the region headline.
+- **G14.3 A US gas supply board.** At the national view: production by
+  region (built regions from filed data, the rest from EIA state and EIA-914
+  series, labelled), rigs, completions, storage against the five-year band,
+  LNG feedgas and the NG curve from the oracle store; every number carries
+  its source, period and cadence (R2, R3).
+- **G14.4 A daily supply feed.** At least one daily supply signal
+  (scheduled flows at production-area receipt points and LNG feedgas
+  deliveries, from interstate pipeline informational postings or a licensed
+  vendor, per D14.4) ingested daily on the VPS, licence-cleared first
+  (`LICENCES.md` row), refreshing the globe in place through row 13's event hub.
+- **G14.5 The store carries the supply picture.** Region × operator × field ×
+  month production, the daily flows and the rigs are tables in
+  `oracle_natgas.db`, from the same parsed files the globe draws (one parse,
+  same numbers: G13.5); covariates per region reach `gas_state` and
+  `market_state`, the journal's supply section cites them, and golden-set
+  questions on supply attribution pass.
+- **G14.6 Licensed NYMEX prices.** Per-contract NG settlements (and, if
+  bought, delayed intraday) from a licence that names display to named
+  third parties, feeding `futures_daily`, the console and the model;
+  yfinance retired for anything invitees see.
+- **G14.7 The system scores itself (per D14.3).** Every quantitative
+  fundamental read the model makes is logged, scored against the official
+  print when it lands (EIA weekly storage, EIA-914 monthly production, state
+  filings), and its misses come back into the prompts and the golden set; a
+  weekly skill report shows error against naive baselines. *Verify:* after
+  eight weeks the ledger holds at least eight scored storage reads and the
+  journal cites its own recent misses.
+
+### 16.3 Non-goals
+
+- Price targets, trade recommendations, sizing or hedge language (R11; the
+  oracle's gate v2) unless the founder reopens d8 (D14.3).
+- Paid vendor feeds other than the NYMEX licence and the supply feed the
+  founder approves in D14.2 and D14.4.
+- International regions before the five largest US gas regions.
+- Changing the Gulf dossier or the row 12 substrate beyond adding the
+  contributor dimension.
+
+### 16.4 Founder decisions first (grill; recommendations marked)
+
+| # | Question | Options | Recommendation |
+| --- | --- | --- | --- |
+| D14.1 | The keyless look on the hosted site | (a) NASA GIBS true colour / Blue Marble (cleared in `LICENCES.md`; soft close up); (b) an ArcGIS Location Platform key so Esri World Imagery returns as before (commercial use with a key; code must send it; check the tile-caching rules); (c) Cesium ion Commercial | The founder's Google key (§15.12 step 4) makes Photorealistic 3D the default. For no-key sessions, **(b)** if the exact old imagery matters, otherwise **(a)**. OSM stays a choosable stack, never the default. |
+| D14.2 | Who supplies NYMEX NG prices | Databento (CME Globex MDP3; per-contract history; pay as you go), CME DataMine end-of-day settlements, Barchart OnDemand | Get quotes that name display to invitees; Databento first for per-contract history. Until then the console's yfinance curve stays founder-only (`LICENCES.md` §D). |
+| D14.3 | What the learning loop scores, given gate v2 (d8) | (A) explanations only (attribution checked against later prints; no numbers stated ahead); (B) internal-only nowcasts of fundamentals (weekly storage change, monthly production by region), labelled, never shown as advice; (C) price-direction forecasts | **(B)**: a learning system needs a scored target, and fundamentals nowcasts stay descriptive of supply and demand. (C) stays out (R11). Reopening d8 is the journal program's call too: coordinate with its owner (FR-J). |
+| D14.4 | Where the daily supply signal comes from | Interstate pipeline informational postings (EBBs; public by FERC rule; one scraper per pipeline; terms to check), a paid feed (Wood Mackenzie Genscape, Criterion) | Probe the EBBs of the production-area and LNG-feed pipelines first (Haynesville and Permian exits, Appalachia takeaway, Gulf Coast LNG laterals); a vendor only if the terms or the coverage fail. |
+| D14.5 | Region order after Williston | §14.5 as written (Appalachia, Permian, Haynesville …) or gas-weighted for the NG thesis | **Appalachia, then Haynesville, then Permian**: together about 78 of about 105 Bcf/d dry, and Haynesville is the LNG-feed swing basin. |
+
+### 16.5 Requirements (R14.n)
+
+**M0 The look (globe)**
+
+1. The hosted keyless default is satellite imagery per D14.1; OSM remains a
+   stack the user can pick. With `GOOGLE_MAPS_API_KEY` set the default stays
+   `photoreal`. Laptop development keeps its current default.
+2. The Google conditions in `LICENCES.md` are met before the key goes in:
+   the site's terms link Google's end-user terms and privacy policy;
+   Geocoding and Places results only over Google's map.
+3. A new imagery source gets its `LICENCES.md` row and, if needed, a
+   `licencePolicy.js` row, in the same commit.
+
+**M1 Main contributors (globe; Williston and the Gulf first)**
+
+4. The region bundle gains an operator dimension: per operator, per field
+   (or county) and per month, gas, oil and producing wells, built by
+   `scripts/build-onshore.mjs` from the per-well records it already parses
+   (`--check` stays byte-identical for the existing files). The Gulf bundle
+   does the same from BSEE's operator field.
+5. Change attribution: the region's change against last month and last year
+   splits into operators' changes plus wells new to the month and wells gone;
+   the parts sum to the whole, and the card says so when they do not (late
+   filings).
+6. The global-tier region card: headline; "Top operators: A 23% · B 15% ·
+   C 9%"; "vs last month: +0.12 Bcf/d, led by A +0.08, B +0.05, C −0.03";
+   the period and source stamp. The dossier gains a Contributors view: a
+   ranked table (operator, fields, gas, share, MoM, YoY, wells) and a
+   24-month stacked chart. Descriptive only (R11).
+7. Operator names are shown as filed; a committed alias table only merges
+   spellings of the same company (never parents and subsidiaries), and the
+   dossier shows the filed names behind a merged row.
+
+**M2 The US gas supply board (globe)**
+
+8. A `gas-supply-us` card at the national view, plus a panel line:
+   production by region (built regions from filed data; the others from EIA
+   state series and EIA-914, labelled as such), the county rig count
+   (attribution per `LICENCES.md`), 90-day completions (FracFocus as filed),
+   storage against the five-year band and the NG curve (from the oracle
+   store through `/api/oracle/*`; the curve only once D14.2 lands), and LNG
+   feedgas (row 10's plants, then M4's daily deliveries).
+9. New oracle routes follow the M3 pattern (`tools/oracle_api.py`, GET,
+   read-only, `observedAt`/`publishedAt` on every record): `curve`,
+   `regional-production`, `flows`.
+
+**M3 The region ladder (globe)**
+
+10. Regions land in the D14.5 order through §14.10's ladder; each arrives
+    with M1's contributors card and M5's store rows.
+
+**M4 The daily supply feed (both)**
+
+11. A probe and a `LICENCES.md` row per pipeline before any ingest.
+12. An oracle ingest lane on the VPS (daily tier; never from the laptop):
+    `pipeline_flows_daily` (pipeline, point, date, scheduled, capacity,
+    region, direction, source), with a completeness rule per pipeline.
+13. The globe reads `/api/oracle/flows`; row 13's event hub
+    (`source.updated`) refreshes the card in place.
+
+**M5 The supply picture into the store (oracle, twin FR-N14)**
+
+14. The globe builder also emits a small aggregates file per region
+    (region × operator × field or county × month) committed beside the
+    bundle; the oracle ingest reads it from the VPS globe release (or
+    re-parses the same raw files: the implementing agent decides and records
+    why). One parse, the same numbers on both sides.
+15. `oracle_natgas.db` `regional_production` + provenance in `ingest_log`;
+    covariates `NG_PROD_<REGION>`, `NG_PROD_<REGION>_MOM`, `_YOY`,
+    `_TOP3_SHARE`; a SUPPLY block in `gas_state`; the journal's supply
+    section cites them; `market_state` via the FR-N6 registry.
+16. `golden_natgas` gains supply-attribution questions ("which operators
+    drove Appalachia's change last month"), graded grounded.
+
+**M6 Licensed NYMEX prices (oracle, twin FR-N16)**
+
+17. The D14.2 lane writes `futures_daily` with its source recorded; the
+    console's curve names the licensed source; yfinance stops feeding
+    anything an invitee can see; `LICENCES.md` §D is updated.
+
+**M7 The learning loop (oracle, twin FR-N17; per D14.3)**
+
+18. A `reads` ledger (oracle.db): kind (`storage_change`,
+    `production_region`, …), target period, value or range, as-of, model,
+    prompt hash, edition. The journal close writes one row per quantitative
+    fundamental read it states.
+19. A scorer after each official print (EIA storage on Thursday, EIA-914
+    monthly, state filings as they land): error, and skill against naive
+    baselines (five-year average, persistence, weather-only).
+20. Feedback: the latest misses are retrieved into the journal and ask
+    prompts ("YOUR RECENT MISSES"), a weekly skill card on the console and
+    one Slack line, and scored reads feed the golden set and, once gated,
+    the QLoRA tranche (FR-N11, FR-P11).
+
+### 16.6 Milestones (each with its check)
+
+| M | What | Check |
+| --- | --- | --- |
+| M0 | The look | Hosted build and laptop dev screenshots at the default camera show imagery, never OSM; with the Google key, `photoreal`. |
+| M1 | Contributors on Williston and the Gulf | Card and dossier show top operators with shares; the operator and attribution sums reconcile (G14.2); `--check` byte-identical for the existing bundle files; QA script extended. |
+| M2 | US gas supply board | Every number on the card matches its source route or bundle, with its stamp; storage and curve equal the console's. |
+| M3 | Appalachia, Haynesville, Permian | Each region's ladder per §14.10, with M1 and M5 automatically. |
+| M4 | Daily supply feed | Licence row; seven consecutive daily ingests; the card refreshes in place from a `source.updated`. |
+| M5 | Supply into the store | `regional_production` rows equal the globe card for one region and month; `gas_state` SUPPLY block; the journal cites it on three consecutive closes; supply golden items pass. |
+| M6 | Licensed NYMEX | `futures_daily` from the licensed source for 10 sessions; `/gas` names it; yfinance off the invitee path. |
+| M7 | Learning loop | Eight weeks: at least eight storage reads scored, skill vs baselines reported weekly, the journal quotes its own misses. |
+
+### 16.7 Constraints and invariants
+
+- Every rule of §2 and §15.9 holds: claim first (this ledger's row 14; the
+  oracle's FR-N14 to FR-N17), four gates per globe commit, R11 descriptive,
+  R13 additive, never ingest from the laptop, no keys in chat or git.
+- Every new source gets a `LICENCES.md` verdict (and a `licencePolicy.js`
+  row if not cleared) before it ships on the hosted site.
+- The oracle owns the store and its routes (H7); the globe reads them
+  read-only and falls back when they fail.
+- The shared oracle tree: message the journal session before editing
+  `market_map.py`, `ask_server.py`, `eia_client.py`, `refresh.py`,
+  `oracle_ask.py` or `journal.py`; stage only your own files.
+
+### 16.8 Risks
+
+- **Lag.** Filed production is one to three months old; the daily flow feed
+  (M4) is the nowcast and says so.
+- **Operator identity.** Names differ across states and filings; only
+  spelling aliases merge, and the dossier shows what was filed.
+- **EBB fragility.** Pipeline postings change formats and terms; each
+  scraper fails alone, with a completeness rule and a freshness row.
+- **Cost.** The NYMEX licence and any supply vendor are founder spend.
+- **VPS load.** New ingest lanes share eight cores with Ollama, the gates and
+  builds; schedule outside the ingest windows.
+- **Gate drift.** A scored-nowcast loop must never leak into advice; the
+  mission gate and the golden regex checks stay the backstop.
+
+### 16.9 Status and next steps
+
+| Step | What | Who | Status |
+| --- | --- | --- | --- |
+| 0 | Decisions D14.1 to D14.5 (short grill) | founder + session | open |
+| 1 | M0 the look (plus the founder's Google key, §15.12 step 4) | session + founder | open |
+| 2 | M1 contributors on Williston and the Gulf | session (globe) | open |
+| 3 | M5 supply into the store for those two regions | session (oracle FR-N14) | open |
+| 4 | M2 the US supply board | session (globe + oracle routes) | open |
+| 5 | M4 daily supply feed (after the D14.4 probe) | session (both, FR-N15) | open |
+| 6 | M6 licensed NYMEX (after D14.2) | founder + session (FR-N16) | open |
+| 7 | M7 learning loop (after D14.3) | session (oracle FR-N17, with the journal program) | open |
+| 8 | M3 region ladder, in the D14.5 order | session | open, continuous |
+
+**Resume prompt (any step):**
+
+```text
+Row 14 of docs/COMMODITIES-PLAN.md (§16; oracle twins FR-N14..N17 in
+~/commodities/PRD-natgas-vertical.md). Run /obsidian, read §15.0 (how the
+system runs) and §16 in full. Take the first open step in 16.9 whose
+decisions are made; if 16.4 is still open, grill the founder on it first.
+Claim row 14 (and the FR-N row for oracle work) before editing. Gates before
+each globe commit; LICENCES.md row before any new source ships hosted.
+Record results in §16.9, the §0 ledger and the change log in §15.14, push,
+then /update-obsidian.
+```
