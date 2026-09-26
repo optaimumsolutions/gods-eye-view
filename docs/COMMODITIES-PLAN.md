@@ -1,10 +1,10 @@
 # PLAN — Commodities Globe: rules, features and layout for rows 1 to 8
 
-**Version:** 1.7 · **Date:** 2026-09-25 · **Status:** decisions locked in the
+**Version:** 1.8 · **Date:** 2026-09-26 · **Status:** decisions locked in the
 2026-09-17 grill; built so far — rows 0a, 0b, 1 (milestone 1), 4 (substrate)
 and 8 (v3), see the §0 ledger for commits; row 3 re-specced in the
 2026-09-21 weather grill (§11); row 13 (hosting at commodities.optaimum.com)
-specced in the 2026-09-23 hosting grill (§15; coding agents start at §15.0), which supersedes R1 and R7; row 14 (the natural-gas intelligence loop) specced 2026-09-25 (§16)
+specced in the 2026-09-23 hosting grill (§15; coding agents start at §15.0), which supersedes R1 and R7; row 14 (the natural-gas intelligence loop) specced 2026-09-25 (§16), claimed with its decisions made 2026-09-26
 **Owner:** Jack Gewirz
 **Companions:** [`COMMODITIES.md`](COMMODITIES.md) (verified endpoints, source
 notes), [`../UPGRADE.md`](../UPGRADE.md) (paid enhancement per stream)
@@ -35,7 +35,7 @@ owns layers. Re-check `git status` before every edit to a shared file.
 | 11  | Gas production facilities: Gulf platforms (BSEE) first | layers + content (shell worktree, `feat/commodities-shell`) | **BUILT (first slice) 2026-09-21** — PRD §13 from the founder's pivot and grill; on `feat/commodities-shell` (founder's instruction: every update on the shell branch, no row worktree), token `2`. Milestone 1 `c6c92b2`: `scripts/build-gulf-platforms.mjs` + `src/data/local_data/bsee_gulf/` (1,315 installed structures, 120-month series, 608 KB gzip), the completeness rule and the one record shape. Milestone 2 `1e685f0`: marks sized by gas share and coloured by change against last year, three tiers, hover and selected cards, the panel line, `scripts/qa-gulf-platforms.mjs`. Milestone 3 `af342d1`: the dossier (ten-year chart, this-month ledger, identity, lifetime, sources) and the drawer chrome shared with the datacenters; QA 20 checks green (layer activation 755 ms apart from the bundle fetch, heap +50 MiB). Milestone 4 is the commit carrying this line. Four gates green at every commit. Next: milestone 5 (EIA regional backdrop, short grill first) |
 | 12  | Onshore production facilities: wells, leases and rigs, region by region | layers + content (shell worktree, `feat/commodities-shell`) | **BUILT (milestones 0 and 1, Williston) 2026-09-21** — PRD §14 from the founder's direction the same day; five live sweeps probed some twenty regulators (§14.4); eleven regions ranked (§14.5). The founder's "build out the basins one at a time" started the ladder in the §14.5 order with O1 taken as recommended (option a: index and clusters committed, history shards built from the archive, not committed). Milestone 1a `c4ec135`: `scripts/build-onshore.mjs` + `scripts/onshore/{nd,eia,regions}.mjs`, `src/layers/onshore/{records,shards,bundledSource}.js`, `src/data/local_data/onshore/williston/` (24,154 North Dakota wells over 120 months, 17,915 producing in 2026-07 at 3.30 Bcf/d and 1.17 MMbbl/d; 518 fields; index 2.5 MB gzip; `--check` byte-identical; 94 % of EIA gross withdrawals, 100 % of marketed). Milestones 1b and 1c `f66463a`: `production-williston` (token `4`) — region card at global, 518 field marks at regional, 24,154 well points (`PointPrimitiveCollection`, clipped to the view) at local, hover and selected cards, the dossier with the ten-year chart from an on-demand shard, `scripts/qa-onshore-williston.mjs` on the shared harness (32 checks: activation 659 ms apart from the 16 MB fetch, heap +35 MiB, layer frame cost 1.8 ms). `836c325` fixes the second enable of the rows 4 and 11 layers (found by this QA). Build notes §14.13. Next: region 2, Appalachia (PA unconventional) |
 | 13  | Hosted site: globe + console behind one login at `commodities.optaimum.com` | ops + shell + server (`feat/commodities-shell`; oracle twin FR-D17) | **M1 BUILT except the browser check; M2 stamping + licence pass BUILT; M3 BUILT (check met); M4 BUILT + deployed (VPS checks met) — 2026-09-25.** Live on the VPS: globe `05ebd94` (`globe.service` :8020, fail-closed 403 on every request and upgrade until Access exists; M4 hub with publish listener :8021; `GEV_LICENCE_PROFILE=hosted` keeps the 20 sources [`LICENCES.md`](LICENCES.md) marks OFF out of the build), console + askd + `refresh.py` at oracle `07cd056` (FR-D17a/b/c). **Blocked on the founder:** keys, the Access app `Commodities` then the hostname (§15.12 steps 4–5), the invitee group, and a decision on the console's uncleared sources (yfinance, Polymarket, PortWatch tiles: LICENCES.md §D). Agents start at §15.0; status §15.12; change log and build record §15.14 |
-| 14  | Natural-gas intelligence loop: the God's Eye View look, regional supply cards with main contributors, live supply feeds into the Oil Oracle, scored learning | shell + layers + server + oracle (`feat/commodities-shell`; oracle twins FR-N14 to FR-N17) | **SPECCED 2026-09-25**, not claimed. PRD §16 from the founder's direction after seeing the hosted build: the keyless hosted globe landed on OSM street tiles (the "Google map" look); region cards show totals, not contributors; nothing from the globe feeds the model. Start with the founder decisions in §16.4 (keyless imagery, NYMEX vendor, what the learning loop scores under gate d8, daily supply source, region order), then M0 the look, M1 contributors on Williston and the Gulf |
+| 14  | Natural-gas intelligence loop: the God's Eye View look, regional supply cards with main contributors, live supply feeds into the Oil Oracle, scored learning | shell + layers + server + oracle (`feat/commodities-shell`; oracle twins FR-N14 to FR-N17) | **CLAIMED 2026-09-26** (session jgewi-14). PRD §16 from the founder's direction after seeing the hosted build: the keyless hosted globe landed on OSM street tiles (the "Google map" look); region cards show totals, not contributors; nothing from the globe feeds the model. **Decisions D14.1–D14.5 made 2026-09-26** (§16.4): the founder's Google key makes Photorealistic 3D the hosted default and USGS imagery is the keyless fallback; Databento first for NYMEX; the loop scores fundamentals nowcasts (B); pipeline EBBs probed first; Appalachia, Haynesville, Permian. In progress: M0 the look, then M1 contributors on Williston and the Gulf |
 
 Definition of usable, pending founder confirmation of question 13: rows 1
 through 4. Rows 5 to 7 are context and content.
@@ -5196,8 +5196,9 @@ the rows above.
 
 ## 16. Row 14 PRD — Natural-gas intelligence loop: the God's Eye View look, regional supply cards with main contributors, live supply feeds into the Oil Oracle, scored learning (FR-G14)
 
-**Status (2026-09-25): SPECCED, not claimed.** Written the same day from
-the founder's direction after seeing the hosted build. Oracle twin:
+**Status (2026-09-26): CLAIMED; decisions D14.1–D14.5 made (16.4).**
+Specced 2026-09-25 from the founder's direction after seeing the hosted
+build. Oracle twin:
 `optaimumsolutions/commodities` `PRD-natgas-vertical.md` rows FR-N14 to
 FR-N17, which point here. Builds on rows 11 and 12 (§13, §14), row 13's
 hosting, licence pass and event hub (§15), and the oracle's natgas vertical
@@ -5286,6 +5287,17 @@ with the founder decisions in 16.4 (a short grill), then M0.**
 | D14.3 | What the learning loop scores, given gate v2 (d8) | (A) explanations only (attribution checked against later prints; no numbers stated ahead); (B) internal-only nowcasts of fundamentals (weekly storage change, monthly production by region), labelled, never shown as advice; (C) price-direction forecasts | **(B)**: a learning system needs a scored target, and fundamentals nowcasts stay descriptive of supply and demand. (C) stays out (R11). Reopening d8 is the journal program's call too: coordinate with its owner (FR-J). |
 | D14.4 | Where the daily supply signal comes from | Interstate pipeline informational postings (EBBs; public by FERC rule; one scraper per pipeline; terms to check), a paid feed (Wood Mackenzie Genscape, Criterion) | Probe the EBBs of the production-area and LNG-feed pipelines first (Haynesville and Permian exits, Appalachia takeaway, Gulf Coast LNG laterals); a vendor only if the terms or the coverage fail. |
 | D14.5 | Region order after Williston | §14.5 as written (Appalachia, Permian, Haynesville …) or gas-weighted for the NG thesis | **Appalachia, then Haynesville, then Permian**: together about 78 of about 105 Bcf/d dry, and Haynesville is the LNG-feed swing basin. |
+
+**Decided (founder grill, 2026-09-26).** Facts behind D14.1 were probed the
+same day, before the questions were put.
+
+| # | Decision | What follows |
+| --- | --- | --- |
+| D14.1 | **The founder's Google Maps Platform key** (Map Tiles API) makes Photorealistic 3D the hosted default. **USGS Imagery Only** (The National Map; USDA NAIP about 1 m over the lower 48, Landsat and Blue Marble at small scales; public domain, credit "USDA, USGS The National Map") replaces OSM as the keyless default and the fallback when Google fails. | The key goes in through POWER UP on the laptop, never chat; a script copies it into `globe.env` without printing it. Rejected: an ArcGIS Location Platform key (2M tiles a month free, but a server-side tile proxy; the keyless `services.arcgisonline.com` endpoint stays OFF); NASA GIBS Blue Marble (500 m, soft at regional zoom); EOX cloudless (its licence page now names a restricted commercial licence). Probed: USGS tiles answer 404 past zoom ~11 offshore and outside the US, where Cesium keeps the parent tile, so close-ups there are soft. |
+| D14.2 | **Databento first.** The founder requests a quote that names display to a handful of named third parties; CME's redistribution licence applies on top. | M6 waits for the licence; yfinance stays founder-only (`LICENCES.md` §D). |
+| D14.3 | **(B) Fundamentals nowcasts**: internal, labelled estimates of the weekly storage change and monthly regional production, scored against the official print and against naive baselines; never shown as advice or a price call. | Needs a narrow amendment to the journal program's d8 (gate v2), agreed with the FR-J owner before FR-N17 is claimed. (C) stays out (R11). |
+| D14.4 | **Probe the pipeline EBBs first** (Haynesville and Permian exits, Appalachia takeaway, Gulf Coast LNG laterals); a vendor only if terms or coverage fail. | A `LICENCES.md` row per pipeline before any ingest (R14.11). |
+| D14.5 | **Appalachia, then Haynesville, then Permian.** | M3 follows this order. |
 
 ### 16.5 Requirements (R14.n)
 
@@ -5425,7 +5437,7 @@ with the founder decisions in 16.4 (a short grill), then M0.**
 
 | Step | What | Who | Status |
 | --- | --- | --- | --- |
-| 0 | Decisions D14.1 to D14.5 (short grill) | founder + session | open |
+| 0 | Decisions D14.1 to D14.5 (short grill) | founder + session | **done 2026-09-26** (16.4) |
 | 1 | M0 the look (plus the founder's Google key, §15.12 step 4) | session + founder | open |
 | 2 | M1 contributors on Williston and the Gulf | session (globe) | open |
 | 3 | M5 supply into the store for those two regions | session (oracle FR-N14) | open |
