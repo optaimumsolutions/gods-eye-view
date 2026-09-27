@@ -118,6 +118,15 @@ export const DATA_CREDITS = [
       '(CC BY 4.0)',
   },
   {
+    // Maps Platform terms: end users are told the app uses Google Maps
+    // content, subject to Google's additional terms and privacy policy.
+    key: 'google-maps',
+    html:
+      'Google 3D: this site uses Google Maps content, subject to the ' +
+      '<a href="https://maps.google.com/help/terms_maps/" target="_blank" rel="noopener">Google Maps/Google Earth Additional Terms of Service</a> ' +
+      'and the <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a>',
+  },
+  {
     key: 'google-news-rss',
     html:
       'Cockpit regional headlines: ' +
