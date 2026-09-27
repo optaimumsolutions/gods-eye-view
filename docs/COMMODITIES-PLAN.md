@@ -4317,6 +4317,17 @@ What was built, and where it departs from the text above:
   so a light month stays light and the panel line says so: `20,231 FILED
   (92 % OF USUAL)`. The rule's filling line still names any month under
   90 %.
+- **Corrected 2026-09-27 (row 14 M1).** The light month was the wrong month.
+  NDIC's first `2026_07.xlsx` carried July 2023's filings under the July 2026
+  name: 1,148 of 1,235 sampled wells matched 2023-07 exactly, which is what
+  the `ReportDate` anomaly was saying. DMR replaced the file within days
+  (ReportDate 2026-07-01, 22,466 wells), so the "does not re-cut" claim
+  above is wrong. From 2026-09-21 to the rebuild the card showed 2023
+  production as 2026 (17,915 producing, 3.30 Bcf/d, 1.17 MMbbl/d; corrected:
+  19,663 producing, 3.43 Bcf/d, 1.01 MMbbl/d). `scripts/onshore/nd.mjs`
+  `assertReportMonth` now refuses a workbook whose ReportDate names another
+  month; the bad first publication is kept in the archive as
+  `2026_07.first-publication-held-2023-07.xlsx.bad`.
 - **Reconciliation.** Against EIA's keyless dnav workbooks at build time
   (`N9010ND2` gross withdrawals, `N9050ND2` marketed production, `MCRFPND1`
   crude), for the newest month both report (2026-06): the state file's gas

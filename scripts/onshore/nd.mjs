@@ -156,8 +156,27 @@ export async function ndMonthAvailable(month, { cacheDir, replay = false }) {
 }
 
 /**
+ * Refuse a workbook whose own ReportDate names another month. NDIC's first
+ * `2026_07.xlsx` (retrieved 2026-09-21) carried July 2023's filings under the
+ * July 2026 name — 93 % of its wells matched 2023-07 exactly — and was
+ * replaced upstream within days; recording the disagreement as an anomaly and
+ * using the rows anyway put 2023 production on the card as 2026 for a week.
+ * Pure, exported for the tests.
+ */
+export function assertReportMonth(parsed, month) {
+  const reported = parsed?.reportDate?.slice(0, 7) ?? null;
+  if (reported && reported !== month) {
+    throw new Error(
+      `nd ${month}: the workbook's ReportDate reads ${parsed.reportDate}, so it holds another month's filings. ` +
+        'Re-download it with --refresh once NDIC corrects the file, or pin --newest to the month before.',
+    );
+  }
+}
+
+/**
  * Read one month. Returns null when the workbook is not published. Rows are
- * per well (pools summed); `anomalies` names what the file got wrong.
+ * per well (pools summed); `anomalies` names what the file got wrong, and a
+ * workbook that holds another month's filings is refused outright.
  */
 export async function readNorthDakotaMonth(
   month,
@@ -188,6 +207,7 @@ export async function readNorthDakotaMonth(
     parsed = parseWorkbook(bytes, month);
     writeFileSync(parsedFile, JSON.stringify(parsed));
   }
+  assertReportMonth(parsed, month);
   return {
     month,
     file: monthFile(month),

@@ -3,36 +3,36 @@
   "name": "Williston Basin onshore production, monthly per facility",
   "category": "production",
   "description": "Facility-level monthly production for the production-williston layer: every well the state files reported in the trailing 120 months, with surface coordinates, current, prior and last-year readings, a ten-year summary, field and county clusters, and on-demand history shards. Current = the newest complete filing month, by rule.",
-  "downloaded_at": "2026-09-21",
+  "downloaded_at": "2026-09-27",
   "license_note": "Public record of the North Dakota Industrial Commission; no licence text, state disclaimer applies",
   "files": [
     {
       "path": "index.json",
       "format": "JSON",
-      "facilities": 24154,
+      "facilities": 24233,
       "window_months": 120,
-      "sha256": "0269219f8cbc148f68ba593b9659a8363088a3af3b557a7976989ac770c908b6",
-      "bytes": 14896058,
-      "gzip_bytes": 2469145
+      "sha256": "cff77862b7dfdbcaa058919ae15727a80ab4c00d2c6517d26e8f68dad2d542bf",
+      "bytes": 14997113,
+      "gzip_bytes": 2505310
     },
     {
       "path": "clusters.json",
       "format": "JSON",
       "fields": 518,
       "counties": 16,
-      "sha256": "911c464c34efa6143a6f4fd25e8a7da6c9b3a014291116911e6235b3844333f3",
-      "bytes": 1579647,
-      "gzip_bytes": 610297
+      "sha256": "f62af0f305ead94097d60dc7b61189dcc0354c5ad52ee13146560758dc4ad6d2",
+      "bytes": 1579832,
+      "gzip_bytes": 610783
     }
   ],
   "shards": {
     "path": "public/data/onshore/williston/history/",
     "count": 1024,
-    "facilities": 24154,
-    "bytes": 85814245,
-    "gzip_bytes": 25192522,
-    "max_gzip_bytes": 44232,
-    "sha256_of_sha256s": "04d758b489c5e4324a003a737d0a2603a2ae1461007b57b72e9c0abb899686ba",
+    "facilities": 24233,
+    "bytes": 86133543,
+    "gzip_bytes": 25199109,
+    "max_gzip_bytes": 44184,
+    "sha256_of_sha256s": "352afbfae684e28f5c38d1f2e7d760c8d3394106af0443dcdb426da310af7250",
     "committed": false,
     "note": "Built alongside the index from the archived workbooks (O1, option a); a checkout without them shows the index and says so in the dossier."
   },
@@ -1473,11 +1473,11 @@
           "month": "2026-07",
           "file": "2026_07.xlsx",
           "url": "https://www.dmr.nd.gov/oilgas/mpr/2026_07.xlsx",
-          "bytes": 3015779,
-          "sha256": "556848a746756a0baa8061de9ec50ede788097e83f87c0dfc295d5edee0e4cfb",
-          "retrieved": "2026-09-21",
-          "rows": 20320,
-          "wells": 20231,
+          "bytes": 3306982,
+          "sha256": "dd55c53342e1079deb48985587c8064abd69400fa5d7fdb25b47e652ad85ec92",
+          "retrieved": "2026-09-27",
+          "rows": 22543,
+          "wells": 22466,
           "unplaced": 0,
           "skippedRows": 19642
         }
@@ -1536,8 +1536,8 @@
     "table": [
       {
         "month": "2026-07",
-        "reporters": 20231,
-        "share": 0.917,
+        "reporters": 22466,
+        "share": 1.018,
         "complete": true
       },
       {
@@ -1620,8 +1620,7 @@
     }
   ],
   "anomalies": [
-    "ND 2026-07: ReportDate column reads 2023-07-01 in a file named for 2026-07; the file name is taken as the month",
-    "ND 78,550 numeric cells hold text (NR/NA) across 120 months (155 to 1140 a month) and are read as not filed, never as zero"
+    "ND 79,670 numeric cells hold text (NR/NA) across 120 months (155 to 1275 a month) and are read as not filed, never as zero"
   ],
   "missing_months": [],
   "reproduce": {

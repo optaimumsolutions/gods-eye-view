@@ -12,6 +12,7 @@ import {
 import { READING_COLUMNS } from './records.js';
 import { classifyMonths } from '../production/completeness.js';
 import { shardFor } from './shards.js';
+import { assertReportMonth } from '../../../scripts/onshore/nd.mjs';
 
 const here = fileURLToPath(new URL('.', import.meta.url));
 const dataDir = path.join(
@@ -81,8 +82,9 @@ test('the committed bundle is the measured one: North Dakota wells, 2026-07 curr
   assert.equal(index.current.month, '2026-07');
   assert.equal(index.months.at(-1), '2026-07');
   assert.equal(index.current.index, 119);
-  // Measured 2026-09-21: 24,154 wells in the window, 20,231 filed for July,
-  // 17,915 producing at 3.30 Bcf/d and 1.17 MMbbl/d.
+  // Measured 2026-09-27 on NDIC's corrected July workbook: 24,233 wells in
+  // the window, 22,466 filed for July, 19,663 producing at 3.43 Bcf/d and
+  // 1.01 MMbbl/d.
   assert.ok(
     index.facilities.length >= 20_000 && index.facilities.length <= 30_000,
   );
@@ -185,10 +187,22 @@ test('the bundled completeness table reproduces the verdict from the rule', () =
     const again = verdict.months.find((m) => m.month === row.month);
     assert.equal(again.complete, row.complete, `${row.month} complete flag`);
   }
-  // The anomaly the file carries is recorded, never silently corrected.
+  // A workbook holding another month's filings is refused by the reader
+  // (NDIC's first 2026-07 file carried 2023-07), so none reaches the bundle.
   assert.ok(
-    index.anomalies.some((a) => /ReportDate column reads 2023-07-01/.test(a)),
-    'the 2026-07 ReportDate anomaly is recorded',
+    !index.anomalies.some((a) => /ReportDate column reads/.test(a)),
+    'no workbook of another month is in the bundle',
+  );
+});
+
+test('the reader refuses a workbook whose ReportDate names another month', () => {
+  assert.doesNotThrow(() =>
+    assertReportMonth({ reportDate: '2026-07-01' }, '2026-07'),
+  );
+  assert.doesNotThrow(() => assertReportMonth({ reportDate: null }, '2026-07'));
+  assert.throws(
+    () => assertReportMonth({ reportDate: '2023-07-01' }, '2026-07'),
+    /ReportDate reads 2023-07-01.*--refresh/,
   );
 });
 
