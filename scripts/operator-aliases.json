@@ -1,0 +1,13 @@
+{
+  "note": "Filed spelling -> canonical spelling, for two spellings of one company only (plan §16, R14.7). Never merge a parent and its subsidiaries or a seller and its buyer. Add a row only after checking both spellings belong to the same filer (the same NDIC operator, the same BSEE company number). The canonical spelling is the one filed most recently. North Dakota rows (2026-09-26): each pair differs only in case or punctuation and one spelling stops the month before the other starts.",
+  "aliases": {
+    "DEVON ENERGY WILLISTON, L.L.C": "DEVON ENERGY WILLISTON, L.L.C.",
+    "LEGACY RESERVES OPERATING LP": "Legacy Reserves Operating LP",
+    "LIME ROCK RESOURCES V-A, LP": "LIME ROCK RESOURCES V-A, L.P.",
+    "MCRAE & HENRY, LTD.": "McRae & Henry, Ltd.",
+    "NEW HORIZON RESOURCES, LLC": "NEW HORIZON RESOURCES LLC",
+    "Phoenix Petroleum LLC": "Phoenix Petroleum, LLC",
+    "WINDRIDGE OPERATING, LLC": "WINDRIDGE OPERATING LLC",
+    "XTO ENERGY INC.": "XTO ENERGY INC"
+  }
+}

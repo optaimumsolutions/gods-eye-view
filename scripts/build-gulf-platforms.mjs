@@ -61,6 +61,8 @@ import {
   newestCompleteMonth,
 } from '../src/layers/production/completeness.js';
 import { daysInMonth } from '../src/layers/production/records.js';
+import { buildContributors } from '../src/layers/production/contributors.js';
+import { loadOperatorAliases } from './operator-aliases.mjs';
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT_DIR = path.join(root, 'src', 'data', 'local_data', 'bsee_gulf');
@@ -441,6 +443,9 @@ async function passTwo(zipPath, months, wanted, structures) {
   const position = new Map(months.map((m, i) => [m, i]));
   const currentMonth = months[months.length - 1];
   const series = new Map();
+  // Row 14 contributors: every Gulf structure that filed in the window,
+  // bundled or not, with the operator filed each month and monthly volumes.
+  const contributors = new Map();
   const filed = { structures: 0, gasMcfd: 0 };
   const unbundled = {
     removed: { structures: 0, gasMcfd: 0 },
@@ -484,8 +489,30 @@ async function passTwo(zipPath, months, wanted, structures) {
           }
         }
       }
-      if (!wanted.has(key)) return;
       const at = position.get(month);
+      if (at !== undefined && trimmed(get('REGION_CODE')) === GULF_REGION) {
+        let unit = contributors.get(key);
+        if (!unit) {
+          unit = {
+            id: key,
+            group: trimmed(get('AREA_CODE')),
+            field: structures.get(key)?.field ?? null,
+            operators: new Array(months.length).fill(null),
+            filed: new Array(months.length).fill(false),
+            gas: new Array(months.length).fill(null),
+            oil: new Array(months.length).fill(null),
+          };
+          contributors.set(key, unit);
+        }
+        const days = daysInMonth(month);
+        const gasRate = int(get('MCFPD'));
+        const oilRate = int(get('BOPD'));
+        unit.operators[at] = trimmed(get('PF_OPERATOR'));
+        unit.filed[at] = true;
+        unit.gas[at] = gasRate === null ? null : gasRate * days;
+        unit.oil[at] = oilRate === null ? null : oilRate * days;
+      }
+      if (!wanted.has(key)) return;
       if (at === undefined) return;
       let entry = series.get(key);
       if (!entry) {
@@ -508,14 +535,14 @@ async function passTwo(zipPath, months, wanted, structures) {
       entry.wells[at] = int(get('PRODUCING_WELLS'));
     },
   );
-  return { series, filed, unbundled, outOfRegion };
+  return { series, filed, unbundled, outOfRegion, contributors };
 }
 
 /* ------------------------------------------------------------------ *
  * Build
  * ------------------------------------------------------------------ */
 
-function readme(payload, manifest) {
+function readme(payload, manifest, contributors) {
   const c = payload.counts;
   const filling = payload.completeness.table
     .filter((row) => !row.complete)
@@ -569,6 +596,13 @@ was retrieved.
 - BOE is BSEE's own figure as filed (\`BOEPD\`), not derived: their rounding is not reproducible from the totals (17,785 bbl/d + 167,392 Mcf/d files as 47,571 BOE/d, where 5.62 Mcf per barrel gives 47,570). The 5.62 convention is used only where a month's BOE is blank.
 - Coordinates are used as published; \`nad\` records the datum year and is shown, not converted.
 - Depth: nothing is hand-curated and nothing is enriched from a second source.
+
+## \`contributors.json\` and \`aggregates.json\` — main contributors (row 14)
+
+- The Gulf's whole filing, not only the structures on the map: every Gulf structure that filed in the window, removed or unplaced ones included, so the total equals what the Gulf filed (${contributors.operators.length} operators with production in the last ${contributors.months.length} months).
+- \`contributors.json\` (read by the layer): per operator the gas, oil and producing structures per month, its top fields this month, the names filed; and the change against last month and last year split into operators and into continuing structures, new, stopped, absent from the file and operator changes. The parts sum to the change.
+- \`aggregates.json\` (read by the Oil Oracle store, FR-N14): operator × area × month over the window, gas and oil as monthly volumes (BSEE's daily rates × days in the month).
+- The operator is \`PF_OPERATOR\` as filed each month (one spelling per company number in this window); \`scripts/operator-aliases.json\` merges spellings of one company only.
 
 Refresh: \`npm run build:gulf-platforms\` (\`--refresh\` re-downloads both
 zips; \`--replay\` never touches the network; \`--check\` diffs against the
@@ -653,7 +687,7 @@ async function main() {
   process.stdout.write(
     `pass 2: ${months[0]} to ${months[months.length - 1]} for ${wanted.size} structures\n`,
   );
-  const { series, filed, unbundled, outOfRegion } = await passTwo(
+  const { series, filed, unbundled, outOfRegion, contributors } = await passTwo(
     productionZip,
     months,
     wanted,
@@ -661,6 +695,46 @@ async function main() {
   );
 
   const currentIndex = months.length - 1;
+
+  // Main contributors (row 14, R14.4 to R14.7, R14.14): every Gulf structure
+  // that filed, by the operator filed each month, areas as the group.
+  const contributorBuild = buildContributors({
+    facilities: [...contributors.values()].sort((a, b) =>
+      a.id < b.id ? -1 : a.id > b.id ? 1 : 0,
+    ),
+    months,
+    currentIndex,
+    region: { id: 'gulf', name: 'Gulf of Mexico OCS' },
+    source: {
+      name: 'BSEE production by platform',
+      grain: 'structure',
+      license:
+        'US Government public domain (BSEE, US Department of the Interior)',
+    },
+    retrieved,
+    groupLabel: 'area',
+    facilityLabel: 'structure',
+    aliases: loadOperatorAliases(),
+  });
+  for (const group of contributorBuild.candidates)
+    process.stdout.write(
+      `  operator spellings to review (alias table): ${group.join(' | ')}\n`,
+    );
+  for (const [span, ok] of Object.entries(contributorBuild.checks))
+    if (ok === false)
+      process.stdout.write(
+        `  contributors: the ${span} parts do not sum to the change\n`,
+      );
+  const contributorsJson = `${JSON.stringify(contributorBuild.contributors)}\n`;
+  const aggregatesJson = `${JSON.stringify(contributorBuild.aggregates)}\n`;
+  const fileEntry = (file, text, extra) => ({
+    path: file,
+    format: 'JSON',
+    ...extra,
+    sha256: createHash('sha256').update(text).digest('hex'),
+    bytes: Buffer.byteLength(text),
+    gzip_bytes: gzipSync(text).length,
+  });
   let producingCurrent = 0;
   let gasMcfdCurrent = 0;
   let incidentsJoined = 0;
@@ -771,6 +845,14 @@ async function main() {
         bytes,
         gzip_bytes: gzipBytes,
       },
+      fileEntry('contributors.json', contributorsJson, {
+        operators: contributorBuild.contributors.operators.length,
+        window_months: contributorBuild.contributors.months.length,
+      }),
+      fileEntry('aggregates.json', aggregatesJson, {
+        operators: contributorBuild.aggregates.operators.length,
+        rows: contributorBuild.aggregates.rows.length,
+      }),
     ],
     upstream: [
       {
@@ -806,25 +888,39 @@ async function main() {
   };
 
   const outFile = path.join(OUT_DIR, 'platforms.json');
+  const outputs = [
+    ['platforms.json', json],
+    ['contributors.json', contributorsJson],
+    ['aggregates.json', aggregatesJson],
+  ];
   if (check) {
-    const committed = existsSync(outFile) ? readFileSync(outFile, 'utf8') : '';
-    const same = committed === json;
-    process.stdout.write(
-      same
-        ? `check: platforms.json matches the committed bytes (${bytes.toLocaleString()} B)\n`
-        : `check: platforms.json DIFFERS from the committed bytes (${committed.length.toLocaleString()} vs ${bytes.toLocaleString()} B)\n`,
-    );
-    process.exitCode = same ? 0 : 1;
+    let allSame = true;
+    for (const [name, text] of outputs) {
+      const file = path.join(OUT_DIR, name);
+      const committed = existsSync(file) ? readFileSync(file, 'utf8') : '';
+      const same = committed === text;
+      allSame &&= same;
+      process.stdout.write(
+        same
+          ? `check: ${name} matches the committed bytes (${Buffer.byteLength(text).toLocaleString()} B)\n`
+          : `check: ${name} DIFFERS from the committed bytes (${committed.length.toLocaleString()} vs ${Buffer.byteLength(text).toLocaleString()} B)\n`,
+      );
+    }
+    process.exitCode = allSame ? 0 : 1;
     return;
   }
 
   mkdirSync(OUT_DIR, { recursive: true });
-  writeFileSync(outFile, json);
+  for (const [name, text] of outputs)
+    writeFileSync(path.join(OUT_DIR, name), text);
   writeFileSync(
     path.join(OUT_DIR, 'source.json'),
     `${JSON.stringify(manifest, null, 2)}\n`,
   );
-  writeFileSync(path.join(OUT_DIR, 'README.md'), readme(payload, manifest));
+  writeFileSync(
+    path.join(OUT_DIR, 'README.md'),
+    readme(payload, manifest, contributorBuild.contributors),
+  );
   process.stdout.write(
     `\nwrote ${path.relative(root, outFile)}\n` +
       `  ${payload.counts.placed} structures bundled (${payload.counts.withSeries} with a series) · ${producingCurrent} producing in ${verdict.current} · ${(gasMcfdCurrent / 1e6).toFixed(2)} of ${(filed.gasMcfd / 1e6).toFixed(2)} Bcf/d filed on the map\n` +

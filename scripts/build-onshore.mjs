@@ -58,6 +58,8 @@ import {
   ONSHORE_BUNDLE_VERSION,
   READING_COLUMNS,
 } from '../src/layers/onshore/records.js';
+import { buildContributors } from '../src/layers/production/contributors.js';
+import { loadOperatorAliases } from './operator-aliases.mjs';
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const WINDOW_MONTHS = 120;
@@ -159,11 +161,16 @@ async function readWindow(reader, months, cacheDir, options) {
           id: row.id,
           state: reader.source.state,
           series: new Float64Array(width * months.length).fill(NaN),
+          // The operator as filed each month (row 14 contributors).
+          operators: new Array(months.length).fill(null),
+          filed: new Array(months.length).fill(false),
           firstSeen: month,
           lastSeen: month,
         };
         facilities.set(row.id, facility);
       }
+      facility.operators[at] = row.operator ?? null;
+      facility.filed[at] = true;
       // Identity follows the newest filing: operators change, names are corrected.
       facility.lastSeen = month;
       facility.fileNo = row.fileNo ?? facility.fileNo ?? null;
@@ -419,7 +426,7 @@ function buildReconciliation(facilities, months, eiaByState, states) {
  * Output
  * ------------------------------------------------------------------ */
 
-function readme(region, payload, manifest) {
+function readme(region, payload, manifest, contributors) {
   const c = payload.counts;
   const r = payload.reconciliation.latest;
   const filling = payload.completeness.table
@@ -453,6 +460,12 @@ runtime except the history shards, which are built alongside and served from
 ## \`clusters.json\` — ${payload.clusterCounts.fields} fields, ${payload.clusterCounts.counties} counties
 
 Monthly sums of gas, oil, water and flared and the count of producing wells per field and per county over the window, with a centroid of the member wells. The regional tier draws the fields.
+
+## \`contributors.json\` and \`aggregates.json\` — main contributors (row 14)
+
+- \`contributors.json\` (read by the layer): the last ${contributors.months.length} months to ${contributors.current.month}, every operator with production in them (${contributors.operators.length}), each with its gas, oil and producing wells per month, its top fields this month and the names it filed under; and the change against last month and last year split into operators and into continuing wells, new wells, wells filed with no gas, wells absent from the file and operator changes (buyer credited, seller debited). The parts sum to the change; the build prints any month where they do not.
+- \`aggregates.json\` (read by the Oil Oracle store, FR-N14): operator × county × month over the whole window, gas, oil and producing wells, with the region totals. The same numbers as the card: one parse.
+- The operator is the one filed for each month. \`scripts/operator-aliases.json\` merges spellings of one company only${contributors.aliases.length ? ` (${contributors.aliases.length} applied here)` : ''}; parents, subsidiaries and buyers stay as filed.
 
 ## History shards — ${manifest.shards.count} files, ${(manifest.shards.gzip_bytes / 1e6).toFixed(1)} MB gzip
 
@@ -647,12 +660,53 @@ async function main() {
   const fields = buildClusters(placed, months, currentIndex, 'field');
   const counties = buildClusters(placed, months, currentIndex, 'county');
 
+  // 5b. Main contributors (row 14, R14.4 to R14.7, R14.14): the placed wells,
+  // the same set as the headline, folded by the operator filed each month.
+  const column = (facility, index) => {
+    const width = READING_COLUMNS.length;
+    const values = new Array(months.length);
+    for (let at = 0; at < months.length; at += 1) {
+      const value = facility.series[at * width + index];
+      values[at] = Number.isNaN(value) ? null : value;
+    }
+    return values;
+  };
   const retrieved = [
     ...upstream.flatMap((u) => u.files.map((f) => f.retrieved)),
     ...eiaFiles.map((f) => f.retrieved),
   ]
     .sort()
     .pop();
+  const aliases = loadOperatorAliases();
+  const contributorBuild = buildContributors({
+    facilities: placed.map((facility) => ({
+      id: facility.id,
+      group: facility.county ?? null,
+      field: facility.field ?? null,
+      operators: facility.operators,
+      filed: facility.filed,
+      gas: column(facility, GAS_INDEX),
+      oil: column(facility, OIL_INDEX),
+    })),
+    months,
+    currentIndex,
+    region: { id: `onshore-${region.id}`, name: region.name },
+    source: {
+      name: sources.map((s) => s.name).join('; '),
+      grain: 'well',
+      license: sources.map((s) => s.license).join('; '),
+    },
+    retrieved,
+    groupLabel: 'county',
+    facilityLabel: 'well',
+    aliases,
+  });
+  for (const group of contributorBuild.candidates)
+    log(`  operator spellings to review (alias table): ${group.join(' | ')}`);
+  for (const [span, ok] of Object.entries(contributorBuild.checks))
+    if (ok === false)
+      log(`  contributors: the ${span} parts do not sum to the change`);
+
   const header = {
     id: `onshore-${region.id}`,
     version: ONSHORE_BUNDLE_VERSION,
@@ -782,6 +836,16 @@ async function main() {
 
   const indexJson = `${JSON.stringify(payload)}\n`;
   const clustersJson = `${JSON.stringify(clustersPayload)}\n`;
+  const contributorsJson = `${JSON.stringify(contributorBuild.contributors)}\n`;
+  const aggregatesJson = `${JSON.stringify(contributorBuild.aggregates)}\n`;
+  const fileEntry = (file, text, extra) => ({
+    path: file,
+    format: 'JSON',
+    ...extra,
+    sha256: createHash('sha256').update(text).digest('hex'),
+    bytes: Buffer.byteLength(text),
+    gzip_bytes: gzipSync(text).length,
+  });
   const manifest = {
     id: `onshore-${region.id}`,
     name: payload.name,
@@ -808,6 +872,14 @@ async function main() {
         bytes: Buffer.byteLength(clustersJson),
         gzip_bytes: gzipSync(clustersJson).length,
       },
+      fileEntry('contributors.json', contributorsJson, {
+        operators: contributorBuild.contributors.operators.length,
+        window_months: contributorBuild.contributors.months.length,
+      }),
+      fileEntry('aggregates.json', aggregatesJson, {
+        operators: contributorBuild.aggregates.operators.length,
+        rows: contributorBuild.aggregates.rows.length,
+      }),
     ],
     shards: {
       path: `${region.shardDir}/`,
@@ -858,6 +930,8 @@ async function main() {
     };
     compare(path.join(outDir, 'index.json'), indexJson);
     compare(path.join(outDir, 'clusters.json'), clustersJson);
+    compare(path.join(outDir, 'contributors.json'), contributorsJson);
+    compare(path.join(outDir, 'aggregates.json'), aggregatesJson);
     if (existsSync(shardDir)) {
       let same = 0;
       for (const shard of shardFiles) {
@@ -880,13 +954,15 @@ async function main() {
   mkdirSync(shardDir, { recursive: true });
   writeFileSync(path.join(outDir, 'index.json'), indexJson);
   writeFileSync(path.join(outDir, 'clusters.json'), clustersJson);
+  writeFileSync(path.join(outDir, 'contributors.json'), contributorsJson);
+  writeFileSync(path.join(outDir, 'aggregates.json'), aggregatesJson);
   writeFileSync(
     path.join(outDir, 'source.json'),
     `${JSON.stringify(manifest, null, 2)}\n`,
   );
   writeFileSync(
     path.join(outDir, 'README.md'),
-    readme(region, payload, manifest),
+    readme(region, payload, manifest, contributorBuild.contributors),
   );
   for (const shard of shardFiles)
     writeFileSync(path.join(shardDir, `${shard.shard}.json`), shard.text);

@@ -14,6 +14,24 @@
       "sha256": "0a845ca976a781f31455ddb08249b8ebbe0dc766a91574334a24b9878174861f",
       "bytes": 2683473,
       "gzip_bytes": 607989
+    },
+    {
+      "path": "contributors.json",
+      "format": "JSON",
+      "operators": 43,
+      "window_months": 24,
+      "sha256": "8b3fe4e2c6b042ca61c939d2aa952fcf39209d18f1f308db64a7ce05e72f6c90",
+      "bytes": 44617,
+      "gzip_bytes": 11436
+    },
+    {
+      "path": "aggregates.json",
+      "format": "JSON",
+      "operators": 71,
+      "rows": 21061,
+      "sha256": "bd6d8fd93f0cbff5cc6e2989a9edfe0fed40ba02289bc547521ec9d296d108ee",
+      "bytes": 525975,
+      "gzip_bytes": 192026
     }
   ],
   "upstream": [

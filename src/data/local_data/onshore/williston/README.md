@@ -23,6 +23,12 @@ runtime except the history shards, which are built alongside and served from
 
 Monthly sums of gas, oil, water and flared and the count of producing wells per field and per county over the window, with a centroid of the member wells. The regional tier draws the fields.
 
+## `contributors.json` and `aggregates.json` — main contributors (row 14)
+
+- `contributors.json` (read by the layer): the last 24 months to 2026-07, every operator with production in them (120), each with its gas, oil and producing wells per month, its top fields this month and the names it filed under; and the change against last month and last year split into operators and into continuing wells, new wells, wells filed with no gas, wells absent from the file and operator changes (buyer credited, seller debited). The parts sum to the change; the build prints any month where they do not.
+- `aggregates.json` (read by the Oil Oracle store, FR-N14): operator × county × month over the whole window, gas, oil and producing wells, with the region totals. The same numbers as the card: one parse.
+- The operator is the one filed for each month. `scripts/operator-aliases.json` merges spellings of one company only (8 applied here); parents, subsidiaries and buyers stay as filed.
+
 ## History shards — 1024 files, 25.2 MB gzip
 
 `public/data/onshore/williston/history/<xx>.json`, `xx` = FNV-1a hash of the facility id mod 1024 in hex (`src/layers/onshore/shards.js`): the full 120-month series per facility. Fetched when a dossier opens. Not committed; rebuilt from the archive.

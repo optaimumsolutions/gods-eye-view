@@ -33,6 +33,13 @@ was retrieved.
 - Coordinates are used as published; `nad` records the datum year and is shown, not converted.
 - Depth: nothing is hand-curated and nothing is enriched from a second source.
 
+## `contributors.json` and `aggregates.json` — main contributors (row 14)
+
+- The Gulf's whole filing, not only the structures on the map: every Gulf structure that filed in the window, removed or unplaced ones included, so the total equals what the Gulf filed (43 operators with production in the last 24 months).
+- `contributors.json` (read by the layer): per operator the gas, oil and producing structures per month, its top fields this month, the names filed; and the change against last month and last year split into operators and into continuing structures, new, stopped, absent from the file and operator changes. The parts sum to the change.
+- `aggregates.json` (read by the Oil Oracle store, FR-N14): operator × area × month over the window, gas and oil as monthly volumes (BSEE's daily rates × days in the month).
+- The operator is `PF_OPERATOR` as filed each month (one spelling per company number in this window); `scripts/operator-aliases.json` merges spellings of one company only.
+
 Refresh: `npm run build:gulf-platforms` (`--refresh` re-downloads both
 zips; `--replay` never touches the network; `--check` diffs against the
 committed bytes). The raw zips are archived under `.gev-cache/bsee/`
