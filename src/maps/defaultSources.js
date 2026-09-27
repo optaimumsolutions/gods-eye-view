@@ -4,6 +4,7 @@ import { keySetupRequirement } from '../keySetupCore.mjs';
 import {
   createOsmImagery,
   createEsriImagery,
+  createUsgsImagery,
   createIonImagery,
   ESRI_ATTRIBUTION_HTML,
 } from './imagery.js';
@@ -14,12 +15,20 @@ import { isWithheld } from '../hosting/withheld.js';
 export const ESRI_WITHHELD_MESSAGE =
   'Esri Satellite is withheld on the hosted site: keyless World Imagery needs an ArcGIS account for commercial use (docs/LICENCES.md)';
 
+/** Keyless imagery factories by stack kind. */
+const KEYLESS_IMAGERY = {
+  osm: createOsmImagery,
+  'esri-imagery': createEsriImagery,
+  'usgs-imagery': createUsgsImagery,
+};
+
 /**
- * The keyless landing stack: Esri imagery, or OSM where the hosted licence
- * profile withholds keyless Esri.
+ * The keyless landing stack: Esri imagery, or USGS imagery where the hosted
+ * licence profile withholds keyless Esri (plan §16.4, D14.1). OSM is never the
+ * landing stack; it stays a stack the user can pick.
  */
 export function keylessStackId() {
-  return isWithheld('esri-world-imagery') ? 'osm' : 'esri-imagery';
+  return isWithheld('esri-world-imagery') ? 'usgs-imagery' : 'esri-imagery';
 }
 
 /** Select sources and setup guidance without putting provider branches in the controller. */
@@ -68,9 +77,7 @@ export function createDefaultMapSources({
       const imagery =
         descriptor.kind === 'ion'
           ? () => createIonImagery(descriptor.style, ionToken)
-          : descriptor.id === 'osm'
-            ? createOsmImagery
-            : createEsriImagery;
+          : KEYLESS_IMAGERY[descriptor.kind];
       return {
         ...common,
         imagery,

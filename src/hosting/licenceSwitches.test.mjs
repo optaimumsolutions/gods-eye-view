@@ -173,13 +173,18 @@ test('withheld PortWatch: both layers get a source that never fetches and says w
   assert.equal(fetchMock.mock.callCount(), 0);
 });
 
-test('withheld Esri: the keyless globe lands on OSM and the Esri stack says why', (t) => {
+test('withheld Esri: the keyless globe lands on USGS imagery, never OSM, and the Esri stack says why', (t) => {
   assert.equal(keylessStackId(), 'esri-imagery');
   assert.equal(createDefaultMapSources().defaultId, 'esri-imagery');
   environment(t, { GEV_WITHHELD: 'esri-world-imagery' });
-  assert.equal(keylessStackId(), 'osm');
+  assert.equal(keylessStackId(), 'usgs-imagery');
   const registry = createDefaultMapSources();
-  assert.equal(registry.defaultId, 'osm');
+  assert.equal(registry.defaultId, 'usgs-imagery');
+  const usgs = registry.sources.find(
+    (source) => source.descriptor.id === 'usgs-imagery',
+  );
+  assert.equal(usgs.available, true);
+  assert.equal(usgs.terrain.id, 'keyless');
   const esri = registry.sources.find(
     (source) => source.descriptor.id === 'esri-imagery',
   );

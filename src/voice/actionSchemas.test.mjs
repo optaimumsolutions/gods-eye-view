@@ -21,7 +21,8 @@ test('the complete Realtime tool payload retains its pre-extraction contract and
     .digest('hex');
   assert.equal(
     digest,
-    '956381c3456d3644ed7c9cda72910dc68a34d9191e0b3e414ee200c348245214',
+    // Moved deliberately by row 14 M0: the usgs-imagery basemap (plan §16.4).
+    '307bacfea66b17dce4aa057d429e5983930cc62f8721013b5e566866e33298c5',
   );
 });
 

@@ -44,8 +44,9 @@ switch or check that does not exist.
   cameras, TfL cameras until an app key is set, DriveBC cameras credited to a
   partner, and Metro Transit (Minneapolis).
 - **What the invitee sees instead:** flights from adsb.lol only; chokepoint
-  and port layers report "withheld" in the panel; OSM as the keyless basemap
-  (Google Photorealistic 3D once the founder's key is in); no weather line on
+  and port layers report "withheld" in the panel; USGS imagery as the keyless
+  basemap since row 14 M0 (Google Photorealistic 3D once the founder's key is
+  in; OSM stays a stack to pick); no weather line on
   the data-center cards and no cockpit weather; GDELT headlines only; LNG
   terminals, US cargoes and routes without GIIGNL's country matrix.
 - **Not switchable in the globe build: the console pages.** The same invitees
@@ -70,6 +71,7 @@ switch or check that does not exist.
 | Open-Meteo (free API) | `open-meteo` | Weather line on the data-center cards (browser-direct); cockpit Local Info weather and weather effects (server) | [Open-Meteo terms](https://open-meteo.com/en/terms): "You may only use the free API services for non-commercial purposes"; commercial includes "Integrating our service into commercial products". Paid plans use `customer-api.open-meteo.com` with a key (ensembles need Professional) | NOT-ALLOWED | **OFF** |
 | Google News RSS | `google-news` | Cockpit regional headlines (primary) | The feed's own copyright element: "made available solely for the purpose of rendering Google News results within a personal feed reader for personal, non-commercial use." | NOT-ALLOWED | **OFF** |
 | Esri World Imagery (keyless) | `esri-world-imagery` | Default keyless basemap, "Esri Satellite" stack | World Imagery item under the Esri Master License Agreement; [terms summary](https://www.esri.com/content/dam/arcgisonline/docs/tou_summary.pdf): "If you do not have Esri software, you must purchase an ArcGIS Online subscription." Revenue-generating apps must authenticate | NOT-ALLOWED | **OFF** |
+| USGS The National Map, Imagery Only | — | The "USGS Imagery" map stack; the hosted keyless landing since row 14 M0 (plan §16.4, D14.1) | [USGS copyrights and credits](https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits) (read 2026-09-26): "USGS-authored or produced data and information are considered to be in the U.S. Public Domain"; credit requested. The service's copyright text: "USDA, USGS The National Map: Orthoimagery" (NAIP is USDA, also federal). The 10 m Alaska SPOT imagery is licence-restricted for download only; the service shows it for viewing | ALLOWED-WITH-CONDITIONS (the credit line, shown by the provider) | on |
 | Cesium ion (Community plan) | `cesium-ion` | Optional ion terrain and imagery with `CESIUM_ION_TOKEN` | [Cesium pricing](https://cesium.com/pricing): the free account is for "Non-commercial personal projects, or Exploratory commercial or government development" | NOT-ALLOWED (free plan) | **OFF** |
 | TomTom Traffic | `tomtom` | Optional live traffic flow (`TOMTOM_API_KEY`) | [TomTom terms](https://docs.tomtom.com/legal/terms-and-conditions/): the free plan is "for Evaluation Use only"; §11.4: no "caching for the purpose of scaling results to serve multiple clients or users" | NOT-ALLOWED (free plan) | **OFF** |
 | City of Austin Open Data | — | CCTV catalog and frames, Austin | [Austin open data terms](https://data.austintexas.gov/stories/s/ranj-cccq): "offered free and without restriction"; dataset licensed public domain | ALLOWED | on |
@@ -191,5 +193,5 @@ They belong to the oracle's own `SOURCES.md` review.
 | Source | id | Used for | Terms, and the decisive words | Verdict | Hosted build |
 | --- | --- | --- | --- | --- | --- |
 | adsbdb.com | `adsbdb` | Aircraft type and callsign-route enrichment (`/api/adsbdb`) | No data licence; route data "may not be copied, published, or incorporated into other databases without the explicit permission of David J Taylor" | ASK-FIRST | **OFF** |
-| OSM standard tiles (tile.openstreetmap.org) | — | The "OSM" map stack, now the keyless default | [OSMF tile policy](https://operations.osmfoundation.org/policies/tiles/): allowed with visible attribution and a real User-Agent/Referer (browser-direct), no bulk or offline use; "access may be withdrawn at any point" | ALLOWED-WITH-CONDITIONS | on |
+| OSM standard tiles (tile.openstreetmap.org) | — | The "OSM" map stack (the hosted keyless default from row 13 M2 until row 14 M0; now a stack the user picks) | [OSMF tile policy](https://operations.osmfoundation.org/policies/tiles/): allowed with visible attribution and a real User-Agent/Referer (browser-direct), no bulk or offline use; "access may be withdrawn at any point" | ALLOWED-WITH-CONDITIONS | on |
 | overpass.private.coffee / overpass.kumi.systems | — | Overpass mirrors | See the OSM data row in §A | ALLOWED-WITH-CONDITIONS | on |

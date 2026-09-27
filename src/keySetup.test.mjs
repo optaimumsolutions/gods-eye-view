@@ -33,6 +33,8 @@ test('the first Google key strips ONLY the keyless OSM basemap from the share ha
   assert.equal(params.get('map'), null, 'osm basemap removed');
   assert.equal(params.get('lat'), '30.2', 'camera survives');
   assert.equal(params.get('style'), 'normal', 'style survives');
+  // The hosted keyless landing stack goes the same way.
+  assert.equal(stripKeylessBasemapFromHash('map=usgs-imagery&lat=1'), 'lat=1');
   // A stack under any other name was chosen or shared on purpose.
   assert.equal(stripKeylessBasemapFromHash('map=bing-aerial&lat=1'), null);
   assert.equal(stripKeylessBasemapFromHash('lat=1&lon=2'), null, 'no stack, nothing to do');

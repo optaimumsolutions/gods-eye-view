@@ -214,7 +214,7 @@ export const ACTION_DESCRIPTIONS = {
       properties: {
         stack: {
           description:
-            'photoreal = Google 3D. Use bing-aerial only when the user explicitly says "Bing aerial" — "satellite(s)" never means a basemap; only the explicit phrase "Esri" / "Esri imagery" means esri-imagery.',
+            'photoreal = Google 3D. Use bing-aerial only when the user explicitly says "Bing aerial" — "satellite(s)" never means a basemap; only the explicit phrase "Esri" / "Esri imagery" means esri-imagery; "USGS" / "USGS imagery" / "National Map" means usgs-imagery.',
           $position: 2,
         },
       },

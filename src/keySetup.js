@@ -40,10 +40,11 @@ export function collectKeyUpdates(fields) {
 
 /**
  * After the FIRST Google key lands, the restart's reload should boot the
- * photoreal default — not faithfully restore the auto-selected keyless OSM
- * basemap from the URL's live share hash. Strips only `map=osm`: a stack under
- * any other name was chosen or shared on purpose and survives, and so does
- * everything else in the hash (camera, style, layers). Pure, exported for tests.
+ * photoreal default — not faithfully restore the auto-selected keyless
+ * basemap from the URL's live share hash. Strips only the keyless landing
+ * stacks (`osm`, `esri-imagery`, `usgs-imagery`): a stack under any other name
+ * was chosen or shared on purpose and survives, and so does everything else in
+ * the hash (camera, style, layers). Pure, exported for tests.
  * @param {string} hash Location hash without the leading '#'.
  * @returns {string|null} The rewritten hash, or null when there is nothing to strip.
  */
@@ -51,7 +52,8 @@ export function stripKeylessBasemapFromHash(hash) {
   if (!hash) return null;
   try {
     const params = new URLSearchParams(hash);
-    if (!['osm', 'esri-imagery'].includes(params.get('map'))) return null;
+    if (!['osm', 'esri-imagery', 'usgs-imagery'].includes(params.get('map')))
+      return null;
     params.delete('map');
     return params.toString();
   } catch {

@@ -31,6 +31,13 @@ export const MAP_STACKS = [
     requiresIon: false,
   },
   {
+    id: 'usgs-imagery',
+    label: 'USGS Imagery',
+    shortLabel: 'USGS',
+    kind: 'usgs-imagery',
+    requiresIon: false,
+  },
+  {
     id: 'osm',
     label: 'OSM',
     shortLabel: 'OSM',

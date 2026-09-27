@@ -552,6 +552,7 @@
   "src/maps/defaultSources.js",
   "src/maps/google3d.js",
   "src/maps/imagery.js",
+  "src/maps/imagery.test.mjs",
   "src/maps/registry.js",
   "src/maps/terrain.js",
   "src/mapStackController.js",
