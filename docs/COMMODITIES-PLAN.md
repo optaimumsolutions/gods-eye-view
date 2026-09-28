@@ -5069,6 +5069,8 @@ oracle ledger cite them.
 | 09-28 15:10 | VPS | globe `7b38084` | Row 14 M3 + M4 deployed; `ng_regional.py` run (Appalachia into the store) | VPS gates 4,476 / 4,475 pass / 0 fail / 1 skipped; release carries only Williston well data; 403 everywhere; store Appalachia 2026-07 21.0406 Bcf/d = the card |
 | 09-28 15:45 | both | globe this commit; oracle `698c832` | Row 14 hand-off (session jgewi-b9): the resume prompt at the end of §16.10 rewritten for the next session; §0 row 14 records the Permian claim and the hand-off; oracle FR-N16/N17 rows record D14.2 and D14.3 (they still read "decision pending") | every fact in the prompt checked against both remotes, the VPS release, `globe.env` key names, the crontab, `ingest_log` and the store |
 | 09-28 16:26 | VPS + oracle | oracle `26e8eb7`; globe this commit | First scored run of `eval/golden_natgas_supply.yaml`: FAIL 1/3, 0 fabricated (s02 PASS via `gas_state`; s01, s03 never called it). Result JSON committed; FR-N14 row, §16.9 step 3, §16.10 and the resume prompt updated | results file on the VPS and in git; the deployed `gas_state` tool description read on the VPS; askd + console `ActiveEnterTimestamp` 14:34:13Z, after `gas_state.py` (14:34:11Z) |
+| 09-28 17:04 | VPS + oracle | oracle `a58ad55` | `gas_state` tool description names the supply, flows and pipeline blocks (founder's OK; no FR-J session live); the three spans patched onto the pre-FR-J7 VPS copy (backup `oracle_ask.py.pre-n14c`); askd restarted while idle; supply eval re-run launched 17:05Z, `golden_tools` chained after it as the regression check | VPS copy = old copy + those spans only (its diff to git is FR-J7's 51 lines, as before); askd `/health` ok |
+| 09-28 17:21 | VPS + oracle + globe | oracle `f5b3214` `ab24847`; globe this commit | FR-N15 Cameron Interstate lane (gasnom.com HTML; Imperva served the identified client with no challenge): Cameron LNG feedgas + the LEG receipt; files diffed equal to git first, backups `*.pre-fr-n15b`, 45 gas days backfilled, askd + console restarted. Globe: the board's feedgas line adds Cameron (not deployed yet); `LICENCES.md` pipeline rows now say built | 990 rows, 45 of 45 days complete; `gas_state` renders Cameron 1.38 and LEG 0.21 Bcf/d (09-27); `flows` and `supply-board` serve seven signals; supplyBoard tests 8/8 |
 
 Ledger and doc commits in between (`292794a`, `cb46ff2`, `d62549f`,
 `db471c3`, `c61e5fe`, oracle `7575548`, `d085cf3`, `cfbea89`, `5414679`,
@@ -5489,7 +5491,7 @@ same day, before the questions were put.
 | 2 | M1 contributors on Williston and the Gulf | session (globe) | **BUILT 2026-09-28** (`ead98bc`, `df9c4eb`); Williston rebuilt on NDIC's corrected July first (`f0b6c5b`) |
 | 3 | M5 supply into the store for those two regions | session (oracle FR-N14) | **BUILT + deployed 2026-09-28** (oracle `f3f35d4`; store = card). Open: journal section 3 and a refresh tier (FR-J owner's OK; `ng_regional.py` by hand after each globe deploy until then), golden supply items (`eval/golden_natgas_supply.yaml`, `cc73f18`; **first scored run 2026-09-28: FAIL 1/3, 0 fabricated**, oracle `26e8eb7`: the model called `gas_state` only for s02, because the tool description in `oracle_ask.py` names no supply block; fix that description with the FR-J owner, then re-run), three closes citing it |
 | 4 | M2 the US supply board | session (globe + oracle routes) | **BUILT + deployed 2026-09-28** (oracle `608354b`, globe `175227f`): EIA balance, storage vs the band, filed regions. Later: rigs, completions, the curve (D14.2), daily flows (M4) |
-| 5 | M4 daily supply feed (after the D14.4 probe) | session (both, FR-N15) | **BUILT + deployed 2026-09-28** (oracle `d3aa844`, globe `7b38084`); licence rows in `LICENCES.md` §C. Check pending: seven consecutive daily runs (cron 15:20Z from 09-28), and the hub refresh once the lane joins a refresh tier (FR-J owner). Next pipelines: Boardwalk, Cameron Interstate; Kinder Morgan, Williams, Enbridge need written permission; the Permian intrastate exits need a vendor |
+| 5 | M4 daily supply feed (after the D14.4 probe) | session (both, FR-N15) | **BUILT + deployed 2026-09-28** (oracle `d3aa844`, globe `7b38084`); licence rows in `LICENCES.md` §C. Check pending: seven consecutive daily runs (cron 15:20Z from 09-28), and the hub refresh once the lane joins a refresh tier (FR-J owner). **Cameron Interstate BUILT + deployed 2026-09-28 17:21Z** (oracle `ab24847`: Cameron LNG feedgas + the LEG receipt, 45 gas days; the board's feedgas line gains Cameron with the next globe deploy). Next pipelines: Boardwalk; Kinder Morgan, Williams, Enbridge need written permission; the Permian intrastate exits need a vendor |
 | 6 | M6 licensed NYMEX (after D14.2) | founder + session (FR-N16) | open |
 | 7 | M7 learning loop (after D14.3) | session (oracle FR-N17, with the journal program) | open |
 | 8 | M3 region ladder, in the D14.5 order | session | **Appalachia (PA) BUILT + deployed 2026-09-28** (`bca6ef7`; hosted OFF pending PA DEP). Haynesville and Permian: Texas RRC is ASK-FIRST ("permission for noncommercial use only", §C), so they build with the hosted layer OFF like PA, or wait for RRC; Louisiana SONRIS unconfirmed (O4). OH and WV join Appalachia as their readers land. **Haynesville CLAIMED 2026-09-28** (session jgewi-98, split agreed with jgewi-b9). Founder, 2026-09-28: the Texas side ships hosted ON (founder override of RRC's ASK-FIRST verdict, recorded in `LICENCES.md`); Haynesville ships only with Louisiana in it, so the SONRIS export (O4) is probed first, and if it fails the founder is told before Permian starts. **Probed 2026-09-28:** SONRIS forbids automated access and sells bulk data by subscription only (O4, `LICENCES.md` §C); Haynesville waits on the founder's decision on the OGP + Well subscription. **Founder, 2026-09-28: no SONRIS subscription; Haynesville waits; Permian next** (TX districts 8, 8A, 7C from the RRC PDQ dump, hosted ON under the RRC override; New Mexico as its second bundle once its licence row is read). **Permian CLAIMED 2026-09-28** (session jgewi-98) |
@@ -5616,6 +5618,32 @@ same day, before the questions were put.
   model had no reason to reach for it. The model declined rather than
   guessed. The fix is that one description (the FR-J owner's file), then a
   re-run.
+
+- **Tool description fix (oracle `a58ad55`; 2026-09-28 17:04Z).** With the
+  founder's OK (no FR-J session was live), the `gas_state` description,
+  the STRUCTURED TOOLS line and the "call the tool" list in `oracle_ask.py`
+  now name the supply block (filed production by region, month-on-month and
+  year-on-year, top-3 operators), the flows block and the pipeline-capacity
+  block. The VPS copy predates FR-J7, so only those three spans were patched
+  there (backup `oracle_ask.py.pre-n14c`); git carries both, and an FR-J7
+  deploy diffs to FR-J7's own hunks. askd restarted 17:04:51Z.
+
+- **M4 Cameron Interstate (oracle `f5b3214` claim, `ab24847` build;
+  2026-09-28 17:21Z).** A third posting format: gasnom.com's HTML table
+  (`dt=MM/DD/YYYY`; a past gas day reads its final cycle, Intraday 3).
+  Imperva fronts the site but served the page to the lane's identified
+  client from the desk and the VPS with no challenge, so nothing is evaded;
+  the reader pauses a second per page, and if the wall ever blocks, the
+  lane stops and Sempra is asked (the `LICENCES.md` condition). A gasnom
+  location posts a delivery and a receipt row under one number, so its
+  point key is `<loc>-<D|R>`. Two signals: `NG_FLOW_CAMERON_FEEDGAS_CIP`
+  (Cameron LNG (Del), 1.38 Bcf/d on 09-27) and
+  `NG_FLOW_HAYNESVILLE_LEG_CIP_REC` (the CIP-LEG receipt, 0.21). 45 gas days
+  backfilled (990 rows, every day complete); `gas_state`, `flows` and
+  `supply-board` serve seven signals; the daily cron picks the pipeline up
+  with the others. The board's LNG feedgas line adds Cameron (105 of its 110
+  characters); the LEG receipt stays off the pipes line, where no readable
+  name fits, and lives in the store and `gas_state`.
 
 **Resume prompt (next session; written 2026-09-28 15:45Z by jgewi-b9 at
 hand-off, updated 16:50Z after the scored supply eval; every fact checked

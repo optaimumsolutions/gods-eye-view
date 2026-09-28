@@ -30,12 +30,16 @@ export const FLOW_SHORT = Object.freeze({
   NG_FLOW_GOLDEN_PASS_GULF_RUN: 'Golden Pass',
   NG_FLOW_HAYNESVILLE_GULF_RUN_REC: 'Haynesville on Gulf Run',
   NG_FLOW_APPALACHIA_ROVER_REC: 'Appalachia on Rover',
+  NG_FLOW_CAMERON_FEEDGAS_CIP: 'Cameron',
 });
 const FEEDGAS = [
   'NG_FLOW_SABINE_FEEDGAS_CREOLE',
   'NG_FLOW_CORPUS_FEEDGAS_CCPL',
   'NG_FLOW_GOLDEN_PASS_GULF_RUN',
+  'NG_FLOW_CAMERON_FEEDGAS_CIP',
 ];
+// The LEG receipt on Cameron Interstate (NG_FLOW_HAYNESVILLE_LEG_CIP_REC) stays
+// in the store and gas_state: no readable name fits it on this line in LINE_MAX.
 const SUPPLY_FLOWS = [
   'NG_FLOW_HAYNESVILLE_GULF_RUN_REC',
   'NG_FLOW_APPALACHIA_ROVER_REC',

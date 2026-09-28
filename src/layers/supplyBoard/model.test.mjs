@@ -87,6 +87,18 @@ const BOARD = {
       bcfd: 3.59,
       chg7Bcfd: -0.03,
     },
+    {
+      id: 'NG_FLOW_CAMERON_FEEDGAS_CIP',
+      gasDay: '2026-09-27',
+      bcfd: 1.38,
+      chg7Bcfd: -0.06,
+    },
+    {
+      id: 'NG_FLOW_HAYNESVILLE_LEG_CIP_REC',
+      gasDay: '2026-09-27',
+      bcfd: 0.21,
+      chg7Bcfd: -0.0,
+    },
   ],
 };
 
@@ -123,12 +135,16 @@ test('the flow lines: LNG feedgas and supply on the pipes, each with its gas day
   const board = normaliseBoard(BOARD, { now: NOW });
   assert.equal(
     feedgasLine(board),
-    'LNG feedgas (scheduled, gas day 09-27): Sabine 1.44 · Corpus 2.43 · Golden Pass 0.75 Bcf/d',
+    'LNG feedgas (scheduled, gas day 09-27): Sabine 1.44 · Corpus 2.43 · Golden Pass 0.75 · Cameron 1.38 Bcf/d',
   );
+  // The LEG receipt stays off the pipes line (it would not fit LINE_MAX).
   assert.equal(
     pipeSupplyLine(board),
     'Pipes (scheduled, gas day 09-27): Haynesville on Gulf Run 2.69 · Appalachia on Rover 3.59 Bcf/d',
   );
+  for (const line of supplyBoardLines({ board })) {
+    assert.ok(!line.endsWith('…'), `clamped: ${line}`);
+  }
   // A week-old gas day is not shown as current.
   const stale = normaliseBoard(BOARD, {
     now: Date.parse('2026-10-05T00:00:00Z'),
