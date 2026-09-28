@@ -4218,7 +4218,12 @@ confirms the order above or reorders it.
   JavaScript; the file endpoint is captured once from a browser and recorded;
   if it rotates monthly the drop convention (R12.8) applies.
 - **O4 Louisiana.** SONRIS is an APEX app since 2025-10; no bulk LUW export
-  verified; half of Haynesville waits on it.
+  verified; half of Haynesville waits on it. **Probed 2026-09-28 (row 14
+  M3):** the data portal's reports sit behind reCAPTCHA Enterprise and Terms
+  of Use that prohibit any automated access; the paid Data Subscription
+  Service (OGP production $900 one-time or $350/month annual, Well $300 or
+  $150/month) is "the only authorized method for obtaining bulk data"
+  (`LICENCES.md` §C). Louisiana is founder spend or nothing.
 - **O5 Ohio and West Virginia.** Ohio's production download URL unverified
   after the site restructure; WV's quarterly files are cumulative.
 - **O6 Oklahoma volumes.** OTC gross production is PUN-keyed inside a
@@ -5485,7 +5490,7 @@ same day, before the questions were put.
 | 5 | M4 daily supply feed (after the D14.4 probe) | session (both, FR-N15) | **BUILT + deployed 2026-09-28** (oracle `d3aa844`, globe `7b38084`); licence rows in `LICENCES.md` §C. Check pending: seven consecutive daily runs (cron 15:20Z from 09-28), and the hub refresh once the lane joins a refresh tier (FR-J owner). Next pipelines: Boardwalk, Cameron Interstate; Kinder Morgan, Williams, Enbridge need written permission; the Permian intrastate exits need a vendor |
 | 6 | M6 licensed NYMEX (after D14.2) | founder + session (FR-N16) | open |
 | 7 | M7 learning loop (after D14.3) | session (oracle FR-N17, with the journal program) | open |
-| 8 | M3 region ladder, in the D14.5 order | session | **Appalachia (PA) BUILT + deployed 2026-09-28** (`bca6ef7`; hosted OFF pending PA DEP). Haynesville and Permian: Texas RRC is ASK-FIRST ("permission for noncommercial use only", §C), so they build with the hosted layer OFF like PA, or wait for RRC; Louisiana SONRIS unconfirmed (O4). OH and WV join Appalachia as their readers land. **Haynesville CLAIMED 2026-09-28** (session jgewi-98, split agreed with jgewi-b9). Founder, 2026-09-28: the Texas side ships hosted ON (founder override of RRC's ASK-FIRST verdict, recorded in `LICENCES.md`); Haynesville ships only with Louisiana in it, so the SONRIS export (O4) is probed first, and if it fails the founder is told before Permian starts |
+| 8 | M3 region ladder, in the D14.5 order | session | **Appalachia (PA) BUILT + deployed 2026-09-28** (`bca6ef7`; hosted OFF pending PA DEP). Haynesville and Permian: Texas RRC is ASK-FIRST ("permission for noncommercial use only", §C), so they build with the hosted layer OFF like PA, or wait for RRC; Louisiana SONRIS unconfirmed (O4). OH and WV join Appalachia as their readers land. **Haynesville CLAIMED 2026-09-28** (session jgewi-98, split agreed with jgewi-b9). Founder, 2026-09-28: the Texas side ships hosted ON (founder override of RRC's ASK-FIRST verdict, recorded in `LICENCES.md`); Haynesville ships only with Louisiana in it, so the SONRIS export (O4) is probed first, and if it fails the founder is told before Permian starts. **Probed 2026-09-28:** SONRIS forbids automated access and sells bulk data by subscription only (O4, `LICENCES.md` §C); Haynesville waits on the founder's decision on the OGP + Well subscription |
 
 ### 16.10 Build record
 
