@@ -53,13 +53,13 @@ export const ND_SOURCE = Object.freeze({
   license:
     'Public record of the North Dakota Industrial Commission; no licence text, state disclaimer applies',
   /**
-   * A month's workbook is not re-cut after publication (its Last-Modified
-   * header is the first release: 2026-06 on 2026-08-17, 2026-07 on
-   * 2026-09-15); late filings reach the PDF report only. The newest workbook
-   * is therefore final as published, and a light month stays light.
+   * Believed final as published until 2026-09-27: DMR replaced its first
+   * `2026_07.xlsx` (July 2023's filings under the July 2026 name) within
+   * days. `assertReportMonth` refuses a workbook of another month; late
+   * filings otherwise reach the PDF report only.
    */
   finality:
-    'workbooks are final as published; late filings reach the PDF report only',
+    'workbooks are usually final as published, but DMR can replace one (2026-07 was, within days); a workbook naming another month is refused; late filings reach the PDF report only',
   /** Six decimals kept of the thirteen filed (11 cm), below any survey. */
   precision: 'coordinates rounded to six decimals',
   /** Months of history the completeness baseline looks back over (R12.3). */

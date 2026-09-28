@@ -10,7 +10,7 @@ runtime except the history shards, which are built alongside and served from
 - Licence: Public record of the North Dakota Industrial Commission; no licence text, state disclaimer applies.
 - Retrieved: 2026-09-27. Per-file sha256 and byte counts in `source.json`.
 - Datum: NAD83 (assumed; the workbook does not state a datum); none — NAD83 and WGS84 agree within a metre in North Dakota; coordinates rounded to six decimals.
-- Finality: workbooks are final as published; late filings reach the PDF report only.
+- Finality: workbooks are usually final as published, but DMR can replace one (2026-07 was, within days); a workbook naming another month is refused; late filings reach the PDF report only.
 - **Current month = newest complete month.** Reporters are wells present in the month’s workbook (filed a report); a month is complete when its count is at least 90 % of the median over the 12 preceding months, that median itself at least 50 % of the median over the 12 before those. This build: **2026-07** is current (22,071 reporters at the median); still filling: none.
 
 ## `index.json` — 24,233 facilities

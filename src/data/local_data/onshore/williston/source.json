@@ -11,9 +11,9 @@
       "format": "JSON",
       "facilities": 24233,
       "window_months": 120,
-      "sha256": "cff77862b7dfdbcaa058919ae15727a80ab4c00d2c6517d26e8f68dad2d542bf",
-      "bytes": 14997113,
-      "gzip_bytes": 2505310
+      "sha256": "6cf5ce6b3b0251b1d7b6d077aedb355e283de08848937862581cfa3aaddf2bd6",
+      "bytes": 14997217,
+      "gzip_bytes": 2505379
     },
     {
       "path": "clusters.json",
@@ -1634,7 +1634,7 @@
       "precision": "coordinates rounded to six decimals",
       "grain": "well",
       "reporterRule": "wells present in the month’s workbook (filed a report)",
-      "finality": "workbooks are final as published; late filings reach the PDF report only"
+      "finality": "workbooks are usually final as published, but DMR can replace one (2026-07 was, within days); a workbook naming another month is refused; late filings reach the PDF report only"
     }
   ],
   "anomalies": [
