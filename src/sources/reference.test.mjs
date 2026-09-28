@@ -22,7 +22,10 @@ test('reference factories retain compatibility without starting acquisition or s
     'gulfPlatforms',
     'lng',
     'onshoreWilliston',
+    'supplyBoard',
   ]);
+  assert.notEqual(first.supplyBoard, second.supplyBoard);
+  assert.equal(typeof first.supplyBoard.getSnapshot, 'function');
   assert.notEqual(first.earthquakes, second.earthquakes);
   assert.notEqual(first.cables, second.cables);
   assert.notEqual(first.chokepoints, second.chokepoints);

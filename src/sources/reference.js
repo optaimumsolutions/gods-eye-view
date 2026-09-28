@@ -8,9 +8,16 @@ import {
 import { createPortWatchPortSource } from '../layers/ports/source.js';
 import { createBundledDatacenterSource } from '../layers/datacenters/source.js';
 import { createBundledGasSource } from '../layers/gasFlows/bundledSource.js';
-import { createBundledGulfSource } from '../layers/production/bundledSource.js';
+import {
+  createBundledGulfSource,
+  GULF_CONTRIBUTORS_URL,
+} from '../layers/production/bundledSource.js';
 import { createBundledLngSource } from '../layers/lng/source.js';
-import { createBundledOnshoreSource } from '../layers/onshore/bundledSource.js';
+import {
+  createBundledOnshoreSource,
+  onshoreBundleUrls,
+} from '../layers/onshore/bundledSource.js';
+import { createSupplyBoardSource } from '../layers/supplyBoard/source.js';
 import { createWithheldSource, isWithheld } from '../hosting/withheld.js';
 
 /** Why the hosted site shows no PortWatch layer (docs/LICENCES.md). */
@@ -39,5 +46,15 @@ export function createReferenceSources() {
     gulfPlatforms: createBundledGulfSource(),
     lng: createBundledLngSource(),
     onshoreWilliston: createBundledOnshoreSource({ region: 'williston' }),
+    // Row 14 M2: the built regions' contributors + the store's supply board
+    supplyBoard: createSupplyBoardSource({
+      regions: [
+        {
+          label: 'Williston',
+          url: onshoreBundleUrls('williston').contributors,
+        },
+        { label: 'Gulf', url: GULF_CONTRIBUTORS_URL },
+      ],
+    }),
   };
 }

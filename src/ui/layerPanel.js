@@ -21,6 +21,7 @@ const PANEL_GROUPS = [
       'commodity-ports',
       'energy-datacenters',
       'commodity-gas-flows',
+      'gas-supply-us',
       'production-gulf-platforms',
       'production-williston',
       'commodity-lng',
@@ -82,6 +83,9 @@ const PANEL_LABELS = {
   'commodity-gas-flows': 'Gas · Border Crossings (geometry)',
   // Row 11: monthly production per platform structure as filed with BSEE;
   // "current" is the newest complete reporting month, named on the row.
+  // Row 14 M2: the national balance and storage from the Oil Oracle store,
+  // filed production for the regions the globe has built.
+  'gas-supply-us': 'Gas · US Supply Board',
   'production-gulf-platforms': 'Gas · Gulf Platforms (BSEE)',
   // Row 12: monthly production per well as filed with the state (North
   // Dakota DMR first); "current" is the newest complete filing month.
