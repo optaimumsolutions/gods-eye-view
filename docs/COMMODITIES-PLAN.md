@@ -36,6 +36,7 @@ owns layers. Re-check `git status` before every edit to a shared file.
 | 12  | Onshore production facilities: wells, leases and rigs, region by region | layers + content (shell worktree, `feat/commodities-shell`) | **BUILT (milestones 0 and 1, Williston) 2026-09-21** — PRD §14 from the founder's direction the same day; five live sweeps probed some twenty regulators (§14.4); eleven regions ranked (§14.5). The founder's "build out the basins one at a time" started the ladder in the §14.5 order with O1 taken as recommended (option a: index and clusters committed, history shards built from the archive, not committed). Milestone 1a `c4ec135`: `scripts/build-onshore.mjs` + `scripts/onshore/{nd,eia,regions}.mjs`, `src/layers/onshore/{records,shards,bundledSource}.js`, `src/data/local_data/onshore/williston/` (24,154 North Dakota wells over 120 months, 17,915 producing in 2026-07 at 3.30 Bcf/d and 1.17 MMbbl/d; 518 fields; index 2.5 MB gzip; `--check` byte-identical; 94 % of EIA gross withdrawals, 100 % of marketed). Milestones 1b and 1c `f66463a`: `production-williston` (token `4`) — region card at global, 518 field marks at regional, 24,154 well points (`PointPrimitiveCollection`, clipped to the view) at local, hover and selected cards, the dossier with the ten-year chart from an on-demand shard, `scripts/qa-onshore-williston.mjs` on the shared harness (32 checks: activation 659 ms apart from the 16 MB fetch, heap +35 MiB, layer frame cost 1.8 ms). `836c325` fixes the second enable of the rows 4 and 11 layers (found by this QA). Build notes §14.13. Next: region 2, Appalachia (PA unconventional) |
 | 13  | Hosted site: globe + console behind one login at `commodities.optaimum.com` | ops + shell + server (`feat/commodities-shell`; oracle twin FR-D17) | **M1 BUILT except the browser check; M2 stamping + licence pass BUILT; M3 BUILT (check met); M4 BUILT + deployed (VPS checks met) — 2026-09-25.** Live on the VPS: globe `05ebd94` (`globe.service` :8020, fail-closed 403 on every request and upgrade until Access exists; M4 hub with publish listener :8021; `GEV_LICENCE_PROFILE=hosted` keeps the 20 sources [`LICENCES.md`](LICENCES.md) marks OFF out of the build), console + askd + `refresh.py` at oracle `07cd056` (FR-D17a/b/c). **Founder steps, 2026-09-28:** hosted Google keys, a $25/month budget alert and daily API caps made; the Access app `Commodities` created FIRST, then the route `commodities.optaimum.com` → `localhost:8020` on tunnel `oracle`; anonymous `/`, `/market`, `/api/health` answer 302 to the Access login. R13.7 amended: the hosted browser key is API-limited, not referrer-locked (§15.7). §D decided: hide the uncleared console panels for everyone but the founder (oracle FR-D17 change, not built); invitee group deferred. **Open:** the founder runs `scripts/hosting/push-hosted-env.sh` (keys, team, AUD, caps into `globe.env`, then a gated deploy), then the M1 browser check; Cesium ion and OpenAI keys optional. Agents start at §15.0; status §15.12; change log and build record §15.14 |
 | 14  | Natural-gas intelligence loop: the God's Eye View look, regional supply cards with main contributors, live supply feeds into the Oil Oracle, scored learning | shell + layers + server + oracle (`feat/commodities-shell`; oracle twins FR-N14 to FR-N17) | **CLAIMED 2026-09-26** (session jgewi-b9). PRD §16 from the founder's direction after seeing the hosted build: the keyless hosted globe landed on OSM street tiles (the "Google map" look); region cards show totals, not contributors; nothing from the globe feeds the model. **Decisions D14.1–D14.5 made 2026-09-26** (§16.4): the founder's Google key makes Photorealistic 3D the hosted default and USGS imagery is the keyless fallback; Databento first for NYMEX; the loop scores fundamentals nowcasts (B); pipeline EBBs probed first; Appalachia, Haynesville, Permian. **M0 BUILT** (`61c680b`, `7311e39`: keyless hosted landing = USGS imagery, never OSM; Google terms notice; the founder's Map-Tiles-only key still to come). **Williston corrected** (`f0b6c5b`: NDIC's first 2026-07 workbook held July 2023; the card showed 2023 as 2026 from 09-21). **M1 BUILT** (`ead98bc` data, `df9c4eb` cards and Contributors drawer; both region QAs PASS, G14.2 exact). **Deployed** 2026-09-28 12:42Z (globe `2dead84` LIVE; VPS gates 4,469 / 0 fail; corrected Williston shards streamed, md5 equal). **M5 BUILT + deployed** (oracle `f3f35d4`, FR-N14: `regional_production`, `NG_PROD_<REGION>` covariates, `gas_state` supply block; the store equals the card); its journal section and refresh tier wait for the FR-J owner. **M2 BUILT + deployed** (oracle `608354b` route `supply-board`; globe `175227f` layer `gas-supply-us`). **M3 region 2 BUILT + deployed** (`bca6ef7`: Appalachia, PA unconventional, 21.04 Bcf/d; well layer withheld on the hosted site until PA DEP confirms coordinates). **M4 BUILT + deployed** (oracle `d3aa844` FR-N15: five pipelines, five signals, 45 days back; globe `7b38084` board lines; **Cameron Interstate added 2026-09-28 17:21Z**, oracle `ab24847`: Cameron LNG feedgas + the LEG receipt, board line in `d68bde1`); its check needs seven daily runs (cron 15:20Z). Globe LIVE `38fb8f6` (17:41Z). **Permian (Texas) BUILT + deployed 2026-09-28** (session jgewi-98; globe `6d0f45f` + `38fb8f6`, LIVE 17:41Z; oracle `cc6d440`): RRC's PDQ dump by lease in three layers by county (Delaware 7.51 Bcf/d JUL, Midland 10.59 JUN, Central Platform & Shelves 1.37 JUN; one layer broke G3/G4, founder's split), hosted ON by founder override; the board folds them ("Permian TX 19.33, JUN"); store `NG_PROD_PERMIAN_*` + `NG_PROD_PERMIAN_TX`. Haynesville waits (no SONRIS subscription). **Hand-off 2026-09-28 15:45Z:** the next session starts from the resume prompt at the end of §16.10 (updated 18:10Z: the `gas_state` tool description is fixed, oracle `a58ad55` with the founder's OK, and the supply eval re-run scored PASS 3/3 as scored, 2/3 adjudicated: s02 inverts the comparison, now recalibrated; Cameron Interstate is live. Next: the `golden_tools` result, the s02 slip as an FR-S2 anchor, Boardwalk, OH/WV, the M4 seven-run check from 10-04, and the hosted M1 check once the founder runs `push-hosted-env.sh`); M6 and M7 wait on the founder and the FR-J owner. Build record §16.10 |
+| 15  | `commodity-flares`: nightly gas-flare heat (VIIRS) matched to wells, calibrated against state flaring | layers + server (`feat/commodities-shell`) | **CLAIMED 2026-09-28** (session a7c9a802). PRD §17 from the founder's "see if wells are producing using the satellite API day to day" and grill F1 to F3 (FIRMS keyless now, `FIRMS_MAP_KEY` only for the backfill; layer + dossier first, oracle feed M7; Williston then Permian). Token `0` (the last free token). Next: M0 probe script, then M1 Williston site gazetteer |
 
 Definition of usable, pending founder confirmation of question 13: rows 1
 through 4. Rows 5 to 7 are context and content.
@@ -5858,3 +5859,201 @@ CLOSE-OUT: record results in §16.9, the §0 ledger, §15.14 and the FR-N rows;
 push origin + mirror (globe) and origin (oracle); /update-obsidian, then
 offer /handoff.
 ```
+
+## 17. Row 15 PRD — `commodity-flares`: nightly gas-flare heat from VIIRS, matched to wells, calibrated against state flaring (FR-G15)
+
+**Status (2026-09-28): CLAIMED (session a7c9a802). Specced from the founder's
+question "is there a way to see if wells are producing using the satellite
+API on a day to day", answered: not per well, but per flaring site and per
+basin, nightly. Grill F1 to F3 answered the same day (17.1). Start at M0.**
+
+### 17.1 The grill (2026-09-28), F1 to F3
+
+| # | Question | Founder's answer |
+| --- | --- | --- |
+| F1 | Source | **NASA FIRMS VIIRS 375 m now.** Keyless 24 h / 7 d CSVs for the live nights; a free `FIRMS_MAP_KEY` (founder enters it through POWER UP) only for the multi-year backfill that calibration needs. VIIRS Nightfire (temperature + volume per flare) needs a Payne Institute data-use licence since 2025-01-10; it is an `UPGRADE.md` row, not a dependency. |
+| F2 | Reach of the first build | **Layer + dossier.** The oracle feed (`NG_FLARE_<REGION>`) is a later milestone with its own grill. |
+| F3 | Order | **Williston, then Permian.** North Dakota files flared gas per well per month (already bundled by row 12), the only calibration truth we have; Texas RRC lease data has no per-well flared column. |
+
+### 17.2 Live probe log (2026-09-28)
+
+- `firms.modaps.eosdis.nasa.gov/data/active_fire/{suomi-npp-viirs-c2,noaa-20-viirs-c2,noaa-21-viirs-c2}/csv/*_VIIRS_C2_{USA_contiguous_and_Hawaii,Global}_{24h,7d}.csv`: **keyless, 200, no CORS header** (server-side fetch). Columns `latitude, longitude, bright_ti4, scan, track, acq_date, acq_time, satellite, confidence, version, bright_ti5, frp, daynight`. US 7 d NOAA-20 file 798 KB.
+- NOAA-20, 7 nights to 2026-09-28: **104 night detections in Williston, 222 in the Permian.** Permian per night 32, 31, 32, **9, 7, 11**, 42, 58.
+- IEM ASOS archive (`mesonet.agron.iastate.edu/cgi-bin/request/asos.py`, keyless, sky cover `skyc1..3`) at 08:53 to 09:55Z: Hobbs and Carlsbad **BKN/OVC on 09-24 and 09-25** (the dropout nights); all clear on 09-26 although the count stayed at 11 (ceilometers see only to 12,000 ft; high cloud or smoke is invisible to them). `api.weather.gov/stations/K???/observations/latest` gives the same live (needs a User-Agent).
+- Matching against the row 12 Williston bundle (2026-07: 13,643 wells flared, 150.9 MMcf/d): of 118 clear-and-cloudy night detections, **58 within 375 m of a flaring well, 72 within 750 m, 88 within 1.5 km; 94 within 750 m of any well; 15 (13 %) near no well** (gas plants, fires). 247 wells flaring ≥ 100 Mcf/d carry 32 % of the flared volume.
+
+### 17.3 Summary
+
+A daily commodity layer that shows where gas is being flared in a basin
+last night, how that compares with the site's and the basin's recent clear
+nights, and (once calibrated) the flared volume that heat implies. Flaring
+is the only production proxy a public satellite sees every night: an oil
+well flares the associated gas it cannot ship, so lit sites mean producing
+wells, and a basin's flare heat moves with its associated-gas output and its
+pipeline constraints. It is a site and basin signal, never a claim about one
+well.
+
+### 17.4 Problem
+
+State production arrives monthly, one to three months late (row 12; ND
+2026-07 was current on 2026-09-27). Nothing on the globe says what a basin
+did last night. VIIRS passes over every US basin three times a night (SNPP,
+NOAA-20, NOAA-21) and its fire product already catches flares, but the
+upstream `local-firms` layer shows raw fire pixels with no idea which are
+flares, no cloud awareness (a cloudy night reads as "everything shut in")
+and no link to wells.
+
+### 17.5 Target user
+
+The founder, reading a basin's supply before the state file lands; the
+Oil Oracle later (M7).
+
+### 17.6 Goals (verifiable)
+
+- **G15.1 Last night, every morning.** By 12:00Z the layer holds the
+  previous UTC night for each built region, with its cloud state. *Verify:*
+  `GET /api/flares?region=williston` returns `nights[0].night` = yesterday
+  (UTC) and a `cloud` field on every night; QA reads it off the region card.
+- **G15.2 Honest matching.** Each night's detections split into
+  *site* (within the match radius of a bundled flare site), *unlisted well*
+  (near a well with no recent flaring), *other* (near no well). Only *site*
+  heat counts in norms and totals; the split is on the card. *Verify:* the
+  M1 build prints the split on the probe week; *site* ≥ 60 % of Williston
+  night detections (probe: 61 % at 750 m to a flaring well).
+- **G15.3 A clouded night is never a zero.** A night is `clear`, `partial`
+  or `obscured` from the region's ASOS stations at the overpass hour, with a
+  backstop: lit sites under 40 % of the median of the last 30 clear nights
+  marks it `suspect`. `obscured` and `suspect` nights are drawn hatched and
+  left out of every norm. *Verify:* unit fixtures (OVC night, dropout night);
+  the Permian 09-24 and 09-25 nights come out `obscured` when M6 lands.
+- **G15.4 Volume only when earned (M5).** The card shows an estimated
+  flared MMcf/d only if the monthly model's error on held-out months is
+  within 20 % (mean absolute percentage), otherwise heat only. *Verify:* the
+  backtest table in 17.12.
+- **G15.5 House performance.** Activation under 1 s apart from the fetch,
+  heap under +50 MiB, headless QA green, the four gates green at every
+  commit (§2.2).
+
+### 17.7 Non-goals
+
+- Whether one well is producing today. Single wells are not resolvable;
+  most wells that sell their gas never flare.
+- VIIRS Nightfire, Sentinel-2 pad detection, TROPOMI methane, tank storage:
+  `UPGRADE.md` rows.
+- Daytime detections in the norms (sunlit I4 is noisy); they are kept, not
+  counted.
+- Global flaring; basins other than Williston and the Permian in this row.
+- The oracle feed in the first build (M7, own grill). Signals or advice (R11).
+- Editing the upstream `local-firms` layer or `server/providers/firms.js`
+  (R13).
+
+### 17.8 Requirements
+
+1. **FR-F1 Site gazetteer (build time).** `npm run build:flares -- --region
+   <id>` reads the row 12 onshore bundle, merges wells within 150 m into pads,
+   and keeps as *sites* the pads with flared gas in any of the last 12 filed
+   months. Per site: id, centroid, wells, field, county, operators (as filed,
+   current month first), monthly flared Mcf for 24 months, the pad's
+   gas and oil this month. Output `src/data/local_data/flares/<region>/
+   sites.json` + `README.md` + `source.json`; `--check` diffs against the
+   committed bytes. Also a compact list of all well coordinates for the
+   *unlisted well* test.
+2. **FR-F2 Nightly detections (server).** New provider
+   `server/providers/flares.js`, route `/api/flares`. Reads the keyless US
+   24 h and 7 d CSVs for SNPP, NOAA-20 and NOAA-21 (single-flight, cached per
+   file for 30 min), keeps night detections inside each region's box, and
+   appends them to a rolling store `.gev-cache/flares/<region>/<YYYY-MM-DD>
+   .json` (git-ignored) so history accumulates from the first run. A night
+   file is final 36 h after its date.
+3. **FR-F3 Matching.** A detection matches the nearest site within
+   `r = max(750 m, ½·hypot(scan, track)·1000 + 375 m)` (the pixel grows
+   toward the scan edge). Unmatched: within 750 m of any well → *unlisted
+   well*, else *other*. Per site per night: detections, max FRP, satellites.
+4. **FR-F4 Cloud state.** IEM ASOS sky cover for the region's stations
+   (Williston: XWA, ISN, DIK, MOT, SDY; Permian: MAF, HOB, CNM, PEQ, FST)
+   at the reports nearest each overpass: `obscured` when most stations report
+   BKN or OVC below 12,000 ft, `partial` when any does, else `clear`; the
+   `suspect` backstop of G15.3. Live nights use `api.weather.gov` when IEM
+   has not caught up.
+5. **FR-F5 Region metrics.** Per night: lit sites, site FRP sum (MW),
+   *unlisted* and *other* counts, cloud state, satellites seen; against the
+   median and the 10th/90th percentile of the last 30 clear nights.
+6. **FR-F6 Layer `commodity-flares`** (token `0`, family `src/layers/flares/`,
+   freshness `daily`, panel `Commodities · Daily`, label `Gas flares ·
+   nightly heat`). Global: region card. Regional: sites lit last clear night
+   sized by FRP, coloured by nights lit in the last 30 clear nights; unlit
+   sites as faint rings; *unlisted* and *other* heat as grey pips. Hover
+   (R5): site name (field + lead operator), last lit night with age, FRP.
+   Markers pinned (§2.2). Observation timestamps: `observedAt` = overpass
+   time, `publishedAt` = FIRMS file time, `fetchedAt`.
+7. **FR-F7 Dossier.** Site: 90 nights of FRP with obscured nights hatched,
+   under it the monthly state flared bars (24 months) and the pad's wells.
+   Region: the nightly lit-site and FRP series with the 30-clear-night band
+   and the monthly state flared total. Drawer chrome shared with rows 8, 11,
+   12.
+8. **FR-F8 Backfill (M5, needs `FIRMS_MAP_KEY`).** `npm run
+   backfill:flares -- --region williston --months 36` through the FIRMS area
+   API (region box, 10-day windows, SP where published, NRT after), IEM ASOS
+   for the same nights; writes the same night files.
+9. **FR-F9 Calibration (M5).** Per region, monthly state flared (MMcf/d) ~
+   mean clear-night site FRP; fit on the earlier 24 months, test on the last
+   12; publish the coefficients, R² and held-out error in the bundle; the card
+   shows the estimate with its error band only under G15.4.
+10. **FR-F10 Attribution and licences.** `DATA_SOURCES.md`,
+    `dataCredits.js`, `LICENCES.md` rows for FIRMS NRT CSV (CC0, already
+    ALLOWED), IEM ASOS and NWS observations (public domain), NDIC (already
+    ALLOWED): hosted ON.
+
+### 17.9 Constraints and invariants
+
+- R2, R3 (timestamps on every observation), R5 (hover), R11 (descriptive),
+  R12 (keyless first; the key only for backfill), R13 (additive; new
+  provider, new family), §2.2 (wiring order, count pins, four gates,
+  portable `source.js`/`records.js`, pinned markers, headless QA).
+- Token `0` is the **last free token**; the alphabet must be widened before
+  any further layer (STATE, §16.10). Permian joins this same layer as a
+  second region, never a second token.
+- The shared tree: claim here first; every commit guarded by `git branch
+  --show-current` = `feat/commodities-shell` in the same command and made
+  with an explicit pathspec (the staged `scripts/hosting/push-hosted-env.sh`
+  mode change is not ours and is never committed).
+- Rolling store and shards stay out of git; the VPS accumulates its own.
+
+### 17.10 Milestones (smallest shippable first)
+
+| M | Slice | Verify |
+| --- | --- | --- |
+| M0 | This PRD, the ledger claim, `scripts/probe-flares.mjs` (reproduces 17.2 from the live feeds) | The probe prints nights per region, per-night counts and the match split |
+| M1 | Williston site gazetteer (FR-F1) + unit tests | Build prints sites, pads, wells; sites carry 100 % of ND flared Mcf in the current month (nothing dropped); `--check` byte-identical; *site* share on the probe week ≥ 60 % |
+| M2 | `/api/flares` + rolling store + cloud state + metrics (FR-F2 to F5) | Fixture tests (match radius, OVC night, dropout night, night finality); live GET returns ≥ 7 nights, each with `cloud`; restart keeps them; second call from cache |
+| M3 | The layer: marks, hover, region card, panel, wiring (FR-F6, F10) | `scripts/qa-flares.mjs` green (activation, heap, frame cost, hover, card numbers equal the API); four gates |
+| M4 | Dossiers (FR-F7) | QA extended: site dossier chart points = API nights; state bars = bundle months |
+| M5 | Backfill + calibration (FR-F8, F9); **founder: `FIRMS_MAP_KEY` in POWER UP** | Backtest table (R², held-out MAPE) in 17.12; G15.4 decides whether the estimate shows |
+| M6 | Permian as region 2 (short grill: sites from persistent backfill heat, since RRC has no per-well flaring) | Obscured 09-24/25 nights flagged; QA for the region |
+| M7 | Oracle feed `NG_FLARE_<REGION>` (own grill, oracle FR row) | Store equals card |
+
+### 17.11 Risks and open questions
+
+- **High cloud and smoke** pass the ceilometers (09-26 Permian). The
+  `suspect` backstop catches deep dropouts only; the M5 backfill measures how
+  often clear-by-ASOS nights drop out, and the rule is tuned then.
+- **The keyless feed holds 7 days.** Nights missed while no server ran are
+  lost until the M5 backfill; the VPS runs continuously, so the hosted store
+  is the reference.
+- **Flare heat ≠ production.** A new gathering line cuts flaring while
+  output rises. The card says "flared gas", and the dossier sets the state
+  flared series beside the heat so a divergence is visible. The M5 model is
+  refit monthly as each ND workbook lands.
+- **Unlisted heat** (gas plants, compressor stations, fires): shown grey,
+  never counted. Bundled EIA processing plants could become sites later (open).
+- **FRP saturation and bow-tie duplicates** at scan edge: the per-site
+  per-night maximum, not the sum of pixels, is the site's reading (M2 checks
+  with the probe week).
+- **O15.1** Is 20 % held-out error the right bar for showing volume? Decide
+  with the backtest in hand (M5).
+- **O15.2** Permian sites: persistent-heat clustering vs RRC flaring permits
+  (M6 grill).
+
+### 17.12 Build record
+
+(Filled milestone by milestone.)
