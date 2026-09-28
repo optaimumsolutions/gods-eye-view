@@ -2,7 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   FLARE_REGIONS,
+  PAD_LINK_M,
   classifyDetection,
+  clusterPads,
   distanceM,
   firmsNrtUrl,
   FIRMS_NRT_FEEDS,
@@ -119,4 +121,32 @@ test('skyState uses the report nearest the overpass per station', () => {
     skyState(r, Date.parse('2026-09-25T09:00:00Z')).state,
     'unknown',
   );
+});
+
+test('clusterPads links wells under 150 m, chains through neighbours, sorts by id', () => {
+  // 0.001° of latitude is about 111 m.
+  const wells = [
+    { id: 'c', lat: 48.002, lon: -103 }, // 111 m from b: same pad through b
+    { id: 'b', lat: 48.001, lon: -103 },
+    { id: 'a', lat: 48.0, lon: -103 },
+    { id: 'z', lat: 48.01, lon: -103 }, // 900 m away: its own pad
+  ];
+  const pads = clusterPads(wells);
+  assert.equal(PAD_LINK_M, 150);
+  assert.deepEqual(
+    pads.map((p) => p.map((w) => w.id)),
+    [['a', 'b', 'c'], ['z']],
+  );
+  assert.equal(clusterPads(wells, 100).length, 4);
+  assert.deepEqual(clusterPads([]), []);
+});
+
+test('clusterPads is independent of input order', () => {
+  const wells = Array.from({ length: 40 }, (_, i) => ({
+    id: String(i).padStart(3, '0'),
+    lat: 48 + (i % 7) * 0.0009,
+    lon: -103 + Math.floor(i / 7) * 0.003,
+  }));
+  const ids = (pads) => JSON.stringify(pads.map((p) => p.map((w) => w.id)));
+  assert.equal(ids(clusterPads(wells)), ids(clusterPads([...wells].reverse())));
 });

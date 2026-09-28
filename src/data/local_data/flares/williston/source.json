@@ -1,0 +1,21 @@
+{
+  "id": "flares-williston",
+  "name": "Williston Basin flare sites (pads that flared in the last 12 months)",
+  "category": "production",
+  "description": "Flare-site gazetteer for the commodity-flares layer (row 15): wells from the row 12 onshore bundle grouped into pads, kept when the pad flared in the lookback. Derived; no network.",
+  "derived_from": {
+    "bundle": "onshore-williston",
+    "index.json sha256": "6cf5ce6b3b0251b1d7b6d077aedb355e283de08848937862581cfa3aaddf2bd6",
+    "shards": 1024,
+    "retrieved": "2026-09-27"
+  },
+  "license_note": "Public record of the North Dakota Industrial Commission; no licence text, state disclaimer applies",
+  "files": [
+    {
+      "path": "sites.json",
+      "format": "JSON",
+      "bytes": 2660600,
+      "sha256": "d316f2a947229fb93b5f60dfd1701976a612fda8048ff6f039cdae9e6b8d2374"
+    }
+  ]
+}

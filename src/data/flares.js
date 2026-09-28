@@ -59,6 +59,8 @@ export const FLARE_REGIONS = Object.freeze({
       east: -101.5,
     }),
     stations: Object.freeze(['XWA', 'ISN', 'DIK', 'MOT', 'SDY']),
+    /** The row 12 onshore bundle whose wells become the flare sites. */
+    onshore: 'williston',
     center: Object.freeze({ lat: 47.85, lon: -103.1 }),
   }),
   permian: Object.freeze({
@@ -200,33 +202,88 @@ export function pointIndex(points) {
     if (!list) cells.set(k, (list = []));
     list.push(p);
   }
+  /** Calls `visit(point, distance)` for every point within the radius. */
+  function scan(lat, lon, radiusM, visit) {
+    const reachLat = Math.ceil(radiusM / (EARTH_M * RAD) / CELL_DEG);
+    const reachLon = Math.ceil(
+      radiusM / (EARTH_M * RAD * Math.cos(lat * RAD)) / CELL_DEG,
+    );
+    const ci = Math.floor(lat / CELL_DEG);
+    const cj = Math.floor(lon / CELL_DEG);
+    for (let i = ci - reachLat; i <= ci + reachLat; i += 1) {
+      for (let j = cj - reachLon; j <= cj + reachLon; j += 1) {
+        const list = cells.get(key(i, j));
+        if (!list) continue;
+        for (const p of list) {
+          const dist = distanceM(lat, lon, p.lat, p.lon);
+          if (dist <= radiusM) visit(p, dist);
+        }
+      }
+    }
+  }
   return {
     size: points.length,
     /**
      * @returns {?{point: T, distanceM: number}}
      */
     nearest(lat, lon, radiusM) {
-      const reachLat = Math.ceil(radiusM / (EARTH_M * RAD) / CELL_DEG);
-      const reachLon = Math.ceil(
-        radiusM / (EARTH_M * RAD * Math.cos(lat * RAD)) / CELL_DEG,
-      );
-      const ci = Math.floor(lat / CELL_DEG);
-      const cj = Math.floor(lon / CELL_DEG);
       let best = null;
-      for (let i = ci - reachLat; i <= ci + reachLat; i += 1) {
-        for (let j = cj - reachLon; j <= cj + reachLon; j += 1) {
-          const list = cells.get(key(i, j));
-          if (!list) continue;
-          for (const p of list) {
-            const dist = distanceM(lat, lon, p.lat, p.lon);
-            if (dist <= radiusM && (!best || dist < best.distanceM))
-              best = { point: p, distanceM: dist };
-          }
-        }
-      }
+      scan(lat, lon, radiusM, (point, dist) => {
+        if (!best || dist < best.distanceM) best = { point, distanceM: dist };
+      });
       return best;
     },
+    /** @returns {T[]} every point within the radius, in index order. */
+    within(lat, lon, radiusM) {
+      const out = [];
+      scan(lat, lon, radiusM, (point) => out.push(point));
+      return out;
+    },
   };
+}
+
+/** Wells closer than this share a pad (FR-F1). */
+export const PAD_LINK_M = 150;
+
+/**
+ * Group wells into pads by single linkage: two wells closer than `linkM` are
+ * on one pad, and so is anything chained through them. Deterministic: pads
+ * come out ordered by their smallest well id, wells within a pad by id.
+ * @template {{id: string, lat: number, lon: number}} T
+ * @param {T[]} wells
+ * @param {number} [linkM]
+ * @returns {T[][]}
+ */
+export function clusterPads(wells, linkM = PAD_LINK_M) {
+  const sorted = [...wells].sort((a, b) =>
+    a.id < b.id ? -1 : a.id > b.id ? 1 : 0,
+  );
+  const slot = new Map(sorted.map((w, i) => [w, i]));
+  const parent = sorted.map((_, i) => i);
+  const find = (i) => {
+    while (parent[i] !== i) {
+      parent[i] = parent[parent[i]];
+      i = parent[i];
+    }
+    return i;
+  };
+  const index = pointIndex(sorted);
+  for (const w of sorted) {
+    for (const n of index.within(w.lat, w.lon, linkM)) {
+      const a = find(slot.get(w));
+      const b = find(slot.get(n));
+      if (a !== b) parent[Math.max(a, b)] = Math.min(a, b);
+    }
+  }
+  /** @type {Map<number, T[]>} */
+  const pads = new Map();
+  sorted.forEach((w, i) => {
+    const root = find(i);
+    let list = pads.get(root);
+    if (!list) pads.set(root, (list = []));
+    list.push(w);
+  });
+  return [...pads.values()].sort((a, b) => (a[0].id < b[0].id ? -1 : 1));
 }
 
 /** The unlisted-well test radius (FR-F3). */

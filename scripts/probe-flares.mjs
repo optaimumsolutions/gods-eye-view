@@ -9,7 +9,7 @@
  *   node scripts/probe-flares.mjs [--window 24h|7d]
  */
 
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import {
   FIRMS_NRT_FEEDS,
   FLARE_REGIONS,
@@ -85,7 +85,15 @@ function williston() {
   const wells = index.facilities.filter((f) => Number.isFinite(f.lat));
   const flaring = wells.filter((f) => (f.current?.[6] ?? 0) > 0);
   const flaredMcf = flaring.reduce((s, f) => s + f.current[6], 0);
-  return { month: index.current.month, wells, flaring, flaredMcf };
+  // After M1 the bundled flare sites (pads) replace the single flaring wells.
+  const sitesUrl = new URL(
+    '../src/data/local_data/flares/williston/sites.json',
+    import.meta.url,
+  );
+  const sites = existsSync(sitesUrl)
+    ? JSON.parse(readFileSync(sitesUrl, 'utf8')).sites
+    : null;
+  return { month: index.current.month, wells, flaring, flaredMcf, sites };
 }
 
 const nd = williston();
@@ -109,7 +117,10 @@ for (const region of Object.values(FLARE_REGIONS)) {
 
   const split =
     region.id === 'williston'
-      ? { sites: pointIndex(nd.flaring), wells: pointIndex(nd.wells) }
+      ? {
+          sites: pointIndex(nd.sites ?? nd.flaring),
+          wells: pointIndex(nd.wells),
+        }
       : null;
 
   console.log(`\n${region.name} — ${mine.length} night detections`);
@@ -117,7 +128,7 @@ for (const region of Object.values(FLARE_REGIONS)) {
     'night       ' +
       FIRMS_NRT_FEEDS.map((f) => f.satellite.padStart(8)).join('') +
       '   total  sky' +
-      (split ? '                     flaring-well  any-well  other' : ''),
+      (split ? '                        site  unlisted  other' : ''),
   );
   const totals = { site: 0, unlisted: 0, other: 0 };
   for (const night of nights) {
@@ -157,7 +168,7 @@ for (const region of Object.values(FLARE_REGIONS)) {
     const all = totals.site + totals.unlisted + totals.other;
     const pct = (k) => `${((100 * totals[k]) / all).toFixed(0)} %`;
     console.log(
-      `split: within the match radius of a flaring well ${totals.site} (${pct('site')}), near another well ${totals.unlisted} (${pct('unlisted')}), near no well ${totals.other} (${pct('other')})`,
+      `split (${nd.sites ? 'bundled flare sites' : 'wells that flared this month'}): site ${totals.site} (${pct('site')}), unlisted well ${totals.unlisted} (${pct('unlisted')}), other ${totals.other} (${pct('other')})`,
     );
   }
 }
