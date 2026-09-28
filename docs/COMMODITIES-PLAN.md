@@ -36,7 +36,7 @@ owns layers. Re-check `git status` before every edit to a shared file.
 | 12  | Onshore production facilities: wells, leases and rigs, region by region | layers + content (shell worktree, `feat/commodities-shell`) | **BUILT (milestones 0 and 1, Williston) 2026-09-21** — PRD §14 from the founder's direction the same day; five live sweeps probed some twenty regulators (§14.4); eleven regions ranked (§14.5). The founder's "build out the basins one at a time" started the ladder in the §14.5 order with O1 taken as recommended (option a: index and clusters committed, history shards built from the archive, not committed). Milestone 1a `c4ec135`: `scripts/build-onshore.mjs` + `scripts/onshore/{nd,eia,regions}.mjs`, `src/layers/onshore/{records,shards,bundledSource}.js`, `src/data/local_data/onshore/williston/` (24,154 North Dakota wells over 120 months, 17,915 producing in 2026-07 at 3.30 Bcf/d and 1.17 MMbbl/d; 518 fields; index 2.5 MB gzip; `--check` byte-identical; 94 % of EIA gross withdrawals, 100 % of marketed). Milestones 1b and 1c `f66463a`: `production-williston` (token `4`) — region card at global, 518 field marks at regional, 24,154 well points (`PointPrimitiveCollection`, clipped to the view) at local, hover and selected cards, the dossier with the ten-year chart from an on-demand shard, `scripts/qa-onshore-williston.mjs` on the shared harness (32 checks: activation 659 ms apart from the 16 MB fetch, heap +35 MiB, layer frame cost 1.8 ms). `836c325` fixes the second enable of the rows 4 and 11 layers (found by this QA). Build notes §14.13. Next: region 2, Appalachia (PA unconventional) |
 | 13  | Hosted site: globe + console behind one login at `commodities.optaimum.com` | ops + shell + server (`feat/commodities-shell`; oracle twin FR-D17) | **M1 BUILT except the browser check; M2 stamping + licence pass BUILT; M3 BUILT (check met); M4 BUILT + deployed (VPS checks met) — 2026-09-25.** Live on the VPS: globe `05ebd94` (`globe.service` :8020, fail-closed 403 on every request and upgrade until Access exists; M4 hub with publish listener :8021; `GEV_LICENCE_PROFILE=hosted` keeps the 20 sources [`LICENCES.md`](LICENCES.md) marks OFF out of the build), console + askd + `refresh.py` at oracle `07cd056` (FR-D17a/b/c). **Founder steps, 2026-09-28:** hosted Google keys, a $25/month budget alert and daily API caps made; the Access app `Commodities` created FIRST, then the route `commodities.optaimum.com` → `localhost:8020` on tunnel `oracle`; anonymous `/`, `/market`, `/api/health` answer 302 to the Access login. R13.7 amended: the hosted browser key is API-limited, not referrer-locked (§15.7). §D decided: hide the uncleared console panels for everyone but the founder (oracle FR-D17 change, not built); invitee group deferred. **Open:** the founder runs `scripts/hosting/push-hosted-env.sh` (keys, team, AUD, caps into `globe.env`, then a gated deploy), then the M1 browser check; Cesium ion and OpenAI keys optional. Agents start at §15.0; status §15.12; change log and build record §15.14 |
 | 14  | Natural-gas intelligence loop: the God's Eye View look, regional supply cards with main contributors, live supply feeds into the Oil Oracle, scored learning | shell + layers + server + oracle (`feat/commodities-shell`; oracle twins FR-N14 to FR-N17) | **CLAIMED 2026-09-26** (session jgewi-b9). PRD §16 from the founder's direction after seeing the hosted build: the keyless hosted globe landed on OSM street tiles (the "Google map" look); region cards show totals, not contributors; nothing from the globe feeds the model. **Decisions D14.1–D14.5 made 2026-09-26** (§16.4): the founder's Google key makes Photorealistic 3D the hosted default and USGS imagery is the keyless fallback; Databento first for NYMEX; the loop scores fundamentals nowcasts (B); pipeline EBBs probed first; Appalachia, Haynesville, Permian. **M0 BUILT** (`61c680b`, `7311e39`: keyless hosted landing = USGS imagery, never OSM; Google terms notice; the founder's Map-Tiles-only key still to come). **Williston corrected** (`f0b6c5b`: NDIC's first 2026-07 workbook held July 2023; the card showed 2023 as 2026 from 09-21). **M1 BUILT** (`ead98bc` data, `df9c4eb` cards and Contributors drawer; both region QAs PASS, G14.2 exact). **Deployed** 2026-09-28 12:42Z (globe `2dead84` LIVE; VPS gates 4,469 / 0 fail; corrected Williston shards streamed, md5 equal). **M5 BUILT + deployed** (oracle `f3f35d4`, FR-N14: `regional_production`, `NG_PROD_<REGION>` covariates, `gas_state` supply block; the store equals the card); its journal section and refresh tier wait for the FR-J owner. **M2 BUILT + deployed** (oracle `608354b` route `supply-board`; globe `175227f` layer `gas-supply-us`). **M3 region 2 BUILT + deployed** (`bca6ef7`: Appalachia, PA unconventional, 21.04 Bcf/d; well layer withheld on the hosted site until PA DEP confirms coordinates). **M4 BUILT + deployed** (oracle `d3aa844` FR-N15: five pipelines, five signals, 45 days back; globe `7b38084` board lines; **Cameron Interstate added 2026-09-28 17:21Z**, oracle `ab24847`: Cameron LNG feedgas + the LEG receipt, board line in `d68bde1`); its check needs seven daily runs (cron 15:20Z). Globe LIVE `38fb8f6` (17:41Z). **Permian (Texas) BUILT + deployed 2026-09-28** (session jgewi-98; globe `6d0f45f` + `38fb8f6`, LIVE 17:41Z; oracle `cc6d440`): RRC's PDQ dump by lease in three layers by county (Delaware 7.51 Bcf/d JUL, Midland 10.59 JUN, Central Platform & Shelves 1.37 JUN; one layer broke G3/G4, founder's split), hosted ON by founder override; the board folds them ("Permian TX 19.33, JUN"); store `NG_PROD_PERMIAN_*` + `NG_PROD_PERMIAN_TX`. Haynesville waits (no SONRIS subscription). **Hand-off 2026-09-28 15:45Z:** the next session starts from the resume prompt at the end of §16.10 (updated 18:10Z: the `gas_state` tool description is fixed, oracle `a58ad55` with the founder's OK, and the supply eval re-run scored PASS 3/3 as scored, 2/3 adjudicated: s02 inverts the comparison, now recalibrated; Cameron Interstate is live. Next: the `golden_tools` result, the s02 slip as an FR-S2 anchor, Boardwalk, OH/WV, the M4 seven-run check from 10-04, and the hosted M1 check once the founder runs `push-hosted-env.sh`); M6 and M7 wait on the founder and the FR-J owner. Build record §16.10 |
-| 15  | `commodity-flares`: nightly gas-flare heat (VIIRS) matched to wells, calibrated against state flaring | layers + server (`feat/commodities-shell`) | **CLAIMED 2026-09-28** (session a7c9a802). PRD §17 from the founder's "see if wells are producing using the satellite API day to day" and grill F1 to F3 (FIRMS keyless now, `FIRMS_MAP_KEY` only for the backfill; layer + dossier first, oracle feed M7; Williston then Permian). Token `0` (the last free token). Next: M0 probe script, then M1 Williston site gazetteer |
+| 15  | `commodity-flares`: nightly gas-flare heat (VIIRS) matched to wells, calibrated against state flaring | layers + server (`feat/commodities-shell`) | **CLAIMED 2026-09-28** (session a7c9a802). PRD §17 from the founder's "see if wells are producing using the satellite API day to day" and grill F1 to F3 (FIRMS keyless now, `FIRMS_MAP_KEY` only for the backfill; layer + dossier first, oracle feed M7; Williston then Permian). Token `0` (the last free token). **M0 BUILT** (probe + pure module, 17.12). Next: M1 Williston site gazetteer |
 
 Definition of usable, pending founder confirmation of question 13: rows 1
 through 4. Rows 5 to 7 are context and content.
@@ -5925,7 +5925,9 @@ Oil Oracle later (M7).
   backstop: lit sites under 40 % of the median of the last 30 clear nights
   marks it `suspect`. `obscured` and `suspect` nights are drawn hatched and
   left out of every norm. *Verify:* unit fixtures (OVC night, dropout night);
-  the Permian 09-24 and 09-25 nights come out `obscured` when M6 lands.
+  in the Permian, the sites nearest Hobbs and Carlsbad come out `obscured`
+  on 09-24 and 09-25 when M6 lands (the region-wide rule reads them only
+  `partial`: 2 of 5 stations, see 17.12 M0).
 - **G15.4 Volume only when earned (M5).** The card shows an estimated
   flared MMcf/d only if the monthly model's error on held-out months is
   within 20 % (mean absolute percentage), otherwise heat only. *Verify:* the
@@ -5974,7 +5976,10 @@ Oil Oracle later (M7).
    at the reports nearest each overpass: `obscured` when most stations report
    BKN or OVC below 12,000 ft, `partial` when any does, else `clear`; the
    `suspect` backstop of G15.3. Live nights use `api.weather.gov` when IEM
-   has not caught up.
+   has not caught up. **Per site as well as per region (added at M0):** each
+   site takes the state of its nearest reporting station, and the region
+   card gives the share of sites under cover, because one front can cover
+   the New Mexico side of the Permian while Midland stays clear.
 5. **FR-F5 Region metrics.** Per night: lit sites, site FRP sum (MW),
    *unlisted* and *other* counts, cloud state, satellites seen; against the
    median and the 10th/90th percentile of the last 30 clear nights.
@@ -6056,4 +6061,33 @@ Oil Oracle later (M7).
 
 ### 17.12 Build record
 
-(Filled milestone by milestone.)
+**M0 — BUILT 2026-09-28** (session a7c9a802). `src/data/flares.js` (pure:
+keyless feed URLs, the two regions, VIIRS and IEM parsers, match radius,
+grid index, detection split, sky state) with `src/data/flares.test.mjs`
+(10 tests), and `scripts/probe-flares.mjs` (network only, writes nothing).
+Four gates green (4,497 tests, 0 fail). Probe, 7 nights to 2026-09-28, three
+satellites:
+
+| Night | Williston (ND) | Sky (ND) | Permian | Sky (Permian, region rule) |
+| --- | --- | --- | --- | --- |
+| 09-22 | 101 | partial 1/4 | 72 | clear |
+| 09-23 | 15 | obscured 4/4 | 68 | partial 2/5 |
+| 09-24 | 5 | partial 2/4 | 33 | partial 2/5 |
+| 09-25 | 96 | clear | 16 | partial 2/5 |
+| 09-26 | 8 | obscured 3/4 | 38 | clear |
+| 09-27 | 102 | clear | 148 | clear |
+
+- **The cloud flag works in Williston:** every clear night carries about 100
+  detections, every obscured night 5 to 15. In the Permian the region-wide
+  majority reads the NM-side overcast only as `partial`, hence the per-site
+  rule added to FR-F4.
+- **The Williston box is North Dakota only** (west -104.05, north 48.999).
+  The first box reached into Saskatchewan (about 25 detections along 49° N)
+  and Montana (8, no MT wells in the bundle).
+- **Split over the 7 nights (336 ND detections):** 219 (65 %) within the
+  match radius of a well that flared in 2026-07, 61 (18 %) near another well,
+  56 (17 %) near no well. G15.2 (≥ 60 %) met before pads. The largest
+  *other* cluster is near Beulah (47.36, -101.84; 26 detections): the
+  synfuels and coal plants, industrial heat, correctly uncounted; the Tioga
+  area (48.40, -102.92) is a gas-plant candidate for the open question on
+  processing plants.
