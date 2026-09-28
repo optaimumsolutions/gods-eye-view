@@ -21,6 +21,25 @@ export const SUPPLY_BOARD_MIN_HEIGHT_M = 2_500_000;
 /** Older than this and a store line is dropped rather than shown as current. */
 export const STORAGE_MAX_AGE_DAYS = 21;
 export const MONTHLY_MAX_AGE_DAYS = 160;
+/** Pipeline postings are daily; older than this and the flow lines are dropped. */
+export const FLOWS_MAX_AGE_DAYS = 5;
+/** Short names for the store's flow signals (row 14 M4, FR-N15). */
+export const FLOW_SHORT = Object.freeze({
+  NG_FLOW_SABINE_FEEDGAS_CREOLE: 'Sabine',
+  NG_FLOW_CORPUS_FEEDGAS_CCPL: 'Corpus',
+  NG_FLOW_GOLDEN_PASS_GULF_RUN: 'Golden Pass',
+  NG_FLOW_HAYNESVILLE_GULF_RUN_REC: 'Haynesville on Gulf Run',
+  NG_FLOW_APPALACHIA_ROVER_REC: 'Appalachia on Rover',
+});
+const FEEDGAS = [
+  'NG_FLOW_SABINE_FEEDGAS_CREOLE',
+  'NG_FLOW_CORPUS_FEEDGAS_CCPL',
+  'NG_FLOW_GOLDEN_PASS_GULF_RUN',
+];
+const SUPPLY_FLOWS = [
+  'NG_FLOW_HAYNESVILLE_GULF_RUN_REC',
+  'NG_FLOW_APPALACHIA_ROVER_REC',
+];
 /** The onshore and offshore regions the plan names (§14.5 eleven + the Gulf). */
 export const SUPPLY_REGIONS_PLANNED = 12;
 
@@ -79,8 +98,20 @@ export function normaliseBoard(payload, { now = Date.now() } = {}) {
           bandPositionPct: finite(s.bandPositionPct),
         }
       : null;
-  if (!monthly.size && !storage) return null;
-  return { asOf: payload.asOf ?? null, monthly, storage };
+  const flows = new Map();
+  for (const row of Array.isArray(payload.flows) ? payload.flows : []) {
+    const bcfd = finite(row?.bcfd);
+    if (!row?.id || bcfd === null || !row.gasDay) continue;
+    if (ageDays(row.gasDay, now) > FLOWS_MAX_AGE_DAYS) continue;
+    flows.set(String(row.id), {
+      id: String(row.id),
+      gasDay: String(row.gasDay).slice(0, 10),
+      bcfd,
+      chg7Bcfd: finite(row.chg7Bcfd),
+    });
+  }
+  if (!monthly.size && !storage && !flows.size) return null;
+  return { asOf: payload.asOf ?? null, monthly, storage, flows };
 }
 
 const signed = (n, digits = 1) =>
@@ -118,6 +149,28 @@ export function storageLine(board) {
   ]);
 }
 
+function flowsLine(board, ids, lead) {
+  const rows = ids.map((id) => board?.flows?.get(id)).filter(Boolean);
+  if (!rows.length) return null;
+  const day = rows
+    .map((r) => r.gasDay)
+    .sort()
+    .at(-1);
+  return `${lead} (scheduled, gas day ${day.slice(5)}): ${rows
+    .map((r) => `${FLOW_SHORT[r.id] ?? r.id} ${r.bcfd.toFixed(2)}`)
+    .join(' · ')} Bcf/d`;
+}
+
+/** `LNG feedgas (scheduled, gas day 09-27): Sabine 1.44 · Corpus 2.43 · Golden Pass 0.75 Bcf/d`. */
+export function feedgasLine(board) {
+  return flowsLine(board, FEEDGAS, 'LNG feedgas');
+}
+
+/** `Pipes (scheduled, gas day 09-27): Haynesville on Gulf Run 2.69 · Appalachia on Rover 3.59 Bcf/d`. */
+export function pipeSupplyLine(board) {
+  return flowsLine(board, SUPPLY_FLOWS, 'Pipes');
+}
+
 /** `Filed: Williston 3.43 (JUL, +27.5 MoM) · Gulf 2.03 (JUN, +72.8) Bcf/d`. */
 export function regionsLine(regions) {
   const built = (regions ?? []).filter((r) => r && r.totalMcfd > 0);
@@ -144,12 +197,14 @@ export function supplyBoardLines({
   return [
     balanceLine(board),
     storageLine(board),
+    feedgasLine(board),
+    pipeSupplyLine(board),
     regionsLine(regions),
     joinParts([
       `${built} of ${SUPPLY_REGIONS_PLANNED} regions built on filings; the rest are inside the EIA total`,
     ]),
     board
-      ? 'Oil Oracle store (EIA) · state and BSEE filings · descriptive only'
+      ? `Oil Oracle store (EIA${board.flows?.size ? ', pipeline postings' : ''}) · state and BSEE filings · descriptive only`
       : `Oil Oracle store not reachable${boardError ? ` (${boardError})` : ''} · state and BSEE filings`,
   ]
     .filter(Boolean)

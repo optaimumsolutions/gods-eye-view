@@ -27,22 +27,33 @@ test('a store write refreshes the layers fed by that source, once per burst', ()
   updated(target, { source: 'wx_ghcn', rows: 6 });
   updated(target, { source: 'quotes', rows: 4 });
   updated(target, { source: 'portwatch', rows: 0 });
-  assert.equal(timers.length, 2, 'one pending refresh per layer');
+  assert.equal(timers.length, 3, 'one pending refresh per layer');
   for (const timer of timers) timer.fn();
   assert.deepEqual(refreshed.sort(), [
     'commodity-chokepoints',
+    'production-appalachia',
     'production-williston',
   ]);
   // After it ran, a new write schedules again.
   updated(target, { source: 'portwatch', rows: 28 });
-  assert.equal(timers.length, 3);
+  assert.equal(timers.length, 4);
+  // Row 14: a store write the supply board reads refreshes it in place.
+  updated(target, { source: 'ng_pipeline_flows', rows: 392 });
+  updated(target, { source: 'ng_storage', rows: 8 });
+  assert.equal(timers.length, 5, 'one pending refresh for the board');
+  timers.at(-1).fn();
+  assert.equal(refreshed.at(-1), 'gas-supply-us');
   uninstall();
   updated(target, { source: 'wx_aifs', rows: 12 });
-  assert.equal(timers.length, 3, 'uninstalled: no more refreshes');
+  assert.equal(timers.length, 5, 'uninstalled: no more refreshes');
 });
 
 test('the mapped sources are the ones the globe reads through /api/oracle/', () => {
   assert.deepEqual(Object.keys(LIVE_REFRESH_LAYERS).sort(), [
+    'ng_monthly',
+    'ng_pipeline_flows',
+    'ng_regional',
+    'ng_storage',
     'portwatch',
     'wx_aifs',
     'wx_ghcn',

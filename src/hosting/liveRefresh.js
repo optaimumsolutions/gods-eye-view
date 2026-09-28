@@ -8,8 +8,13 @@
 /** Oracle ingest source -> globe layers that read it through /api/oracle/. */
 export const LIVE_REFRESH_LAYERS = Object.freeze({
   portwatch: Object.freeze(['commodity-chokepoints']),
-  wx_ghcn: Object.freeze(['production-williston']),
-  wx_aifs: Object.freeze(['production-williston']),
+  // Row 14: the US supply board re-reads the store when these sources write.
+  ng_storage: Object.freeze(['gas-supply-us']),
+  ng_monthly: Object.freeze(['gas-supply-us']),
+  ng_regional: Object.freeze(['gas-supply-us']),
+  ng_pipeline_flows: Object.freeze(['gas-supply-us']),
+  wx_ghcn: Object.freeze(['production-williston', 'production-appalachia']),
+  wx_aifs: Object.freeze(['production-williston', 'production-appalachia']),
 });
 
 export const LIVE_REFRESH_DELAY_MS = 1_500;

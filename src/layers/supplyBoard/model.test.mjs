@@ -4,7 +4,9 @@ import { readFileSync } from 'node:fs';
 import {
   balanceLine,
   createSupplyBoardOverlayEntry,
+  feedgasLine,
   normaliseBoard,
+  pipeSupplyLine,
   regionsLine,
   storageLine,
   supplyBoardLines,
@@ -52,6 +54,38 @@ const BOARD = {
     observedAt: '2026-09-18',
   },
   regions: [],
+  flows: [
+    {
+      id: 'NG_FLOW_SABINE_FEEDGAS_CREOLE',
+      gasDay: '2026-09-27',
+      bcfd: 1.44,
+      chg7Bcfd: 0.03,
+    },
+    {
+      id: 'NG_FLOW_CORPUS_FEEDGAS_CCPL',
+      gasDay: '2026-09-27',
+      bcfd: 2.43,
+      chg7Bcfd: 0.11,
+    },
+    {
+      id: 'NG_FLOW_GOLDEN_PASS_GULF_RUN',
+      gasDay: '2026-09-27',
+      bcfd: 0.75,
+      chg7Bcfd: 0.03,
+    },
+    {
+      id: 'NG_FLOW_HAYNESVILLE_GULF_RUN_REC',
+      gasDay: '2026-09-27',
+      bcfd: 2.69,
+      chg7Bcfd: 0.11,
+    },
+    {
+      id: 'NG_FLOW_APPALACHIA_ROVER_REC',
+      gasDay: '2026-09-27',
+      bcfd: 3.59,
+      chg7Bcfd: -0.03,
+    },
+  ],
 };
 
 const read = (path) =>
@@ -83,6 +117,23 @@ test('the store lines: balance and storage, each with its month or week', () => 
   );
 });
 
+test('the flow lines: LNG feedgas and supply on the pipes, each with its gas day', () => {
+  const board = normaliseBoard(BOARD, { now: NOW });
+  assert.equal(
+    feedgasLine(board),
+    'LNG feedgas (scheduled, gas day 09-27): Sabine 1.44 · Corpus 2.43 · Golden Pass 0.75 Bcf/d',
+  );
+  assert.equal(
+    pipeSupplyLine(board),
+    'Pipes (scheduled, gas day 09-27): Haynesville on Gulf Run 2.69 · Appalachia on Rover 3.59 Bcf/d',
+  );
+  // A week-old gas day is not shown as current.
+  const stale = normaliseBoard(BOARD, {
+    now: Date.parse('2026-10-05T00:00:00Z'),
+  });
+  assert.equal(feedgasLine(stale), null);
+});
+
 test('a stale or empty store drops its lines instead of showing them as current', () => {
   const late = Date.parse('2026-10-20T00:00:00Z');
   const board = normaliseBoard(BOARD, { now: late });
@@ -107,15 +158,20 @@ test('the filed regions line names each built region with its month', () => {
 test('the card: store lines first, then the regions, the coverage and the stamp', () => {
   const board = normaliseBoard(BOARD, { now: NOW });
   const lines = supplyBoardLines({ regions, board });
-  assert.equal(lines.length, 5);
+  assert.equal(lines.length, 7);
   assert.match(lines[0], /^Dry production/);
   assert.match(lines[1], /^Storage/);
-  assert.match(lines[2], /^Filed: /);
+  assert.match(lines[2], /^LNG feedgas/);
+  assert.match(lines[3], /^Pipes/);
+  assert.match(lines[4], /^Filed: /);
   assert.equal(
-    lines[3],
+    lines[5],
     '2 of 12 regions built on filings; the rest are inside the EIA total',
   );
-  assert.match(lines[4], /descriptive only$/);
+  assert.match(
+    lines[6],
+    /pipeline postings\) · state and BSEE filings · descriptive only$/,
+  );
   assert.ok(lines.every((line) => line.length <= 110));
   const entry = createSupplyBoardOverlayEntry({ regions, board }, { x: 0 });
   assert.equal(entry.title, 'US NATURAL GAS SUPPLY');
