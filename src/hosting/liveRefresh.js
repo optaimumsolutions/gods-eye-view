@@ -13,8 +13,20 @@ export const LIVE_REFRESH_LAYERS = Object.freeze({
   ng_monthly: Object.freeze(['gas-supply-us']),
   ng_regional: Object.freeze(['gas-supply-us']),
   ng_pipeline_flows: Object.freeze(['gas-supply-us']),
-  wx_ghcn: Object.freeze(['production-williston', 'production-appalachia']),
-  wx_aifs: Object.freeze(['production-williston', 'production-appalachia']),
+  wx_ghcn: Object.freeze([
+    'production-williston',
+    'production-appalachia',
+    'production-permian-delaware',
+    'production-permian-midland',
+    'production-permian-platform',
+  ]),
+  wx_aifs: Object.freeze([
+    'production-williston',
+    'production-appalachia',
+    'production-permian-delaware',
+    'production-permian-midland',
+    'production-permian-platform',
+  ]),
 });
 
 export const LIVE_REFRESH_DELAY_MS = 1_500;

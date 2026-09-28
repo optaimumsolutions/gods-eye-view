@@ -239,13 +239,24 @@ export function buildOnshoreDossierModel(
     {
       title: 'Identity',
       rows: [
-        ['API', row.api],
+        // Texas files oil per lease and gas per gas well (R12.1): the RRC id
+        // stands where a well's API number would.
+        row.grain && row.grain !== 'well'
+          ? ['RRC id', row.id.replace(/^TX-/, '')]
+          : ['API', row.api],
         ['File no.', row.fileNo !== null ? String(row.fileNo) : null],
         ['Operator', row.operator],
         ['Field', row.field],
         ['County', row.county],
         ['Pools', row.pools.length ? row.pools.join(', ') : null],
-        ['Grain', 'well · pools summed per month'],
+        [
+          'Grain',
+          row.grain === 'oil lease'
+            ? `oil lease · ${row.wells ? `${formatInt(row.wells)} wells on file, drawn at their centroid` : 'no well located'}; oil + condensate, gas-well + casinghead gas`
+            : row.grain === 'gas well'
+              ? 'gas well (RRC gas well id) · gas-well + casinghead gas, oil + condensate'
+              : 'well · pools summed per month',
+        ],
         [
           'Filed',
           joinParts([
@@ -332,7 +343,9 @@ export function buildOnshoreDossierModel(
         [
           'EIA',
           recon
-            ? `${recon.month}: ${region?.states?.join(', ') ?? 'state'} filings ${(recon.regionGasMcf / 1e6).toFixed(1)} Bcf gas = ${Math.round(recon.gasToGross * 100)} % of EIA gross withdrawals (${(recon.eiaGrossMcf / 1e6).toFixed(1)} Bcf), ${Math.round(recon.gasToMarketed * 100)} % of marketed; oil ${Math.round(recon.oilToEia * 100)} % of EIA`
+            ? region?.reconcileScope
+              ? `${recon.month}: ${region.reconcileScope}: ${(recon.regionGasMcf / 1e6).toFixed(1)} Bcf gas = ${Math.round(recon.gasToGross * 100)} % of EIA ${region.states.join(', ')} gross withdrawals (${(recon.eiaGrossMcf / 1e6).toFixed(1)} Bcf), ${Math.round(recon.gasToMarketed * 100)} % of marketed; oil ${Math.round(recon.oilToEia * 100)} % of EIA ${region.states.join(', ')} — the region's share of the state, not a coverage gap`
+              : `${recon.month}: ${region?.states?.join(', ') ?? 'state'} filings ${(recon.regionGasMcf / 1e6).toFixed(1)} Bcf gas = ${Math.round(recon.gasToGross * 100)} % of EIA gross withdrawals (${(recon.eiaGrossMcf / 1e6).toFixed(1)} Bcf), ${Math.round(recon.gasToMarketed * 100)} % of marketed; oil ${Math.round(recon.oilToEia * 100)} % of EIA`
             : null,
         ],
         ['History', historyNote],

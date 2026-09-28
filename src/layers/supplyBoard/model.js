@@ -171,20 +171,90 @@ export function pipeSupplyLine(board) {
   return flowsLine(board, SUPPLY_FLOWS, 'Pipes');
 }
 
+/**
+ * The built regions as the board counts them: entries sharing a `group` (the
+ * Permian's three Texas layers, split by county for size) fold into one item,
+ * summed at the newest month every member has filed so no month is mixed, its
+ * change against the month before taken from the same series. Entries
+ * without a group pass through unchanged.
+ */
+export function foldRegionGroups(regions) {
+  const items = [];
+  const groups = new Map();
+  for (const r of regions ?? []) {
+    if (!r || !(r.totalMcfd > 0)) continue;
+    if (!r.group) {
+      items.push(r);
+      continue;
+    }
+    let group = groups.get(r.group);
+    if (!group) {
+      group = { label: r.group, members: [] };
+      groups.set(r.group, group);
+      items.push(group);
+    }
+    group.members.push(r);
+  }
+  return items.map((item) => {
+    if (!item.members) return item;
+    const month = item.members.map((m) => m.currentMonth).sort()[0];
+    let total = 0;
+    let prior = 0;
+    let priorFiled = true;
+    for (const m of item.members) {
+      const at = m.months.indexOf(month);
+      total += m.totalGasMcfd?.[at] ?? 0;
+      const before = at > 0 ? m.totalGasMcfd?.[at - 1] : null;
+      if (before === null || before === undefined) priorFiled = false;
+      else prior += before;
+    }
+    return {
+      label: item.label,
+      totalMcfd: total,
+      currentMonth: month,
+      mom: priorFiled ? { region: { deltaMcfd: total - prior } } : null,
+      members: item.members.length,
+    };
+  });
+}
+
+function regionParts(regions) {
+  return foldRegionGroups(regions).map(
+    (r, i) =>
+      `${r.label} ${(r.totalMcfd / 1e6).toFixed(2)} (${monthAbbrev(r.currentMonth)}${
+        r.mom
+          ? `, ${formatSignedIn(r.mom.region.deltaMcfd, 'MMcf/d')}${i === 0 ? ' MoM' : ''}`
+          : ''
+      })`,
+  );
+}
+
 /** `Filed: Williston 3.43 (JUL, +27.5 MoM) · Gulf 2.03 (JUN, +72.8) Bcf/d`. */
 export function regionsLine(regions) {
-  const built = (regions ?? []).filter((r) => r && r.totalMcfd > 0);
-  if (!built.length) return null;
-  return `Filed: ${built
-    .map(
-      (r, i) =>
-        `${r.label} ${(r.totalMcfd / 1e6).toFixed(2)} (${monthAbbrev(r.currentMonth)}${
-          r.mom
-            ? `, ${formatSignedIn(r.mom.region.deltaMcfd, 'MMcf/d')}${i === 0 ? ' MoM' : ''}`
-            : ''
-        })`,
-    )
-    .join(' · ')} Bcf/d`;
+  const parts = regionParts(regions);
+  if (!parts.length) return null;
+  return `Filed: ${parts.join(' · ')} Bcf/d`;
+}
+
+/**
+ * The same regions packed onto as many card lines as they need, so a long
+ * list wraps instead of being cut at the card width.
+ */
+export function regionsLines(regions) {
+  const parts = regionParts(regions);
+  if (!parts.length) return [];
+  const lines = [];
+  let line = 'Filed:';
+  parts.forEach((part, i) => {
+    const tail = i === parts.length - 1 ? ' Bcf/d' : ' ·';
+    const next = `${line} ${part}${tail}`;
+    if (next.length > LINE_MAX && line !== 'Filed:') {
+      lines.push(line);
+      line = `${part}${tail}`;
+    } else line = next;
+  });
+  lines.push(line);
+  return lines;
 }
 
 /** The card's lines, store lines first when the store answered. */
@@ -193,13 +263,13 @@ export function supplyBoardLines({
   board = null,
   boardError = null,
 } = {}) {
-  const built = regions.filter((r) => r && r.totalMcfd > 0).length;
+  const built = foldRegionGroups(regions).length;
   return [
     balanceLine(board),
     storageLine(board),
     feedgasLine(board),
     pipeSupplyLine(board),
-    regionsLine(regions),
+    ...regionsLines(regions),
     joinParts([
       `${built} of ${SUPPLY_REGIONS_PLANNED} regions built on filings; the rest are inside the EIA total`,
     ]),
@@ -215,7 +285,7 @@ export function supplyBoardLines({
 export function supplyBoardMetaLine({ regions = [], board = null } = {}) {
   const dry = board?.monthly.get('dry production');
   const s = board?.storage;
-  const built = regions.filter((r) => r && r.totalMcfd > 0).length;
+  const built = foldRegionGroups(regions).length;
   return joinParts([
     'US GAS',
     dry ? `${dry.bcfd.toFixed(1)} BCF/D DRY (${monthAbbrev(dry.month)})` : null,

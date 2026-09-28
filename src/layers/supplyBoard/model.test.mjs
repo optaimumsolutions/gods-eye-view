@@ -7,7 +7,9 @@ import {
   feedgasLine,
   normaliseBoard,
   pipeSupplyLine,
+  foldRegionGroups,
   regionsLine,
+  regionsLines,
   storageLine,
   supplyBoardLines,
   supplyBoardMetaLine,
@@ -152,6 +154,58 @@ test('the filed regions line names each built region with its month', () => {
   assert.match(
     line,
     /^Filed: Williston 3\.43 \(JUL, \+27\.5 MoM\) · Gulf 2\.03 \(JUN, \+72\.8\) Bcf\/d$/,
+  );
+});
+
+test('layers of one region fold into one item at the month all have filed', () => {
+  const permian = [
+    'permian-delaware',
+    'permian-midland',
+    'permian-platform',
+  ].map((id) => ({
+    ...normaliseContributors(
+      read(`../../data/local_data/onshore/${id}/contributors.json`),
+    ),
+    label: id,
+    group: 'Permian TX',
+  }));
+  const all = [...permian, ...regions];
+  const items = foldRegionGroups(all);
+  assert.deepEqual(
+    items.map((r) => r.label),
+    ['Permian TX', 'Williston', 'Gulf'],
+  );
+  const group = items[0];
+  // Delaware's newest complete month is later than the others': the group
+  // is summed at the month all three have filed, never a mix of months.
+  const month = permian.map((p) => p.currentMonth).sort()[0];
+  assert.equal(group.currentMonth, month);
+  const sum = permian.reduce(
+    (s, p) => s + p.totalGasMcfd[p.months.indexOf(month)],
+    0,
+  );
+  assert.ok(Math.abs(group.totalMcfd - sum) < 1e-6);
+  assert.equal(group.members, 3);
+  const line = regionsLine(all);
+  assert.match(line, /^Filed: Permian TX \d+\.\d\d \([A-Z]{3}, [+−]/);
+  assert.match(line, /· Williston 3\.43 .* · Gulf 2\.03 /);
+  // With Appalachia too the list is longer than the card: it wraps, never cut.
+  const appalachia = {
+    ...normaliseContributors(
+      read('../../data/local_data/onshore/appalachia/contributors.json'),
+    ),
+    label: 'Appalachia',
+  };
+  const lines = regionsLines([appalachia, ...all]);
+  assert.ok(lines.length > 1);
+  for (const l of lines) assert.ok(l.length <= 110, `${l.length} chars`);
+  const joined = lines.join(' ');
+  for (const name of ['Appalachia', 'Permian TX', 'Williston', 'Gulf'])
+    assert.ok(joined.includes(`${name} `), name);
+  assert.match(joined, /^Filed: .* Bcf\/d$/);
+  assert.match(
+    supplyBoardLines({ regions: all }).join('\n'),
+    /3 of 12 regions built on filings/,
   );
 });
 

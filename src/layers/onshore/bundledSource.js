@@ -15,6 +15,18 @@ export const ONSHORE_CONTRIBUTORS = Object.freeze({
     '../../data/local_data/onshore/appalachia/contributors.json',
     import.meta.url,
   ).href,
+  'permian-delaware': new URL(
+    '../../data/local_data/onshore/permian-delaware/contributors.json',
+    import.meta.url,
+  ).href,
+  'permian-midland': new URL(
+    '../../data/local_data/onshore/permian-midland/contributors.json',
+    import.meta.url,
+  ).href,
+  'permian-platform': new URL(
+    '../../data/local_data/onshore/permian-platform/contributors.json',
+    import.meta.url,
+  ).href,
 });
 
 /**
@@ -47,6 +59,41 @@ const BUNDLES = Object.freeze({
         }),
       }
     : {}),
+  // Row 14 M3, region 3: the Permian's Texas side in three layers (RRC; shown
+  // on the hosted site by the founder's 2026-09-28 decision, docs/LICENCES.md).
+  'permian-delaware': Object.freeze({
+    index: new URL(
+      '../../data/local_data/onshore/permian-delaware/index.json',
+      import.meta.url,
+    ).href,
+    clusters: new URL(
+      '../../data/local_data/onshore/permian-delaware/clusters.json',
+      import.meta.url,
+    ).href,
+    contributors: ONSHORE_CONTRIBUTORS['permian-delaware'],
+  }),
+  'permian-midland': Object.freeze({
+    index: new URL(
+      '../../data/local_data/onshore/permian-midland/index.json',
+      import.meta.url,
+    ).href,
+    clusters: new URL(
+      '../../data/local_data/onshore/permian-midland/clusters.json',
+      import.meta.url,
+    ).href,
+    contributors: ONSHORE_CONTRIBUTORS['permian-midland'],
+  }),
+  'permian-platform': Object.freeze({
+    index: new URL(
+      '../../data/local_data/onshore/permian-platform/index.json',
+      import.meta.url,
+    ).href,
+    clusters: new URL(
+      '../../data/local_data/onshore/permian-platform/clusters.json',
+      import.meta.url,
+    ).href,
+    contributors: ONSHORE_CONTRIBUTORS['permian-platform'],
+  }),
 });
 
 export const ONSHORE_REGION_IDS = Object.freeze(Object.keys(BUNDLES));

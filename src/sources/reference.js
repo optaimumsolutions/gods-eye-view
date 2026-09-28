@@ -53,10 +53,36 @@ export function createReferenceSources() {
     onshoreAppalachia: isWithheld('pa-dep-wells')
       ? createWithheldSource('PA DEP', PA_WELLS_WITHHELD_MESSAGE)
       : createBundledOnshoreSource({ region: 'appalachia' }),
+    // Row 14 M3, region 3 (Texas RRC; hosted by the founder's decision)
+    onshorePermianDelaware: createBundledOnshoreSource({
+      region: 'permian-delaware',
+    }),
+    onshorePermianMidland: createBundledOnshoreSource({
+      region: 'permian-midland',
+    }),
+    onshorePermianPlatform: createBundledOnshoreSource({
+      region: 'permian-platform',
+    }),
     // Row 14 M2: the built regions' contributors + the store's supply board
     supplyBoard: createSupplyBoardSource({
       regions: [
         { label: 'Appalachia', url: ONSHORE_CONTRIBUTORS.appalachia },
+        // The Permian's three Texas layers print as one region.
+        {
+          label: 'Delaware',
+          group: 'Permian TX',
+          url: ONSHORE_CONTRIBUTORS['permian-delaware'],
+        },
+        {
+          label: 'Midland',
+          group: 'Permian TX',
+          url: ONSHORE_CONTRIBUTORS['permian-midland'],
+        },
+        {
+          label: 'Permian platform',
+          group: 'Permian TX',
+          url: ONSHORE_CONTRIBUTORS['permian-platform'],
+        },
         { label: 'Williston', url: ONSHORE_CONTRIBUTORS.williston },
         { label: 'Gulf', url: GULF_CONTRIBUTORS_URL },
       ],

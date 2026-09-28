@@ -26,6 +26,9 @@ import { createApplicationGulfPlatforms } from './layers/gulfPlatforms.js';
 import { createApplicationLng } from './layers/lng.js';
 import {
   createApplicationOnshoreAppalachia,
+  createApplicationOnshorePermianDelaware,
+  createApplicationOnshorePermianMidland,
+  createApplicationOnshorePermianPlatform,
   createApplicationOnshoreWilliston,
 } from './layers/onshore.js';
 import { createApplicationSupplyBoard } from './layers/supplyBoard.js';
@@ -156,6 +159,15 @@ export function createApplicationCatalog({
         createApplicationOnshoreWilliston({ source: sources.onshoreWilliston }),
         createApplicationOnshoreAppalachia({
           source: sources.onshoreAppalachia,
+        }),
+        createApplicationOnshorePermianDelaware({
+          source: sources.onshorePermianDelaware,
+        }),
+        createApplicationOnshorePermianMidland({
+          source: sources.onshorePermianMidland,
+        }),
+        createApplicationOnshorePermianPlatform({
+          source: sources.onshorePermianPlatform,
         }),
         createApplicationSupplyBoard({ source: sources.supplyBoard }),
         createApplicationFirms({

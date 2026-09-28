@@ -23,6 +23,9 @@ test('reference factories retain compatibility without starting acquisition or s
     'lng',
     'onshoreWilliston',
     'onshoreAppalachia',
+    'onshorePermianDelaware',
+    'onshorePermianMidland',
+    'onshorePermianPlatform',
     'supplyBoard',
   ]);
   assert.notEqual(first.supplyBoard, second.supplyBoard);

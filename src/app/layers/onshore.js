@@ -36,6 +36,30 @@ export const ONSHORE_REGIONS = Object.freeze([
     icon: '⛽',
     sourceKey: 'onshoreAppalachia',
   }),
+  // Row 14 M3, region 3: the Permian's Texas side per RRC lease, in three
+  // layers (Delaware, Midland, Central Platform & Shelves) to stay inside
+  // the size budgets.
+  Object.freeze({
+    id: 'permian-delaware',
+    layerId: 'production-permian-delaware',
+    name: 'Gas · Permian Delaware Leases (Texas RRC)',
+    icon: '⛽',
+    sourceKey: 'onshorePermianDelaware',
+  }),
+  Object.freeze({
+    id: 'permian-midland',
+    layerId: 'production-permian-midland',
+    name: 'Gas · Permian Midland Leases (Texas RRC)',
+    icon: '⛽',
+    sourceKey: 'onshorePermianMidland',
+  }),
+  Object.freeze({
+    id: 'permian-platform',
+    layerId: 'production-permian-platform',
+    name: 'Gas · Permian Platform & Shelves Leases (Texas RRC)',
+    icon: '⛽',
+    sourceKey: 'onshorePermianPlatform',
+  }),
 ]);
 
 /**
@@ -98,4 +122,16 @@ export function createApplicationOnshoreWilliston(options) {
 
 export function createApplicationOnshoreAppalachia(options) {
   return createApplicationOnshore({ region: ONSHORE_REGIONS[1], ...options });
+}
+
+export function createApplicationOnshorePermianDelaware(options) {
+  return createApplicationOnshore({ region: ONSHORE_REGIONS[2], ...options });
+}
+
+export function createApplicationOnshorePermianMidland(options) {
+  return createApplicationOnshore({ region: ONSHORE_REGIONS[3], ...options });
+}
+
+export function createApplicationOnshorePermianPlatform(options) {
+  return createApplicationOnshore({ region: ONSHORE_REGIONS[4], ...options });
 }

@@ -75,9 +75,13 @@ export async function runOnshoreQa({
     fs.readFileSync(path.join(REPO_ROOT, bundleDir, 'clusters.json'), 'utf8'),
   );
   const gasAt = index.readingColumns.indexOf('gas');
+  // The panel counts the placed facilities (G5: less the unplaced class the
+  // meta line names); the snapshot's facility total is the bundle's, placed
+  // or not. Equal to the plain counts where nothing is unplaced.
   const expected = {
-    facilities: index.facilities.length,
-    producing: index.counts.producing,
+    facilities: index.counts?.facilities ?? index.facilities.length,
+    placed: index.facilities.length,
+    producing: index.facilities.filter((f) => f.status === 'producing').length,
     fields: clusters.fields.length,
     month: index.current.month,
   };
@@ -420,7 +424,10 @@ export async function runOnshoreQa({
     );
     check(
       'panel line reconciles with EIA',
-      /% OF EIA GROSS/.test(String(globalStats?.source)),
+      // A region that is part of its state names it: `% OF EIA TX GROSS`.
+      /% OF EIA (?:[A-Z]{2}(?: \+ [A-Z]{2})* )?GROSS/.test(
+        String(globalStats?.source),
+      ),
     );
     check(
       'the layer is published, never live',
@@ -562,8 +569,8 @@ export async function runOnshoreQa({
       got: localStats?.tier,
     });
     check(
-      `every well became a point primitive (${expected.facilities})`,
-      localStats?.drawn?.wells === expected.facilities,
+      `every placed facility became a point primitive (${expected.placed})`,
+      localStats?.drawn?.wells === expected.placed,
       { got: localStats?.drawn?.wells },
     );
     check(

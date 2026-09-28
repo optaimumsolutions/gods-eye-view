@@ -24,6 +24,9 @@ const PANEL_GROUPS = [
       'gas-supply-us',
       'production-gulf-platforms',
       'production-appalachia',
+      'production-permian-delaware',
+      'production-permian-midland',
+      'production-permian-platform',
       'production-williston',
       'commodity-lng',
     ],
@@ -93,6 +96,11 @@ const PANEL_LABELS = {
   'production-williston': 'Gas · Williston Wells (ND DMR)',
   // Row 14 M3: Pennsylvania's unconventional wells, monthly as filed with DEP.
   'production-appalachia': 'Gas · Appalachia Wells (PA DEP)',
+  // Row 14 M3: the Permian's Texas side, monthly per RRC lease as filed.
+  'production-permian-delaware': 'Gas · Permian Delaware Leases (Texas RRC)',
+  'production-permian-midland': 'Gas · Permian Midland Leases (Texas RRC)',
+  'production-permian-platform':
+    'Gas · Permian Platform & Shelves Leases (Texas RRC)',
   'commodity-lng': 'LNG · Terminals & Cargoes',
 };
 

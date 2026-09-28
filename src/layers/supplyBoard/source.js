@@ -37,7 +37,14 @@ export function createSupplyBoardSource({
           const contributors = normaliseContributors(
             await readJson(region.url, signal),
           );
-          return contributors ? { ...contributors, label: region.label } : null;
+          return contributors
+            ? {
+                ...contributors,
+                label: region.label,
+                // Layers of one region (the Permian's Texas three) fold into one line.
+                ...(region.group ? { group: region.group } : {}),
+              }
+            : null;
         } catch (error) {
           if (signal?.aborted) throw error;
           return null;

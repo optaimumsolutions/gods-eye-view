@@ -210,7 +210,9 @@ export function normaliseFacility(raw, context) {
     producing,
     firstSeen: text(raw.firstSeen),
     lastSeen: text(raw.lastSeen),
-    grain: 'well',
+    // `well` unless the state files by lease (Texas: `oil lease`, `gas well`).
+    grain: text(raw.grain) ?? 'well',
+    wells: num(raw.wells),
     cadence: 'monthly',
     current,
     prior,
@@ -266,6 +268,8 @@ function normaliseCluster(raw, context) {
     lat,
     lon,
     wells: num(raw.wells) ?? 0,
+    // The region's word for its facilities (`wells`, or `leases` in Texas).
+    facilityNoun: context.facilityMany ?? 'wells',
     reported: num(raw.reported) ?? 0,
     producing: current.producing,
     current,
@@ -369,6 +373,13 @@ export function normaliseOnshoreDataset(
       lat: num(payload.region.center?.lat),
       lon: num(payload.region.center?.lon),
     }),
+    // What a facility is: a well (the default) or, in Texas, an RRC lease.
+    facility: Object.freeze({
+      one: text(payload.region.facility?.one) ?? 'well',
+      many: text(payload.region.facility?.many) ?? 'wells',
+    }),
+    // Set when the region is part of the state its EIA series covers.
+    reconcileScope: text(payload.region.reconcileScope),
   });
   if (!region.id || !region.layerId) return null;
   const sources = Object.freeze(
@@ -410,6 +421,7 @@ export function normaliseOnshoreDataset(
     lastYearMonth: currentIndex >= 12 ? months[currentIndex - 12] : null,
     observation: baseObservation,
     source: sourceLong,
+    facilityMany: region.facility.many,
   };
   const rows = rankRows(
     payload.facilities
@@ -496,7 +508,7 @@ export function normaliseOnshoreDataset(
   const reconciliation = normaliseReconciliation(payload.reconciliation);
   const observation = Object.freeze({
     ...baseObservation,
-    headline: `${producing.length} wells producing in ${region.name} in ${currentMonth}`,
+    headline: `${producing.length} ${region.facility.many} producing in ${region.name} in ${currentMonth}`,
   });
   return Object.freeze({
     layerId: region.layerId,
@@ -560,11 +572,18 @@ function monthAbbrev(month) {
   return names[Number(String(month).slice(5, 7)) - 1] ?? String(month);
 }
 
-/** `94 % OF EIA GROSS (JUN)` — the panel's reconciliation phrase, or null. */
+/**
+ * `94 % OF EIA GROSS (JUN)` — the panel's reconciliation phrase, or null. A
+ * region that is part of its state names the state, so the share reads as
+ * the region's part of it (`58 % OF EIA TX GROSS (JUN)`), not a gap.
+ */
 export function reconciliationPhrase(snapshot) {
   const latest = snapshot?.reconciliation?.latest;
   if (!latest?.gasToGross || !latest.month) return null;
-  return `${Math.round(latest.gasToGross * 100)} % OF EIA GROSS (${monthAbbrev(latest.month)})`;
+  const scope = snapshot.region?.reconcileScope
+    ? `${snapshot.region.states.join(' + ')} `
+    : '';
+  return `${Math.round(latest.gasToGross * 100)} % OF EIA ${scope}GROSS (${monthAbbrev(latest.month)})`;
 }
 
 /**

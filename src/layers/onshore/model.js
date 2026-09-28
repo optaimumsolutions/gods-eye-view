@@ -202,11 +202,17 @@ export function operationsLine(row) {
   ]);
 }
 
-/** Who runs it and what it produces from. */
+/** Who runs it and what it produces from (and, for a lease, how many wells). */
 export function identityLine(row) {
   return joinParts([
     row.operator ? `operator ${row.operator}` : null,
     row.pools.length ? row.pools.join(' / ') : null,
+    row.grain && row.grain !== 'well'
+      ? joinParts([
+          row.grain,
+          row.wells > 1 ? `${formatInt(row.wells)} wells` : null,
+        ])
+      : null,
     row.county ? `${row.county} county` : null,
   ]);
 }
@@ -239,9 +245,10 @@ export function createRegionOverlayEntry(
   weatherLine = null,
 ) {
   const c = snapshot.counts;
+  const many = snapshot.region.facility?.many ?? 'wells';
   const contributorLines = contributorCardLines(snapshot.contributors);
   const details = [
-    `${formatInt(c.producing)} wells producing · ${(c.gasMcfdTotal / 1e6).toFixed(2)} Bcf/d gas · ${(c.oilBbldTotal / 1e6).toFixed(2)} MMbbl/d oil`,
+    `${formatInt(c.producing)} ${many} producing · ${(c.gasMcfdTotal / 1e6).toFixed(2)} Bcf/d gas · ${(c.oilBbldTotal / 1e6).toFixed(2)} MMbbl/d oil`,
     // Row 14 M1: who produces it, and who moved it since last month.
     ...contributorLines,
     snapshot.asOf,
@@ -249,8 +256,8 @@ export function createRegionOverlayEntry(
   if (weatherLine) details.push(weatherLine);
   details.push(
     contributorLines.length
-      ? 'click the mark for contributors · zoom in for fields, then wells'
-      : 'zoom in for fields, then wells',
+      ? `click the mark for contributors · zoom in for fields, then ${many}`
+      : `zoom in for fields, then ${many}`,
   );
   return {
     ...baseEntry(
@@ -277,7 +284,7 @@ export function createClusterOverlayEntry(cluster, position, tier) {
       Math.round(cluster.current.gasMcfd),
     ),
     variant: 'label',
-    title: `${cluster.name.toUpperCase()} · ${formatMcfd(cluster.current.gasMcfd)} · ${formatInt(cluster.producing)} wells`,
+    title: `${cluster.name.toUpperCase()} · ${formatMcfd(cluster.current.gasMcfd)} · ${formatInt(cluster.producing)} ${cluster.facilityNoun ?? 'wells'}`,
   };
 }
 
@@ -338,11 +345,11 @@ export function buildHoverClusterCard(cluster, position, snapshot) {
       ]),
       joinParts([
         c.oilBopd !== null ? `oil ${formatBbld(c.oilBopd)}` : null,
-        `${formatInt(cluster.producing)} of ${formatInt(cluster.wells)} wells producing`,
+        `${formatInt(cluster.producing)} of ${formatInt(cluster.wells)} ${cluster.facilityNoun ?? 'wells'} producing`,
         cluster.rank ? `#${cluster.rank} field by gas` : null,
       ]),
       snapshot?.asOf ?? null,
-      'click to fly to the wells',
+      `click to fly to the ${cluster.facilityNoun ?? 'wells'}`,
     ]
       .filter(Boolean)
       .map(clampLine),

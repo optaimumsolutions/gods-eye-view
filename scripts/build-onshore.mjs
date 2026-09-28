@@ -179,6 +179,10 @@ async function readWindow(reader, months, cacheDir, options) {
       facility.county = row.county ?? facility.county ?? null;
       facility.field = row.field ?? facility.field ?? null;
       facility.pools = row.pools?.length ? row.pools : (facility.pools ?? []);
+      // Lease-grain states (Texas): what the facility is and how many wells
+      // it draws; absent for well-grain readers, so their bytes are unchanged.
+      if (row.grain) facility.grain = row.grain;
+      if (row.wells !== undefined) facility.wells = row.wells;
       if (row.lat !== null && row.lon !== null) {
         facility.lat = row.lat;
         facility.lon = row.lon;
@@ -428,6 +432,9 @@ function buildReconciliation(facilities, months, eiaByState, states) {
 
 function readme(region, payload, manifest, contributors) {
   const c = payload.counts;
+  // Lease-grain regions (Texas) name their facility; well-grain text is unchanged.
+  const leaseGrain = Boolean(region.facility);
+  const noun = region.facility?.many ?? 'wells';
   const r = payload.reconciliation.latest;
   const filling = payload.completeness.table
     .filter((row) => !row.complete)
@@ -453,8 +460,8 @@ runtime except the history shards, which are built alongside and served from
 
 ## \`index.json\` — ${c.facilities.toLocaleString()} facilities
 
-- ${c.reported.toLocaleString()} wells filed for ${payload.current.month}; ${c.producing.toLocaleString()} produced (${(c.gasMcfdTotal / 1e6).toFixed(2)} Bcf/d gas, ${(c.oilBbldTotal / 1e6).toFixed(2)} MMbbl/d oil, ${(c.flaredMcfd / 1e3).toFixed(0)} MMcf/d flared); ${c.quiet.toLocaleString()} filed with no production; ${c.absent.toLocaleString()} wells appear earlier in the window but not in the current file (plugged, inactive or confidential); ${c.unplaced} have no coordinates and are counted only.
-- Per facility: identity (API well number, NDIC file number, well name, operator, county, field, pools), surface location, \`status\`, and three readings — \`current\`, \`prior\` and \`lastYear\` — as arrays in the order \`${READING_COLUMNS.join(', ')}\` (monthly volumes: bbl, bbl, days, bbl, Mcf, Mcf, Mcf; null = not filed), plus a ten-year \`summary\` over the ${payload.months.length} months (first and last producing month, months producing, peak gas and oil per calendar day with their months, cumulative gas, oil, water and flared).
+- ${c.reported.toLocaleString()} ${noun} filed for ${payload.current.month}; ${c.producing.toLocaleString()} produced (${(c.gasMcfdTotal / 1e6).toFixed(2)} Bcf/d gas, ${(c.oilBbldTotal / 1e6).toFixed(2)} MMbbl/d oil${leaseGrain ? '; the state files no flaring here' : `, ${(c.flaredMcfd / 1e3).toFixed(0)} MMcf/d flared`}); ${c.quiet.toLocaleString()} filed with no production; ${c.absent.toLocaleString()} ${noun} appear earlier in the window but not in the current file (plugged, inactive or confidential); ${c.unplaced} have no coordinates and are counted only.
+- Per facility: identity (${leaseGrain ? 'RRC id `TX-<district>-<O|G>-<lease or gas well number>`, lease name (with the gas well number for a gas well), operator, county, field; `grain` oil lease or gas well and `wells`, the wells on file it is drawn from' : 'API well number, NDIC file number, well name, operator, county, field, pools'}), surface location, \`status\`, and three readings — \`current\`, \`prior\` and \`lastYear\` — as arrays in the order \`${READING_COLUMNS.join(', ')}\` (monthly volumes: bbl, bbl, days, bbl, Mcf, Mcf, Mcf; null = not filed), plus a ten-year \`summary\` over the ${payload.months.length} months (first and last producing month, months producing, peak gas and oil per calendar day with their months, cumulative gas, oil, water and flared).
 - Rates on the map are per calendar day (volume ÷ days in the month); the dossier also shows per producing day where days were filed.
 
 ## \`clusters.json\` — ${payload.clusterCounts.fields} fields, ${payload.clusterCounts.counties} counties
@@ -463,7 +470,7 @@ Monthly sums of gas, oil, water and flared and the count of producing wells per 
 
 ## \`contributors.json\` and \`aggregates.json\` — main contributors (row 14)
 
-- \`contributors.json\` (read by the layer): the last ${contributors.months.length} months to ${contributors.current.month}, every operator with production in them (${contributors.operators.length}), each with its gas, oil and producing wells per month, its top fields this month and the names it filed under; and the change against last month and last year split into operators and into continuing wells, new wells, wells filed with no gas, wells absent from the file and operator changes (buyer credited, seller debited). The parts sum to the change; the build prints any month where they do not.
+- \`contributors.json\` (read by the layer): the last ${contributors.months.length} months to ${contributors.current.month}, every operator with production in them (${contributors.operators.length}), each with its gas, oil and producing ${noun} per month, its top fields this month and the names it filed under; and the change against last month and last year split into operators and into continuing ${noun}, new ${noun}, ${noun} filed with no gas, ${noun} absent from the file and operator changes (buyer credited, seller debited). The parts sum to the change; the build prints any month where they do not.
 - \`aggregates.json\` (read by the Oil Oracle store, FR-N14): operator × county × month over the whole window, gas, oil and producing wells, with the region totals. The same numbers as the card: one parse.
 - The operator is the one filed for each month. \`scripts/operator-aliases.json\` merges spellings of one company only${contributors.aliases.length ? ` (${contributors.aliases.length} applied here)` : ''}; parents, subsidiaries and buyers stay as filed.
 
@@ -643,6 +650,8 @@ async function main() {
       county: facility.county ?? null,
       field: facility.field ?? null,
       pools: facility.pools ?? [],
+      ...(facility.grain ? { grain: facility.grain } : {}),
+      ...(facility.wells !== undefined ? { wells: facility.wells } : {}),
       lat: facility.lat,
       lon: facility.lon,
       status,
@@ -698,7 +707,7 @@ async function main() {
     },
     retrieved,
     groupLabel: 'county',
-    facilityLabel: 'well',
+    facilityLabel: region.facility?.one ?? 'well',
     aliases,
   });
   for (const group of contributorBuild.candidates)
@@ -720,6 +729,12 @@ async function main() {
       basins: region.basins,
       states: region.states,
       center: region.center,
+      // Lease-grain regions name their facility (Texas: "lease"); well-grain
+      // regions omit it and keep their bytes.
+      ...(region.facility ? { facility: region.facility } : {}),
+      ...(region.reconcileScope
+        ? { reconcileScope: region.reconcileScope }
+        : {}),
     },
     sources,
     readingColumns: READING_COLUMNS,
