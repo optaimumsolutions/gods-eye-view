@@ -35,7 +35,7 @@ owns layers. Re-check `git status` before every edit to a shared file.
 | 11  | Gas production facilities: Gulf platforms (BSEE) first | layers + content (shell worktree, `feat/commodities-shell`) | **BUILT (first slice) 2026-09-21** — PRD §13 from the founder's pivot and grill; on `feat/commodities-shell` (founder's instruction: every update on the shell branch, no row worktree), token `2`. Milestone 1 `c6c92b2`: `scripts/build-gulf-platforms.mjs` + `src/data/local_data/bsee_gulf/` (1,315 installed structures, 120-month series, 608 KB gzip), the completeness rule and the one record shape. Milestone 2 `1e685f0`: marks sized by gas share and coloured by change against last year, three tiers, hover and selected cards, the panel line, `scripts/qa-gulf-platforms.mjs`. Milestone 3 `af342d1`: the dossier (ten-year chart, this-month ledger, identity, lifetime, sources) and the drawer chrome shared with the datacenters; QA 20 checks green (layer activation 755 ms apart from the bundle fetch, heap +50 MiB). Milestone 4 is the commit carrying this line. Four gates green at every commit. Next: milestone 5 (EIA regional backdrop, short grill first) |
 | 12  | Onshore production facilities: wells, leases and rigs, region by region | layers + content (shell worktree, `feat/commodities-shell`) | **BUILT (milestones 0 and 1, Williston) 2026-09-21** — PRD §14 from the founder's direction the same day; five live sweeps probed some twenty regulators (§14.4); eleven regions ranked (§14.5). The founder's "build out the basins one at a time" started the ladder in the §14.5 order with O1 taken as recommended (option a: index and clusters committed, history shards built from the archive, not committed). Milestone 1a `c4ec135`: `scripts/build-onshore.mjs` + `scripts/onshore/{nd,eia,regions}.mjs`, `src/layers/onshore/{records,shards,bundledSource}.js`, `src/data/local_data/onshore/williston/` (24,154 North Dakota wells over 120 months, 17,915 producing in 2026-07 at 3.30 Bcf/d and 1.17 MMbbl/d; 518 fields; index 2.5 MB gzip; `--check` byte-identical; 94 % of EIA gross withdrawals, 100 % of marketed). Milestones 1b and 1c `f66463a`: `production-williston` (token `4`) — region card at global, 518 field marks at regional, 24,154 well points (`PointPrimitiveCollection`, clipped to the view) at local, hover and selected cards, the dossier with the ten-year chart from an on-demand shard, `scripts/qa-onshore-williston.mjs` on the shared harness (32 checks: activation 659 ms apart from the 16 MB fetch, heap +35 MiB, layer frame cost 1.8 ms). `836c325` fixes the second enable of the rows 4 and 11 layers (found by this QA). Build notes §14.13. Next: region 2, Appalachia (PA unconventional) |
 | 13  | Hosted site: globe + console behind one login at `commodities.optaimum.com` | ops + shell + server (`feat/commodities-shell`; oracle twin FR-D17) | **M1 BUILT except the browser check; M2 stamping + licence pass BUILT; M3 BUILT (check met); M4 BUILT + deployed (VPS checks met) — 2026-09-25.** Live on the VPS: globe `05ebd94` (`globe.service` :8020, fail-closed 403 on every request and upgrade until Access exists; M4 hub with publish listener :8021; `GEV_LICENCE_PROFILE=hosted` keeps the 20 sources [`LICENCES.md`](LICENCES.md) marks OFF out of the build), console + askd + `refresh.py` at oracle `07cd056` (FR-D17a/b/c). **Blocked on the founder:** keys, the Access app `Commodities` then the hostname (§15.12 steps 4–5), the invitee group, and a decision on the console's uncleared sources (yfinance, Polymarket, PortWatch tiles: LICENCES.md §D). Agents start at §15.0; status §15.12; change log and build record §15.14 |
-| 14  | Natural-gas intelligence loop: the God's Eye View look, regional supply cards with main contributors, live supply feeds into the Oil Oracle, scored learning | shell + layers + server + oracle (`feat/commodities-shell`; oracle twins FR-N14 to FR-N17) | **CLAIMED 2026-09-26** (session jgewi-14). PRD §16 from the founder's direction after seeing the hosted build: the keyless hosted globe landed on OSM street tiles (the "Google map" look); region cards show totals, not contributors; nothing from the globe feeds the model. **Decisions D14.1–D14.5 made 2026-09-26** (§16.4): the founder's Google key makes Photorealistic 3D the hosted default and USGS imagery is the keyless fallback; Databento first for NYMEX; the loop scores fundamentals nowcasts (B); pipeline EBBs probed first; Appalachia, Haynesville, Permian. In progress: M0 the look, then M1 contributors on Williston and the Gulf |
+| 14  | Natural-gas intelligence loop: the God's Eye View look, regional supply cards with main contributors, live supply feeds into the Oil Oracle, scored learning | shell + layers + server + oracle (`feat/commodities-shell`; oracle twins FR-N14 to FR-N17) | **CLAIMED 2026-09-26** (session jgewi-14). PRD §16 from the founder's direction after seeing the hosted build: the keyless hosted globe landed on OSM street tiles (the "Google map" look); region cards show totals, not contributors; nothing from the globe feeds the model. **Decisions D14.1–D14.5 made 2026-09-26** (§16.4): the founder's Google key makes Photorealistic 3D the hosted default and USGS imagery is the keyless fallback; Databento first for NYMEX; the loop scores fundamentals nowcasts (B); pipeline EBBs probed first; Appalachia, Haynesville, Permian. **M0 BUILT** (`61c680b`, `7311e39`: keyless hosted landing = USGS imagery, never OSM; Google terms notice; the founder's Map-Tiles-only key still to come). **Williston corrected** (`f0b6c5b`: NDIC's first 2026-07 workbook held July 2023; the card showed 2023 as 2026 from 09-21). **M1 BUILT** (`ead98bc` data, `df9c4eb` cards and Contributors drawer; both region QAs PASS, G14.2 exact). Next: deploy, then M5 (oracle FR-N14). Build record §16.10 |
 
 Definition of usable, pending founder confirmation of question 13: rows 1
 through 4. Rows 5 to 7 are context and content.
@@ -5033,6 +5033,12 @@ oracle ledger cite them.
 | 09-25 | globe | `9d00ed1` | M4 event contract frozen (§15.12) before the hub code | — |
 | 09-25 15:35 | oracle | `07cd056` on VPS | FR-D17c: `refresh.py` publish hook, askd `/relay/slack`, console reload yields to the hub | VPS files diffed clean against `07cd056~1` (backups `*.pre-fr-d17c`); relay 403 without the key; pages 200 |
 | 09-25 15:38 | globe | `05ebd94` | M4 hub: `/api/events`, publish listener :8021, probes, deadlines, paging; strip on the hub; layers refresh in place | 4,430 / 0 fail laptop and VPS; real browser through a tunnel: publish to page 285–668 ms; VPS console stop/start paged once each way |
+| 09-26 | globe | `fe479a0` | Row 14 claimed; founder decisions D14.1–D14.5 recorded (§16.4) | — |
+| 09-27 | globe | `61c680b` | Row 14 M0: USGS Imagery stack, hosted keyless landing (never OSM), blank-tile discard policy, voice enum and both schema pins moved, `LICENCES.md` and `DATA_SOURCES.md` rows | 4,454 / 0 fail; hosted build `usgs-imagery` (179 USGS tiles, 0 OSM); laptop dev `esri-imagery` |
+| 09-27 | globe | `7311e39` | Row 14 M0 (R14.2): Google Maps terms and privacy notice in the attribution lightbox; key scope recorded | 4,454 / 0 fail |
+| 09-27 | globe | `f0b6c5b` | Williston: `assertReportMonth` refuses a workbook of another month; rebuilt on NDIC's corrected July (19,663 producing, 3.43 Bcf/d, 1.01 MMbbl/d) | 4,460 / 0 fail; `--check` byte-identical |
+| 09-27 | globe | `ead98bc` | Row 14 M1 data: operator dimension, `contributors.json` and `aggregates.json` for Williston and the Gulf, alias table | 4,460 / 0 fail; `--check` byte-identical for every existing file; G14.2 exact |
+| 09-28 | globe | `df9c4eb` | Row 14 M1: region cards name the main contributors; Contributors drawer; Gulf region card; `qa-contributors.mjs` | 4,469 / 0 fail; qa-onshore-williston PASS, qa-gulf-platforms PASS |
 
 Ledger and doc commits in between (`292794a`, `cb46ff2`, `d62549f`,
 `db471c3`, `c61e5fe`, oracle `7575548`, `d085cf3`, `cfbea89`, `5414679`,
@@ -5449,14 +5455,73 @@ same day, before the questions were put.
 | Step | What | Who | Status |
 | --- | --- | --- | --- |
 | 0 | Decisions D14.1 to D14.5 (short grill) | founder + session | **done 2026-09-26** (16.4) |
-| 1 | M0 the look (plus the founder's Google key, §15.12 step 4) | session + founder | open |
-| 2 | M1 contributors on Williston and the Gulf | session (globe) | open |
+| 1 | M0 the look (plus the founder's Google key, §15.12 step 4) | session + founder | **BUILT 2026-09-27** (`61c680b`, `7311e39`); the key is the founder's (Map Tiles API only, referrer-restricted, via POWER UP) |
+| 2 | M1 contributors on Williston and the Gulf | session (globe) | **BUILT 2026-09-28** (`ead98bc`, `df9c4eb`); Williston rebuilt on NDIC's corrected July first (`f0b6c5b`) |
 | 3 | M5 supply into the store for those two regions | session (oracle FR-N14) | open |
 | 4 | M2 the US supply board | session (globe + oracle routes) | open |
 | 5 | M4 daily supply feed (after the D14.4 probe) | session (both, FR-N15) | open |
 | 6 | M6 licensed NYMEX (after D14.2) | founder + session (FR-N16) | open |
 | 7 | M7 learning loop (after D14.3) | session (oracle FR-N17, with the journal program) | open |
 | 8 | M3 region ladder, in the D14.5 order | session | open, continuous |
+
+### 16.10 Build record
+
+- **M0, the look (`61c680b`, `7311e39`; 2026-09-27).** A `usgs-imagery`
+  stack (`src/maps/imagery.js` `createUsgsImagery`: USGS The National Map
+  Imagery Only, level cap 16, credit "USDA, USGS The National Map:
+  Orthoimagery") is the keyless landing wherever the hosted profile
+  withholds keyless Esri (`keylessStackId()`); laptop development keeps
+  Esri; Google 3D stays the default whenever a key loads it; OSM is a stack
+  to pick. Probed before building: tiles carry `Access-Control-Allow-Origin:
+  *`; offshore past level 8 the service answers fully transparent tiles and
+  abroad past level 11 opaque white ones (and some 404s), so
+  `createBlankTileDiscardPolicy` drops a tile whose sixteen samples are all
+  transparent or all white and Cesium keeps the parent (the Gulf reads as
+  Blue Marble bathymetry, never white), and a quiet `errorEvent` listener
+  keeps the 404s out of the console with no stack fallback (a 404 must not
+  flip the stack). The id joined every stack list; the voice enum must equal
+  `MAP_STACKS` (a test), so the tool payload's two pins moved deliberately.
+  R14.2: the attribution lightbox carries Google's terms and privacy links;
+  the hosted key is to be scoped to the Map Tiles API only, which makes
+  Geocoding answer `REQUEST_DENIED` and search fall through to Photon and
+  Nominatim. Checked: hosted build `activeId` `usgs-imagery` (179 USGS tile
+  requests, 0 OSM) at the default camera, over Williston and over the Gulf;
+  laptop dev `esri-imagery`.
+- **Williston corrected (`f0b6c5b`; 2026-09-27).** M1's attribution showed
+  2,284 wells "not in the July file" against +1.14 Bcf/d from the rest: the
+  archived `2026_07.xlsx` held July 2023's filings (ReportDate 2023-07-01;
+  1,148 of 1,235 sampled wells identical to 2023-07). DMR had replaced it.
+  `scripts/onshore/nd.mjs` `assertReportMonth` now refuses such a file;
+  §14.13 carries the correction. All 1,024 history shards changed with it.
+- **M1, contributors (`ead98bc`, `df9c4eb`; 2026-09-27 and 28).**
+  `src/layers/production/contributors.js` folds per-facility monthly
+  volumes by the operator filed each month: every facility lands in exactly
+  one part of a change (continuing, new, stopped, not in the file, operator
+  change with the buyer credited and the seller debited), so the parts sum
+  by construction and `reconciles` checks it against the totals. Williston
+  folds the placed wells (the headline's set); the Gulf every Gulf structure
+  that filed, so its total equals the Gulf's filing. Operator spellings:
+  eight ND pairs merged in `scripts/operator-aliases.json` (each pair hands
+  over month to month; Devon's filed spelling changed with the corrected
+  July and would have shown as 1,910 transfers); BSEE keeps one spelling per
+  company number in the window; Oasis and Whiting, Grayson Mill and WPX stay
+  as filed (a purchase is a transfer, not a spelling). Files:
+  `contributors.json` (the layer's; 118 KB Williston, 45 KB Gulf) and
+  `aggregates.json` (the store's; operator × county or area × month over
+  the window; 860 KB and 526 KB). Numbers: Williston 2026-07 3.4297 Bcf/d =
+  headline; top five Continental 18.3 %, Burlington 12.2 %, Devon 11.8 %,
+  Hess 11.5 %, XTO 6.4 %, each equal to its wells exactly (G14.2); vs June
+  +27.5 MMcf/d = continuing −14.8 + new +67.5 (484 wells) + stopped −25.3
+  (439 wells); vs July 2025 +80.1 MMcf/d (Devon +406 through Grayson Mill
+  −318 and WPX −134). Gulf 2026-06 2.0305 Bcf/d = filed; Shell 32.9 %, BP
+  10.4 %, Chevron 8.9 %; vs May +72.8 MMcf/d led by Shell +139.6. UI: two
+  card lines (`contributorCardLines`), a Gulf region mark and card, the
+  Contributors drawer (stacked columns in the reference palette's dark slots
+  1 to 5, validated on the drawer surface; ranked table in MMcf/d; both
+  ledgers; names as filed; sources). QA: `scripts/qa-contributors.mjs` from
+  both region QAs, both PASS on a fresh dev server. Measured noise: the
+  Williston layer's local-tier frame cost read 19.6, 4.9 and 11.5 ms on three
+  runs of the same tree (base scene 30 to 41 ms on this iGPU).
 
 **Resume prompt (any step):**
 
