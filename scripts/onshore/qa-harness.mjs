@@ -19,6 +19,8 @@
  *      selects that well and opens its dossier; the history shard arrives and
  *      the chart carries one point per filed month.
  *   6. No uncaught page errors. Screenshots at the three tiers.
+ *   7. Row 14 M1 (scripts/qa-contributors.mjs): the region card's main
+ *      contributors reconcile (G14.2) and the region mark opens their drawer.
  *
  *   npx vite --port 4174 --strictPort --host 127.0.0.1
  *   node scripts/qa-onshore-williston.mjs --url http://127.0.0.1:4174
@@ -29,6 +31,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import puppeteer from 'puppeteer';
 import { shardFor } from '../../src/layers/onshore/shards.js';
+import { checkContributors } from '../qa-contributors.mjs';
+import { loadOperatorAliases } from '../operator-aliases.mjs';
 
 const REPO_ROOT = path.join(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -437,6 +441,39 @@ export async function runOnshoreQa({
     await page.screenshot({
       path: path.join(shotsDir, `onshore-${regionId}-global.png`),
     });
+
+    /** Row 14 M1: the region card's main contributors and their drawer. */
+    const contributorsFile = path.join(
+      REPO_ROOT,
+      bundleDir,
+      'contributors.json',
+    );
+    if (fs.existsSync(contributorsFile)) {
+      await checkContributors(page, {
+        check,
+        report,
+        sleep,
+        screenOf,
+        shotsDir,
+        file: contributorsFile,
+        stats: globalStats,
+        expectedTotalMcfd: index.counts.gasMcfdTotal,
+        facilityTotals: (() => {
+          const aliases = loadOperatorAliases();
+          const totals = new Map();
+          for (const f of index.facilities) {
+            const gas = f.current?.[gasAt];
+            if (!(gas > 0)) continue;
+            const op = aliases[f.operator] ?? f.operator;
+            totals.set(op, (totals.get(op) ?? 0) + gas);
+          }
+          return totals;
+        })(),
+        drawerId: `contributors-dossier-${regionId}`,
+        markLonLat: [index.region.center.lon, index.region.center.lat],
+        shot: `onshore-${regionId}-contributors.png`,
+      });
+    }
 
     const heapAfter = await page.evaluate(() =>
       performance.memory ? performance.memory.usedJSHeapSize / 1048576 : null,

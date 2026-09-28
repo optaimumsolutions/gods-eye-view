@@ -10,6 +10,7 @@
  */
 
 import { YOY_CSS, yoyCss } from '../production/model.js';
+import { contributorCardLines } from '../production/contributorsView.js';
 import {
   facilityStamp,
   formatBbld,
@@ -238,12 +239,19 @@ export function createRegionOverlayEntry(
   weatherLine = null,
 ) {
   const c = snapshot.counts;
+  const contributorLines = contributorCardLines(snapshot.contributors);
   const details = [
     `${formatInt(c.producing)} wells producing · ${(c.gasMcfdTotal / 1e6).toFixed(2)} Bcf/d gas · ${(c.oilBbldTotal / 1e6).toFixed(2)} MMbbl/d oil`,
+    // Row 14 M1: who produces it, and who moved it since last month.
+    ...contributorLines,
     snapshot.asOf,
   ];
   if (weatherLine) details.push(weatherLine);
-  details.push('zoom in for fields, then wells');
+  details.push(
+    contributorLines.length
+      ? 'click the mark for contributors · zoom in for fields, then wells'
+      : 'zoom in for fields, then wells',
+  );
   return {
     ...baseEntry(
       `region:${snapshot.regionId}`,

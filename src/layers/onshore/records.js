@@ -21,6 +21,7 @@
 
 import { createObservation, formatAsOf } from '../commodities/observation.js';
 import { fillingMonthsLine } from '../production/completeness.js';
+import { normaliseContributors } from '../production/contributorsView.js';
 import {
   daysInMonth,
   formatBbld,
@@ -324,6 +325,12 @@ function normaliseReconciliation(raw) {
   });
 }
 
+/** A contributors file only counts when it describes the bundle's own current month. */
+function matchingContributors(raw, currentMonth) {
+  const contributors = normaliseContributors(raw);
+  return contributors?.currentMonth === currentMonth ? contributors : null;
+}
+
 /**
  * The whole bundled region: the month axis, the completeness verdict, the
  * reconciliation, the counts, the facilities ranked by current gas (quiet
@@ -332,7 +339,7 @@ function normaliseReconciliation(raw) {
  */
 export function normaliseOnshoreDataset(
   payload,
-  { clusters = null, fetchedAt = Date.now() } = {},
+  { clusters = null, contributors = null, fetchedAt = Date.now() } = {},
 ) {
   if (!payload || typeof payload !== 'object') return null;
   if (!Array.isArray(payload.months) || !Array.isArray(payload.facilities))
@@ -521,6 +528,8 @@ export function normaliseOnshoreDataset(
     anomalies: Object.freeze(
       Array.isArray(payload.anomalies) ? payload.anomalies.map(String) : [],
     ),
+    // Row 14: main contributors, when the file is present and describes this month.
+    contributors: matchingContributors(contributors, currentMonth),
     observation,
     asOf: onshoreAsOf(currentMonth, sourceName),
     fillingLine: fillingMonthsLine(completeness.table, currentMonth),

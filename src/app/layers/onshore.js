@@ -5,6 +5,7 @@ import {
   createOracleBasinWeatherSource,
   createShardStore,
 } from '../../layers/onshore/index.js';
+import { createContributorsDossier } from '../../layers/production/contributorsDossier.js';
 import { overlayHost } from './overlayHost.js';
 import {
   clearSelectedEntityContextForLayer,
@@ -48,6 +49,16 @@ export function createApplicationOnshore({ region, source, ...options } = {}) {
           onStep: (delta) => layer?.stepWell(delta),
         })
       : null;
+  // Row 14 M1: the region mark opens the main contributors.
+  const contributorsDossier =
+    typeof document !== 'undefined'
+      ? createContributorsDossier({
+          document,
+          regionId: region.id,
+          onClose: () => layer?.closeContributors(),
+          onZoom: () => layer?.zoomToRegion(),
+        })
+      : null;
   layer = createOnshoreLayer({
     region,
     source,
@@ -63,6 +74,7 @@ export function createApplicationOnshore({ region, source, ...options } = {}) {
       removeEntityContextsForLayer,
     },
     dossier,
+    contributorsDossier,
     // Row 13 M3: the region card's basin line from the Oil Oracle store
     basinWeather: createOracleBasinWeatherSource(),
     screenSpaceEventHandlerFactory: (canvas) =>

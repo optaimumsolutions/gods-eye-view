@@ -51,6 +51,7 @@ export {
 } from './bundledSource.js';
 export { buildOnshoreDossierModel, createOnshoreDossier } from './dossier.js';
 export * from './basinWeather.js';
+import { contributorStats } from '../production/contributorsView.js';
 
 /** The bundle never changes at runtime; the poll is the manager's formality. */
 const UPDATE_INTERVAL_MS = 6 * 60 * 60_000;
@@ -74,6 +75,7 @@ export function createOnshoreLayer({
   overlayHost,
   context,
   dossier = null,
+  contributorsDossier = null,
   basinWeather = null,
   screenSpaceEventHandlerFactory,
 } = {}) {
@@ -703,9 +705,32 @@ export function createOnshoreLayer({
     _historyState = 'idle';
   }
 
+  /** Row 14 M1: the region's Contributors drawer, from the region mark. */
+  function openContributors() {
+    const contributors = _snapshot?.contributors;
+    if (!contributors || !contributorsDossier?.show) return false;
+    clearSelection();
+    return contributorsDossier.show(contributors, {
+      regionName: _snapshot.region.name,
+      asOf: _snapshot.asOf,
+    });
+  }
+
+  function closeContributors() {
+    contributorsDossier?.hide?.();
+  }
+
+  function zoomToRegion() {
+    const center = _snapshot?.region?.center;
+    return center
+      ? flyTo(center.lon, center.lat, ONSHORE_ZOOM_OUT_HEIGHT_M)
+      : false;
+  }
+
   function selectById(id, { fly = 'auto' } = {}) {
     const row = _rowById.get(id);
     if (!row) return;
+    closeContributors();
     _selectedId = id;
     context.selectEntityContext(registerWellContext(row));
     openDossier(row);
@@ -760,8 +785,7 @@ export function createOnshoreLayer({
         return;
       }
       if (target?.kind === 'region') {
-        const center = _snapshot?.region?.center;
-        if (center) flyTo(center.lon, center.lat, ONSHORE_ZOOM_OUT_HEIGHT_M);
+        if (!openContributors()) zoomToRegion();
         return;
       }
       // A pick that belongs to a sibling layer is not empty space.
@@ -838,6 +862,7 @@ export function createOnshoreLayer({
       _request?.abort();
       _request = null;
       clearSelection({ publish: false });
+      closeContributors();
       _enabled = false;
       removeHandlers();
       removeCameraListeners();
@@ -902,6 +927,7 @@ export function createOnshoreLayer({
       removeCameraListeners();
       removeHorizonCulling();
       dossier?.destroy?.();
+      contributorsDossier?.destroy?.();
       overlayHost.clearSource(OVERLAY_SOURCE_ID);
       overlayHost.setVisible(OVERLAY_SOURCE_ID, false);
       context.removeEntityContextsForLayer(LAYER_ID);
@@ -948,6 +974,16 @@ export function createOnshoreLayer({
     clearWell() {
       clearSelection();
     },
+    /** Row 14 M1: the Contributors drawer and its zoom button. */
+    openContributors() {
+      return openContributors();
+    },
+    closeContributors() {
+      closeContributors();
+    },
+    zoomToRegion() {
+      return zoomToRegion();
+    },
 
     /** The panel row's colour legend: one swatch per change class with its count. */
     getRowControls() {
@@ -991,6 +1027,14 @@ export function createOnshoreLayer({
         hoverId: _hover ? `${_hover.kind}:${_hover.id}` : null,
         dossierOpen: Boolean(dossier?.isOpen?.()),
         historyState: _historyState,
+        contributors: contributorStats(
+          _snapshot?.contributors,
+          contributorsDossier,
+        ),
+        // The global-tier region card as published to the overlay (row 14 M1).
+        regionCard:
+          _entries.find((entry) => String(entry.id).startsWith('region:'))
+            ?.details ?? null,
       };
     },
   };

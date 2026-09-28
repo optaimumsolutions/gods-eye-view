@@ -10,10 +10,13 @@ import {
   GULF_OVERLAY_COHORT_LIMIT,
   GULF_OVERLAY_COLLISION_CAPACITY,
   GULF_OVERLAY_SOURCE_ID,
+  GULF_REGION_ANCHOR,
+  GULF_REGION_ID,
   GULF_TIER_GLOBAL,
   GULF_ZOOM_OUT_HEIGHT_M,
   buildHoverPlatformCard,
   buildSelectedPlatformCard,
+  createGulfRegionOverlayEntry,
   createPlatformOverlayEntry,
   detailTierForHeight,
   legendEntries,
@@ -22,6 +25,7 @@ import {
   selectPlatformOverlayCohort,
 } from './model.js';
 import { gulfMetaLine, mapAnalystRecord, platformStamp } from './records.js';
+import { contributorStats } from './contributorsView.js';
 export * from './model.js';
 export * from './records.js';
 export * from './completeness.js';
@@ -44,6 +48,7 @@ export function createGulfPlatformsLayer({
   overlayHost,
   context,
   dossier = null,
+  contributorsDossier = null,
   screenSpaceEventHandlerFactory,
 } = {}) {
   if (typeof source?.getSnapshot !== 'function')
@@ -83,6 +88,8 @@ export function createGulfPlatformsLayer({
   let _lastError = null;
   let _tier = GULF_TIER_GLOBAL;
   let _enabled = false;
+  /** Row 14 M1: the region's one mark at global depth, `{ marker, position, visible }`. */
+  let _regionPin = null;
   const _rowById = new Map();
   const _positionById = new Map();
   /** Pinned entity per structure id: `{ marker, visible }`. */
@@ -117,6 +124,10 @@ export function createGulfPlatformsLayer({
 
   function rebuildEntries() {
     const entries = [];
+    if (_tier === GULF_TIER_GLOBAL && _regionPin) {
+      const card = createGulfRegionOverlayEntry(_snapshot, _regionPin.position);
+      if (card) entries.push(card);
+    }
     for (const row of _rows) {
       const entry = createPlatformOverlayEntry(
         row,
@@ -156,6 +167,7 @@ export function createGulfPlatformsLayer({
     if (!force && tier === _tier) return;
     _tier = tier;
     applyTierToPins();
+    refreshHorizonCulling();
     rebuildEntries();
     publishOverlay();
   }
@@ -206,6 +218,15 @@ export function createGulfPlatformsLayer({
       if (pin.visible === visible) continue;
       pin.marker.point.show = visible;
       pin.visible = visible;
+    }
+    if (_regionPin) {
+      const visible =
+        _tier === GULF_TIER_GLOBAL &&
+        occluder.isPointVisible(_regionPin.position) === true;
+      if (_regionPin.visible !== visible) {
+        _regionPin.marker.point.show = visible;
+        _regionPin.visible = visible;
+      }
     }
   }
 
@@ -309,10 +330,30 @@ export function createGulfPlatformsLayer({
     dossier?.hide?.();
   }
 
+  /** Row 14 M1: the Gulf's Contributors drawer, from the region mark. */
+  function openContributors() {
+    const contributors = _snapshot?.contributors;
+    if (!contributors || !contributorsDossier?.show) return false;
+    clearSelection();
+    return contributorsDossier.show(contributors, {
+      regionName: 'Gulf of Mexico OCS',
+      asOf: _snapshot.asOf,
+    });
+  }
+
+  function closeContributors() {
+    contributorsDossier?.hide?.();
+  }
+
+  function zoomToRegion() {
+    return flyTo(GULF_REGION_ANCHOR, GULF_ZOOM_OUT_HEIGHT_M);
+  }
+
   function selectById(id, { fly = 'auto' } = {}) {
     const pin = _pinsById.get(id);
     const row = _rowById.get(id);
     if (!pin || !row) return;
+    closeContributors();
     _selectedId = id;
     if (_viewer) _viewer.selectedEntity = pin.marker;
     context.selectEntityContext(pin.marker);
@@ -364,6 +405,10 @@ export function createGulfPlatformsLayer({
         selectById(id);
         return;
       }
+      if (picked?.id?.__gulfRegionId) {
+        if (!openContributors()) zoomToRegion();
+        return;
+      }
       // A pick that belongs to a sibling layer is not empty space.
       if (picked) return;
       clearSelection();
@@ -408,6 +453,31 @@ export function createGulfPlatformsLayer({
       longitude: row.lon,
       properties: mapAnalystRecord(row),
     });
+  }
+
+  /** The region's one mark, created with the snapshot when it carries contributors. */
+  function createRegionPin(snapshot) {
+    if (_regionPin || !snapshot?.contributors || !_dataSource) return;
+    const position = Cesium.Cartesian3.fromDegrees(
+      GULF_REGION_ANCHOR.lon,
+      GULF_REGION_ANCHOR.lat,
+    );
+    const marker = new Cesium.Entity({
+      id: `gulf-region:${GULF_REGION_ID}`,
+      position,
+      point: {
+        pixelSize: 16,
+        color: Cesium.Color.fromCssColorString('#39d5ff').withAlpha(0.9),
+        outlineColor: Cesium.Color.BLACK.withAlpha(0.8),
+        outlineWidth: 2,
+        heightReference: Cesium.HeightReference.NONE,
+        disableDepthTestDistance: Number.POSITIVE_INFINITY,
+      },
+      properties: { gulfRegionId: GULF_REGION_ID, name: 'Gulf of Mexico OCS' },
+    });
+    marker.__gulfRegionId = GULF_REGION_ID;
+    _dataSource.entities.add(marker);
+    _regionPin = { marker, position, visible: true };
   }
 
   /** Create every structure's pinned point once from the snapshot. */
@@ -490,6 +560,7 @@ export function createGulfPlatformsLayer({
       _request?.abort();
       _request = null;
       clearSelection({ publish: false });
+      closeContributors();
       _enabled = false;
       removeHandlers();
       removeCameraListeners();
@@ -517,6 +588,7 @@ export function createGulfPlatformsLayer({
         if (!rows) throw new Error('Malformed Gulf platforms snapshot');
         _snapshot = snapshot;
         createPins(rows);
+        createRegionPin(snapshot);
         _rows = rows;
         _lastUpdate = Date.now();
         _lastError = null;
@@ -546,6 +618,7 @@ export function createGulfPlatformsLayer({
       removeCameraListeners();
       removeHorizonCulling();
       dossier?.destroy?.();
+      contributorsDossier?.destroy?.();
       overlayHost.clearSource(GULF_OVERLAY_SOURCE_ID);
       overlayHost.setVisible(GULF_OVERLAY_SOURCE_ID, false);
       context.removeEntityContextsForLayer(GULF_LAYER_ID);
@@ -560,6 +633,7 @@ export function createGulfPlatformsLayer({
       _rowById.clear();
       _positionById.clear();
       _pinsById.clear();
+      _regionPin = null;
       _lastUpdate = null;
       _lastError = null;
     },
@@ -581,6 +655,16 @@ export function createGulfPlatformsLayer({
     },
     clearPlatform() {
       clearSelection();
+    },
+    /** Row 14 M1: the Contributors drawer and its zoom button. */
+    openContributors() {
+      return openContributors();
+    },
+    closeContributors() {
+      closeContributors();
+    },
+    zoomToRegion() {
+      return zoomToRegion();
     },
 
     /** The panel row's colour legend: one swatch per change class with its count. */
@@ -621,6 +705,14 @@ export function createGulfPlatformsLayer({
         selectedId: _selectedId,
         hoverId: _hoverId,
         dossierOpen: Boolean(dossier?.isOpen?.()),
+        contributors: contributorStats(
+          _snapshot?.contributors,
+          contributorsDossier,
+        ),
+        // The global-tier region card as published to the overlay (row 14 M1).
+        regionCard:
+          _entries.find((entry) => String(entry.id).startsWith('region:'))
+            ?.details ?? null,
       };
     },
   };

@@ -19,6 +19,10 @@ const BUNDLES = Object.freeze({
       '../../data/local_data/onshore/williston/clusters.json',
       import.meta.url,
     ).href,
+    contributors: new URL(
+      '../../data/local_data/onshore/williston/contributors.json',
+      import.meta.url,
+    ).href,
   }),
 });
 
@@ -53,13 +57,24 @@ export function createBundledOnshoreSource({
     async getSnapshot({ signal } = {}) {
       if (_snapshot) return _snapshot;
       signal?.throwIfAborted();
-      const [index, clusters] = await Promise.all([
+      const [index, clusters, contributors] = await Promise.all([
         readJson(urls.index, signal, 'index'),
         readJson(urls.clusters, signal, 'clusters'),
+        // Row 14 contributors are optional: without them the card keeps
+        // its totals and the region mark flies in instead.
+        urls.contributors
+          ? readJson(urls.contributors, signal, 'contributors').catch(
+              (error) => {
+                if (signal?.aborted) throw error;
+                return null;
+              },
+            )
+          : null,
       ]);
       signal?.throwIfAborted();
       const snapshot = normaliseOnshoreDataset(index, {
         clusters,
+        contributors,
         fetchedAt: now(),
       });
       if (!snapshot) throw new Error('Malformed onshore dataset');

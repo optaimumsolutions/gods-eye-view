@@ -424,7 +424,7 @@ export function buildContributors({
   // The browser file: the chart window ending at the current month, every
   // operator with gas or oil in it, ranked by gas this month.
   const start = Math.max(0, currentIndex - chartMonths + 1);
-  const window = months.slice(start, currentIndex + 1);
+  const chartMonthsSlice = months.slice(start, currentIndex + 1);
   const sliceOf = (values) => values.slice(start, currentIndex + 1);
   const inWindow = [...ops.values()].filter((entry) =>
     sliceOf(entry.producing).some((count) => count > 0),
@@ -481,8 +481,11 @@ export function buildContributors({
       producing: `${facilityLabel}s producing`,
       attribution: 'Mcf per calendar day',
     },
-    months: window,
-    current: { month: months[currentIndex], index: window.length - 1 },
+    months: chartMonthsSlice,
+    current: {
+      month: months[currentIndex],
+      index: chartMonthsSlice.length - 1,
+    },
     total: {
       gas: sliceOf(total.gas),
       oil: sliceOf(total.oil),

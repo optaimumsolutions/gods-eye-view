@@ -3,6 +3,7 @@ import {
   createGulfDossier,
   createGulfPlatformsLayer,
 } from '../../layers/production/index.js';
+import { createContributorsDossier } from '../../layers/production/contributorsDossier.js';
 import { overlayHost } from './overlayHost.js';
 import {
   clearSelectedEntityContextForLayer,
@@ -29,6 +30,16 @@ export function createApplicationGulfPlatforms(options) {
           onStep: (delta) => layer?.stepPlatform(delta),
         })
       : null;
+  // Row 14 M1: the region mark opens the Gulf's main contributors.
+  const contributorsDossier =
+    typeof document !== 'undefined'
+      ? createContributorsDossier({
+          document,
+          regionId: 'gulf',
+          onClose: () => layer?.closeContributors(),
+          onZoom: () => layer?.zoomToRegion(),
+        })
+      : null;
   layer = createGulfPlatformsLayer({
     overlayHost,
     context: {
@@ -38,6 +49,7 @@ export function createApplicationGulfPlatforms(options) {
       removeEntityContextsForLayer,
     },
     dossier,
+    contributorsDossier,
     screenSpaceEventHandlerFactory: (canvas) =>
       new Cesium.ScreenSpaceEventHandler(canvas),
     ...options,

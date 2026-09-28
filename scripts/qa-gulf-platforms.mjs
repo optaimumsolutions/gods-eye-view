@@ -25,6 +25,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import puppeteer from 'puppeteer';
+import { checkContributors } from './qa-contributors.mjs';
 
 const REPO_ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SHOTS_DIR = process.env.QA_SHOTS_DIR || path.join(REPO_ROOT, 'qa-shots');
@@ -145,7 +146,7 @@ const readStats = async (page, label) => {
   return stats;
 };
 
-/** How many platform points are currently shown, from the layer's data source. */
+/** How many platform points are currently shown, from the layer's data source (not the region mark). */
 const shownPoints = (page) =>
   page.evaluate((layerId) => {
     const v = window.__godsEyeView.viewer;
@@ -155,7 +156,7 @@ const shownPoints = (page) =>
     let shown = 0;
     let total = 0;
     for (const e of ds.entities.values) {
-      if (!e.point) continue;
+      if (!e.point || e.__gulfRegionId) continue;
       total += 1;
       if (e.point.show?.getValue?.(now) !== false) shown += 1;
     }
@@ -298,6 +299,42 @@ try {
       overGulf?.total === expected.installed,
     overGulf,
   );
+
+  /** Row 14 M1: the Gulf's region card and its Contributors drawer. */
+  await checkContributors(page, {
+    check,
+    report,
+    sleep,
+    screenOf: (p, lon, lat) =>
+      p.evaluate(
+        (lon, lat) => {
+          const v = window.__godsEyeView.viewer;
+          const world = v.scene.globe.ellipsoid.cartographicToCartesian({
+            longitude: (lon * Math.PI) / 180,
+            latitude: (lat * Math.PI) / 180,
+            height: 0,
+          });
+          const c = v.scene.cartesianToCanvasCoordinates(world);
+          return c ? { x: c.x, y: c.y } : null;
+        },
+        lon,
+        lat,
+      ),
+    shotsDir: SHOTS_DIR,
+    file: path.join(
+      REPO_ROOT,
+      'src',
+      'data',
+      'local_data',
+      'bsee_gulf',
+      'contributors.json',
+    ),
+    stats: globalStats,
+    expectedTotalMcfd: bundle.counts.gasMcfdFiled,
+    drawerId: 'contributors-dossier-gulf',
+    markLonLat: [-90.4, 25.2],
+    shot: 'gulf-platforms-contributors.png',
+  });
 
   const heapAfter = await page.evaluate(() =>
     performance.memory ? performance.memory.usedJSHeapSize / 1048576 : null,

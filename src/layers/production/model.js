@@ -18,6 +18,7 @@ import {
   formatYoy,
   platformStamp,
 } from './records.js';
+import { contributorCardLines } from './contributorsView.js';
 
 export { GULF_LAYER_ID };
 export const GULF_OVERLAY_SOURCE_ID = 'production-gulf-platforms';
@@ -234,6 +235,46 @@ export function createPlatformOverlayEntry(row, position, tier) {
     ...base,
     variant: 'label',
     title: `${platformTitle(row)} · ${formatMcfd(row.current.gasMcfd)}`,
+  };
+}
+
+/**
+ * Row 14 M1: the Gulf's one region mark, south of the deep-water fields so it
+ * sits clear of the platforms, and the card it carries at global depth.
+ */
+export const GULF_REGION_ID = 'gulf';
+export const GULF_REGION_ANCHOR = Object.freeze({ lat: 25.2, lon: -90.4 });
+
+/**
+ * Global tier: the region card — the Gulf's whole filing (every structure,
+ * on the map or not), who produces it and who moved it since last month.
+ * Null without a contributors file.
+ */
+export function createGulfRegionOverlayEntry(snapshot, position) {
+  const c = snapshot?.contributors;
+  if (!c || !position) return null;
+  return {
+    id: `region:${GULF_REGION_ID}`,
+    position,
+    accent: YOY_CSS.flat,
+    priority: Number.MAX_SAFE_INTEGER - 2,
+    collisionGroup: 'ambient-label',
+    paintLane: 'ambient-label',
+    interactive: false,
+    edgeFade: 'keyhole',
+    horizonCull: true,
+    terrainOcclusion: false,
+    gapPx: 14,
+    verticalOnly: true,
+    placement: 'above',
+    variant: 'card',
+    title: 'GULF OF MEXICO OCS',
+    details: [
+      `${formatInt(c.producing)} structures with production · ${(c.totalMcfd / 1e6).toFixed(2)} Bcf/d gas · ${(c.totalOilBbld / 1e6).toFixed(2)} MMbbl/d oil`,
+      ...contributorCardLines(c),
+      snapshot.asOf,
+      'every Gulf filing · click the mark for contributors · zoom in for platforms',
+    ].map(clampLine),
   };
 }
 

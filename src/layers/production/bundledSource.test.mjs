@@ -116,8 +116,11 @@ test('the source reads once, caches, and refuses a malformed bundle', async () =
   });
   const first = await source.getSnapshot();
   const second = await source.getSnapshot();
-  assert.equal(calls, 1);
+  // The platforms and, since row 14, the contributors file beside them.
+  assert.equal(calls, 2);
   assert.equal(first, second);
+  assert.equal(first.contributors.currentMonth, first.currentMonth);
+  assert.ok(first.contributors.operators.length > 10);
   assert.equal(first.counts.producing, payload.counts.producingCurrent);
   assert.equal(first.rows[0].rank, 1);
   assert.ok(first.rows[0].current.gasMcfd >= first.rows[1].current.gasMcfd);
@@ -135,6 +138,17 @@ test('the source reads once, caches, and refuses a malformed bundle', async () =
     fetchImpl: async () => ({ ok: false, status: 404 }),
   });
   await assert.rejects(() => http.getSnapshot(), /HTTP 404/);
+
+  // A missing contributors file costs the region card, never the platforms.
+  const noContributors = createBundledGulfSource({
+    fetchImpl: (url) =>
+      String(url).includes('contributors')
+        ? Promise.resolve({ ok: false, status: 404 })
+        : diskFetch(url),
+  });
+  const bare = await noContributors.getSnapshot();
+  assert.equal(bare.contributors, null);
+  assert.ok(bare.rows.length > 1000);
 });
 
 test('an abort propagates rather than being swallowed', async () => {
