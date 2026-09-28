@@ -702,7 +702,7 @@ async function main() {
     region: { id: `onshore-${region.id}`, name: region.name },
     source: {
       name: sources.map((s) => s.name).join('; '),
-      grain: 'well',
+      grain: region.facility?.one ?? 'well',
       license: sources.map((s) => s.license).join('; '),
     },
     retrieved,

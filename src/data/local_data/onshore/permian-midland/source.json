@@ -29,18 +29,18 @@
       "format": "JSON",
       "operators": 433,
       "window_months": 24,
-      "sha256": "67f65f95c3d2309af9103b76bb5b65a234d98232eadabe29554f02d61a16e8be",
-      "bytes": 309371,
-      "gzip_bytes": 69615
+      "sha256": "6de5299a6be57709326c346603238076df58a9cc010928ae7a837a1aa08c31ad",
+      "bytes": 309372,
+      "gzip_bytes": 69611
     },
     {
       "path": "aggregates.json",
       "format": "JSON",
       "operators": 835,
       "rows": 91916,
-      "sha256": "f015c4210af5989c3257c22ce5e8dcce716a7ebe39b8b0cb6fb5082758f733ee",
-      "bytes": 2042472,
-      "gzip_bytes": 713488
+      "sha256": "a555f0fadb97c13e747e133d03f3617cb18b30fe979bc0cea2945d06060dc1c5",
+      "bytes": 2042473,
+      "gzip_bytes": 713486
     }
   ],
   "shards": {
