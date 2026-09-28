@@ -4,9 +4,9 @@ import { readFileSync } from 'node:fs';
 import {
   balanceLine,
   createSupplyBoardOverlayEntry,
-  feedgasLine,
+  feedgasLines,
   normaliseBoard,
-  pipeSupplyLine,
+  pipeSupplyLines,
   foldRegionGroups,
   regionsLine,
   regionsLines,
@@ -99,6 +99,12 @@ const BOARD = {
       bcfd: 0.21,
       chg7Bcfd: -0.0,
     },
+    {
+      id: 'NG_FLOW_FREEPORT_FEEDGAS_GS',
+      gasDay: '2026-09-27',
+      bcfd: 1.41,
+      chg7Bcfd: 0.0,
+    },
   ],
 };
 
@@ -133,15 +139,15 @@ test('the store lines: balance and storage, each with its month or week', () => 
 
 test('the flow lines: LNG feedgas and supply on the pipes, each with its gas day', () => {
   const board = normaliseBoard(BOARD, { now: NOW });
-  assert.equal(
-    feedgasLine(board),
-    'LNG feedgas (scheduled, gas day 09-27): Sabine 1.44 · Corpus 2.43 · Golden Pass 0.75 · Cameron 1.38 Bcf/d',
-  );
-  // The LEG receipt stays off the pipes line (it would not fit LINE_MAX).
-  assert.equal(
-    pipeSupplyLine(board),
-    'Pipes (scheduled, gas day 09-27): Haynesville on Gulf Run 2.69 · Appalachia on Rover 3.59 Bcf/d',
-  );
+  // Past LINE_MAX a group wraps onto a continuation line, never mid-part.
+  assert.deepEqual(feedgasLines(board), [
+    'LNG feedgas (scheduled, gas day 09-27): Sabine 1.44 · Corpus 2.43 · Golden Pass 0.75 · Cameron 1.38 ·',
+    'Freeport 1.41 Bcf/d',
+  ]);
+  assert.deepEqual(pipeSupplyLines(board), [
+    'Pipes (scheduled, gas day 09-27): Haynesville on Gulf Run 2.69 · Appalachia on Rover 3.59 ·',
+    'LEG on Cameron 0.21 Bcf/d',
+  ]);
   for (const line of supplyBoardLines({ board })) {
     assert.ok(!line.endsWith('…'), `clamped: ${line}`);
   }
@@ -149,7 +155,7 @@ test('the flow lines: LNG feedgas and supply on the pipes, each with its gas day
   const stale = normaliseBoard(BOARD, {
     now: Date.parse('2026-10-05T00:00:00Z'),
   });
-  assert.equal(feedgasLine(stale), null);
+  assert.deepEqual(feedgasLines(stale), []);
 });
 
 test('a stale or empty store drops its lines instead of showing them as current', () => {
@@ -228,18 +234,20 @@ test('layers of one region fold into one item at the month all have filed', () =
 test('the card: store lines first, then the regions, the coverage and the stamp', () => {
   const board = normaliseBoard(BOARD, { now: NOW });
   const lines = supplyBoardLines({ regions, board });
-  assert.equal(lines.length, 7);
+  assert.equal(lines.length, 9);
   assert.match(lines[0], /^Dry production/);
   assert.match(lines[1], /^Storage/);
   assert.match(lines[2], /^LNG feedgas/);
-  assert.match(lines[3], /^Pipes/);
-  assert.match(lines[4], /^Filed: /);
+  assert.match(lines[3], /^Freeport /);
+  assert.match(lines[4], /^Pipes/);
+  assert.match(lines[5], /^LEG on Cameron /);
+  assert.match(lines[6], /^Filed: /);
   assert.equal(
-    lines[5],
+    lines[7],
     '2 of 12 regions built on filings; the rest are inside the EIA total',
   );
   assert.match(
-    lines[6],
+    lines[8],
     /pipeline postings\) · state and BSEE filings · descriptive only$/,
   );
   assert.ok(lines.every((line) => line.length <= 110));

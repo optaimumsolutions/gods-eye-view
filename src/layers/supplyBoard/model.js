@@ -31,18 +31,20 @@ export const FLOW_SHORT = Object.freeze({
   NG_FLOW_HAYNESVILLE_GULF_RUN_REC: 'Haynesville on Gulf Run',
   NG_FLOW_APPALACHIA_ROVER_REC: 'Appalachia on Rover',
   NG_FLOW_CAMERON_FEEDGAS_CIP: 'Cameron',
+  NG_FLOW_FREEPORT_FEEDGAS_GS: 'Freeport',
+  NG_FLOW_HAYNESVILLE_LEG_CIP_REC: 'LEG on Cameron',
 });
 const FEEDGAS = [
   'NG_FLOW_SABINE_FEEDGAS_CREOLE',
   'NG_FLOW_CORPUS_FEEDGAS_CCPL',
   'NG_FLOW_GOLDEN_PASS_GULF_RUN',
   'NG_FLOW_CAMERON_FEEDGAS_CIP',
+  'NG_FLOW_FREEPORT_FEEDGAS_GS',
 ];
-// The LEG receipt on Cameron Interstate (NG_FLOW_HAYNESVILLE_LEG_CIP_REC) stays
-// in the store and gas_state: no readable name fits it on this line in LINE_MAX.
 const SUPPLY_FLOWS = [
   'NG_FLOW_HAYNESVILLE_GULF_RUN_REC',
   'NG_FLOW_APPALACHIA_ROVER_REC',
+  'NG_FLOW_HAYNESVILLE_LEG_CIP_REC',
 ];
 /** The onshore and offshore regions the plan names (§14.5 eleven + the Gulf). */
 export const SUPPLY_REGIONS_PLANNED = 12;
@@ -153,26 +155,46 @@ export function storageLine(board) {
   ]);
 }
 
-function flowsLine(board, ids, lead) {
+/**
+ * `head part · part · … part Bcf/d`, wrapped onto continuation lines so no
+ * line passes LINE_MAX (a part never splits; the first always joins `head`).
+ */
+function wrapParts(head, parts) {
+  const lines = [];
+  let line = head;
+  parts.forEach((part, i) => {
+    const tail = i === parts.length - 1 ? ' Bcf/d' : ' ·';
+    const next = `${line} ${part}${tail}`;
+    if (next.length > LINE_MAX && line !== head) {
+      lines.push(line);
+      line = `${part}${tail}`;
+    } else line = next;
+  });
+  lines.push(line);
+  return lines;
+}
+
+function flowsLines(board, ids, lead) {
   const rows = ids.map((id) => board?.flows?.get(id)).filter(Boolean);
-  if (!rows.length) return null;
+  if (!rows.length) return [];
   const day = rows
     .map((r) => r.gasDay)
     .sort()
     .at(-1);
-  return `${lead} (scheduled, gas day ${day.slice(5)}): ${rows
-    .map((r) => `${FLOW_SHORT[r.id] ?? r.id} ${r.bcfd.toFixed(2)}`)
-    .join(' · ')} Bcf/d`;
+  return wrapParts(
+    `${lead} (scheduled, gas day ${day.slice(5)}):`,
+    rows.map((r) => `${FLOW_SHORT[r.id] ?? r.id} ${r.bcfd.toFixed(2)}`),
+  );
 }
 
-/** `LNG feedgas (scheduled, gas day 09-27): Sabine 1.44 · Corpus 2.43 · Golden Pass 0.75 Bcf/d`. */
-export function feedgasLine(board) {
-  return flowsLine(board, FEEDGAS, 'LNG feedgas');
+/** `LNG feedgas (scheduled, gas day 09-27): Sabine 1.44 · Corpus 2.43 · …`, wrapped. */
+export function feedgasLines(board) {
+  return flowsLines(board, FEEDGAS, 'LNG feedgas');
 }
 
 /** `Pipes (scheduled, gas day 09-27): Haynesville on Gulf Run 2.69 · Appalachia on Rover 3.59 Bcf/d`. */
-export function pipeSupplyLine(board) {
-  return flowsLine(board, SUPPLY_FLOWS, 'Pipes');
+export function pipeSupplyLines(board) {
+  return flowsLines(board, SUPPLY_FLOWS, 'Pipes');
 }
 
 /**
@@ -247,18 +269,7 @@ export function regionsLine(regions) {
 export function regionsLines(regions) {
   const parts = regionParts(regions);
   if (!parts.length) return [];
-  const lines = [];
-  let line = 'Filed:';
-  parts.forEach((part, i) => {
-    const tail = i === parts.length - 1 ? ' Bcf/d' : ' ·';
-    const next = `${line} ${part}${tail}`;
-    if (next.length > LINE_MAX && line !== 'Filed:') {
-      lines.push(line);
-      line = `${part}${tail}`;
-    } else line = next;
-  });
-  lines.push(line);
-  return lines;
+  return wrapParts('Filed:', parts);
 }
 
 /** The card's lines, store lines first when the store answered. */
@@ -271,8 +282,8 @@ export function supplyBoardLines({
   return [
     balanceLine(board),
     storageLine(board),
-    feedgasLine(board),
-    pipeSupplyLine(board),
+    ...feedgasLines(board),
+    ...pipeSupplyLines(board),
     ...regionsLines(regions),
     joinParts([
       `${built} of ${SUPPLY_REGIONS_PLANNED} regions built on filings; the rest are inside the EIA total`,

@@ -35,7 +35,7 @@ owns layers. Re-check `git status` before every edit to a shared file.
 | 11  | Gas production facilities: Gulf platforms (BSEE) first | layers + content (shell worktree, `feat/commodities-shell`) | **BUILT (first slice) 2026-09-21** — PRD §13 from the founder's pivot and grill; on `feat/commodities-shell` (founder's instruction: every update on the shell branch, no row worktree), token `2`. Milestone 1 `c6c92b2`: `scripts/build-gulf-platforms.mjs` + `src/data/local_data/bsee_gulf/` (1,315 installed structures, 120-month series, 608 KB gzip), the completeness rule and the one record shape. Milestone 2 `1e685f0`: marks sized by gas share and coloured by change against last year, three tiers, hover and selected cards, the panel line, `scripts/qa-gulf-platforms.mjs`. Milestone 3 `af342d1`: the dossier (ten-year chart, this-month ledger, identity, lifetime, sources) and the drawer chrome shared with the datacenters; QA 20 checks green (layer activation 755 ms apart from the bundle fetch, heap +50 MiB). Milestone 4 is the commit carrying this line. Four gates green at every commit. Next: milestone 5 (EIA regional backdrop, short grill first) |
 | 12  | Onshore production facilities: wells, leases and rigs, region by region | layers + content (shell worktree, `feat/commodities-shell`) | **BUILT (milestones 0 and 1, Williston) 2026-09-21** — PRD §14 from the founder's direction the same day; five live sweeps probed some twenty regulators (§14.4); eleven regions ranked (§14.5). The founder's "build out the basins one at a time" started the ladder in the §14.5 order with O1 taken as recommended (option a: index and clusters committed, history shards built from the archive, not committed). Milestone 1a `c4ec135`: `scripts/build-onshore.mjs` + `scripts/onshore/{nd,eia,regions}.mjs`, `src/layers/onshore/{records,shards,bundledSource}.js`, `src/data/local_data/onshore/williston/` (24,154 North Dakota wells over 120 months, 17,915 producing in 2026-07 at 3.30 Bcf/d and 1.17 MMbbl/d; 518 fields; index 2.5 MB gzip; `--check` byte-identical; 94 % of EIA gross withdrawals, 100 % of marketed). Milestones 1b and 1c `f66463a`: `production-williston` (token `4`) — region card at global, 518 field marks at regional, 24,154 well points (`PointPrimitiveCollection`, clipped to the view) at local, hover and selected cards, the dossier with the ten-year chart from an on-demand shard, `scripts/qa-onshore-williston.mjs` on the shared harness (32 checks: activation 659 ms apart from the 16 MB fetch, heap +35 MiB, layer frame cost 1.8 ms). `836c325` fixes the second enable of the rows 4 and 11 layers (found by this QA). Build notes §14.13. Next: region 2, Appalachia (PA unconventional) |
 | 13  | Hosted site: globe + console behind one login at `commodities.optaimum.com` | ops + shell + server (`feat/commodities-shell`; oracle twin FR-D17) | **M1 BUILT except the browser check; M2 stamping + licence pass BUILT; M3 BUILT (check met); M4 BUILT + deployed (VPS checks met) — 2026-09-25.** Live on the VPS: globe `05ebd94` (`globe.service` :8020, fail-closed 403 on every request and upgrade until Access exists; M4 hub with publish listener :8021; `GEV_LICENCE_PROFILE=hosted` keeps the 20 sources [`LICENCES.md`](LICENCES.md) marks OFF out of the build), console + askd + `refresh.py` at oracle `07cd056` (FR-D17a/b/c). **Founder steps, 2026-09-28:** hosted Google keys, a $25/month budget alert and daily API caps made; the Access app `Commodities` created FIRST, then the route `commodities.optaimum.com` → `localhost:8020` on tunnel `oracle`; anonymous `/`, `/market`, `/api/health` answer 302 to the Access login. R13.7 amended: the hosted browser key is API-limited, not referrer-locked (§15.7). §D decided: hide the uncleared console panels for everyone but the founder (oracle FR-D17 change, not built); invitee group deferred. **Open:** the founder runs `scripts/hosting/push-hosted-env.sh` (keys, team, AUD, caps into `globe.env`, then a gated deploy), then the M1 browser check; Cesium ion and OpenAI keys optional. Agents start at §15.0; status §15.12; change log and build record §15.14 |
-| 14  | Natural-gas intelligence loop: the God's Eye View look, regional supply cards with main contributors, live supply feeds into the Oil Oracle, scored learning | shell + layers + server + oracle (`feat/commodities-shell`; oracle twins FR-N14 to FR-N17) | **CLAIMED 2026-09-26** (session jgewi-b9). PRD §16 from the founder's direction after seeing the hosted build: the keyless hosted globe landed on OSM street tiles (the "Google map" look); region cards show totals, not contributors; nothing from the globe feeds the model. **Decisions D14.1–D14.5 made 2026-09-26** (§16.4): the founder's Google key makes Photorealistic 3D the hosted default and USGS imagery is the keyless fallback; Databento first for NYMEX; the loop scores fundamentals nowcasts (B); pipeline EBBs probed first; Appalachia, Haynesville, Permian. **M0 BUILT** (`61c680b`, `7311e39`: keyless hosted landing = USGS imagery, never OSM; Google terms notice; the founder's Map-Tiles-only key still to come). **Williston corrected** (`f0b6c5b`: NDIC's first 2026-07 workbook held July 2023; the card showed 2023 as 2026 from 09-21). **M1 BUILT** (`ead98bc` data, `df9c4eb` cards and Contributors drawer; both region QAs PASS, G14.2 exact). **Deployed** 2026-09-28 12:42Z (globe `2dead84` LIVE; VPS gates 4,469 / 0 fail; corrected Williston shards streamed, md5 equal). **M5 BUILT + deployed** (oracle `f3f35d4`, FR-N14: `regional_production`, `NG_PROD_<REGION>` covariates, `gas_state` supply block; the store equals the card); its journal section and refresh tier wait for the FR-J owner. **M2 BUILT + deployed** (oracle `608354b` route `supply-board`; globe `175227f` layer `gas-supply-us`). **M3 region 2 BUILT + deployed** (`bca6ef7`: Appalachia, PA unconventional, 21.04 Bcf/d; well layer withheld on the hosted site until PA DEP confirms coordinates). **M4 BUILT + deployed** (oracle `d3aa844` FR-N15: five pipelines, five signals, 45 days back; globe `7b38084` board lines; **Cameron Interstate added 2026-09-28 17:21Z**, oracle `ab24847`: Cameron LNG feedgas + the LEG receipt, board line in `d68bde1`); its check needs seven daily runs (cron 15:20Z). Globe LIVE `38fb8f6` (17:41Z). **Permian (Texas) BUILT + deployed 2026-09-28** (session jgewi-98; globe `6d0f45f` + `38fb8f6`, LIVE 17:41Z; oracle `cc6d440`): RRC's PDQ dump by lease in three layers by county (Delaware 7.51 Bcf/d JUL, Midland 10.59 JUN, Central Platform & Shelves 1.37 JUN; one layer broke G3/G4, founder's split), hosted ON by founder override; the board folds them ("Permian TX 19.33, JUN"); store `NG_PROD_PERMIAN_*` + `NG_PROD_PERMIAN_TX`. Haynesville waits (no SONRIS subscription). **Hand-off 2026-09-28 15:45Z:** the next session starts from the resume prompt at the end of §16.10 (updated 18:10Z: the `gas_state` tool description is fixed, oracle `a58ad55` with the founder's OK, and the supply eval re-run scored PASS 3/3 as scored, 2/3 adjudicated: s02 inverts the comparison, now recalibrated; Cameron Interstate is live. Next: the `golden_tools` result, the s02 slip as an FR-S2 anchor, Boardwalk, OH/WV, the M4 seven-run check from 10-04, and the hosted M1 check once the founder runs `push-hosted-env.sh`); M6 and M7 wait on the founder and the FR-J owner. Build record §16.10 |
+| 14  | Natural-gas intelligence loop: the God's Eye View look, regional supply cards with main contributors, live supply feeds into the Oil Oracle, scored learning | shell + layers + server + oracle (`feat/commodities-shell`; oracle twins FR-N14 to FR-N17) | **CLAIMED 2026-09-26** (session jgewi-b9). PRD §16 from the founder's direction after seeing the hosted build: the keyless hosted globe landed on OSM street tiles (the "Google map" look); region cards show totals, not contributors; nothing from the globe feeds the model. **Decisions D14.1–D14.5 made 2026-09-26** (§16.4): the founder's Google key makes Photorealistic 3D the hosted default and USGS imagery is the keyless fallback; Databento first for NYMEX; the loop scores fundamentals nowcasts (B); pipeline EBBs probed first; Appalachia, Haynesville, Permian. **M0 BUILT** (`61c680b`, `7311e39`: keyless hosted landing = USGS imagery, never OSM; Google terms notice; the founder's Map-Tiles-only key still to come). **Williston corrected** (`f0b6c5b`: NDIC's first 2026-07 workbook held July 2023; the card showed 2023 as 2026 from 09-21). **M1 BUILT** (`ead98bc` data, `df9c4eb` cards and Contributors drawer; both region QAs PASS, G14.2 exact). **Deployed** 2026-09-28 12:42Z (globe `2dead84` LIVE; VPS gates 4,469 / 0 fail; corrected Williston shards streamed, md5 equal). **M5 BUILT + deployed** (oracle `f3f35d4`, FR-N14: `regional_production`, `NG_PROD_<REGION>` covariates, `gas_state` supply block; the store equals the card); its journal section and refresh tier wait for the FR-J owner. **M2 BUILT + deployed** (oracle `608354b` route `supply-board`; globe `175227f` layer `gas-supply-us`). **M3 region 2 BUILT + deployed** (`bca6ef7`: Appalachia, PA unconventional, 21.04 Bcf/d; well layer withheld on the hosted site until PA DEP confirms coordinates). **M4 BUILT + deployed** (oracle `d3aa844` FR-N15: five pipelines, five signals, 45 days back; globe `7b38084` board lines; **Cameron Interstate added 2026-09-28 17:21Z**, oracle `ab24847`: Cameron LNG feedgas + the LEG receipt, board line in `d68bde1`; **Boardwalk Gulf South added 19:23Z**, oracle `8e29338`: Freeport LNG feedgas); its check needs seven daily runs (cron 15:20Z). Globe LIVE `6434609` (19:14Z, session jgewi-d3's deploy with the founder's hosted keys). **Permian (Texas) BUILT + deployed 2026-09-28** (session jgewi-98; globe `6d0f45f` + `38fb8f6`, LIVE 17:41Z; oracle `cc6d440`): RRC's PDQ dump by lease in three layers by county (Delaware 7.51 Bcf/d JUL, Midland 10.59 JUN, Central Platform & Shelves 1.37 JUN; one layer broke G3/G4, founder's split), hosted ON by founder override; the board folds them ("Permian TX 19.33, JUN"); store `NG_PROD_PERMIAN_*` + `NG_PROD_PERMIAN_TX`. Haynesville waits (no SONRIS subscription). **Hand-off 2026-09-28 15:45Z:** the next session starts from the resume prompt at the end of §16.10 (updated 19:35Z: the `gas_state` tool description is fixed, oracle `a58ad55` with the founder's OK; the supply eval re-run scored PASS 3/3 as scored, 2/3 adjudicated (s02 inverts the comparison, now recalibrated); `golden_tools` is unchanged against its baseline, so no regression; Cameron Interstate and Gulf South are live; the founder's hosted keys are in. Next: the s02 slip as an FR-S2 anchor (founder), the hosted M1 check with the founder signed in, Texas Gas (a decision), OH/WV, the M4 seven-run check from 10-04); M6 and M7 wait on the founder and the FR-J owner. Build record §16.10 |
 | 15  | `commodity-flares`: nightly gas-flare heat (VIIRS) matched to wells, calibrated against state flaring | layers + server (`feat/commodities-shell`) | **CLAIMED 2026-09-28** (session a7c9a802). PRD §17 from the founder's "see if wells are producing using the satellite API day to day" and grill F1 to F3 (FIRMS keyless now, `FIRMS_MAP_KEY` only for the backfill; layer + dossier first, oracle feed M7; Williston then Permian). Token `0` (the last free token). **M0 BUILT** (probe + pure module, 17.12). Next: M1 Williston site gazetteer |
 
 Definition of usable, pending founder confirmation of question 13: rows 1
@@ -5077,6 +5077,9 @@ oracle ledger cite them.
 | 09-28 17:25 | oracle + VPS | `cc6d440` | FR-N14 loads the three Permian regions + `NG_PROD_PERMIAN_TX`; VPS file diffed equal to git first, backup `*.pre-permian`; `ng_regional.py` run | 416,351 rows; PERMIAN_TX 2026-06 19,328.686 MMcf/d = the board |
 | 09-28 17:41 | globe + VPS | `38fb8f6` LIVE (deploy-11, carries `d68bde1`) | Permian files name their grain "lease"; `ng_regional.py` re-run | `gas_state`: "11,098 leases" (was "wells") |
 | 09-28 18:00 | VPS + oracle | oracle `998b4f1`; globe this commit | Supply eval re-run on the fixed description: PASS 3/3 as scored, 0 fabricated, every question called `gas_state`; adjudicated 2/3 (s02 inverted the comparison, as in the first run); s02 recalibrated in-file and the VPS copy replaced (backup `*.pre-s02cal`); `golden_tools` regression launched 18:00:29Z | `...-qwen3_14b-2.json` in git; rescored offline: both recorded s02 answers FAIL, three correct phrasings PASS; VPS `--dry-run` OK |
+| 09-28 19:09 | VPS + oracle | oracle `01694d8` | `golden_tools` regression on the new description: FAIL 3/5 as scored, 0 fabricated, identical to the 09-15 baseline per question (effective 4/5): no regression | result JSON in git; tools called unchanged |
+| 09-28 19:14 | VPS | globe `6434609` LIVE (session jgewi-d3) | The founder's `push-hosted-env.sh`: `globe.env` has the Google keys, the Access team + AUD and the rate-limit lines; gated deploy of `6434609`. `ng_regional.py` re-run 19:15Z (b9) | 302 to Access anonymous; 416,351 rows, PERMIAN_TX 19,328.686 MMcf/d = the board |
+| 09-28 19:23 | VPS + oracle + globe | oracle `d680ad6` `8e29338` `6962971`; globe this commit | FR-N15 Boardwalk, Gulf South: public infopost API, Freeport LNG feedgas; files diffed equal to git first, backups `*.pre-fr-n15c`, 45 gas days backfilled, askd + console restarted. Globe: flow lines wrap; Freeport and the LEG receipt on the board (not deployed yet); `LICENCES.md` Boardwalk row says built | 34,604 rows, 45 of 45 days; `flows` and `supply-board` serve eight signals; supplyBoard tests 8/8 |
 
 Ledger and doc commits in between (`292794a`, `cb46ff2`, `d62549f`,
 `db471c3`, `c61e5fe`, oracle `7575548`, `d085cf3`, `cfbea89`, `5414679`,
@@ -5497,7 +5500,7 @@ same day, before the questions were put.
 | 2 | M1 contributors on Williston and the Gulf | session (globe) | **BUILT 2026-09-28** (`ead98bc`, `df9c4eb`); Williston rebuilt on NDIC's corrected July first (`f0b6c5b`) |
 | 3 | M5 supply into the store for those two regions | session (oracle FR-N14) | **BUILT + deployed 2026-09-28** (oracle `f3f35d4`; store = card). Open: journal section 3 and a refresh tier (FR-J owner's OK; `ng_regional.py` by hand after each globe deploy until then), golden supply items (`eval/golden_natgas_supply.yaml`, `cc73f18`; first scored run 2026-09-28 FAIL 1/3, oracle `26e8eb7`: `gas_state` skipped, its tool description named no supply block; description fixed in oracle `a58ad55` (17:04Z); **re-run 18:00Z: PASS 3/3 as scored, 0 fabricated, adjudicated 2/3** (oracle `998b4f1`: s02 names Williston as the larger grower in both runs; recalibrated so that slip now fails; the model-side fix is an FR-S2 anchor)), three closes citing it |
 | 4 | M2 the US supply board | session (globe + oracle routes) | **BUILT + deployed 2026-09-28** (oracle `608354b`, globe `175227f`): EIA balance, storage vs the band, filed regions. Later: rigs, completions, the curve (D14.2), daily flows (M4) |
-| 5 | M4 daily supply feed (after the D14.4 probe) | session (both, FR-N15) | **BUILT + deployed 2026-09-28** (oracle `d3aa844`, globe `7b38084`); licence rows in `LICENCES.md` §C. Check pending: seven consecutive daily runs (cron 15:20Z from 09-28), and the hub refresh once the lane joins a refresh tier (FR-J owner). **Cameron Interstate BUILT + deployed 2026-09-28 17:21Z** (oracle `ab24847`: Cameron LNG feedgas + the LEG receipt, 45 gas days; the board's feedgas line shows Cameron since globe `38fb8f6`, LIVE 17:41Z). Next pipelines: Boardwalk; Kinder Morgan, Williams, Enbridge need written permission; the Permian intrastate exits need a vendor |
+| 5 | M4 daily supply feed (after the D14.4 probe) | session (both, FR-N15) | **BUILT + deployed 2026-09-28** (oracle `d3aa844`, globe `7b38084`); licence rows in `LICENCES.md` §C. Check pending: seven consecutive daily runs (cron 15:20Z from 09-28), and the hub refresh once the lane joins a refresh tier (FR-J owner). **Cameron Interstate BUILT + deployed 2026-09-28 17:21Z** (oracle `ab24847`: Cameron LNG feedgas + the LEG receipt, 45 gas days; the board's feedgas line shows Cameron since globe `38fb8f6`, LIVE 17:41Z). **Boardwalk (Gulf South) BUILT + deployed 2026-09-28 19:23Z** (oracle `8e29338`: Freeport LNG feedgas via Stratton Ridge, 45 gas days; the board's flow lines wrap and add Freeport and the LEG receipt, §15.14 row 19:23). Next pipelines: Texas Gas (needs a decision: its rows are compressor throughput with no direction); Kinder Morgan, Williams, Enbridge need written permission; the Permian intrastate exits need a vendor |
 | 6 | M6 licensed NYMEX (after D14.2) | founder + session (FR-N16) | open |
 | 7 | M7 learning loop (after D14.3) | session (oracle FR-N17, with the journal program) | open |
 | 8 | M3 region ladder, in the D14.5 order | session | **Appalachia (PA) BUILT + deployed 2026-09-28** (`bca6ef7`; hosted OFF pending PA DEP). Haynesville and Permian: Texas RRC is ASK-FIRST ("permission for noncommercial use only", §C), so they build with the hosted layer OFF like PA, or wait for RRC; Louisiana SONRIS unconfirmed (O4). OH and WV join Appalachia as their readers land. **Haynesville CLAIMED 2026-09-28** (session jgewi-98, split agreed with jgewi-b9). Founder, 2026-09-28: the Texas side ships hosted ON (founder override of RRC's ASK-FIRST verdict, recorded in `LICENCES.md`); Haynesville ships only with Louisiana in it, so the SONRIS export (O4) is probed first, and if it fails the founder is told before Permian starts. **Probed 2026-09-28:** SONRIS forbids automated access and sells bulk data by subscription only (O4, `LICENCES.md` §C); Haynesville waits on the founder's decision on the OGP + Well subscription. **Founder, 2026-09-28: no SONRIS subscription; Haynesville waits; Permian next** (TX districts 8, 8A, 7C from the RRC PDQ dump, hosted ON under the RRC override; New Mexico as its second bundle once its licence row is read). **Permian CLAIMED 2026-09-28** (session jgewi-98). **Permian (Texas) BUILT + deployed 2026-09-28** (globe `6d0f45f` + `38fb8f6` LIVE 17:41Z; oracle `cc6d440`; 16.10): three layers by county, tokens 7, 8, 9 (only `0` is left, plus reserved `3`: widen the alphabet before the next region). Next: New Mexico (OCD REST wells + C-115 volumes; licence row first) joins the Delaware layer; Haynesville when Louisiana is bought or licensed |
@@ -5648,6 +5651,15 @@ same day, before the questions were put.
   `golden_tools` before and after); the `golden_tools` run launched 18:00Z
   is the "after" for the description fix.
 
+- **`golden_tools` after the description fix (oracle `01694d8`; 2026-09-28
+  19:09Z).** FAIL 3/5 as scored, 0 fabricated, identical to the 2026-09-15
+  baseline question by question: the same tools called, no oil question
+  pulled `gas_state`, t04 (the `gas_state` read) still passes. t01 still
+  answers from retrieval without `market_state` (W-007) but now reads the
+  curve as contango (the W-006 anchor holds); t05 is the same false fail
+  (a correct look-then-refuse worded outside ABSTAIN_MARKERS, W-005).
+  Effective 4/5, as at baseline: no regression from `a58ad55`.
+
 - **M4 Cameron Interstate (oracle `f5b3214` claim, `ab24847` build;
   2026-09-28 17:21Z).** A third posting format: gasnom.com's HTML table
   (`dt=MM/DD/YYYY`; a past gas day reads its final cycle, Intraday 3).
@@ -5662,8 +5674,28 @@ same day, before the questions were put.
   backfilled (990 rows, every day complete); `gas_state`, `flows` and
   `supply-board` serve seven signals; the daily cron picks the pipeline up
   with the others. The board's LNG feedgas line adds Cameron (105 of its 110
-  characters; LIVE with globe `38fb8f6`, 17:41Z); the LEG receipt stays off the pipes line, where no readable
-  name fits, and lives in the store and `gas_state`.
+  characters; LIVE with globe `38fb8f6`, 17:41Z); the LEG receipt stayed off
+  the pipes line, where no readable name fitted, until the Boardwalk commit
+  made the flow lines wrap.
+
+- **M4 Boardwalk: Gulf South (oracle `d680ad6` claim, `8e29338` build;
+  2026-09-28 19:23Z).** A fourth posting format. gasquest.com is an Angular
+  app over a gas-management platform (Cognito login for shippers), but its
+  informational postings call a public API with no login: a POST to
+  `reporting.prod.bwpmlp.org/infopost/infopostdetails` (infoPostID 1 =
+  Operational Capacity, tspId 1 = Gulf South, 100000 = Texas Gas) lists
+  each cycle's report files, about 11 a gas day and ~110 days back, and
+  `/infopost/postings?postingsDocumentId=` returns the CSV base64-encoded.
+  A gas day reads its latest posting (ID3 on 27 of 45 days, a later timed
+  cycle TD11 or TD7 on the rest). 777 points a day, keys `<loc>-<D|R|SI|SW>`.
+  One signal, `NG_FLOW_FREEPORT_FEEDGAS_GS`: delivery 24329 "Stratton Ridge
+  (To Freeport Lng)", 1.41 Bcf/d on 09-27, a flat firm nomination most days
+  with one-day dips (0.37 to 1.1). 45 gas days backfilled (34,604 rows);
+  eight signals now. Texas Gas waits on a decision: its rows are
+  compressor-station throughput with no flow direction. The globe board's
+  flow lines now wrap like the region lines (a shared `wrapParts`), so
+  Freeport joins the feedgas group and the LEG receipt the pipes group,
+  each on a continuation line.
 - **M3, the Permian's Texas side (globe `6d0f45f`, `38fb8f6`; oracle
   `cc6d440`; 2026-09-28, session jgewi-98).** Haynesville first per D14.5,
   but SONRIS (Louisiana) forbids automated access and sells bulk data by
@@ -5707,14 +5739,14 @@ same day, before the questions were put.
   `/srv/gods-eye-view/shards/permian-*` (md5 equal).
 
 **Resume prompt (next session; written 2026-09-28 15:45Z by jgewi-b9 at
-hand-off, rewritten 18:15Z after the tool-description fix, the supply eval
-re-run and the Cameron lane; every fact checked against git and the VPS
-then):**
+hand-off, rewritten 19:40Z after the tool-description fix, both eval runs,
+Cameron Interstate, Gulf South and the founder's hosted keys; every fact
+checked against git and the VPS then):**
 
 ```text
 Row 14 of docs/COMMODITIES-PLAN.md (§16; oracle twins FR-N14..N17 in
 ~/commodities/PRD-natgas-vertical.md). Continue after session jgewi-b9
-(2026-09-26..28). The facts under STATE were true at 2026-09-28 18:15Z;
+(2026-09-26..28). The facts under STATE were true at 2026-09-28 19:40Z;
 re-check each one before acting on it.
 
 ORIENT
@@ -5727,46 +5759,45 @@ ORIENT
 - ListAgents before touching a shared file: several sessions share this tree.
 
 STATE AT HAND-OFF
-- Globe: feat/commodities-shell = origin = mirror at the hand-off commit.
-  VPS LIVE 38fb8f6 (jgewi-98's Permian deploy, 17:41Z; it carries d68bde1,
-  Cameron on the board's feedgas line). Anonymous
-  https://commodities.optaimum.com -> 302 to the Access login.
-  /etc/gods-eye-view/globe.env has GOOGLE_MAPS_API_KEY,
-  GOOGLE_MAPS_SERVER_API_KEY, GEV_ACCESS_TEAM and GEV_ACCESS_AUD EMPTY: the
-  founder has not run scripts/hosting/push-hosted-env.sh yet.
+- Globe: VPS LIVE 6434609 (19:14Z, session jgewi-d3's deploy after the
+  founder's push-hosted-env.sh). /etc/gods-eye-view/globe.env has
+  GOOGLE_MAPS_API_KEY, GOOGLE_MAPS_SERVER_API_KEY, GEV_ACCESS_TEAM and
+  GEV_ACCESS_AUD SET (names checked, never values). Anonymous
+  https://commodities.optaimum.com -> 302 to the Access login. The
+  hand-off commit (board flow lines wrap; Freeport + the LEG receipt on the
+  board) is on the branch but NOT deployed: it ships with the next deploy.
 - Built + deployed: M0 (keyless hosted = USGS imagery, never OSM), M1
   (contributors), M2 (US supply board, gas-supply-us), M3 regions 2 and 3
   (Appalachia = PA, well layer withheld hosted; Permian = Texas, jgewi-98),
-  M4 (daily pipeline flows, six pipelines), M5 (store = card). Open: M6,
-  M7, the rest of M3.
+  M4 (daily pipeline flows: seven pipelines, eight signals), M5 (store =
+  card). Open: M6, M7, the rest of M3.
 - Oracle main = origin. On the VPS (~/oracle, scp, not git):
   regional_production for Williston, the Gulf, Appalachia and the three
-  Permian layers; seven NG_FLOW_* covariates, 45 gas days through
-  2026-09-27 (Cameron Interstate added 17:21Z: NG_FLOW_CAMERON_FEEDGAS_CIP,
-  NG_FLOW_HAYNESVILLE_LEG_CIP_REC); cron `20 15 * * *` (flock, --days 2)
-  -> logs/pipeline-flows.log runs all six pipelines. ingest_log is in
-  oracle.db (source, run_at, rows_written, raw_path, note). askd idle
-  ("running": null); askd + console restarted 17:21Z.
+  Permian layers (ng_regional.py last run 19:15Z, after 6434609); eight
+  NG_FLOW_* covariates, 45 gas days through 2026-09-27, incl.
+  NG_FLOW_CAMERON_FEEDGAS_CIP, NG_FLOW_HAYNESVILLE_LEG_CIP_REC (17:21Z) and
+  NG_FLOW_FREEPORT_FEEDGAS_GS (Gulf South, 19:23Z); cron `20 15 * * *`
+  (flock, --days 2) -> logs/pipeline-flows.log runs all seven pipelines;
+  its first run with Cameron and Gulf South is 2026-09-29 15:20Z. askd idle
+  ("running": null); askd + console restarted 19:23Z.
 - gas_state tool description FIXED (oracle a58ad55, founder's OK): the VPS
   oracle_ask.py is the pre-FR-J7 copy plus that description only (backup
   tools/oracle_ask.py.pre-n14c); git's copy also carries FR-J7 (8a3308a,
   built, not deployed), so an FR-J7 deploy diffs to FR-J7's hunks alone.
-- Supply eval re-run 18:00Z: PASS 3/3 as scored, 0 fabricated, every
-  question called gas_state; ADJUDICATED 2/3. s02 names Williston as the
-  larger grower while quoting Williston +27.5 and Gulf +72.8 MMcf/d (the
-  first run did the same). s02 is recalibrated (oracle 998b4f1), so the
-  next run scores that slip as a FAIL.
-- golden_tools regression on the new description: launched 18:00:29Z
-  (logs/eval_chain_2026-09-28.log prints TOOLS_EXIT and CHAIN_DONE; result
-  eval/results/2026-09-28-golden_tools-qwen3_14b.json). Baseline
-  2026-09-15: 3/5 as scored, 4/5 effective.
+- Evals on the fixed description: supply set PASS 3/3 as scored, 0
+  fabricated, ADJUDICATED 2/3 (s02 names Williston as the larger grower
+  while quoting Gulf +72.8 vs Williston +27.5, as in the first run; s02 is
+  recalibrated in oracle 998b4f1 so the slip now FAILS). golden_tools FAIL
+  3/5 as scored, identical to the 2026-09-15 baseline question by question
+  (effective 4/5): no regression (oracle 01694d8).
 
 WHO OWNS WHAT (commit by pathspec; never git add -A or git commit -a)
-- jgewi-98: M3 Permian (BUILT + LIVE 38fb8f6; New Mexico as a second bundle
-  next). It may add one-line region entries to src/sources/reference.js
-  (supplyBoard) and ingest/ng_regional.py (REGIONS), and messages before
-  any globe deploy. Never commit its files; a gate failure inside them is
-  its to fix.
+- Row 15 (flares, session jgewi-be at hand-off): plan §17,
+  src/data/flares.js, scripts/build-flares.mjs, scripts/probe-flares.mjs,
+  src/data/local_data/flares/, its package.json lines; layer token 0.
+  Its commits may sit unpushed on the shared branch: ask before pushing
+  past them.
+- jgewi-98 (ended): M3 Permian; New Mexico is its next step.
 - Row 13 session: scripts/hosting/push-hosted-env.sh (a staged mode change
   sits in the shared tree: never commit it).
 - FR-J (journal) owner: journal.py, refresh.py, oracle_ask.py,
@@ -5778,13 +5809,7 @@ WHO OWNS WHAT (commit by pathspec; never git add -A or git commit -a)
   by subscription only; the founder declined 2026-09-28).
 
 DO, in order (skip a step whose trigger has not happened, and say so)
-1. Read the golden_tools result (above). Compare per question with the
-   2026-09-15 baseline (eval/results/2026-09-15-golden_tools-qwen3_14b.json;
-   PRD-model-production-optimization.md FR-S1 row: the t01 and t05 notes).
-   A question that newly fails because the model now reaches for gas_state
-   is a regression of a58ad55: record it on FR-N14 and ask the founder.
-   Record the result on FR-N14, §16.9 step 3 and §16.10 either way.
-2. The s02 slip (two occurrences: the FR-S2 bar for an anchor). Propose to
+1. The s02 slip (two occurrences: the FR-S2 bar for an anchor). Propose to
    the founder a TOOLS_SYSTEM comparison line in oracle_ask.py (the FR-J
    owner's file), e.g. "when comparing two changes, name the larger one
    from the numbers", with a wobble entry in eval/wobble.md (the FR-S
@@ -5795,36 +5820,35 @@ DO, in order (skip a step whose trigger has not happened, and say so)
        tools/golden_ext_eval.py eval/golden_natgas_supply.yaml --show
        > logs/<name>.log 2>&1 </dev/null &'
    Poll for the results file, never pgrep -f over ssh.
-3. M4, Boardwalk (FR-N15): Texas Gas and Gulf South on gasquest.com (a
-   JavaScript app with keyless JSON behind it). Read its LICENCES.md §C row
-   first. Pattern: ab24847 (Cameron: a reader kind, SIGNALS entries,
-   gas_state FLOW_SIGNALS) + d68bde1 (the globe's FLOW_SHORT and
-   FEEDGAS/SUPPLY_FLOWS, inside the board's 110-character lines). Rehearse
-   on a scratch db (--db <scratch> --no-log), diff VPS vs git with
-   --strip-trailing-cr, back up *.pre-fr-n15c, then scp and backfill
-   --pipeline <id> --days 45. Never solve or evade a bot challenge: if a
-   site blocks, stop and ask the founder.
-4. M3, widen Appalachia: Ohio (ODNR) and West Virginia (DEP) readers. No
+2. Deploy the globe (the board's wrapped flow lines) once the branch is
+   gated and row 15 agrees its commits may ship; deploy detached and poll
+   for LIVE/FAILED; then re-run ingest/ng_regional.py on the VPS. Then the
+   hosted M1 check with the founder signed in (the keys are set):
+   photoreal default + the Google notice, USGS fallback, Contributors
+   drawers (Williston, Gulf, Appalachia, Permian), the US board (Cameron and
+   Freeport on the feedgas lines), the nav strip, the wss hub.
+3. M4 check: on 2026-09-29 after 15:20Z, the first cron run with Cameron
+   and Gulf South (ingest_log source ng_pipeline_flows; pipeline_flows_daily
+   gas day 09-28 for all seven pipelines, eight signals). The seven-run
+   check is on or after 2026-10-04 15:30Z (a run_at on each day
+   09-28..10-04). Record in §16.9 step 5.
+4. Texas Gas (Boardwalk, tspId 100000): its OAC rows are compressor-station
+   throughput with no flow direction (Bastrop, Greenville, Pineville...).
+   Ask the founder whether a throughput signal (e.g. north through Bastrop,
+   LA) is wanted before building; pattern 8e29338.
+5. M3, widen Appalachia: Ohio (ODNR) and West Virginia (DEP) readers. No
    LICENCES.md rows exist yet; write each verdict first. Pattern: bca6ef7.
-5. M4 check, on or after 2026-10-04 15:30Z: seven consecutive daily runs
-   (ingest_log source ng_pipeline_flows, a run_at on each day 09-28..10-04;
-   pipeline_flows_daily through gas day 10-03, six pipelines, seven signals
-   a day). Record in §16.9 step 5.
-6. Once globe.env's keys are set (print names only, never values: NAME
-   set|EMPTY), the M1 check through https://commodities.optaimum.com with
-   the founder signed in: photoreal default + the Google notice, USGS
-   fallback, Contributors drawers (Williston, Gulf, Appalachia, Permian),
-   the US board (Cameron on the feedgas line), the nav strip, the wss hub.
-   Re-run ingest/ng_regional.py on the VPS after ANY globe deploy.
-7. With the FR-J owner (message first; if none is live, ask the founder):
+6. With the FR-J owner (message first; if none is live, ask the founder):
    journal.py CLOSE_SECTIONS item 3 cites supply; ng_regional and
    ng_pipeline_flows join refresh tiers (retire the cron line) with
    market_map.py SRC_TOL_H entries so the hub publishes source.updated; the
    d8 amendment, then claim FR-N17 (M7).
-8. Founder-gated: R14.2 (if approved, Google geocoding/places only while the
+7. Founder-gated: R14.2 (if approved, Google geocoding/places only while the
    photoreal stack shows, then update the LICENCES.md Google row); M6 on
    Databento's licence (FR-N16); pa-dep-wells on once PA DEP confirms the
    coordinates (GEV_LICENCE_ON_FILE).
+Pipeline lanes: never solve or evade a bot challenge; if a site blocks,
+stop and ask the founder.
 
 RULES
 - Claim in the §0 ledger (and the FR-N row for oracle work) and commit the
