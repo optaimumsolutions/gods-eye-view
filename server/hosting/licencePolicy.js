@@ -51,6 +51,21 @@ export const HOSTED_WITHHELD = Object.freeze([
       'src/layers/lng/matrixUrl.js': 'src/hosting/withheld/lngMatrixUrl.js',
     },
   }),
+  row({
+    id: 'pa-dep-wells',
+    licence:
+      'PA DEP licenses its well-location layers "Not for commercial use or resale" (its ArcGIS hub); the GreenPort extract that carries the same coordinates states no licence',
+    permit: "DEP's written confirmation that the well coordinates may be shown",
+    modules: {
+      'src/layers/onshore/appalachiaBundle.js':
+        'src/hosting/withheld/onshoreAppalachia.js',
+    },
+    publicPaths: ['data/onshore/appalachia'],
+    code: {
+      file: 'src/sources/reference.js',
+      check: "isWithheld('pa-dep-wells')",
+    },
+  }),
   // Live feeds
   row({
     id: 'portwatch',

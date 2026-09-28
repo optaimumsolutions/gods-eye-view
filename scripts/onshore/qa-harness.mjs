@@ -651,10 +651,22 @@ export async function runOnshoreQa({
     const selected = clickStats?.selectedId
       ? byId.get(clickStats.selectedId)
       : null;
+    // Pad wells share a pixel (Pennsylvania pads stack wells 2 to 6 m apart):
+    // the click may select the hovered well or a neighbour on the same pad,
+    // the same tolerance the hover check gives (row 14 M3, first seen on
+    // Appalachia: 015-24000 selected for 015-21044, 5 m apart).
+    const clickMetres =
+      selected && hoveredWell ? metresBetween(selected, hoveredWell) : null;
     check(
-      'clicking selects the hovered well',
-      selected !== null && clickStats?.selectedId === hoveredWellId,
-      { got: clickStats?.selectedId, want: hoveredWellId },
+      'clicking selects the hovered well or its pad neighbour',
+      selected !== null &&
+        (clickStats?.selectedId === hoveredWellId ||
+          (clickMetres !== null && clickMetres <= PAD_RADIUS_M)),
+      {
+        got: clickStats?.selectedId,
+        want: hoveredWellId,
+        metres: clickMetres === null ? null : Math.round(clickMetres),
+      },
     );
     const dossier = await readDossier(page);
     report('dossier', dossier);

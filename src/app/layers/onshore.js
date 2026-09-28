@@ -28,6 +28,14 @@ export const ONSHORE_REGIONS = Object.freeze([
     icon: '⛽',
     sourceKey: 'onshoreWilliston',
   }),
+  // Row 14 M3 (plan §16.4 D14.5): Pennsylvania's unconventional wells first.
+  Object.freeze({
+    id: 'appalachia',
+    layerId: 'production-appalachia',
+    name: 'Gas · Appalachia Wells (PA DEP)',
+    icon: '⛽',
+    sourceKey: 'onshoreAppalachia',
+  }),
 ]);
 
 /**
@@ -86,4 +94,8 @@ export function createApplicationOnshore({ region, source, ...options } = {}) {
 
 export function createApplicationOnshoreWilliston(options) {
   return createApplicationOnshore({ region: ONSHORE_REGIONS[0], ...options });
+}
+
+export function createApplicationOnshoreAppalachia(options) {
+  return createApplicationOnshore({ region: ONSHORE_REGIONS[1], ...options });
 }

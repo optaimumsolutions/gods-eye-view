@@ -391,6 +391,11 @@ export const LAYER_STATE_REGISTRY = Object.freeze([
     disposition: 'enabled-only',
   }),
   Object.freeze({
+    id: 'production-appalachia',
+    token: '6',
+    disposition: 'enabled-only',
+  }),
+  Object.freeze({
     id: 'production-gulf-platforms',
     token: '2',
     disposition: 'enabled-only',

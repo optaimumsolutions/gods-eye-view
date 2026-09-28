@@ -7,6 +7,7 @@
  */
 
 import { northDakotaReader } from './nd.mjs';
+import { pennsylvaniaReader } from './pa.mjs';
 
 export const REGIONS = Object.freeze({
   williston: Object.freeze({
@@ -24,6 +25,23 @@ export const REGIONS = Object.freeze({
     /** Region bundle paths. */
     bundleDir: 'src/data/local_data/onshore/williston',
     shardDir: 'public/data/onshore/williston/history',
+  }),
+  /**
+   * Row 14 M3, region 2 (plan §16.4 D14.5): Pennsylvania's unconventional
+   * wells first (Marcellus and Utica); Ohio and West Virginia join as their
+   * readers land. `Appalachia` matches the Oil Oracle store's basin name.
+   */
+  appalachia: Object.freeze({
+    id: 'appalachia',
+    layerId: 'production-appalachia',
+    name: 'Appalachian Basin',
+    basins: ['Appalachia', 'Marcellus', 'Utica'],
+    states: ['PA'],
+    readers: [pennsylvaniaReader],
+    reconcile: ['PA'],
+    center: { lat: 41.1, lon: -78.0 },
+    bundleDir: 'src/data/local_data/onshore/appalachia',
+    shardDir: 'public/data/onshore/appalachia/history',
   }),
 });
 

@@ -1870,6 +1870,7 @@
       "src/layers/onshore/basinWeather.js",
       "src/layers/onshore/dossier.js",
       "src/layers/onshore/bundledSource.js",
+      "src/layers/onshore/appalachiaBundle.js",
       "src/layers/onshore/records.js",
       "src/layers/onshore/shards.js"
     ],
@@ -2324,6 +2325,7 @@
       "src/layers/onshore/basinWeather.js",
       "src/layers/onshore/dossier.js",
       "src/layers/onshore/bundledSource.js",
+      "src/layers/onshore/appalachiaBundle.js",
       "src/layers/onshore/records.js",
       "src/layers/onshore/shards.js"
     ],
@@ -2651,6 +2653,7 @@
       "src/layers/lng/matrixUrl.js",
       "src/layers/lng/records.js",
       "src/layers/onshore/bundledSource.js",
+      "src/layers/onshore/appalachiaBundle.js",
       "src/layers/onshore/records.js",
       "src/layers/onshore/shards.js"
     ],

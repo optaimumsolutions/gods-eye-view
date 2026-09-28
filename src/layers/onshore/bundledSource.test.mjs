@@ -73,7 +73,8 @@ test('source.json sha256, byte counts and the gzip budgets hold for the committe
 });
 
 test('the committed bundle is the measured one: North Dakota wells, 2026-07 current, 120 months', () => {
-  assert.deepEqual([...ONSHORE_REGION_IDS], ['williston']);
+  // Row 14 M3 added Appalachia (the hosted build's stub drops it).
+  assert.deepEqual([...ONSHORE_REGION_IDS], ['williston', 'appalachia']);
   assert.equal(index.region.id, 'williston');
   assert.equal(index.region.layerId, 'production-williston');
   assert.deepEqual(index.region.states, ['ND']);

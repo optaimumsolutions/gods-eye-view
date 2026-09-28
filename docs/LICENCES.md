@@ -36,13 +36,14 @@ switch or check that does not exist.
 
 ## Summary
 
-- **OFF on the hosted site (20 rows):** PortWatch (chokepoints, ports and the
+- **OFF on the hosted site (21 rows):** PortWatch (chokepoints, ports and the
   oracle's `/api/oracle/chokepoints`), OpenSky, Open-Meteo, Google News RSS,
   keyless Esri World Imagery, Cesium ion (Community plan), TomTom (free plan),
   adsbdb, the overpass-api.de instances, TeleGeography, the Bhote Koshi event
   pack, the GIIGNL matrix, TxDOT, Tallinn, Warendorf, Ontario 511 and Tark Tee
   cameras, TfL cameras until an app key is set, DriveBC cameras credited to a
-  partner, and Metro Transit (Minneapolis).
+  partner, Metro Transit (Minneapolis), and Pennsylvania DEP well coordinates
+  (the Appalachia layer; its operator and county figures still ship).
 - **What the invitee sees instead:** flights from adsb.lol only; chokepoint
   and port layers report "withheld" in the panel; USGS imagery as the keyless
   basemap since row 14 M0 (Google Photorealistic 3D once the founder's key is
@@ -127,6 +128,8 @@ switch or check that does not exist.
 | EIA gas network, NACEI crossings | — | Gas pipelines and border crossings | EIA linework is public domain; the ArcGIS copy is wrapped in the Esri MLA, so re-source from EIA's Energy Atlas at the next rebuild; NACEI under [OGL-Canada](https://open.canada.ca/en/open-government-licence-canada) "including for commercial purposes" | ALLOWED-WITH-CONDITIONS | on |
 | BSEE platform production | — | Gulf platforms | [BSEE disclaimer](https://www.bsee.gov/disclaimer): "public information and may be distributed or copied" | ALLOWED | on |
 | NDIC DMR monthly production | — | Williston wells | [DMR disclaimer](https://www.dmr.nd.gov/oilgas/disclaimer.asp): free workbooks; only the paid subscription is restricted (do not duplicate it) | ALLOWED | on |
+| PA DEP Oil and Gas Production Report (GreenPort extract) | — | Appalachia wells: monthly gas and oil, operators, counties, townships; the contributors and aggregates files | [GreenPort report extracts](https://greenport.pa.gov/ReportExtracts/OG/OilGasWellProdReport) (read 2026-09-28): no licence or terms on the page; the [pa.gov disclaimer](https://www.pa.gov/) covers warranty only ("expressly disclaim any warranty of the accuracy, reliability, or timeliness"); robots.txt allows `/ReportExtracts/`. Per-well volumes are operator-reported facts | ALLOWED-WITH-CONDITIONS (credit PA DEP; "as reported by operators"; no warranty or endorsement implied) | on (contributors, aggregates, US board) |
+| PA DEP well coordinates | `pa-dep-wells` | Appalachia well, township and region marks | DEP's ArcGIS hub licenses its well-location layers "**Not for commercial use or resale.** The User shall save the Commonwealth harmless…"; PASDA's copy of the same DEP layer (dataset 1088) says the data "can be shared by anyone"; the GreenPort extract carries the coordinates with no terms. Conflicting statements: permission asked | ASK-FIRST (DEP's written confirmation; founder decision 2026-09-28) | **OFF** |
 | OSM extracts (datacenters, dams) | — | Data centers, dams | ODbL: "Publicly … means to Persons other than You"; attribution, and the derived database offered under ODbL (it is, in this public repository) | ALLOWED-WITH-CONDITIONS | on |
 | Natural Earth | — | Named regions for voice | [Terms](https://www.naturalearthdata.com/about/terms-of-use/): "No permission is needed" | ALLOWED | on |
 | DataSF Analysis Neighborhoods | — | SF neighborhoods for voice | PDDL: "imposes no restrictions on your use" | ALLOWED | on |
@@ -163,6 +166,15 @@ is not cleared, **before** it ships to the hosted site.
 | Windy API | — | Stream 7 | [Windy API terms](https://account.windy.com/agreements/windy-api-map-and-point-forecast-terms-of-use): the trial is "for development purposes only"; paid private apps cover the user and employees only | NOT-ALLOWED | not built |
 | S&P Global, Morningstar connectors | — | Oracle ingest | Licensed per user; showing invitees needs display rights in the contract | NOT-ALLOWED until the contract says so | not built |
 | Paid vendors in UPGRADE.md (Kpler … Baltic Exchange) | — | Upgrades | Any contract must name display to named third-party users (pilot clients), not only employees | — | not built |
+| Energy Transfer postings: Gulf Run, Rover, Panhandle Eastern, Transwestern | — | Row 14 M4 daily supply: Haynesville to Golden Pass, Appalachia takeaway, Permian (TW) | `pipelines.energytransfer.com/ipost/capacity/operationally-available-by-location?asset=GR` (and the Rover, PEPL, TW messengers), read 2026-09-28: each postings legal page is a disclaimer only ("provided 'AS IS'"); the corporate "No reproduction … without the prior written permission" covers energytransfer.com, not the postings. Public by FERC rule (18 CFR 284.13(d)(1)); scheduled quantities are facts | ALLOWED-WITH-CONDITIONS (derived numbers only, attribute the pipeline, once a day, never republish raw tables) | not built |
+| Cheniere postings: Creole Trail, Corpus Christi Pipeline | — | Row 14 M4 LNG feedgas: Sabine Pass, Corpus Christi | `lngconnectionapi.cheniere.com/api/Capacity/GetCapacity?tspNo=200` (400 = CCPL): JSON; disclaimer only ("provided for informational purposes only"); no terms on the postings site | ALLOWED-WITH-CONDITIONS (as above; history only 1–3 months, archive daily) | not built |
+| Boardwalk postings: Texas Gas, Gulf South | — | Row 14 M4 Haynesville exits | `gasquest.com/informational-posting` (JavaScript app; keyless JSON behind it, undocumented): [bwpipelines.com/legal](https://www.bwpipelines.com/legal) "use of any Content in violation of those rights is strictly prohibited", no non-commercial clause | ALLOWED-WITH-CONDITIONS (facts only; expect format churn) | not built |
+| Cameron Interstate (Sempra) | — | Row 14 M4 LNG feedgas (Cameron LNG) and the only public LEG receipt | `gasnom.com/ip/cameron/oauc.cfm?type=1`: HTML table; no terms found; bot protection (Incapsula) | ALLOWED-WITH-CONDITIONS | not built |
+| Kinder Morgan postings: TGP, El Paso, KMLP | — | Row 14 M4 Haynesville, Appalachia, Permian, LNG | `pipeline2.kindermorgan.com` (ASP.NET form, CSV): kindermorgan.com/Legal "may not be distributed, modified, or reproduced in whole or in part without the prior written permission"; the firewall refuses scripted POSTs | ASK-FIRST | not built |
+| Transco (Williams 1Line) | — | Row 14 M4 Appalachia, LNG (Sabine, Cameron) | Keyless public API, history to 2020: "You may not copy or display for redistribution to third parties or for commercial purposes any portion of the content" | NOT-ALLOWED without written permission | not built |
+| Texas Eastern (Enbridge) | — | Row 14 M4 Appalachia, LNG | `rtba.enbridge.com` form to CSV: licence "solely for non-commercial use within your organization … No other use of the materials is authorized" | NOT-ALLOWED without written permission | not built |
+| Columbia Gas (TC Energy), MVP and Equitrans (EQT), TransCameron (Venture Global) | — | Row 14 M4 Appalachia, LNG | TC Energy: "may not be reproduced, published, transmitted or distributed without written permission"; eqt.com terms bar reproduction and derivative works; Venture Global postings answered 503 (terms not verified) | ASK-FIRST | not built |
+| Permian intrastate exits (Permian Highway, Gulf Coast Express, Whistler, Matterhorn) and LEG | — | Row 14 M4 Permian and Haynesville exits | No FERC posting duty (intrastate, or ruled gathering for LEG): notices only, no scheduled quantities. A licensed vendor (Wood Mackenzie Genscape, S&P/Criterion; PipeRiv republishes postings with its own no-commercial-use clause) is the only source | n/a (no public feed) | not built |
 
 ## D. Oracle console sources seen through the proxy (outside the globe build)
 

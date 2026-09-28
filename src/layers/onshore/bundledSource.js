@@ -1,4 +1,21 @@
 import { normaliseOnshoreDataset } from './records.js';
+import { APPALACHIA_BUNDLE } from './appalachiaBundle.js';
+
+/**
+ * Row 14 contributors files: operators, counties and volumes, no
+ * coordinates. They ship even where a region's well layer is withheld, so
+ * the US supply board and the store keep the region's figures.
+ */
+export const ONSHORE_CONTRIBUTORS = Object.freeze({
+  williston: new URL(
+    '../../data/local_data/onshore/williston/contributors.json',
+    import.meta.url,
+  ).href,
+  appalachia: new URL(
+    '../../data/local_data/onshore/appalachia/contributors.json',
+    import.meta.url,
+  ).href,
+});
 
 /**
  * The bundled region snapshots. Static assets under
@@ -19,11 +36,17 @@ const BUNDLES = Object.freeze({
       '../../data/local_data/onshore/williston/clusters.json',
       import.meta.url,
     ).href,
-    contributors: new URL(
-      '../../data/local_data/onshore/williston/contributors.json',
-      import.meta.url,
-    ).href,
+    contributors: ONSHORE_CONTRIBUTORS.williston,
   }),
+  // Row 14 M3: absent from the hosted build until DEP confirms the coordinates.
+  ...(APPALACHIA_BUNDLE
+    ? {
+        appalachia: Object.freeze({
+          ...APPALACHIA_BUNDLE,
+          contributors: ONSHORE_CONTRIBUTORS.appalachia,
+        }),
+      }
+    : {}),
 });
 
 export const ONSHORE_REGION_IDS = Object.freeze(Object.keys(BUNDLES));

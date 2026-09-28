@@ -265,6 +265,15 @@ export const DATA_CREDITS = [
       '(CC BY 4.0) and NOAA GHCN-Daily (US public domain)',
   },
   {
+    key: 'onshore-appalachia',
+    html:
+      'Appalachian Basin well production: ' +
+      '<a href="https://greenport.pa.gov/ReportExtracts/OG/OilGasWellProdReport" target="_blank" rel="noopener">Pennsylvania DEP Oil and Gas Production Reports</a> ' +
+      '(unconventional wells, as reported by operators, no warranty); reconciled with ' +
+      '<a href="https://www.eia.gov/dnav/ng/ng_prod_sum_a_EPG0_FGW_mmcf_m.htm" target="_blank" rel="noopener">EIA state production series</a> ' +
+      '(US public domain)',
+  },
+  {
     key: 'lng',
     html:
       'LNG terminals, cargoes and routes: terminals from ' +

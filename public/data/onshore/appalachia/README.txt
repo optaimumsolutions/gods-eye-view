@@ -1,0 +1,1 @@
+Appalachia well history shards live in history/ (built by `npm run build:onshore -- --region appalachia`, never committed). The hosted build prunes this folder until PA DEP confirms its well coordinates may be shown (docs/LICENCES.md, server/hosting/licencePolicy.js row pa-dep-wells).

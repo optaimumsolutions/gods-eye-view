@@ -15,7 +15,7 @@ import {
 import { createBundledLngSource } from '../layers/lng/source.js';
 import {
   createBundledOnshoreSource,
-  onshoreBundleUrls,
+  ONSHORE_CONTRIBUTORS,
 } from '../layers/onshore/bundledSource.js';
 import { createSupplyBoardSource } from '../layers/supplyBoard/source.js';
 import { createWithheldSource, isWithheld } from '../hosting/withheld.js';
@@ -23,6 +23,10 @@ import { createWithheldSource, isWithheld } from '../hosting/withheld.js';
 /** Why the hosted site shows no PortWatch layer (docs/LICENCES.md). */
 export const PORTWATCH_WITHHELD_MESSAGE =
   'Withheld on the hosted site until the IMF permits commercial reuse of PortWatch data (docs/LICENCES.md)';
+
+/** Why the hosted site shows no Appalachia wells (docs/LICENCES.md). */
+export const PA_WELLS_WITHHELD_MESSAGE =
+  'Withheld on the hosted site until PA DEP confirms its well coordinates may be shown (docs/LICENCES.md)';
 
 /** Construct the existing reference feeds independently of application setup. */
 export function createReferenceSources() {
@@ -46,13 +50,14 @@ export function createReferenceSources() {
     gulfPlatforms: createBundledGulfSource(),
     lng: createBundledLngSource(),
     onshoreWilliston: createBundledOnshoreSource({ region: 'williston' }),
+    onshoreAppalachia: isWithheld('pa-dep-wells')
+      ? createWithheldSource('PA DEP', PA_WELLS_WITHHELD_MESSAGE)
+      : createBundledOnshoreSource({ region: 'appalachia' }),
     // Row 14 M2: the built regions' contributors + the store's supply board
     supplyBoard: createSupplyBoardSource({
       regions: [
-        {
-          label: 'Williston',
-          url: onshoreBundleUrls('williston').contributors,
-        },
+        { label: 'Appalachia', url: ONSHORE_CONTRIBUTORS.appalachia },
+        { label: 'Williston', url: ONSHORE_CONTRIBUTORS.williston },
         { label: 'Gulf', url: GULF_CONTRIBUTORS_URL },
       ],
     }),

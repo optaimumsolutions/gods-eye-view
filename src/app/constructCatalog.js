@@ -24,7 +24,10 @@ import { createApplicationDatacenters } from './layers/datacenters.js';
 import { createApplicationGasFlows } from './layers/gasFlows.js';
 import { createApplicationGulfPlatforms } from './layers/gulfPlatforms.js';
 import { createApplicationLng } from './layers/lng.js';
-import { createApplicationOnshoreWilliston } from './layers/onshore.js';
+import {
+  createApplicationOnshoreAppalachia,
+  createApplicationOnshoreWilliston,
+} from './layers/onshore.js';
 import { createApplicationSupplyBoard } from './layers/supplyBoard.js';
 import { createInfrastructureLayers } from '../data/infrastructure.js';
 import { localGeoJsonServices } from './localGeojsonServices.js';
@@ -151,6 +154,9 @@ export function createApplicationCatalog({
         createApplicationGulfPlatforms({ source: sources.gulfPlatforms }),
         createApplicationLng({ source: sources.lng }),
         createApplicationOnshoreWilliston({ source: sources.onshoreWilliston }),
+        createApplicationOnshoreAppalachia({
+          source: sources.onshoreAppalachia,
+        }),
         createApplicationSupplyBoard({ source: sources.supplyBoard }),
         createApplicationFirms({
           surface,

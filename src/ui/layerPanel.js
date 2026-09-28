@@ -23,6 +23,7 @@ const PANEL_GROUPS = [
       'commodity-gas-flows',
       'gas-supply-us',
       'production-gulf-platforms',
+      'production-appalachia',
       'production-williston',
       'commodity-lng',
     ],
@@ -90,6 +91,8 @@ const PANEL_LABELS = {
   // Row 12: monthly production per well as filed with the state (North
   // Dakota DMR first); "current" is the newest complete filing month.
   'production-williston': 'Gas · Williston Wells (ND DMR)',
+  // Row 14 M3: Pennsylvania's unconventional wells, monthly as filed with DEP.
+  'production-appalachia': 'Gas · Appalachia Wells (PA DEP)',
   'commodity-lng': 'LNG · Terminals & Cargoes',
 };
 
