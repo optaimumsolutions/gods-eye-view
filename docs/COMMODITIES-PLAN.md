@@ -37,6 +37,7 @@ owns layers. Re-check `git status` before every edit to a shared file.
 | 13  | Hosted site: globe + console behind one login at `commodities.optaimum.com` | ops + shell + server (`feat/commodities-shell`; oracle twin FR-D17) | **M1 BUILT except the browser check; M2 stamping + licence pass BUILT; M3 BUILT (check met); M4 BUILT + deployed (VPS checks met) — 2026-09-25.** Live on the VPS: globe `05ebd94` (`globe.service` :8020, fail-closed 403 on every request and upgrade until Access exists; M4 hub with publish listener :8021; `GEV_LICENCE_PROFILE=hosted` keeps the 20 sources [`LICENCES.md`](LICENCES.md) marks OFF out of the build), console + askd + `refresh.py` at oracle `07cd056` (FR-D17a/b/c). **Founder steps, 2026-09-28:** hosted Google keys, a $25/month budget alert and daily API caps made; the Access app `Commodities` created FIRST, then the route `commodities.optaimum.com` → `localhost:8020` on tunnel `oracle`; anonymous `/`, `/market`, `/api/health` answer 302 to the Access login. R13.7 amended: the hosted browser key is API-limited, not referrer-locked (§15.7). §D decided: hide the uncleared console panels for everyone but the founder (oracle FR-D17 change, not built); invitee group deferred. **Open:** the founder runs `scripts/hosting/push-hosted-env.sh` (keys, team, AUD, caps into `globe.env`, then a gated deploy), then the M1 browser check; Cesium ion and OpenAI keys optional. Agents start at §15.0; status §15.12; change log and build record §15.14 |
 | 14  | Natural-gas intelligence loop: the God's Eye View look, regional supply cards with main contributors, live supply feeds into the Oil Oracle, scored learning | shell + layers + server + oracle (`feat/commodities-shell`; oracle twins FR-N14 to FR-N17) | **CLAIMED 2026-09-26** (session jgewi-b9). **Resumed 2026-09-29 18:40Z by session jgewi-e1** (founder gates (a)-(c) all YES: globe deploy of `798a50b` incl. row 15's flares files; oracle FR-J7 deploy + journal section 3 (FR-N14 a); the s02 anchor; M7 = oracle FR-N17's weekly storage read under the narrow d8a amendment; oracle claim `ff29642`). **Landed 2026-09-29:** globe `798a50b` LIVE 19:01:42Z (deploy-12; anonymous `/`, `/market`, `/api/health` → 302 Access login; `ng_regional.py` re-run, store unchanged); oracle FR-J7 DEPLOYED 19:05Z with journal section 3 citing supply + flows (`5ee1058`, `6cad61c`; FR-N14 (a) done, the 09-29 close is the first of (d)'s three); the s02 comparison anchor W-008 live 19:09Z (`8275501`; its eval chain queued on the VPS for 23:35Z); **M7 first slice BUILT + deployed 19:24Z** (oracle `3793933`: `reads` ledger, Wednesday storage read, scorer vs three naive baselines, YOUR RECENT MISSES, console card, Slack line; first read the 09-30 close, first score 10-01). PRD §16 from the founder's direction after seeing the hosted build: the keyless hosted globe landed on OSM street tiles (the "Google map" look); region cards show totals, not contributors; nothing from the globe feeds the model. **Decisions D14.1–D14.5 made 2026-09-26** (§16.4): the founder's Google key makes Photorealistic 3D the hosted default and USGS imagery is the keyless fallback; Databento first for NYMEX; the loop scores fundamentals nowcasts (B); pipeline EBBs probed first; Appalachia, Haynesville, Permian. **M0 BUILT** (`61c680b`, `7311e39`: keyless hosted landing = USGS imagery, never OSM; Google terms notice; the founder's Map-Tiles-only key still to come). **Williston corrected** (`f0b6c5b`: NDIC's first 2026-07 workbook held July 2023; the card showed 2023 as 2026 from 09-21). **M1 BUILT** (`ead98bc` data, `df9c4eb` cards and Contributors drawer; both region QAs PASS, G14.2 exact). **Deployed** 2026-09-28 12:42Z (globe `2dead84` LIVE; VPS gates 4,469 / 0 fail; corrected Williston shards streamed, md5 equal). **M5 BUILT + deployed** (oracle `f3f35d4`, FR-N14: `regional_production`, `NG_PROD_<REGION>` covariates, `gas_state` supply block; the store equals the card); its journal section and refresh tier wait for the FR-J owner. **M2 BUILT + deployed** (oracle `608354b` route `supply-board`; globe `175227f` layer `gas-supply-us`). **M3 region 2 BUILT + deployed** (`bca6ef7`: Appalachia, PA unconventional, 21.04 Bcf/d; well layer withheld on the hosted site until PA DEP confirms coordinates). **M4 BUILT + deployed** (oracle `d3aa844` FR-N15: five pipelines, five signals, 45 days back; globe `7b38084` board lines; **Cameron Interstate added 2026-09-28 17:21Z**, oracle `ab24847`: Cameron LNG feedgas + the LEG receipt, board line in `d68bde1`; **Boardwalk Gulf South added 19:23Z**, oracle `8e29338`: Freeport LNG feedgas); its check needs seven daily runs (cron 15:20Z). Globe LIVE `6434609` (19:14Z, session jgewi-d3's deploy with the founder's hosted keys). **Permian (Texas) BUILT + deployed 2026-09-28** (session jgewi-98; globe `6d0f45f` + `38fb8f6`, LIVE 17:41Z; oracle `cc6d440`): RRC's PDQ dump by lease in three layers by county (Delaware 7.51 Bcf/d JUL, Midland 10.59 JUN, Central Platform & Shelves 1.37 JUN; one layer broke G3/G4, founder's split), hosted ON by founder override; the board folds them ("Permian TX 19.33, JUN"); store `NG_PROD_PERMIAN_*` + `NG_PROD_PERMIAN_TX`. Haynesville waits (no SONRIS subscription). **Hand-off 2026-09-28 15:45Z:** the next session starts from the resume prompt at the end of §16.10 (updated 19:35Z: the `gas_state` tool description is fixed, oracle `a58ad55` with the founder's OK; the supply eval re-run scored PASS 3/3 as scored, 2/3 adjudicated (s02 inverts the comparison, now recalibrated); `golden_tools` is unchanged against its baseline, so no regression; Cameron Interstate and Gulf South are live; the founder's hosted keys are in. Next: the s02 slip as an FR-S2 anchor (founder), the hosted M1 check with the founder signed in, Texas Gas (a decision), OH/WV, the M4 seven-run check from 10-04); M6 and M7 wait on the founder and the FR-J owner. Build record §16.10 |
 | 15  | `commodity-flares`: nightly gas-flare heat (VIIRS) matched to wells, calibrated against state flaring | layers + server (`feat/commodities-shell`) | **CLAIMED 2026-09-28** (session a7c9a802). PRD §17 from the founder's "see if wells are producing using the satellite API day to day" and grill F1 to F3 (FIRMS keyless now, `FIRMS_MAP_KEY` only for the backfill; layer + dossier first, oracle feed M7; Williston then Permian). Token `0` (the last free token). **M0 BUILT** (probe + pure module, 17.12). **M1 BUILT** (Williston flare sites: 7,493 pads, 79 % of night detections on a site). Next: M2 `/api/flares` |
+| 16  | System tabs on the hosted site: MODEL (the LLM's record), OPS (a health agent probing every endpoint), DASHBOARD (the status dashboard) | shell + server + oracle (`feat/commodities-shell`; oracle twin FR-D21) | **CLAIMED 2026-09-29 20:35Z** (session jgewi-e1). Founder, 2026-09-29: "Model, Ops, the globe and the LLM and dashboard as well as the health check … an agent that could also make sure all the endpoints are healthy" (Docs and Code tabs declined). PRD §18. Touches row 13's hosting files (`consoleProxy.js` page list, `public/gev-shell/strip.mjs` links) under the founder's standing autonomy; row 13's staged `push-hosted-env.sh` change is untouched |
 
 Definition of usable, pending founder confirmation of question 13: rows 1
 through 4. Rows 5 to 7 are context and content.
@@ -6115,3 +6116,61 @@ git-ignored history shards, so a fresh clone runs `build:onshore` first.
   (Phoenix, 1,364 and 1,218), East Tioga (Petro-Hunt, 1,225), Antelope Creek
   (Kraken, 1,114).
 - Four gates green (4,499 tests, 0 fail).
+
+## 18. Row 16 PRD — System tabs: MODEL, OPS (health agent), DASHBOARD (FR-G16)
+
+Claimed 2026-09-29 20:35Z (session jgewi-e1); oracle twin FR-D21
+(`PRD-market-console.md`).
+
+### 18.1 Founder direction (2026-09-29)
+
+Asked whether the repo is viewable on the hosted site ("all of it in tabs"),
+the founder chose: "Model, Ops, the globe and the LLM and dashboard as well
+as the health check … an overview of an agent that could also make sure
+everything, all the endpoints, are healthy". Docs and Code tabs were offered
+and not chosen. GLOBE, MARKET and CHAT already exist.
+
+### 18.2 Goals (verifiable)
+
+- G16.1 Three new strip tabs behind the same Access login, in this order
+  after CHAT: MODEL `/model`, OPS `/ops`, DASHBOARD `/dashboard`. Each
+  answers 200 through the globe origin with the strip; anonymous → 302.
+- G16.2 MODEL shows the LLM's own record from the canonical store: model
+  and serving config, every journal edition (grounding, gate, timing), the
+  scored reads and skill vs baselines (FR-N17), eval scores over time, the
+  wobble log, and ask telemetry (count, wall time, prompt tokens, ≥95 %
+  window warnings).
+- G16.3 OPS shows the health agent's latest sweep and 24 h history: every
+  check with status, latency and detail; each failure with when it started.
+- G16.4 The health agent (`tools/health_agent.py`, VPS cron every 5 min
+  under flock) probes: the public hostnames (302 to Access = tunnel + Access
+  up), the globe (local 403 = the guard is closed), every console page and
+  `/api/oracle/*` route, askd `/health`, Ollama (model present), the event
+  hub, datasette, the systemd units, data freshness (validate.py), each
+  refresh tier's last run, the journal's editions on schedule, disk, memory
+  and load. It writes `health_checks` in oracle.db and posts one Slack line
+  per state change (fail and recovery), never per sweep. Observe and alert
+  only: it restarts nothing.
+- G16.5 DASHBOARD serves `tools/dashboard.py`'s status page from the
+  console process on the canonical store (no new service or port).
+
+### 18.3 Non-goals
+
+Docs and Code tabs; auto-remediation (restarts) by the agent; new data
+sources; exposing anything outside the Access login.
+
+### 18.4 Milestones
+
+| M | What | Check |
+| --- | --- | --- |
+| M1 | Health agent + `health_checks` (oracle) | A sweep rehearsed on the VPS lists every check; one induced failure pages once and its recovery once |
+| M2 | Console pages `/model`, `/ops`, `/dashboard` (oracle `market_map.py`) | Each renders 200 on the VPS console with real data |
+| M3 | Strip tabs + proxy routes (globe) | Four gates; deployed; each tab 200 through the globe with the strip; anonymous 302 |
+
+### 18.5 Constraints
+
+R11 (descriptive), R13 (additive; row 13's hosting files change only by
+adding three paths and three links), the deploy windows of §16.9, backups
+`*.pre-fr-d21`, claim-first ledgers, four gates per globe push.
+
+### 18.6 Build record
