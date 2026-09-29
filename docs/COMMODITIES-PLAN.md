@@ -5080,6 +5080,7 @@ oracle ledger cite them.
 | 09-28 19:09 | VPS + oracle | oracle `01694d8` | `golden_tools` regression on the new description: FAIL 3/5 as scored, 0 fabricated, identical to the 09-15 baseline per question (effective 4/5): no regression | result JSON in git; tools called unchanged |
 | 09-28 19:14 | VPS | globe `6434609` LIVE (session jgewi-d3) | The founder's `push-hosted-env.sh`: `globe.env` has the Google keys, the Access team + AUD and the rate-limit lines; gated deploy of `6434609`. `ng_regional.py` re-run 19:15Z (b9) | 302 to Access anonymous; 416,351 rows, PERMIAN_TX 19,328.686 MMcf/d = the board |
 | 09-28 19:23 | VPS + oracle + globe | oracle `d680ad6` `8e29338` `6962971`; globe this commit | FR-N15 Boardwalk, Gulf South: public infopost API, Freeport LNG feedgas; files diffed equal to git first, backups `*.pre-fr-n15c`, 45 gas days backfilled, askd + console restarted. Globe: flow lines wrap; Freeport and the LEG receipt on the board (not deployed yet); `LICENCES.md` Boardwalk row says built | 34,604 rows, 45 of 45 days; `flows` and `supply-board` serve eight signals; supplyBoard tests 8/8 |
+| 09-29 16:45 | VPS + globe | globe this commit | Checks: the 15:20Z cron's first run with Cameron and Gulf South wrote all seven pipelines and eight signals for gas day 09-28; the 09-28 close still says "No daily S/D lane in the store" (journal section 3 predates the supply and flows blocks). Resume prompt rewritten for the learning-loop phase (founder gates d8 / FR-J files / row 15 push; FR-J7 deploy, journal section 3, the s02 anchor, M7's weekly storage read) | `pipeline_flows_daily` gas day 09-28: seven pipelines; `journal` id 7 |
 
 Ledger and doc commits in between (`292794a`, `cb46ff2`, `d62549f`,
 `db471c3`, `c61e5fe`, oracle `7575548`, `d085cf3`, `cfbea89`, `5414679`,
@@ -5739,114 +5740,126 @@ same day, before the questions were put.
   `/srv/gods-eye-view/shards/permian-*` (md5 equal).
 
 **Resume prompt (next session; written 2026-09-28 15:45Z by jgewi-b9 at
-hand-off, rewritten 19:40Z after the tool-description fix, both eval runs,
-Cameron Interstate, Gulf South and the founder's hosted keys; every fact
-checked against git and the VPS then):**
+hand-off, rewritten 2026-09-29 16:45Z for the learning-loop phase; every
+fact checked against git and the VPS then):**
 
 ```text
-Row 14 of docs/COMMODITIES-PLAN.md (§16; oracle twins FR-N14..N17 in
-~/commodities/PRD-natgas-vertical.md). Continue after session jgewi-b9
-(2026-09-26..28). The facts under STATE were true at 2026-09-28 19:40Z;
+Row 14 of docs/COMMODITIES-PLAN.md (§16), next phase: make the Oil Oracle
+learn from its own reads (M7, oracle FR-N17) on top of the live
+globe -> store -> model loop. Continue after session jgewi-b9
+(2026-09-26..29). The facts under STATE were true at 2026-09-29 16:45Z;
 re-check each one before acting on it.
 
 ORIENT
 - /obsidian gods-eye-view (STATE.md, then 02-handoff.md).
-- ~/commodities-shell, branch feat/commodities-shell: git pull --ff-only.
-  Read §15.0 (how the system runs), §16.4 (D14.1-D14.5, all decided), §16.9
-  (steps; step 8 is the region ladder), §16.10 (build record) and
-  docs/LICENCES.md §C (pipelines, SONRIS, Texas RRC).
-- Oracle ~/commodities (main): the FR-N14..N17 rows; CLAUDE.md commands.
-- ListAgents before touching a shared file: several sessions share this tree.
+- ~/commodities-shell (feat/commodities-shell) and ~/commodities (main).
+  Read plan §16.4 (D14.3: the loop scores fundamentals nowcasts, (B)),
+  §16.5 items 18-20 (M7), §16.6 (M7's check) and §16.10; the oracle
+  FR-N14 and FR-N17 rows (PRD-natgas-vertical.md); and
+  PRD-oracle-journal-memory.md: the FR-J6 and FR-J7 rows, d8 (§9 G2 and
+  the decisions table), §7 (config end-state) and §11 (gotchas).
+- ListAgents first: several sessions share both working trees.
+
+FOUNDER GATES (ask in ONE AskUserQuestion unless the kickoff answered)
+a. Amend d8 narrowly: the journal may write internal, labelled nowcasts
+   (the weekly storage change, monthly regional production), scored
+   against the official print, never shown as advice or a price call
+   (R11; price direction stays out).
+b. No FR-J session is live: may this session edit and deploy the FR-J
+   owner's files (journal.py, oracle_ask.py, refresh.py, market_map.py)?
+c. Push row 15's unpushed commits with row 14's 13561da, or wait for
+   row 15 to push first?
+Without (b) skip steps 2-5; without (a) skip step 5. Say what was skipped.
 
 STATE AT HAND-OFF
-- Globe: VPS LIVE 6434609 (19:14Z, session jgewi-d3's deploy after the
-  founder's push-hosted-env.sh). /etc/gods-eye-view/globe.env has
-  GOOGLE_MAPS_API_KEY, GOOGLE_MAPS_SERVER_API_KEY, GEV_ACCESS_TEAM and
-  GEV_ACCESS_AUD SET (names checked, never values). Anonymous
-  https://commodities.optaimum.com -> 302 to the Access login. The
-  hand-off commit (board flow lines wrap; Freeport + the LEG receipt on the
-  board) is on the branch but NOT deployed: it ships with the next deploy.
-- Built + deployed: M0 (keyless hosted = USGS imagery, never OSM), M1
-  (contributors), M2 (US supply board, gas-supply-us), M3 regions 2 and 3
-  (Appalachia = PA, well layer withheld hosted; Permian = Texas, jgewi-98),
-  M4 (daily pipeline flows: seven pipelines, eight signals), M5 (store =
-  card). Open: M6, M7, the rest of M3.
-- Oracle main = origin. On the VPS (~/oracle, scp, not git):
-  regional_production for Williston, the Gulf, Appalachia and the three
-  Permian layers (ng_regional.py last run 19:15Z, after 6434609); eight
-  NG_FLOW_* covariates, 45 gas days through 2026-09-27, incl.
-  NG_FLOW_CAMERON_FEEDGAS_CIP, NG_FLOW_HAYNESVILLE_LEG_CIP_REC (17:21Z) and
-  NG_FLOW_FREEPORT_FEEDGAS_GS (Gulf South, 19:23Z); cron `20 15 * * *`
-  (flock, --days 2) -> logs/pipeline-flows.log runs all seven pipelines;
-  its first run with Cameron and Gulf South is 2026-09-29 15:20Z. askd idle
-  ("running": null); askd + console restarted 19:23Z.
-- gas_state tool description FIXED (oracle a58ad55, founder's OK): the VPS
-  oracle_ask.py is the pre-FR-J7 copy plus that description only (backup
-  tools/oracle_ask.py.pre-n14c); git's copy also carries FR-J7 (8a3308a,
-  built, not deployed), so an FR-J7 deploy diffs to FR-J7's hunks alone.
-- Evals on the fixed description: supply set PASS 3/3 as scored, 0
-  fabricated, ADJUDICATED 2/3 (s02 names Williston as the larger grower
-  while quoting Gulf +72.8 vs Williston +27.5, as in the first run; s02 is
-  recalibrated in oracle 998b4f1 so the slip now FAILS). golden_tools FAIL
-  3/5 as scored, identical to the 2026-09-15 baseline question by question
-  (effective 4/5): no regression (oracle 01694d8).
+- Globe: VPS LIVE 6434609 (globe.env's Google keys and Access team/AUD
+  SET, names checked; anonymous -> 302 to the Access login).
+  origin/feat/commodities-shell = 6434609. Local and unpushed above it:
+  row 15's e968c62, 2e9c8f9, 6f46bbb and row 14's 13561da (the board's
+  flow lines wrap; Freeport + the LEG receipt; gated 4,497 tests, 0 fail).
+- Oracle main = origin. VPS (~/oracle, scp, not git): regional_production
+  for Williston, the Gulf, Appalachia and three Permian layers; eight
+  NG_FLOW_* signals from seven pipelines. The 15:20Z cron's first full run
+  (2026-09-29) wrote all seven pipelines and eight signals for gas day
+  09-28. askd idle ("running": null).
+- Model: gas_state's tool description names the supply and flows blocks
+  (a58ad55; on the VPS as a patch onto the pre-FR-J7 oracle_ask.py).
+  Supply eval 2/3 in substance (s02 inverts a comparison; recalibrated in
+  998b4f1 so the slip now fails); golden_tools 3/5 as scored, the same as
+  its 09-15 baseline (01694d8).
+- Journal (FR-J6) live: close 21:30Z (about an hour), morning 10:00Z,
+  both under flock ~/oracle/.journal.lock. The 09-28 close still says "No
+  daily S/D lane in the store": CLOSE_SECTIONS item 3 in tools/journal.py
+  predates the supply and flows blocks.
+- Memory (FR-J7, 8a3308a) is built, NOT deployed: tools/current_state.py
+  (absent on the VPS), journal.py, oracle_ask.py (PRIOR JOURNAL, NUM_CTX
+  16384), ingest/journal_embed.py, corpus/retrieval.yaml. Its deploy
+  trigger (the first close editions) has happened.
 
 WHO OWNS WHAT (commit by pathspec; never git add -A or git commit -a)
-- Row 15 (flares, session jgewi-be at hand-off): plan §17,
-  src/data/flares.js, scripts/build-flares.mjs, scripts/probe-flares.mjs,
-  src/data/local_data/flares/, its package.json lines; layer token 0.
-  Its commits may sit unpushed on the shared branch: ask before pushing
-  past them.
-- jgewi-98 (ended): M3 Permian; New Mexico is its next step.
+- Row 15 (flares; session jgewi-be at hand-off): plan §17 and its files
+  (src/data/flares*, scripts/*flares*, src/data/local_data/flares/,
+  package.json lines); layer token 0. Never push past its commits
+  without its or the founder's OK.
 - Row 13 session: scripts/hosting/push-hosted-env.sh (a staged mode change
   sits in the shared tree: never commit it).
-- FR-J (journal) owner: journal.py, refresh.py, oracle_ask.py,
-  market_map.py, ask_server.py, eia_client.py; message first. None live at
-  hand-off.
-- FR-S (eval) lane: tools/golden_ext_eval.py, tools/golden_eval.py
-  (frozen), eval/wobble.md. The supply golden file is row 14's (FR-N14).
-- Haynesville: waits (SONRIS forbids automated access and sells bulk data
-  by subscription only; the founder declined 2026-09-28).
+- FR-J owner: journal.py, refresh.py, oracle_ask.py, market_map.py,
+  ask_server.py, eia_client.py (gate b). FR-S lane: golden_ext_eval.py,
+  golden_eval.py (frozen), eval/wobble.md. The supply golden file and
+  ng_regional/ng_pipeline_flows/gas_state's supply and flows blocks are
+  row 14's.
 
 DO, in order (skip a step whose trigger has not happened, and say so)
-1. The s02 slip (two occurrences: the FR-S2 bar for an anchor). Propose to
-   the founder a TOOLS_SYSTEM comparison line in oracle_ask.py (the FR-J
-   owner's file), e.g. "when comparing two changes, name the larger one
-   from the numbers", with a wobble entry in eval/wobble.md (the FR-S
-   lane's file) and golden_tools + the supply set before and after. Launch
-   a VPS eval with its own ssh call and the bare command; `cd X && setsid
-   ...&` holds the ssh channel open:
-     ssh ... 'cd ~/oracle; setsid nohup .venv/bin/python
-       tools/golden_ext_eval.py eval/golden_natgas_supply.yaml --show
-       > logs/<name>.log 2>&1 </dev/null &'
-   Poll for the results file, never pgrep -f over ssh.
-2. Deploy the globe (the board's wrapped flow lines) once the branch is
-   gated and row 15 agrees its commits may ship; deploy detached and poll
-   for LIVE/FAILED; then re-run ingest/ng_regional.py on the VPS. Then the
-   hosted M1 check with the founder signed in (the keys are set):
-   photoreal default + the Google notice, USGS fallback, Contributors
-   drawers (Williston, Gulf, Appalachia, Permian), the US board (Cameron and
-   Freeport on the feedgas lines), the nav strip, the wss hub.
-3. M4 check: on 2026-09-29 after 15:20Z, the first cron run with Cameron
-   and Gulf South (ingest_log source ng_pipeline_flows; pipeline_flows_daily
-   gas day 09-28 for all seven pipelines, eight signals). The seven-run
-   check is on or after 2026-10-04 15:30Z (a run_at on each day
-   09-28..10-04). Record in §16.9 step 5.
-4. Texas Gas (Boardwalk, tspId 100000): its OAC rows are compressor-station
-   throughput with no flow direction (Bastrop, Greenville, Pineville...).
-   Ask the founder whether a throughput signal (e.g. north through Bastrop,
-   LA) is wanted before building; pattern 8e29338.
-5. M3, widen Appalachia: Ohio (ODNR) and West Virginia (DEP) readers. No
-   LICENCES.md rows exist yet; write each verdict first. Pattern: bca6ef7.
-6. With the FR-J owner (message first; if none is live, ask the founder):
-   journal.py CLOSE_SECTIONS item 3 cites supply; ng_regional and
-   ng_pipeline_flows join refresh tiers (retire the cron line) with
-   market_map.py SRC_TOL_H entries so the hub publishes source.updated; the
-   d8 amendment, then claim FR-N17 (M7).
-7. Founder-gated: R14.2 (if approved, Google geocoding/places only while the
-   photoreal stack shows, then update the LICENCES.md Google row); M6 on
-   Databento's licence (FR-N16); pa-dep-wells on once PA DEP confirms the
-   coordinates (GEV_LICENCE_ON_FILE).
+1. Gate c: push 13561da (row 15's commits only with its or the founder's
+   OK) to origin + mirror; deploy the globe detached and poll for
+   LIVE/FAILED; then re-run ingest/ng_regional.py on the VPS.
+2. Deploy FR-J7 as its PRD row describes: diff every VPS file against git
+   with --strip-trailing-cr (oracle_ask.py should differ by FR-J7 alone),
+   back up *.pre-fr-j7, scp the six files, build the journal collection
+   (ingest/journal_embed.py), restart askd only while /health shows
+   "running": null. Rehearse with oracle_ask.py --show-context (the
+   CURRENT STATE block is pinned) and journal.py --edition close
+   --dry-run. Never between 20:30 and 22:45Z (the close) or 09:30 and
+   10:45Z (the morning), nor 22:45-23:30Z or 01:45-02:30Z.
+3. Journal section 3 (CLOSE_SECTIONS item 3): cite gas_state's supply and
+   flows blocks (filed production by region with its month and
+   month-on-month change; the eight pipeline signals with their gas day)
+   and drop "no daily S/D lane". Deploy before 20:30Z so that evening's
+   close uses it. FR-N14 (d) wants three consecutive closes citing it:
+   record each on the FR-N14 row.
+4. The s02 anchor: one comparison line in TOOLS_SYSTEM (e.g. "when
+   comparing two changes, name the larger one from the numbers") plus a
+   wobble entry in eval/wobble.md. Then one eval chain on the VPS: the
+   supply set, then golden_tools (about 2 h on the single Ollama slot, so
+   outside the journal windows). One ssh call, the bare command:
+     ssh ... 'cd ~/oracle; setsid nohup bash -c ".venv/bin/python
+       tools/golden_ext_eval.py eval/golden_natgas_supply.yaml --show;
+       .venv/bin/python tools/golden_ext_eval.py eval/golden_tools.yaml
+       --show" > logs/<name>.log 2>&1 </dev/null &'
+   Never `cd X && setsid ...&` (it holds the ssh channel); poll the
+   results files with one ssh call at a time. Expect s02 to PASS and
+   golden_tools to hold its baseline; the run is also the regression check
+   for step 2. Read every stored answer, not just the PASS line.
+5. M7, first slice (claim FR-N17 in the oracle ledger and §0 row 14,
+   commit the claim first): the weekly storage read. The Wednesday close
+   writes a labelled estimate of Thursday's EIA storage change into a
+   `reads` table in oracle.db (kind storage_change, target week, value or
+   range, as-of, model, prompt hash, edition; §16.5 item 18). A scorer
+   runs after ng_storage lands (Thursday, fast tier) and grades it against
+   the naive baselines (five-year average, persistence, weather-only;
+   item 19). Misses go back into the journal and ask prompts as "YOUR
+   RECENT MISSES", with a weekly skill card and one Slack line (item 20).
+   Rehearse on a scratch db first. The check (§16.6): eight weeks, at
+   least eight storage reads scored, skill vs the baselines reported
+   weekly, the journal quotes its own misses. Monthly regional-production
+   reads come second.
+6. M4 check, on or after 2026-10-04 15:30Z: a run_at on each day
+   09-28..10-04 (ingest_log source ng_pipeline_flows) and all seven
+   pipelines in pipeline_flows_daily for each gas day. Record in §16.9
+   step 5.
+7. Founder items, only when raised: the hosted M1 browser check (the keys
+   are set; the founder signs in), a Texas Gas throughput signal, OH/WV
+   readers, M6 (Databento), R14.2, the PA DEP email.
 Pipeline lanes: never solve or evade a bot challenge; if a site blocks,
 stop and ask the founder.
 
@@ -5876,7 +5889,8 @@ RULES
   then taskkill.
 - Never put keys in chat or git.
 
-FOUNDER-OWNED: running push-hosted-env.sh; the PA DEP email; the Databento
+FOUNDER-OWNED: the d8 amendment; the FR-J files while no FR-J session is
+live; the hosted browser check; Texas Gas; the PA DEP email; the Databento
 quote; the R14.2 gate; SONRIS (Haynesville).
 
 CLOSE-OUT: record results in §16.9, the §0 ledger, §15.14 and the FR-N rows;
