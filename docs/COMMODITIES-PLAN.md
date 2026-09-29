@@ -5761,164 +5761,104 @@ same day, before the questions were put.
   one week says nothing about skill, which is why the check is eight weeks.
 
 **Resume prompt (next session; written 2026-09-28 15:45Z by jgewi-b9 at
-hand-off, rewritten 2026-09-29 16:45Z for the learning-loop phase; every
-fact checked against git and the VPS then):**
+hand-off, rewritten 2026-09-29 16:45Z for the learning-loop phase and
+again 19:40Z by jgewi-e1 after day 1 landed; every fact checked against
+git and the VPS then):**
 
 ```text
-Row 14 of docs/COMMODITIES-PLAN.md (§16), next phase: make the Oil Oracle
-learn from its own reads (M7, oracle FR-N17) on top of the live
-globe -> store -> model loop. Continue after session jgewi-b9
-(2026-09-26..29). The facts under STATE were true at 2026-09-29 16:45Z;
-re-check each one before acting on it.
+Row 14 of docs/COMMODITIES-PLAN.md (§16), learning-loop phase (M7,
+oracle FR-N17). Continue after session jgewi-e1 (2026-09-29). The facts
+under STATE were true at 2026-09-29 19:40Z; re-check each before acting.
 
 ORIENT
 - /obsidian gods-eye-view (STATE.md, then 02-handoff.md).
 - ~/commodities-shell (feat/commodities-shell) and ~/commodities (main).
-  Read plan §16.4 (D14.3: the loop scores fundamentals nowcasts, (B)),
-  §16.5 items 18-20 (M7), §16.6 (M7's check) and §16.10; the oracle
-  FR-N14 and FR-N17 rows (PRD-natgas-vertical.md); and
-  PRD-oracle-journal-memory.md: the FR-J6 and FR-J7 rows, d8 (§9 G2 and
-  the decisions table), §7 (config end-state) and §11 (gotchas).
+  Read plan §16.6 (M7's check), §16.9 steps 3, 5, 7 and §16.10; the oracle
+  FR-N14 and FR-N17 rows (PRD-natgas-vertical.md); PRD-oracle-journal-
+  memory.md FR-J6/FR-J7 rows and d8a (§9 G2, §10).
 - ListAgents first: several sessions share both working trees.
 
-FOUNDER GATES (ask in ONE AskUserQuestion unless the kickoff answered)
-a. Amend d8 narrowly: the journal may write internal, labelled nowcasts
-   (the weekly storage change, monthly regional production), scored
-   against the official print, never shown as advice or a price call
-   (R11; price direction stays out).
-b. No FR-J session is live: may this session edit and deploy the FR-J
-   owner's files (journal.py, oracle_ask.py, refresh.py, market_map.py)?
-c. Deploy the globe now? It ships row 15's M0/M1 (the flares module and
-   the Williston flare-site bundle) with row 14's board change; row 15
-   cleared the push (vault STATE, 09-28), not the deploy.
-Without (b) skip steps 2-5; without (a) skip step 5. Say what was skipped.
+STANDING FOUNDER GATES (given 2026-09-29, "full autonomy"): (a) d8a — the
+journal may write internal, labelled nowcasts of the weekly storage change
+and monthly regional production, scored against the print, never shown as
+advice or a price call; (b) edit and deploy the FR-J owner's files while
+no FR-J session is live; (c) globe deploys. Re-ask only if the founder
+narrows them.
 
-STATE AT HAND-OFF
-- Globe: VPS LIVE 6434609 (globe.env's Google keys and Access team/AUD
-  SET, names checked; anonymous -> 302 to the Access login).
-  origin = mirror = the hand-off commit, which carries row 15's e968c62,
-  2e9c8f9, 6f46bbb (its session cleared b9 to push them) and row 14's
-  13561da (the board's flow lines wrap; Freeport + the LEG receipt).
-  Pushed, NOT deployed: LIVE is still 6434609.
-- Oracle main = origin. VPS (~/oracle, scp, not git): regional_production
-  for Williston, the Gulf, Appalachia and three Permian layers; eight
-  NG_FLOW_* signals from seven pipelines. The 15:20Z cron's first full run
-  (2026-09-29) wrote all seven pipelines and eight signals for gas day
-  09-28. askd idle ("running": null).
-- Model: gas_state's tool description names the supply and flows blocks
-  (a58ad55; on the VPS as a patch onto the pre-FR-J7 oracle_ask.py).
-  Supply eval 2/3 in substance (s02 inverts a comparison; recalibrated in
-  998b4f1 so the slip now fails); golden_tools 3/5 as scored, the same as
-  its 09-15 baseline (01694d8).
-- Journal (FR-J6) live: close 21:30Z (about an hour), morning 10:00Z,
-  both under flock ~/oracle/.journal.lock. The 09-28 close still says "No
-  daily S/D lane in the store": CLOSE_SECTIONS item 3 in tools/journal.py
-  predates the supply and flows blocks.
-- Memory (FR-J7, 8a3308a) is built, NOT deployed: tools/current_state.py
-  (absent on the VPS), journal.py, oracle_ask.py (PRIOR JOURNAL, NUM_CTX
-  16384), ingest/journal_embed.py, corpus/retrieval.yaml. Its deploy
-  trigger (the first close editions) has happened.
+STATE
+- Globe: VPS LIVE 798a50b (deploy-12, 19:01Z); origin = mirror = the
+  hand-off commit. Anonymous -> 302 Access login. Next deploy log name:
+  deploy-13.log or higher.
+- Oracle main = origin 749adeb. VPS ~/oracle equals git for every file this
+  session touched (oracle_ask, ask_server, journal, current_state,
+  journal_embed, retrieval.yaml, reads, market_map, refresh, eia_client);
+  backups *.pre-fr-j7, *.pre-w008, *.pre-fr-n17 in ~/oracle/backups.
+- FR-J7 DEPLOYED 19:05Z: CURRENT STATE pinned on every ask, journal
+  collection (8 editions at deploy; journal.py embeds each new one), ask
+  window 16384. Open M5 checks: golden_eval byte-guard re-run, no >=95 %
+  warnings on 5 asks, a live "report from <date>" ask.
+- Journal section 3 (FR-N14 a) live since 19:02Z: the close cites
+  gas_state regional supply, the eight pipeline flows, then the EIA
+  balance. FR-N14 (d) wants three consecutive closes doing so: the 09-29
+  close is the first candidate — check each close's section 3 and tally it
+  on the FR-N14 row (09-29, 09-30, 10-01).
+- W-008 anchor (TOOLS_SYSTEM comparison line) live 19:09Z. Its eval chain
+  (supply set, then golden_tools) was queued on the VPS to start 23:35Z
+  behind .journal.lock; log ~/oracle/logs/eval-w008-20260929.log, results
+  in eval/results/2026-09-29-* or 2026-09-30-*. Expect s02 PASS and
+  golden_tools at its 3/5-as-scored baseline; read every stored answer.
+- M7 first slice DEPLOYED 19:24Z (oracle 3793933): oracle.db `reads`;
+  tools/reads.py (write/score/misses/skill); journal.py writes one storage
+  read after the WEDNESDAY close (week ending the prior Friday); refresh
+  runs `reads.py score` after ng_storage (fast catch-up Thu/Fri 14:30-21:30Z
+  + daily 23:00Z) and posts one Slack line; scored reads reach the close
+  (YOUR RECENT MISSES + a section-4 line) and every ask; console card
+  "Scored reads". First read 2026-09-30 close (week ending 09-25), first
+  score 2026-10-01 after the EIA print.
 
-WHO OWNS WHAT (commit by pathspec; never git add -A or git commit -a)
-- Row 15 (flares; session jgewi-be at hand-off): plan §17 and its files
-  (src/data/flares*, scripts/*flares*, src/data/local_data/flares/,
-  package.json lines); layer token 0. Never push past its commits
-  without its or the founder's OK.
-- Row 13 session: scripts/hosting/push-hosted-env.sh (a staged mode change
-  sits in the shared tree: never commit it).
-- FR-J owner: journal.py, refresh.py, oracle_ask.py, market_map.py,
-  ask_server.py, eia_client.py (gate b). FR-S lane: golden_ext_eval.py,
-  golden_eval.py (frozen), eval/wobble.md. The supply golden file and
-  ng_regional/ng_pipeline_flows/gas_state's supply and flows blocks are
-  row 14's.
-
-DO, in order (skip a step whose trigger has not happened, and say so)
-1. Gate c: deploy the globe (the branch head; pull the VPS clone first if
-   scripts/deploy-vps.sh changed) detached and poll for LIVE/FAILED; then
-   re-run ingest/ng_regional.py on the VPS.
-2. Deploy FR-J7 as its PRD row describes: diff every VPS file against git
-   with --strip-trailing-cr (oracle_ask.py should differ by FR-J7 alone),
-   back up *.pre-fr-j7, scp the six files, build the journal collection
-   (ingest/journal_embed.py), restart askd only while /health shows
-   "running": null. Rehearse with oracle_ask.py --show-context (the
-   CURRENT STATE block is pinned) and journal.py --edition close
-   --dry-run. Never between 20:30 and 22:45Z (the close) or 09:30 and
-   10:45Z (the morning), nor 22:45-23:30Z or 01:45-02:30Z.
-3. Journal section 3 (CLOSE_SECTIONS item 3): cite gas_state's supply and
-   flows blocks (filed production by region with its month and
-   month-on-month change; the eight pipeline signals with their gas day)
-   and drop "no daily S/D lane". Deploy before 20:30Z so that evening's
-   close uses it. FR-N14 (d) wants three consecutive closes citing it:
-   record each on the FR-N14 row.
-4. The s02 anchor: one comparison line in TOOLS_SYSTEM (e.g. "when
-   comparing two changes, name the larger one from the numbers") plus a
-   wobble entry in eval/wobble.md. Then one eval chain on the VPS: the
-   supply set, then golden_tools (about 2 h on the single Ollama slot, so
-   outside the journal windows). One ssh call, the bare command:
-     ssh ... 'cd ~/oracle; setsid nohup bash -c ".venv/bin/python
-       tools/golden_ext_eval.py eval/golden_natgas_supply.yaml --show;
-       .venv/bin/python tools/golden_ext_eval.py eval/golden_tools.yaml
-       --show" > logs/<name>.log 2>&1 </dev/null &'
-   Never `cd X && setsid ...&` (it holds the ssh channel); poll the
-   results files with one ssh call at a time. Expect s02 to PASS and
-   golden_tools to hold its baseline; the run is also the regression check
-   for step 2. Read every stored answer, not just the PASS line.
-5. M7, first slice (claim FR-N17 in the oracle ledger and §0 row 14,
-   commit the claim first): the weekly storage read. The Wednesday close
-   writes a labelled estimate of Thursday's EIA storage change into a
-   `reads` table in oracle.db (kind storage_change, target week, value or
-   range, as-of, model, prompt hash, edition; §16.5 item 18). A scorer
-   runs after ng_storage lands (Thursday, fast tier) and grades it against
-   the naive baselines (five-year average, persistence, weather-only;
-   item 19). Misses go back into the journal and ask prompts as "YOUR
-   RECENT MISSES", with a weekly skill card and one Slack line (item 20).
-   Rehearse on a scratch db first. The check (§16.6): eight weeks, at
-   least eight storage reads scored, skill vs the baselines reported
-   weekly, the journal quotes its own misses. Monthly regional-production
-   reads come second.
-6. M4 check, on or after 2026-10-04 15:30Z: a run_at on each day
+DO, in order (skip a step whose trigger hasn't happened; say so)
+1. Read the eval chain's results (if not yet recorded): record in the
+   FR-N14 row, eval/wobble.md W-008 (before/after), plan §16.9 step 3 and
+   §15.14. If s02 still inverts, say so; do not re-anchor without a new
+   occurrence.
+2. After each close (21:30Z, ~40 min): does section 3 cite regional
+   supply + flows? Tally on the FR-N14 (d) row.
+3. After the 09-30 close: `sqlite3 ~/oracle/oracle.db "select * from
+   reads"` shows one storage_change row for 2026-09-25 (edition close).
+   If missing, read logs/journal.log for "storage read not written".
+4. After the 10-01 print: the row is scored (actual, err, baselines_json
+   errors), one Slack line posted, the 10-01 close quotes the miss in
+   section 4 (M7 check item "the journal quotes its own misses").
+5. M4 check on or after 2026-10-04 15:30Z: a run_at on each day
    09-28..10-04 (ingest_log source ng_pipeline_flows) and all seven
-   pipelines in pipeline_flows_daily for each gas day. Record in §16.9
+   pipelines in pipeline_flows_daily for each gas day; record in §16.9
    step 5.
-7. Founder items, only when raised: the hosted M1 browser check (the keys
-   are set; the founder signs in), a Texas Gas throughput signal, OH/WV
-   readers, M6 (Databento), R14.2, the PA DEP email.
-Pipeline lanes: never solve or evade a bot challenge; if a site blocks,
-stop and ask the founder.
+6. M7 second slice when the first has two scored weeks: monthly
+   regional-production reads (kind production_region) scored against the
+   next filed month; claim it on FR-N17 first.
+7. Founder items, only when raised: hosted M1 browser check, Texas Gas
+   throughput, OH/WV readers, M6 (Databento), R14.2, PA DEP email.
 
 RULES
-- Claim in the §0 ledger (and the FR-N row for oracle work) and commit the
-  claim before editing. Guard commits with git branch --show-current.
-- Four gates before each globe commit: npm run format, npm run
-  check:boundaries, npm test, npm run build. New files go in
-  scripts/format-scope.json; imports may need scripts/package-boundaries.json
-  lines.
-- Every new source gets a docs/LICENCES.md verdict (and a
-  server/hosting/licencePolicy.js row if not cleared) before it ships
-  hosted.
-- Oracle commits: git -c user.name="Jack Gewirz" -c
-  user.email=jack@optaimum.com commit ...; stage only your own files.
-- VPS: ssh -i ~/.ssh/oil_oracle_laptop_ed25519 ubuntu@15.204.118.186. Keep
-  *.pre-<fr> backups; askd /health must show "running": null before a
-  restart. Never run ingest from the laptop. Never deploy in 22:45-23:30Z
-  or 01:45-02:30Z. Pull the VPS clone (sudo -u globe git -C
-  /srv/gods-eye-view/repo pull --ff-only) before deploying a commit that
-  changes scripts/deploy-vps.sh; deploy detached and poll for LIVE/FAILED.
-- Descriptive, never signals (R11); no price targets or advice.
-- Windows: big scripts or anything with a backslash via the Write tool;
-  scripted edits of CRLF files are line-aware (split, replace one line,
-  assert the count, read git diff --stat). After stopping a background task,
-  check netstat for an orphaned ssh.exe/node.exe, confirm its command line,
-  then taskkill.
-- Never put keys in chat or git.
+- Claim first in the §0 ledger and the FR row; commit the claim. Commit
+  with `git commit -o <paths>`: row 13's staged mode change on
+  scripts/hosting/push-hosted-env.sh sits in the shared tree; a plain
+  commit sweeps it in (it did once on 09-29, caught before push).
+- Four globe gates before each globe push (.gev-logs/gate-at.ps1 -Sha
+  <sha> -Name <name>; one gate run at a time).
+- VPS: ssh -i ~/.ssh/oil_oracle_laptop_ed25519 ubuntu@15.204.118.186 '...'
+  exactly (the founder's auto-mode allow rules match that form; no -o
+  options before the host). Keep *.pre-<fr> backups; askd /health must
+  show "running": null before a restart. Never deploy 20:30-22:45Z,
+  09:30-10:45Z, 22:45-23:30Z or 01:45-02:30Z. Never ingest from the laptop.
+- Descriptive only (R11): reads are internal, labelled nowcasts of
+  physical prints, never price calls; open reads are never shown.
+- Windows: big files via Write; CRLF files line-aware (split, replace one
+  line, assert count, git diff --stat).
 
-FOUNDER-OWNED: the d8 amendment; the FR-J files while no FR-J session is
-live; the hosted browser check; Texas Gas; the PA DEP email; the Databento
-quote; the R14.2 gate; SONRIS (Haynesville).
-
-CLOSE-OUT: record results in §16.9, the §0 ledger, §15.14 and the FR-N rows;
-push origin + mirror (globe) and origin (oracle); /update-obsidian, then
-offer /handoff.
+CLOSE-OUT: record results in §16.9, the §0 ledger, §15.14 and the FR-N
+rows; push origin + mirror (globe) and origin (oracle); /update-obsidian,
+then offer /handoff.
 ```
 
 ## 17. Row 15 PRD — `commodity-flares`: nightly gas-flare heat from VIIRS, matched to wells, calibrated against state flaring (FR-G15)
