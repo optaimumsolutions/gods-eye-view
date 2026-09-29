@@ -5767,16 +5767,18 @@ a. Amend d8 narrowly: the journal may write internal, labelled nowcasts
    (R11; price direction stays out).
 b. No FR-J session is live: may this session edit and deploy the FR-J
    owner's files (journal.py, oracle_ask.py, refresh.py, market_map.py)?
-c. Push row 15's unpushed commits with row 14's 13561da, or wait for
-   row 15 to push first?
+c. Deploy the globe now? It ships row 15's M0/M1 (the flares module and
+   the Williston flare-site bundle) with row 14's board change; row 15
+   cleared the push (vault STATE, 09-28), not the deploy.
 Without (b) skip steps 2-5; without (a) skip step 5. Say what was skipped.
 
 STATE AT HAND-OFF
 - Globe: VPS LIVE 6434609 (globe.env's Google keys and Access team/AUD
   SET, names checked; anonymous -> 302 to the Access login).
-  origin/feat/commodities-shell = 6434609. Local and unpushed above it:
-  row 15's e968c62, 2e9c8f9, 6f46bbb and row 14's 13561da (the board's
-  flow lines wrap; Freeport + the LEG receipt; gated 4,497 tests, 0 fail).
+  origin = mirror = the hand-off commit, which carries row 15's e968c62,
+  2e9c8f9, 6f46bbb (its session cleared b9 to push them) and row 14's
+  13561da (the board's flow lines wrap; Freeport + the LEG receipt).
+  Pushed, NOT deployed: LIVE is still 6434609.
 - Oracle main = origin. VPS (~/oracle, scp, not git): regional_production
   for Williston, the Gulf, Appalachia and three Permian layers; eight
   NG_FLOW_* signals from seven pipelines. The 15:20Z cron's first full run
@@ -5810,9 +5812,9 @@ WHO OWNS WHAT (commit by pathspec; never git add -A or git commit -a)
   row 14's.
 
 DO, in order (skip a step whose trigger has not happened, and say so)
-1. Gate c: push 13561da (row 15's commits only with its or the founder's
-   OK) to origin + mirror; deploy the globe detached and poll for
-   LIVE/FAILED; then re-run ingest/ng_regional.py on the VPS.
+1. Gate c: deploy the globe (the branch head; pull the VPS clone first if
+   scripts/deploy-vps.sh changed) detached and poll for LIVE/FAILED; then
+   re-run ingest/ng_regional.py on the VPS.
 2. Deploy FR-J7 as its PRD row describes: diff every VPS file against git
    with --strip-trailing-cr (oracle_ask.py should differ by FR-J7 alone),
    back up *.pre-fr-j7, scp the six files, build the journal collection
