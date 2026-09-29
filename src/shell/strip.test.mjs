@@ -45,6 +45,9 @@ test('the strip links are the product pages, in order', () => {
       'WEATHER /weather',
       'TRADES /trades',
       'CHAT /market#ask',
+      'MODEL /model',
+      'OPS /ops',
+      'DASHBOARD /dashboard',
     ],
   );
   assert.ok(Object.isFrozen(NAV_LINKS) && Object.isFrozen(NAV_LINKS[0]));

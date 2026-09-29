@@ -16,6 +16,10 @@ export const NAV_LINKS = Object.freeze([
   Object.freeze({ id: 'weather', label: 'WEATHER', href: '/weather' }),
   Object.freeze({ id: 'trades', label: 'TRADES', href: '/trades' }),
   Object.freeze({ id: 'chat', label: 'CHAT', href: '/market#ask' }),
+  // Row 16 (oracle FR-D21): the model's record, system health, the status dashboard.
+  Object.freeze({ id: 'model', label: 'MODEL', href: '/model' }),
+  Object.freeze({ id: 'ops', label: 'OPS', href: '/ops' }),
+  Object.freeze({ id: 'dashboard', label: 'DASHBOARD', href: '/dashboard' }),
 ]);
 
 /** A source is stale past twice its tolerance, the console's own rule. */

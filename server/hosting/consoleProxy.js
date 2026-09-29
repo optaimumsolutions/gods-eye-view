@@ -13,7 +13,16 @@ import { PROXY_KEY_HEADER, USER_HEADER } from './accessGuard.js';
  * /ask/<id>/cancel`), but a streamed answer would still pass straight through.
  */
 
-const PAGE_PATHS = new Set(['/gas', '/weather', '/trades', '/logs.json']);
+// Row 16 (oracle FR-D21): the MODEL, OPS and DASHBOARD tabs are console pages.
+const PAGE_PATHS = new Set([
+  '/gas',
+  '/weather',
+  '/trades',
+  '/logs.json',
+  '/model',
+  '/ops',
+  '/dashboard',
+]);
 const POST_PATHS = new Set(['/ask', '/grill', '/trade', '/trade_close']);
 const ORACLE_API_PREFIX = '/api/oracle/';
 // FR-D19 (oracle FR-J1) async ask jobs: poll and cancel.

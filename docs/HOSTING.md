@@ -25,7 +25,8 @@ before its own host check, proxy and static files, so the guard covers every
 request.
 
 Console routes under the globe's origin: `GET /market` (the console root),
-`/gas`, `/weather`, `/trades`, `/logs.json`, `/api/oracle/*` (M3, live since
+`/gas`, `/weather`, `/trades`, `/model`, `/ops`, `/dashboard` (row 16, oracle
+FR-D21: the MODEL, OPS and DASHBOARD tabs), `/logs.json`, `/api/oracle/*` (M3, live since
 2026-09-24: `freshness`, `chokepoints`, `basins`, `gas-storage`; the chokepoint
 layer and the Williston card read them and fall back when they fail),
 and `POST /ask`, `/grill`, `/trade`, `/trade_close`; since FR-D19 also
