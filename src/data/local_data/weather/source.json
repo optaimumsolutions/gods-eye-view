@@ -1,10 +1,12 @@
 {
   "repo": "optaimumsolutions/commodities",
-  "commit": "28f69db0ed0479c9217232df779f305db46d1b85",
+  "commit": "28c27e30d43a029e76aa04cef16bfad9ab8f05be",
   "files": {
     "corpus/wx_basins.yaml": "3801d73dba6bdf35c80d91875fc989aa6017a98500b25b182f00c572c2bd8e8b",
-    "corpus/wx_regions.yaml": "76e5db552a1beb91c0d6adb9d311df25521be6e3ced5022471e17b4e814c850c",
-    "corpus/wx_stations.yaml": "2275f16035c36eec289b0464c96bf41639aedbb7ae6177a2252d4cb5d56a9a9a"
+    "corpus/wx_regions.yaml": "1a261f127d012b271adb99434a7f69381d8198a6d690dbc7f1148ff9e74af8da",
+    "corpus/wx_stations.yaml": "2275f16035c36eec289b0464c96bf41639aedbb7ae6177a2252d4cb5d56a9a9a",
+    "corpus/wx_divisions.yaml": "b3cf272c0a920fba701e3b05fa0dc48159d47552fd3767ce735d561ce8040bc1",
+    "corpus/gwdd_weights.yaml": "7583c30cd71f7d2b6845a894fc146f00ed0561dd832b520e70003df8f57ea676"
   },
   "handPlaced": [
     "gulf-offshore",

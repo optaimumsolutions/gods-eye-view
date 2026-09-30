@@ -39,6 +39,9 @@ export function nearestRow(rows, lat, lon, maxKm = FORECAST_MAX_KM) {
   let best = null;
   for (const row of rows || []) {
     if (!Number.isFinite(row?.lat) || !Number.isFinite(row?.lon)) continue;
+    // M7 division centroids are demand markers, not places a campus or port
+    // sits in; the card line keeps reading the nearest basin, region or Gulf
+    if (row.kind === 'division') continue;
     const km = haversineKm(lat, lon, row.lat, row.lon);
     if (km <= maxKm && (!best || km < best.km)) best = { row, km };
   }

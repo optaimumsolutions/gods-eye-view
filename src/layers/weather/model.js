@@ -9,6 +9,9 @@ export const WEATHER_OVERLAY_COLLISION_CAPACITY = 16;
 export const RING_BASE_M = 30_000;
 export const RING_PER_DEG_F_M = 8_000;
 export const RING_MAX_M = 200_000;
+/** §11.8.15 D7.1: a division's point scales with its share of US gas deliveries. */
+export const MARKER_PX_BASE = 9;
+export const MARKER_PX_PER_GAS_SHARE = 40;
 
 /**
  * §11.8.5.2 / A-4: the shared six colour slots relabelled for weather, cold
@@ -65,7 +68,87 @@ export function discShare(row) {
   if (!w) return 0;
   if (row.kind === 'basin') return (w.freezeDays ?? 0) / 15;
   if (row.kind === 'region') return (w.heatingDays ?? 0) / 15;
+  if (row.kind === 'division') {
+    // D7.2: heating season fills with HDD days, cooling season with CDD days
+    const days = (row.days || []).length || 14;
+    return heatingSeason(row)
+      ? (w.heatingDays ?? 0) / days
+      : (w.coolingDays ?? 0) / days;
+  }
   return (w.galeDays ?? 0) / 7;
+}
+
+/** A division's window is a heating window when HDD14 ≥ CDD14. */
+export function heatingSeason(row) {
+  const w = row?.window || {};
+  return (w.hdd14 ?? 0) >= (w.cdd14 ?? 0);
+}
+
+/** Point size in pixels: basins/regions/Gulf fixed; divisions by gas share. */
+export function markerPixelSize(row) {
+  if (row?.kind !== 'division') return MARKER_PX_BASE;
+  const share = Number.isFinite(row.gasShare) ? Math.max(0, row.gasShare) : 0;
+  return Math.round(MARKER_PX_BASE + MARKER_PX_PER_GAS_SHARE * share);
+}
+
+/** The spread that sizes a marker's ring: TMIN, else the division's TMEAN. */
+export function ringSpread(day) {
+  return day?.tmin?.spread ?? day?.tmean?.spread ?? day?.hdd?.spread ?? null;
+}
+
+/** Degree days rounded, `n/a` when the store has none. */
+function dd(v) {
+  return Number.isFinite(v) ? `${Math.round(v)}` : 'n/a';
+}
+
+/** Anomaly with its sign and what it is measured on. */
+function anomalyText(day) {
+  if (day?.anomalyF == null) return 'no normal';
+  return `${day.anomalyF > 0 ? '+' : ''}${day.anomalyF}°F vs ERA5 normal${day.anomalyOf ? ` (${day.anomalyOf})` : ''}`;
+}
+
+/**
+ * §11.8.15 D7.2 / D7.3: the three sourced lines of a division card — degree
+ * days, the direct mean temperature, and the EIA-930 region(s) it quotes by
+ * name. Each line ends with its source; nothing is summed across regions.
+ */
+export function divisionCardLines(row, lead) {
+  const day = selectedDay(row, lead);
+  const w = row.window || {};
+  const lines = [
+    `HDD14 ${dd(w.hdd14)} · CDD14 ${dd(w.cdd14)} · ${heatingSeason(row) ? `${w.heatingDays ?? 0} heating` : `${w.coolingDays ?? 0} cooling`} days of ${(row.days || []).length} · ECMWF AIFS ENS via Oil Oracle`,
+  ];
+  if (day?.tmean?.p50 != null)
+    lines.push(
+      `mean temp D+${day.lead} p50 ${f0(day.tmean.p50)}°F [p10 ${f0(day.tmean.p10)} · p90 ${f0(day.tmean.p90)}] · ${anomalyText(day)} · ECMWF AIFS ENS via Oil Oracle`,
+    );
+  else if (day)
+    lines.push(
+      `mean temp D+${day.lead} n/a in this run · ${anomalyText(day)} · ECMWF AIFS ENS via Oil Oracle`,
+    );
+  lines.push(powerLine(row));
+  return lines;
+}
+
+/**
+ * The EIA-930 line: `power demand · TEX 74,392 MW at 18Z · day-ahead 63,440 · EIA-930`.
+ * Names the region it quotes (D7.3); a division with two regions prints both;
+ * no reading yet prints the regions it will quote.
+ */
+export function powerLine(row) {
+  const regions = Array.isArray(row?.eia930) ? row.eia930 : [];
+  const readings = (row?.power || []).filter((p) => p && p.demandMw != null);
+  if (!readings.length)
+    return `power demand · EIA-930 ${regions.join(' + ') || 'region'} · no reading yet`;
+  const parts = readings.map((p) => {
+    const at = p.observedAt ? `${String(p.observedAt).slice(11, 13)}Z` : '';
+    const ahead =
+      p.forecastMw == null
+        ? ''
+        : ` · day-ahead ${Math.round(p.forecastMw).toLocaleString('en-US')}`;
+    return `${p.id} ${Math.round(p.demandMw).toLocaleString('en-US')} MW at ${at}${ahead}`;
+  });
+  return `power demand · ${parts.join(' · ')} · EIA-930`;
 }
 
 export function weatherPosition(row) {
@@ -104,6 +187,10 @@ export function ambientLabel(row, lead) {
   if (row.kind === 'basin')
     return `${head} · p10 ${f0(day.tmin.p10)}°F · ${row.window.freezeDays ?? 0} frz`;
   if (row.kind === 'region') return `${head} · HDD14 ${f0(row.window.hdd14)}`;
+  if (row.kind === 'division')
+    return heatingSeason(row)
+      ? `${head} · HDD14 ${f0(row.window.hdd14)} · gas ${Math.round((row.gasShare ?? 0) * 100)}%`
+      : `${head} · CDD14 ${f0(row.window.cdd14)} · gas ${Math.round((row.gasShare ?? 0) * 100)}%`;
   return `${head} · wind p90 ${f0(day.wind.p90)}`;
 }
 
@@ -116,6 +203,8 @@ export function hoverLines(row, lead, formatAsOf) {
     headline = `p10 ${f0(day.tmin.p10)}°F · p50 ${f0(day.tmin.p50)}°F · ${row.window.freezeDays} freeze days (heuristic ${row.freezeF}°F)`;
   else if (row.kind === 'region')
     headline = `HDD14 ${f0(row.window.hdd14)} · CDD14 ${f0(row.window.cdd14)} · p50 mean ${f0((day.tmin.p50 + day.tmax.p50) / 2)}°F`;
+  else if (row.kind === 'division')
+    headline = `HDD14 ${f0(row.window.hdd14)} · CDD14 ${f0(row.window.cdd14)} · mean p50 ${f0(day.tmean?.p50)}°F · gas share ${Math.round((row.gasShare ?? 0) * 100)}%`;
   else {
     const wave = row.marine?.find((m) => m.date === day.date)?.waveMax;
     headline = `wind p90 ${f0(day.wind.p90)} mph · wave ${Number.isFinite(wave) ? wave.toFixed(1) : 'n/a'} m · ${row.window.galeDays} gale days (≥ ${GALE_MPH} mph)`;
@@ -137,7 +226,9 @@ export function createWeatherOverlayEntry(row, lead, position) {
     title: ambientLabel(row, lead),
     accent: bandCss(day?.band),
     priority: Math.round(
-      Math.abs(day?.anomalyF ?? 0) * 100 + (row.kind === 'basin' ? 50 : 0),
+      Math.abs(day?.anomalyF ?? 0) * 100 +
+        (row.kind === 'basin' ? 50 : 0) +
+        (row.kind === 'division' ? (row.gasShare ?? 0) * 100 : 0),
     ),
     collisionGroup: 'ambient-label',
     paintLane: 'ambient-label',
@@ -169,7 +260,11 @@ export function buildSelectedWeatherCard(row, lead, position, formatAsOf) {
   const day = selectedDay(row, lead);
   const [title, stamp, headline] = hoverLines(row, lead, formatAsOf);
   const details = [stamp, headline];
-  if (day) {
+  if (day && row.kind === 'division') {
+    details.push(...divisionCardLines(row, lead));
+    details.push(confidenceLine(day));
+    details.push(`${row.source} · ${row.members} members · click for the fan`);
+  } else if (day) {
     details.push(
       `p10 ${f0(day.tmin.p10)} · p50 ${f0(day.tmin.p50)} · p90 ${f0(day.tmin.p90)}°F TMIN · spread ${f0(day.tmin.spread)}°F · ${day.anomalyF == null ? 'no normal' : `${day.anomalyF > 0 ? '+' : ''}${day.anomalyF}°F vs ERA5 normal`}`,
     );

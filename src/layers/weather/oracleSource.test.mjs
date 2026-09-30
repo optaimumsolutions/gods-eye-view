@@ -34,17 +34,40 @@ function routePayload(initDate = '2026-09-29') {
     entries: {
       Permian: { TMIN: series(30, -1, 3), FRZDD: series(0, 0.2, 0.1) },
       Texas: { HDD: series(0, 0.5, 1), CDD: series(8, -0.5, 1) },
+      // M7: a division carries HDD/CDD and the direct TMEAN (FR-W12)
+      'East North Central': {
+        HDD: series(12, 0.5, 2),
+        CDD: series(0, 0, 0),
+        TMEAN: series(53, -0.5, 4),
+      },
       CONUS: { GWDD: series(3, 0.1, 0.5) },
     },
   };
 }
 
+const DIVISION_ENTRY = {
+  id: 'east-north-central',
+  kind: 'division',
+  name: 'East North Central',
+  lat: 41.39,
+  lon: -85.49,
+  points: [{ name: 'Chicago', lat: 41.85, lon: -87.65, w: 1 }],
+  gasShare: 0.239614,
+  eia930: ['MIDW'],
+  commodities: ['natgas'],
+  country: 'US',
+};
+
 const bundles = () => ({
-  entries: FIXTURE_ENTRIES,
+  entries: [...FIXTURE_ENTRIES, DIVISION_ENTRY],
   normals: {
     entries: {
       permian: { tmin: new Array(366).fill(40), tmax: new Array(366).fill(60) },
       texas: { tmin: new Array(366).fill(60), tmax: new Array(366).fill(80) },
+      'east-north-central': {
+        tmin: new Array(366).fill(40),
+        tmax: new Array(366).fill(60),
+      },
     },
   },
   skill: { vintage: '2026-09-30', models: {} },
@@ -60,9 +83,28 @@ test('the route payload becomes the layer snapshot: leads from D+1, mean as p50,
   const ids = snap.rows.map((r) => r.id);
   assert.deepEqual(
     ids,
-    ['permian', 'texas'],
+    ['permian', 'texas', 'east-north-central'],
     'the Gulf entry has no oracle sample and is left out',
   );
+  // M7 (§11.8.15 D7.2 B): the division's anomaly is the direct TMEAN against
+  // the ERA5 mean normal (50), never back-derived from degree days
+  const enc = snap.rows[2];
+  assert.equal(enc.kind, 'division');
+  assert.equal(enc.days[0].tmean.p50, 53);
+  assert.equal(
+    enc.days[0].tmean.spread,
+    8,
+    'p90 − p10 of TMEAN sizes the ring',
+  );
+  assert.equal(enc.days[0].anomalyF, 3);
+  assert.equal(enc.days[0].anomalyOf, 'TMEAN');
+  assert.equal(enc.days[0].normalMean, 50);
+  assert.equal(enc.window.hdd14, 213.5);
+  assert.equal(enc.window.heatingDays, 14);
+  assert.equal(enc.window.coolingDays, 0);
+  assert.equal(enc.members, 51);
+  assert.equal(enc.gasShare, 0.239614);
+  assert.deepEqual(enc.eia930, ['MIDW']);
   const permian = snap.rows[0];
   assert.equal(permian.days.length, 14);
   assert.equal(permian.days[0].lead, 1, 'the oracle keeps no D+0 row');

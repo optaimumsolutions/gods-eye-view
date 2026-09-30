@@ -3,11 +3,13 @@ import {
   DEFAULT_FIELD_STAT,
   FIELD_STATS,
   FIELD_UPSCALE,
+  POPULATION_STATS,
   paintField,
   rampLegend,
+  weightByPopulation,
 } from './fieldModel.js';
 import { DEFAULT_LEAD, getForecastScrubber } from './scrubber.js';
-import { WEATHER_SKILL_URL } from './source.js';
+import { WEATHER_POPULATION_URL, WEATHER_SKILL_URL } from './source.js';
 
 export const WEATHER_FIELD_LAYER_ID = 'weather-field';
 /** W7's alpha for the draped field; per-cell confidence multiplies it. */
@@ -35,6 +37,7 @@ export function createWeatherFieldLayer({
   scrubber = null,
   fetchImpl = (...args) => globalThis.fetch(...args),
   skillUrl = WEATHER_SKILL_URL,
+  populationUrl = WEATHER_POPULATION_URL,
   documentRef = typeof document !== 'undefined' ? document : null,
 } = {}) {
   if (
@@ -49,6 +52,11 @@ export function createWeatherFieldLayer({
   let _entity = null;
   let _manifest = null;
   let _skill = null;
+  /** The GPW bundle: `{ vintage, values: Float32Array }`, null until read, false when missing. */
+  let _population = null;
+  let _populationError = null;
+  /** The day's max HDD×people (or CDD×people) product, for the legend. */
+  let _productMax = null;
   let _lead = DEFAULT_LEAD;
   let _stat = DEFAULT_FIELD_STAT;
   let _enabled = false;
@@ -77,6 +85,59 @@ export function createWeatherFieldLayer({
     return _skill;
   }
 
+  /**
+   * D7.5: the population bundle, read once when a `× people` chip is first
+   * chosen; a missing or mismatched bundle disables those chips by name.
+   */
+  async function loadPopulation(signal) {
+    if (_population !== null) return _population;
+    try {
+      const r = await fetchImpl(populationUrl, { signal });
+      if (!r.ok) throw new Error(`population bundle HTTP ${r.status}`);
+      // a dev server answers a missing bundle with index.html, not a 404
+      const type = String(r.headers?.get?.('content-type') || '');
+      if (type && !/json/i.test(type))
+        throw new Error(
+          'population bundle not built (npm run build:weather-population)',
+        );
+      const p = await r.json();
+      const g = _manifest?.grid;
+      if (
+        !Array.isArray(p?.values) ||
+        !g ||
+        p.grid?.rows !== g.rows ||
+        p.grid?.cols !== g.cols
+      )
+        throw new Error('population bundle does not match the field grid');
+      _population = {
+        vintage: p.vintage || 'GPW',
+        source: p.source || '',
+        values: Float32Array.from(p.values),
+      };
+      _populationError = null;
+    } catch (e) {
+      if (signal?.aborted) throw e;
+      _population = false;
+      _populationError = e?.message || 'population bundle unavailable';
+    }
+    return _population;
+  }
+
+  /** The grid to paint for a stat: the route's, or the population-weighted product. */
+  async function gridFor(lead, stat, signal) {
+    const base = POPULATION_STATS[stat];
+    if (!base) return source.getGrid(lead, stat, { signal });
+    const [grid, population] = await Promise.all([
+      source.getGrid(lead, base, { signal }),
+      loadPopulation(signal),
+    ]);
+    if (!population)
+      throw new Error(_populationError || 'no population bundle');
+    const weighted = weightByPopulation(grid.values, population.values);
+    _productMax = weighted.max;
+    return { ...grid, values: weighted.values, stat };
+  }
+
   /** The lead the manifest can answer nearest to the scrubber's. */
   function leadFor(lead) {
     const leads = _manifest?.leads || [];
@@ -102,7 +163,7 @@ export function createWeatherFieldLayer({
       try {
         const signal = _request?.signal;
         const [grid, spread] = await Promise.all([
-          source.getGrid(lead, _stat, { signal }),
+          gridFor(lead, _stat, signal),
           _stat === 'spread'
             ? null
             : source.getGrid(lead, 'spread', { signal }),
@@ -273,8 +334,19 @@ export function createWeatherFieldLayer({
 
     setStat(stat) {
       if (!FIELD_STATS[stat] || stat === _stat) return;
+      if (
+        _manifest &&
+        !_manifest.stats.includes(POPULATION_STATS[stat] || stat)
+      )
+        return; // the run's field lacks this stat (an older reduce)
+      const previous = _stat;
       _stat = stat;
-      paint();
+      const painted = paint();
+      // a people chip without its bundle falls back to the stat it replaced
+      if (POPULATION_STATS[stat] && typeof painted?.then === 'function')
+        painted.then((ok) => {
+          if (!ok && _stat === stat && _population === false) _stat = previous;
+        });
     },
     getStat: () => _stat,
     getSelectedLead: () => _lead,
@@ -286,13 +358,22 @@ export function createWeatherFieldLayer({
 
     getRowControls() {
       return {
-        chips: Object.entries(FIELD_STATS).map(([id, spec]) => ({
-          id: `stat-${id}`,
-          label: spec.label.toUpperCase(),
-          title: `Draw ${spec.label} (${spec.unit})`,
-          disabled: !_enabled || id === _stat,
-          onClick: () => layer.setStat(id),
-        })),
+        chips: Object.entries(FIELD_STATS).map(([id, spec]) => {
+          const served =
+            !_manifest || _manifest.stats.includes(POPULATION_STATS[id] || id);
+          const bundled = !POPULATION_STATS[id] || _population !== false;
+          return {
+            id: `stat-${id}`,
+            label: spec.label.toUpperCase(),
+            title: !served
+              ? `${spec.label}: not in this run's field (older reduce)`
+              : !bundled
+                ? `${spec.label}: ${_populationError}`
+                : `Draw ${spec.label} (${spec.unit})`,
+            disabled: !_enabled || id === _stat || !served || !bundled,
+            onClick: () => layer.setStat(id),
+          };
+        }),
         legend: [
           ...rampLegend(_stat).map((step) => ({
             label: step.label,
@@ -304,7 +385,11 @@ export function createWeatherFieldLayer({
             blurb: `${FIELD_STATS[_stat].label} for the scrubber's day; cells fade where the 51 members disagree. ${
               _skill?.models?.ecmwf_aifs025_ensemble?.label ||
               'skill not loaded'
-            }. ECMWF AIFS ENS open data, reduced by the Oil Oracle nightly.`,
+            }. ECMWF AIFS ENS open data, reduced by the Oil Oracle nightly.${
+              POPULATION_STATS[_stat] && _population
+                ? ` Population: ${_population.vintage} (CC BY 4.0, bundled); the day's max product is ${Math.round(_productMax ?? 0).toLocaleString('en-US')} degree-day·people per cell = 100%.`
+                : ''
+            }`,
           },
         ],
       };
@@ -329,6 +414,8 @@ export function createWeatherFieldLayer({
         stat: _stat,
         painted: _paintedKey,
         source: layer.source,
+        population: _population ? _population.vintage : _populationError,
+        productMax: _productMax,
       };
     },
   };

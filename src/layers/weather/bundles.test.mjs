@@ -5,6 +5,11 @@ import { fileURLToPath } from 'node:url';
 import { parseYaml, flow } from '../../../scripts/build-weather-gazetteer.mjs';
 import { reduceNormals } from '../../../scripts/build-weather-normals.mjs';
 import { buildSkill, MAX_LEAD } from '../../../scripts/build-weather-skill.mjs';
+import {
+  FIELD_GRID,
+  buildBundle,
+  parseAsciiGrid,
+} from '../../../scripts/build-weather-population.mjs';
 
 const read = (name) =>
   JSON.parse(
@@ -18,9 +23,9 @@ const read = (name) =>
 
 // --------------------------------------------------------- gazetteer ----
 
-test('gazetteer pins ten entries inside the contiguous US with freezeF on every basin', () => {
+test('gazetteer pins nineteen entries inside the contiguous US with freezeF on every basin', () => {
   const { entries } = read('gazetteer.json');
-  assert.equal(entries.length, 10);
+  assert.equal(entries.length, 19);
   const ids = entries.map((e) => e.id);
   assert.deepEqual(ids, [
     'appalachia',
@@ -33,12 +38,21 @@ test('gazetteer pins ten entries inside the contiguous US with freezeF on every 
     'texas',
     'gulf-offshore',
     'gulf-lng',
+    'new-england',
+    'middle-atlantic',
+    'east-north-central',
+    'west-north-central',
+    'south-atlantic',
+    'east-south-central',
+    'west-south-central',
+    'mountain',
+    'pacific',
   ]);
   for (const e of entries) {
     assert.ok(e.lat > 24 && e.lat < 50, `${e.id} lat ${e.lat}`);
     assert.ok(e.lon > -126 && e.lon < -66, `${e.id} lon ${e.lon}`);
     assert.equal(e.country, 'US');
-    assert.ok(['basin', 'region', 'gulf'].includes(e.kind));
+    assert.ok(['basin', 'region', 'gulf', 'division'].includes(e.kind));
     const w = e.points.reduce((s, p) => s + p.w, 0);
     assert.ok(Math.abs(w - 1) < 1e-4, `${e.id} weights sum ${w}`);
     if (e.kind === 'basin') {
@@ -52,6 +66,68 @@ test('gazetteer pins ten entries inside the contiguous US with freezeF on every 
   // regions resolve metros by name: South Central lists nine, Texas four
   assert.equal(entries.find((e) => e.id === 'southcentral').points.length, 9);
   assert.equal(entries.find((e) => e.id === 'texas').points.length, 4);
+  // M7 (§11.8.15 D7.1/D7.3): nine divisions, gas shares summing to 1, the
+  // oracle's metro basket, and the EIA-930 regions each quotes
+  const divisions = entries.filter((e) => e.kind === 'division');
+  assert.equal(divisions.length, 9);
+  const gas = divisions.reduce((s, d) => s + d.gasShare, 0);
+  assert.ok(Math.abs(gas - 1) < 1e-4, `gas shares sum ${gas}`);
+  assert.equal(
+    entries.find((e) => e.id === 'east-north-central').gasShare,
+    0.239614,
+  );
+  assert.equal(
+    entries.find((e) => e.id === 'east-north-central').points.length,
+    7,
+  );
+  assert.deepEqual(entries.find((e) => e.id === 'south-atlantic').eia930, [
+    'CAR',
+    'SE',
+    'FLA',
+  ]);
+  assert.deepEqual(entries.find((e) => e.id === 'west-south-central').eia930, [
+    'TEX',
+  ]);
+  for (const d of divisions) {
+    assert.ok(d.eia930.length >= 1 && d.eia930.length <= 3, `${d.id} eia930`);
+    assert.deepEqual(d.commodities, ['natgas']);
+  }
+});
+
+// -------------------------------------------------------- population ----
+
+test('the population builder reads an ESRI ASCII grid and quarter-sums the four cells at each field point', () => {
+  // a 1440 × 720 world at 0.25°, every cell = 4 people, so each field point = 4
+  const ncols = 1440;
+  const nrows = 720;
+  const header = `ncols ${ncols}\nnrows ${nrows}\nxllcorner -180\nyllcorner -90\ncellsize 0.25\nNODATA_value -9999\n`;
+  const row = new Array(ncols).fill(4).join(' ');
+  const rows = new Array(nrows).fill(row);
+  // one NODATA cell at the field's north-west corner (row for lat 49.75..50, col for lon -126..-125.75)
+  const rTop = Math.round((90 - 50) / 0.25); // the cell whose top edge is 50 N
+  const cLeft = Math.round((-126 + 180) / 0.25);
+  const cells = row.split(' ');
+  cells[cLeft] = '-9999';
+  rows[rTop] = cells.join(' ');
+  const grid = parseAsciiGrid(header + rows.join('\n') + '\n');
+  assert.equal(grid.nrows, nrows);
+  const bundle = buildBundle(grid);
+  assert.equal(bundle.values.length, FIELD_GRID.rows * FIELD_GRID.cols);
+  assert.equal(bundle.grid.rows, 105);
+  assert.equal(bundle.grid.cols, 241);
+  // interior points: (4 + 4 + 4 + 4) / 4 = 4
+  assert.equal(bundle.values[50 * 241 + 120], 4);
+  // the north-west corner point touches the NODATA cell (read as 0) to its SE: (0 + 4 + 4 + 4) / 4 = 3
+  assert.equal(bundle.values[0], 3);
+  assert.equal(bundle.licence, 'CC BY 4.0');
+  assert.match(bundle.vintage, /GPWv4\.11/);
+  assert.throws(
+    () =>
+      parseAsciiGrid(
+        'ncols 3\nnrows 1\nxllcorner 0\nyllcorner 0\ncellsize 0.25\n1 2\n',
+      ),
+    /cols/,
+  );
 });
 
 test('the flow-yaml parser reads the oracle grammar and refuses anything else', () => {

@@ -118,6 +118,15 @@ export const DATA_CREDITS = [
       '(CC BY 4.0)',
   },
   {
+    key: 'gpw-population',
+    html:
+      'Forecast-field population weighting: ' +
+      '<a href="https://sedac.ciesin.columbia.edu/data/set/gpw-v4-population-count-rev11" target="_blank" rel="noopener">Gridded Population of the World v4.11</a> ' +
+      '(CIESIN, Columbia University / NASA SEDAC, 2020, CC BY 4.0); division power demand by ' +
+      '<a href="https://www.eia.gov/electricity/gridmonitor/" target="_blank" rel="noopener">EIA-930 Hourly Electric Grid Monitor</a> ' +
+      '(US public domain)',
+  },
+  {
     key: 'era5-normals',
     html:
       'Basin forecast normals: contains modified Copernicus Climate Change Service information (ERA5, 2016–2025, via the ' +

@@ -3,7 +3,8 @@
  * Row 3 (docs/COMMODITIES-PLAN.md §11.8.1): bundle the weather gazetteer.
  *
  * Reads the Oil Oracle's sample-point yamls (`corpus/wx_basins.yaml`,
- * `corpus/wx_regions.yaml`, `corpus/wx_stations.yaml`) from
+ * `corpus/wx_regions.yaml`, `corpus/wx_stations.yaml`, and for the M7 demand
+ * markers `corpus/wx_divisions.yaml` + `corpus/gwdd_weights.yaml`) from
  * `optaimumsolutions/commodities` at a PINNED commit through `gh api` — build
  * time only; nothing in the read path touches GitHub — and writes
  * `src/data/local_data/weather/gazetteer.json` + `source.json`, so the globe
@@ -28,11 +29,13 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT_DIR = join(ROOT, 'src', 'data', 'local_data', 'weather');
 const REPO = 'optaimumsolutions/commodities';
 /** Pinned oracle commit the yamls are read at (bump deliberately, re-run). */
-const COMMIT = '28f69db0ed0479c9217232df779f305db46d1b85';
+const COMMIT = '28c27e30d43a029e76aa04cef16bfad9ab8f05be';
 const FILES = [
   'corpus/wx_basins.yaml',
   'corpus/wx_regions.yaml',
   'corpus/wx_stations.yaml',
+  'corpus/wx_divisions.yaml',
+  'corpus/gwdd_weights.yaml',
 ];
 
 /**
@@ -228,7 +231,13 @@ function round(v, d) {
   return Number(v.toFixed(d));
 }
 
-export function buildGazetteer({ basins, regions, stations }) {
+export function buildGazetteer({
+  basins,
+  regions,
+  stations,
+  divisions = null,
+  weights = null,
+}) {
   const entries = [];
   for (const [name, b] of Object.entries(basins.basins)) {
     const id = BASIN_IDS[name];
@@ -286,6 +295,33 @@ export function buildGazetteer({ basins, regions, stations }) {
       country: 'US',
     });
   }
+  // §11.8.15 requirement 1 (M7, D7.1/D7.3): the nine census divisions as
+  // demand markers — the oracle's own metro basket and pop weights, its gas
+  // share (division share of US res+comm gas deliveries) and the EIA-930
+  // regions the power-demand line quotes.
+  if (divisions && weights) {
+    for (const [name, d] of Object.entries(divisions.divisions)) {
+      const list = stations.divisions[name];
+      if (!list) throw new Error(`division ${name} not in wx_stations.yaml`);
+      const gasShare = weights.weights[name];
+      if (typeof gasShare !== 'number')
+        throw new Error(`division ${name} has no weight in gwdd_weights.yaml`);
+      const points = normalizeWeights(
+        list.map((m) => ({ name: m.name, lat: m.lat, lon: m.lon, w: m.pop })),
+      );
+      entries.push({
+        id: String(d.id),
+        kind: 'division',
+        name,
+        ...centroid(points),
+        points,
+        gasShare: round(gasShare, 6),
+        eia930: (Array.isArray(d.eia930) ? d.eia930 : [d.eia930]).map(String),
+        commodities: ['natgas'],
+        country: 'US',
+      });
+    }
+  }
   return entries;
 }
 
@@ -301,6 +337,8 @@ function main() {
     basins: parseYaml(texts['corpus/wx_basins.yaml']),
     regions: parseYaml(texts['corpus/wx_regions.yaml']),
     stations: parseYaml(texts['corpus/wx_stations.yaml']),
+    divisions: parseYaml(texts['corpus/wx_divisions.yaml']),
+    weights: parseYaml(texts['corpus/gwdd_weights.yaml']),
   };
   const entries = buildGazetteer(parsed);
   const gazetteer = JSON.stringify({ entries }, null, 2) + '\n';

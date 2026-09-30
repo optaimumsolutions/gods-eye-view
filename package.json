@@ -47,6 +47,7 @@
     "build:weather-gazetteer": "node scripts/build-weather-gazetteer.mjs",
     "build:weather-normals": "node scripts/build-weather-normals.mjs",
     "build:weather-skill": "node scripts/build-weather-skill.mjs",
+    "build:weather-population": "node scripts/build-weather-population.mjs",
     "build:onshore": "node scripts/build-onshore.mjs",
     "test": "node scripts/run-unit-tests.mjs",
     "test:track": "node scripts/track-regression.mjs",

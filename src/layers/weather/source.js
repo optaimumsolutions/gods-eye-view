@@ -35,6 +35,11 @@ export const WEATHER_SKILL_URL = new URL(
   '../../data/local_data/weather/skill.json',
   import.meta.url,
 ).href;
+/** M7 (§11.8.15 D7.5): GPWv4.11 population counts on the field's grid. */
+export const WEATHER_POPULATION_URL = new URL(
+  '../../data/local_data/weather/population.json',
+  import.meta.url,
+).href;
 
 /** The three static bundles, read once; shared by every weather source. */
 export async function loadWeatherBundles({

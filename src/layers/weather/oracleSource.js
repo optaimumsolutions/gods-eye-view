@@ -45,6 +45,16 @@ export const ORACLE_REGION_NAMES = Object.freeze({
   bakken: 'Bakken',
   southcentral: 'SouthCentral',
   texas: 'Texas',
+  // M7 (§11.8.15 D7.1): the nine census divisions, the oracle's demand basket
+  'new-england': 'New England',
+  'middle-atlantic': 'Middle Atlantic',
+  'east-north-central': 'East North Central',
+  'west-north-central': 'West North Central',
+  'south-atlantic': 'South Atlantic',
+  'east-south-central': 'East South Central',
+  'west-south-central': 'West South Central',
+  mountain: 'Mountain',
+  pacific: 'Pacific',
 });
 /** A run older than this (a laptop's stale mirror) loses to live Open-Meteo. */
 export const ORACLE_MAX_LAG_DAYS = 3;
@@ -99,6 +109,7 @@ export function buildOracleEntryDays(entry, series, { normals, initDate }) {
     const tmin = statsOf(s.TMIN);
     const hdd = statsOf(s.HDD);
     const cdd = statsOf(s.CDD);
+    const tmean = statsOf(s.TMEAN);
     const doy = dayOfYear(validAt);
     const normalTmin = normal ? normal.tmin[doy - 1] : null;
     let anomalyF = null;
@@ -106,6 +117,11 @@ export function buildOracleEntryDays(entry, series, { normals, initDate }) {
     if (tmin.p50 != null && normalTmin != null) {
       anomalyF = Number((tmin.p50 - normalTmin).toFixed(1));
       anomalyOf = 'TMIN';
+    } else if (tmean.p50 != null && normal) {
+      // M7 (D7.2 B): the oracle's direct pop-weighted mean, never back-derived
+      const normalMean = (normal.tmin[doy - 1] + normal.tmax[doy - 1]) / 2;
+      anomalyF = Number((tmean.p50 - normalMean).toFixed(1));
+      anomalyOf = 'TMEAN';
     } else if ((hdd.p50 != null || cdd.p50 != null) && normal) {
       const meanT = 65 - (hdd.p50 ?? 0) + (cdd.p50 ?? 0);
       const normalMean = (normal.tmin[doy - 1] + normal.tmax[doy - 1]) / 2;
@@ -118,6 +134,7 @@ export function buildOracleEntryDays(entry, series, { normals, initDate }) {
       lead,
       tmin,
       tmax: EMPTY,
+      tmean,
       hdd,
       cdd,
       wind: EMPTY,
@@ -126,6 +143,9 @@ export function buildOracleEntryDays(entry, series, { normals, initDate }) {
       frzddMean: frz,
       freezeShare: null,
       normalTmin,
+      normalMean: normal
+        ? (normal.tmin[doy - 1] + normal.tmax[doy - 1]) / 2
+        : null,
       anomalyF,
       anomalyOf,
       band: anomalyBand(anomalyF),
@@ -157,6 +177,7 @@ export function buildOracleEntryDays(entry, series, { normals, initDate }) {
       freezeDays,
       freezeDaysP50,
       heatingDays: has('hdd') ? days.filter((d) => d.hdd.p50 > 0).length : null,
+      coolingDays: has('cdd') ? days.filter((d) => d.cdd.p50 > 0).length : null,
       hdd7: sum('hdd', 7),
       hdd14: sum('hdd', 14),
       cdd7: sum('cdd', 7),
@@ -194,16 +215,15 @@ export function buildOracleWeatherSnapshot(
       normals,
       initDate: payload.initDate,
     });
-    const spreadSample = readings.days.map(
-      (d) => d.tmin.spread ?? d.hdd.spread,
-    );
+    const spreadOf = (d) => d.tmin.spread ?? d.tmean.spread ?? d.hdd.spread;
+    const spreadSample = readings.days.map(spreadOf);
     const days = readings.days.map((day) => ({
       ...day,
       confidence: confidenceFor({
         skill,
         model,
         lead: day.lead,
-        spread: day.tmin.spread ?? day.hdd.spread,
+        spread: spreadOf(day),
         spreadSample,
       }),
       observation: createObservation({
@@ -219,7 +239,7 @@ export function buildOracleWeatherSnapshot(
       ...entry,
       model,
       source: ORACLE_WEATHER_SOURCE_LABEL,
-      members: days[0]?.tmin.n || days[0]?.hdd.n || 0,
+      members: days[0]?.tmin.n || days[0]?.tmean.n || days[0]?.hdd.n || 0,
       memberCounts: {},
       days,
       window: readings.window,

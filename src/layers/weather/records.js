@@ -168,6 +168,8 @@ export function buildEntryReadings(entry, aggregate, { normals } = {}) {
     const cdd = stats(
       mean.map((t) => (t == null ? null : Math.max(0, t - 65))),
     );
+    // M7: the daily mean per member, the demand markers' direct reading
+    const tmean = stats(mean);
     const wind = stats(members.wind?.[d] || []);
     const precip = stats(members.precip?.[d] || []);
     const snow = stats(members.snow?.[d] || []);
@@ -179,15 +181,23 @@ export function buildEntryReadings(entry, aggregate, { normals } = {}) {
         : [];
     const doy = dayOfYear(iso);
     const normalTmin = normal ? normal.tmin[doy - 1] : null;
-    const anomalyF =
+    let anomalyF =
       tmin.p50 == null || normalTmin == null
         ? null
         : Number((tmin.p50 - normalTmin).toFixed(1));
+    let anomalyOf = anomalyF == null ? null : 'TMIN';
+    if (entry.kind === 'division' && tmean.p50 != null && normal) {
+      // demand markers read the mean-temperature anomaly (§11.8.15 D7.2)
+      const normalMean = (normal.tmin[doy - 1] + normal.tmax[doy - 1]) / 2;
+      anomalyF = Number((tmean.p50 - normalMean).toFixed(1));
+      anomalyOf = 'mean (TMIN+TMAX)/2';
+    }
     return {
       date: iso,
       lead: d,
       tmin,
       tmax,
+      tmean,
       hdd,
       cdd,
       wind,
@@ -195,7 +205,11 @@ export function buildEntryReadings(entry, aggregate, { normals } = {}) {
       snow,
       freezeShare: tmin.n ? frozen.length / tmin.n : null,
       normalTmin,
+      normalMean: normal
+        ? (normal.tmin[doy - 1] + normal.tmax[doy - 1]) / 2
+        : null,
       anomalyF,
+      anomalyOf,
       band: anomalyBand(anomalyF),
     };
   });
@@ -213,6 +227,7 @@ export function buildEntryReadings(entry, aggregate, { normals } = {}) {
       freezeDays: entry.kind === 'basin' ? freezeDays : null,
       freezeDaysP50: entry.kind === 'basin' ? freezeDaysP50 : null,
       heatingDays: daysOut.filter((x) => x.hdd.p50 > 0).length,
+      coolingDays: daysOut.filter((x) => x.cdd.p50 > 0).length,
       hdd7: Number(sum('hdd', 7).toFixed(1)),
       hdd14: Number(sum('hdd', 14).toFixed(1)),
       cdd7: Number(sum('cdd', 7).toFixed(1)),
@@ -370,6 +385,8 @@ export function mapAnalystRecord(row, selectedDay = 1) {
     threshold: row.kind === 'basin' ? row.freezeF : null,
     hdd14: row.window.hdd14,
     cdd14: row.window.cdd14,
+    tmeanP50: n(day?.tmean?.p50),
+    gasShare: n(row.gasShare),
     windP90: n(day?.wind.p90),
     galeDays: row.window.galeDays,
     confidence: day?.confidence.alpha ?? null,

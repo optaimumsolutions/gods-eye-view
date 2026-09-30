@@ -4,11 +4,13 @@ import {
   DEFAULT_FIELD_STAT,
   FIELD_STATS,
   FIELD_UPSCALE,
+  POPULATION_STATS,
   decodeGrid,
   paintField,
   percentileRanks,
   rampColor,
   rampLegend,
+  weightByPopulation,
 } from './fieldModel.js';
 import {
   createOracleFieldSource,
@@ -68,6 +70,33 @@ test('ramps are piecewise-linear and clamped; the legend names its stops', () =>
   assert.match(legend[0].color, /^rgb\(/);
   assert.equal(rampLegend('p50')[0].label, '-20°F');
   assert.equal(FIELD_STATS[DEFAULT_FIELD_STAT].label, 'p50 TMIN');
+  // M7 (§11.8.15 D7.4/D7.5): degree-day chips 0 → 40, the people chips 0 → 100 %
+  assert.deepEqual(
+    rampLegend('hdd', 3).map((s) => s.label),
+    ['0', '20', '40'],
+  );
+  assert.deepEqual(
+    rampLegend('hddPop', 3).map((s) => s.label),
+    ['0%', '50%', '100%'],
+  );
+  assert.deepEqual(POPULATION_STATS, { hddPop: 'hdd', cddPop: 'cdd' });
+  assert.deepEqual(rampColor('people', 0), [30, 30, 45]);
+  assert.deepEqual(rampColor('degreeDays', 99), [220, 40, 60]);
+});
+
+test('weightByPopulation normalizes the degree-day × people product to the day max; empty cells read 0', () => {
+  const hdd = Float32Array.from([10, 20, NaN, 5]);
+  const pop = Float32Array.from([1000, 250, 9000, 0]);
+  const out = weightByPopulation(hdd, pop);
+  assert.equal(out.max, 10_000);
+  assert.deepEqual([...out.values], [1, 0.5, 0, 0]);
+  assert.throws(() => weightByPopulation(hdd, Float32Array.from([1])), /match/);
+  const none = weightByPopulation(
+    Float32Array.from([0, 0]),
+    Float32Array.from([1, 1]),
+  );
+  assert.equal(none.max, 0);
+  assert.deepEqual([...none.values], [0, 0]);
 });
 
 test('percentile ranks span 0..1 and ignore NaN', () => {

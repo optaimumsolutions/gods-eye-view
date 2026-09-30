@@ -11,7 +11,12 @@ import {
   svgEl,
 } from '../commodities/dossierChrome.js';
 import { formatAsOf } from '../commodities/observation.js';
-import { BAND_LABELS, confidenceLine } from './model.js';
+import {
+  BAND_LABELS,
+  confidenceLine,
+  heatingSeason,
+  powerLine,
+} from './model.js';
 import { GALE_MPH, dayAtLead } from './records.js';
 
 const f0 = (v) => (Number.isFinite(v) ? `${Math.round(v)}` : '–');
@@ -46,6 +51,22 @@ export function buildWeatherDossierModel(row, lead) {
         label: 'CDD14',
         value: f0(row.window.cdd14),
         note: `CDD7 ${f0(row.window.cdd7)}`,
+      },
+    );
+  } else if (row.kind === 'division') {
+    // M7 (§11.8.15): degree days, the direct mean, gas share, power by region
+    stats.push(
+      {
+        label: heatingSeason(row) ? 'HDD14' : 'CDD14',
+        value: f0(heatingSeason(row) ? row.window.hdd14 : row.window.cdd14),
+        note: heatingSeason(row)
+          ? `CDD14 ${f0(row.window.cdd14)} · ${row.window.heatingDays ?? 0} heating days`
+          : `HDD14 ${f0(row.window.hdd14)} · ${row.window.coolingDays ?? 0} cooling days`,
+      },
+      {
+        label: `D+${day?.lead ?? lead} mean p50`,
+        value: `${f0(day?.tmean?.p50)}°F`,
+        note: `p10 ${f0(day?.tmean?.p10)} · p90 ${f0(day?.tmean?.p90)} · gas share ${Math.round((row.gasShare ?? 0) * 100)}%`,
       },
     );
   } else {
@@ -86,14 +107,35 @@ export function buildWeatherDossierModel(row, lead) {
       : 'awaiting run',
     stats,
     fan: {
+      // divisions fan the daily MEAN (the reading the store keeps for them)
       days: days.map((d) => d.date.slice(5)),
-      p10: days.map((d) => d.tmin.p10),
-      p50: days.map((d) => d.tmin.p50),
-      p90: days.map((d) => d.tmin.p90),
-      normal: days.map((d) => d.normalTmin),
-      threshold: row.kind === 'basin' ? row.freezeF : null,
+      p10: days.map((d) =>
+        row.kind === 'division' ? d.tmean?.p10 : d.tmin.p10,
+      ),
+      p50: days.map((d) =>
+        row.kind === 'division' ? d.tmean?.p50 : d.tmin.p50,
+      ),
+      p90: days.map((d) =>
+        row.kind === 'division' ? d.tmean?.p90 : d.tmin.p90,
+      ),
+      normal: days.map((d) =>
+        row.kind === 'division' && Number.isFinite(d.normalMean)
+          ? d.normalMean
+          : d.normalTmin,
+      ),
+      threshold:
+        row.kind === 'basin'
+          ? row.freezeF
+          : row.kind === 'division'
+            ? 65
+            : null,
       selected: day?.lead ?? null,
+      label:
+        row.kind === 'division'
+          ? 'daily mean · p10–p90 band · p50 · normal dotted · 65°F base dashed'
+          : 'daily minimum · p10–p90 band · p50 · normal dotted · threshold dashed',
     },
+    power: row.kind === 'division' ? powerLine(row) : null,
     table: days.map((d) => ({
       date: d.date.slice(5),
       lead: d.lead,
@@ -236,16 +278,10 @@ function renderModel(doc, root, model) {
   }
   const body = el(doc, 'div', 'dc-dossier__body');
   const fanSec = el(doc, 'div', 'dc-section');
-  fanSec.append(
-    el(
-      doc,
-      'div',
-      'dc-section__title',
-      'daily minimum · p10–p90 band · p50 · normal dotted · threshold dashed',
-    ),
-  );
+  fanSec.append(el(doc, 'div', 'dc-section__title', model.fan.label));
   fanSec.append(renderFan(doc, model.fan));
   fanSec.append(el(doc, 'div', 'dc-legend', model.confidence));
+  if (model.power) fanSec.append(el(doc, 'div', 'dc-legend', model.power));
   const tableSec = el(doc, 'div', 'dc-section');
   tableSec.append(el(doc, 'div', 'dc-section__title', 'by day'));
   const table = el(doc, 'table', 'dc-table');

@@ -21,7 +21,11 @@ export const EIA_930_SERIES_URL =
   'https://www.eia.gov/electricity/930-api/region_data/series_data';
 export const OPEN_METEO_FORECAST_URL = 'https://api.open-meteo.com/v1/forecast';
 
-/** The six EIA balancing authorities the bundled campuses sit in. */
+/**
+ * The six EIA balancing authorities the bundled campuses sit in, plus the 13
+ * EIA-930 regional aggregates the weather layer's division markers quote
+ * (row 3 M7, §11.8.15 D7.3). The series API takes both as `respondent[]`.
+ */
 export const BALANCING_AUTHORITIES = Object.freeze({
   ERCO: 'ERCOT',
   MISO: 'MISO',
@@ -29,6 +33,19 @@ export const BALANCING_AUTHORITIES = Object.freeze({
   SOCO: 'Southern Company',
   SWPP: 'Southwest Power Pool',
   TVA: 'Tennessee Valley Authority',
+  CAL: 'California',
+  CAR: 'Carolinas',
+  CENT: 'Central',
+  FLA: 'Florida',
+  MIDA: 'Mid-Atlantic',
+  MIDW: 'Midwest',
+  NE: 'New England',
+  NW: 'Northwest',
+  NY: 'New York',
+  SE: 'Southeast',
+  SW: 'Southwest',
+  TEN: 'Tennessee',
+  TEX: 'Texas',
 });
 
 function pad(n) {

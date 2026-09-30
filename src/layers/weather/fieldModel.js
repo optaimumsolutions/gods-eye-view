@@ -21,7 +21,39 @@ export const FIELD_STATS = Object.freeze({
     unit: '% of members < 32°F',
     ramp: 'freeze',
   },
+  // M7 (§11.8.15 D7.4 / D7.5): degree days per cell, and the demand-weighted
+  // product with the bundled population grid (normalized to the day's max)
+  hdd: {
+    label: 'HDD',
+    unit: 'degree days, base 65°F, member p50',
+    ramp: 'degreeDays',
+  },
+  cdd: {
+    label: 'CDD',
+    unit: 'degree days, base 65°F, member p50',
+    ramp: 'degreeDays',
+  },
+  hddPop: {
+    label: 'HDD × people',
+    unit: "HDD × population per cell, share of the day's CONUS max",
+    ramp: 'people',
+    base: 'hdd',
+  },
+  cddPop: {
+    label: 'CDD × people',
+    unit: "CDD × population per cell, share of the day's CONUS max",
+    ramp: 'people',
+    base: 'cdd',
+  },
 });
+/** The stats derived on the globe from a base grid and the population bundle. */
+export const POPULATION_STATS = Object.freeze(
+  Object.fromEntries(
+    Object.entries(FIELD_STATS)
+      .filter(([, spec]) => spec.base)
+      .map(([id, spec]) => [id, spec.base]),
+  ),
+);
 export const DEFAULT_FIELD_STAT = 'p50';
 /** Nearest-neighbour upscale so a 0.25° cell is a crisp block, not a blur. */
 export const FIELD_UPSCALE = 4;
@@ -50,10 +82,28 @@ const FREEZE_STOPS = [
   [0.5, [80, 120, 240]],
   [1, [200, 80, 255]],
 ];
+/** Degree days 0 → 40 (D7.5: the plain chips keep the physics). */
+const DEGREE_DAY_STOPS = [
+  [0, [40, 40, 60]],
+  [5, [70, 110, 200]],
+  [15, [250, 220, 90]],
+  [25, [250, 130, 50]],
+  [40, [220, 40, 60]],
+];
+/** Dark → hot for the demand-weighted product, 0 → 1 of the day's max. */
+const PEOPLE_STOPS = [
+  [0, [30, 30, 45]],
+  [0.15, [90, 60, 140]],
+  [0.4, [210, 80, 120]],
+  [0.7, [255, 150, 60]],
+  [1, [255, 245, 170]],
+];
 const RAMPS = {
   temperature: TEMPERATURE_STOPS,
   spread: SPREAD_STOPS,
   freeze: FREEZE_STOPS,
+  degreeDays: DEGREE_DAY_STOPS,
+  people: PEOPLE_STOPS,
 };
 const GREY = [107, 114, 128];
 
@@ -82,12 +132,13 @@ export function rampLegend(stat, n = 5) {
   return Array.from({ length: n }, (_, i) => {
     const v = lo + ((hi - lo) * i) / (n - 1);
     const [r, g, b] = rampColor(spec.ramp, v);
-    return {
-      value: v,
-      label:
-        stat === 'freeze' ? `${Math.round(v * 100)}%` : `${Math.round(v)}°F`,
-      color: `rgb(${r},${g},${b})`,
-    };
+    const label =
+      spec.ramp === 'freeze' || spec.ramp === 'people'
+        ? `${Math.round(v * 100)}%`
+        : spec.ramp === 'degreeDays'
+          ? `${Math.round(v)}`
+          : `${Math.round(v)}°F`;
+    return { value: v, label, color: `rgb(${r},${g},${b})` };
   });
 }
 
@@ -154,6 +205,30 @@ export function paintField({
     }
   }
   return { data, width, height, alphaLead: aLead };
+}
+
+/**
+ * D7.5: degree days × population per cell, normalized to the day's CONUS
+ * maximum so the ramp always spans 0..1; returns the normalized grid and the
+ * day's maximum product (the legend prints it with the bundle's vintage).
+ * A cell with no population (or NaN) reads 0 and paints dark.
+ */
+export function weightByPopulation(values, population) {
+  if (!values || !population || values.length !== population.length)
+    throw new TypeError('population grid does not match the field');
+  const product = new Float32Array(values.length);
+  let max = 0;
+  for (let i = 0; i < values.length; i++) {
+    const v = values[i];
+    const p = population[i];
+    const x = Number.isFinite(v) && Number.isFinite(p) ? v * p : 0;
+    product[i] = x;
+    if (x > max) max = x;
+  }
+  const out = new Float32Array(values.length);
+  if (max > 0)
+    for (let i = 0; i < values.length; i++) out[i] = product[i] / max;
+  return { values: out, max };
 }
 
 /** Decode a route grid: int16 ints × scale → Float32Array in the unit. */

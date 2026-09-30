@@ -1,13 +1,13 @@
 # Weather forecast bundles (row 3)
 
-Three static reference files for the `weather-forecast` layer
+Four static reference files for the `weather-forecast` and `weather-field` layers
 (docs/COMMODITIES-PLAN.md §11). Nothing here is a forecast: the forecast is
 fetched browser-direct from Open-Meteo at runtime. These files say *where*
 to sample, *what normal is* at each place, and *how far to trust a lead*.
 
 ## gazetteer.json (§11.8.1) — `npm run build:weather-gazetteer`
 
-The ten places the layer samples, mirrored from the Oil Oracle's own
+The nineteen places the layer samples, mirrored from the Oil Oracle's own
 sample-point yamls so the globe and the console name the same places with
 the same weights:
 
@@ -19,7 +19,12 @@ the same weights:
   winterization heuristic `freezeF` and rough production `share`), two
   demand regions (`kind: region`, metros weighted by population exactly as
   the oracle weights them), two Gulf points (`kind: gulf`, **hand-placed**,
-  A-1: Mississippi Canyon 28.20, −89.80 and Sabine Pass 29.73, −93.87).
+  A-1: Mississippi Canyon 28.20, −89.80 and Sabine Pass 29.73, −93.87), and
+  (M7, plan §11.8.15) the nine census divisions (`kind: division`: the
+  oracle's `wx_stations.yaml` metro basket with pop weights, `gasShare` from
+  `gwdd_weights.yaml` = the division's share of US residential + commercial
+  gas deliveries, `eia930` = the EIA-930 regional aggregates the card's
+  power line quotes by name, from `wx_divisions.yaml`).
 - `lat`/`lon` is the weight-normalized centroid of `points[]`; weights are
   normalized to sum to 1 per entry.
 - `--check` rebuilds and fails on any byte of drift.
@@ -59,4 +64,19 @@ skill, never a hand-drawn curve.
   `no skill measured yet`.
 - Vintage is the `--vintage` date (the day the VPS JSON was read).
 
-Rebuild order after an oracle yaml change: gazetteer → normals → skill.
+## population.json (§11.8.15 D7.5) — `npm run build:weather-population -- --from <asc>`
+
+GPWv4.11 population count, 2020, 15 arc-minute (NASA SEDAC / CIESIN,
+CC BY 4.0), cut to the field's 105 × 241 CONUS grid: each field grid point
+takes the quarter-weighted sum of the four 0.25° GPW cells meeting at it
+(the people within ±0.125° of the point), whole people, NODATA read as 0.
+The `HDD × people` / `CDD × people` chips multiply the oracle's degree-day
+field by it and normalize to the day's CONUS maximum; the legend prints the
+vintage and that maximum. The SEDAC download needs an Earthdata login, so
+the `.asc` is a manual input (like the GEM spreadsheet for the LNG bundle):
+place `gpw_v4_population_count_rev11_2020_15_min.asc` under
+`.gev-cache/weather/` and run the build; `--check` compares byte for byte.
+Until the bundle exists the two chips are disabled and say why.
+
+Rebuild order after an oracle yaml change: gazetteer → normals → skill;
+population only when SEDAC publishes a new revision.

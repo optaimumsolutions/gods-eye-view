@@ -15,11 +15,14 @@ import {
   discShare,
   groundCirclePositions,
   hoverLines,
+  markerPixelSize,
   ringRadiusMeters,
+  ringSpread,
   selectWeatherOverlayCohort,
   selectedDay,
   weatherPosition,
 } from './model.js';
+import { readPower } from './power.js';
 import { MODEL_LABELS, horizonOf, mapAnalystRecord } from './records.js';
 import { DEFAULT_LEAD, getForecastScrubber } from './scrubber.js';
 export * from './model.js';
@@ -30,13 +33,16 @@ const UPDATE_INTERVAL_MS = 30 * 60_000;
 const HOVER_THROTTLE_MS = 80;
 
 /**
- * Row 3 (docs/COMMODITIES-PLAN.md §11): ten pinned markers — six basins, two
- * demand regions, two Gulf points — coloured by the selected day's minimum
- * against its ERA5 normal, ringed by ensemble spread, filled by the share of
- * the window past a printed threshold, and faded by confidence (lead-time
- * skill × spread). One shared scrubber walks the window; the layer restyles
- * without a fetch. Geometry is created once from the first snapshot's
- * gazetteer rows and never recreated.
+ * Row 3 (docs/COMMODITIES-PLAN.md §11): nineteen pinned markers — six
+ * basins, two demand regions, two Gulf points and (M7, §11.8.15) the nine
+ * census divisions sized by gas share — coloured by the selected day's
+ * reading against its ERA5 normal (TMIN at basins, the direct mean at
+ * divisions), ringed by ensemble spread, filled by the share of the window
+ * past a printed threshold, and faded by confidence (lead-time skill ×
+ * spread). One shared scrubber walks the window; the layer restyles without
+ * a fetch. Geometry is created once from the first snapshot's gazetteer
+ * rows and never recreated. Division rows also carry one EIA-930 reading
+ * per refresh (`power.js`), a keyless browser-direct request.
  */
 export function createWeatherForecastLayer({
   source,
@@ -45,6 +51,7 @@ export function createWeatherForecastLayer({
   screenSpaceEventHandlerFactory,
   scrubber = null,
   dossier = null,
+  powerFetchImpl = (...args) => globalThis.fetch(...args),
 } = {}) {
   if (typeof source?.getSnapshot !== 'function')
     throw new TypeError('Weather forecast requires a snapshot source');
@@ -79,6 +86,8 @@ export function createWeatherForecastLayer({
   let _hoverLastPickAt = 0;
   let _lastUpdate = null;
   let _lastError = null;
+  let _powerError = null;
+  let _powerAttached = 0;
   let _meta = null;
   let _lead = DEFAULT_LEAD;
   let _enabled = false;
@@ -181,7 +190,7 @@ export function createWeatherForecastLayer({
           material: color,
         },
         point: {
-          pixelSize: 9,
+          pixelSize: markerPixelSize(row),
           color,
           outlineColor: Cesium.Color.BLACK.withAlpha(0.8),
           outlineWidth: 2,
@@ -216,7 +225,7 @@ export function createWeatherForecastLayer({
     const day = selectedDay(row, _lead);
     const alpha = day?.confidence?.alpha ?? 1;
     const color = bandColor(day?.band, alpha);
-    const radius = ringRadiusMeters(day?.tmin?.spread);
+    const radius = ringRadiusMeters(ringSpread(day));
     if (radius !== pin.radius) {
       pin.ring.polyline.positions = groundCirclePositions(
         row.lon,
@@ -445,6 +454,17 @@ export function createWeatherForecastLayer({
         _rows = rows;
         for (const row of rows) _rowById.set(row.id, row);
         _meta = snapshot.meta;
+        // M7: one EIA-930 request for every division's power-demand line
+        if (rows.some((r) => r.kind === 'division')) {
+          const power = await readPower(rows, {
+            fetchImpl: powerFetchImpl,
+            signal: request.signal,
+          });
+          if (request.signal.aborted || _request !== request || !_enabled)
+            return false;
+          _powerError = power.error;
+          _powerAttached = power.attached;
+        }
         const s = scrub();
         if (s) {
           const horizon = horizonOf(rows);
@@ -531,7 +551,9 @@ export function createWeatherForecastLayer({
             color: '#6b7280',
             blurb: `Fade = lead-time skill × ensemble spread. ${
               _rows[0]?.days?.[1]?.confidence?.skillLabel || 'skill not loaded'
-            }. Ring radius = spread; disc = share of the window past the printed heuristic.`,
+            }. Ring radius = spread; disc = share of the window past the printed heuristic. Division points scale with the division's share of US residential + commercial gas deliveries (EIA); their power line quotes EIA-930 regions by name${
+              _powerError ? ` (EIA-930: ${_powerError})` : ''
+            }.`,
           },
         ],
       };
@@ -556,6 +578,9 @@ export function createWeatherForecastLayer({
         availableAt: _meta?.availableAt ?? null,
         selectedLead: _lead,
         source: _sourceLabel,
+        divisions: _rows.filter((r) => r.kind === 'division').length,
+        powerReadings: _powerAttached,
+        powerError: _powerError,
       };
     },
   };
