@@ -113,9 +113,15 @@ export const DATA_CREDITS = [
   {
     key: 'open-meteo',
     html:
-      'Cockpit current conditions: ' +
+      'Cockpit current conditions and the basin forecast (ECMWF AIFS ENS, CC BY 4.0, © ECMWF): ' +
       '<a href="https://open-meteo.com/en/licence" target="_blank" rel="noopener">Weather data by Open-Meteo.com</a> ' +
       '(CC BY 4.0)',
+  },
+  {
+    key: 'era5-normals',
+    html:
+      'Basin forecast normals: contains modified Copernicus Climate Change Service information (ERA5, 2016–2025, via the ' +
+      '<a href="https://open-meteo.com/en/docs/historical-weather-api" target="_blank" rel="noopener">Open-Meteo archive API</a>)',
   },
   {
     // Maps Platform terms: end users are told the app uses Google Maps

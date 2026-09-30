@@ -32,6 +32,7 @@ import {
   createApplicationOnshoreWilliston,
 } from './layers/onshore.js';
 import { createApplicationSupplyBoard } from './layers/supplyBoard.js';
+import { createApplicationWeatherForecast } from './layers/weatherForecast.js';
 import { createInfrastructureLayers } from '../data/infrastructure.js';
 import { localGeoJsonServices } from './localGeojsonServices.js';
 import { createBhoteKoshiEventLayer } from '../data/bhoteKoshiEvent.js';
@@ -64,6 +65,7 @@ const SOURCE_METHODS = Object.freeze({
   gasFlows: ['getSnapshot'],
   gulfPlatforms: ['getSnapshot'],
   lng: ['getSnapshot'],
+  weatherForecast: ['getSnapshot'],
 });
 
 /** Construct the current catalog without choosing any source provider.
@@ -170,6 +172,7 @@ export function createApplicationCatalog({
           source: sources.onshorePermianPlatform,
         }),
         createApplicationSupplyBoard({ source: sources.supplyBoard }),
+        createApplicationWeatherForecast({ source: sources.weatherForecast }),
         createApplicationFirms({
           surface,
           id: 'local-firms',

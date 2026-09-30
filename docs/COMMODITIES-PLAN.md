@@ -24,7 +24,7 @@ owns layers. Re-check `git status` before every edit to a shared file.
 | 0b  | `commodity-ports` layer                          | layers                               | **BUILT** — commit `f042155`, merged into `commodities`, pushed to origin and mirror; markers pinned in `f238b66` (merged here as `fa8132f`, not pushed); retrofit to the row-1 contract pending |
 | 1   | Shell, observation contract, hover, class groups | shell (worktree `commodities-shell`) | CLAIMED 2026-09-17 — PRD §7; worktree `commodities-shell` on `feat/commodities-shell`; milestone 1 (observation contract) BUILT 2026-09-18, four gates green; next: milestone 2, retrofit 0a and 0b |
 | 2   | `commodity-tankers`                              | layers                               | BLOCKED — AISStream rejects the saved key; verify or rotate on the Account page, enter via POWER UP |
-| 3   | Weather forecast and overlays (`weather-forecast` first) | layers (shell worktree, `feat/commodities-shell`) | **CLAIMED 2026-09-30** (session jgewi-e1; founder: "weather overlay" is the next build under plan path A). PRD §11 from the weather grill (W1 to W9): AIFS ENS via Open-Meteo at the six basins, two market regions and the Gulf, browser-direct, keyless, token `3`; six milestones (point layer → asset-card lines → WN2 challenger → AIFS field → truth overlays → beyond the US). **Amended 2026-09-30 (founder):** the lead-day stepper becomes a forecast-window scrubber D+0…D+7 fine / tail to D+16 (§11.8.13) and confidence renders as opacity/saturation — lead-time decay from the oracle's measured skill (bundled, provisional until the 30-init gate) × per-cell ensemble spread (§11.8.14). Builds on `feat/commodities-shell` (founder rule), no row worktree. **§11.13 is the built state, overwritten at every milestone.** Next: M0 widen the token alphabet, then M1 |
+| 3   | Weather forecast and overlays (`weather-forecast` first) | layers (shell worktree, `feat/commodities-shell`) | **CLAIMED 2026-09-30** (session jgewi-e1; founder: "weather overlay" is the next build under plan path A). PRD §11 from the weather grill (W1 to W9): AIFS ENS via Open-Meteo at the six basins, two market regions and the Gulf, browser-direct, keyless, token `3`; six milestones (point layer → asset-card lines → WN2 challenger → AIFS field → truth overlays → beyond the US). **Amended 2026-09-30 (founder):** the lead-day stepper becomes a forecast-window scrubber D+0…D+7 fine / tail to D+16 (§11.8.13) and confidence renders as opacity/saturation — lead-time decay from the oracle's measured skill (bundled, provisional until the 30-init gate) × per-cell ensemble spread (§11.8.14). Builds on `feat/commodities-shell` (founder rule), no row worktree. **§11.13 is the built state, overwritten at every milestone.** **M1 BUILT 2026-09-30** (`e97f338` bundles; layer + scrubber + confidence in the next commit): ten markers, scrubber `now…+16` with the AIFS horizon at `+14`, provisional skill fade, dossier with the fan; four gates green; render check on the dev server. Hosted OFF (free Open-Meteo API is non-commercial — `LICENCES.md`). M0 not needed for M1 (`3` was free); the alphabet widens before M5. Next: M2 (forecast lines on the asset cards) |
 | 4   | `commodity-gas-flows`, gas cross-border crossings | layers                               | **BUILT (substrate) 2026-09-21** — PRD §10. Data layer `f665031`: `scripts/build-gas-bundle.mjs` + `src/data/local_data/eia_energy/` (32,892 features to 234 systems; 99 filings to 60 marks) and the `src/layers/gasFlows/` pure modules. Render layer `4919e03`: PENCIL pips and hairline, token `l`, GRID off by default after the milestone-5 gate breached (~500 MiB to draw; `scripts/qa-gas-flows.mjs` 18/18). Four gates green at every commit. Open: no UI chip calls `setNetworkEnabled` yet. Volumes: decided 2026-09-21 to bundle EIA's keyless dnav monthly point-of-entry series (POE1 imports, POE2 exports, 1973 → 2026-06, verified) instead of waiting for an API key, which becomes the refresh path; milestone 1 is re-scoped accordingly and follows row 11's first slice |
 | 5   | News pinned to assets                            | layers + server                      | OPEN — needs the assets from row 4                                                                  |
 | 6   | Trade-flow arcs                                  | layers + server                      | OPEN                                                                                                |
@@ -2420,8 +2420,8 @@ globe consumes the best open AI weather models; it trains nothing and reads
 nothing from the oracle's store.
 
 **Written:** 2026-09-21 · **Amended:** 2026-09-30 (founder: forecast-window
-scrubber §11.8.13, confidence as opacity §11.8.14) · **Status:** CLAIMED
-2026-09-30, building on `feat/commodities-shell`; **the built state is §11.13
+scrubber §11.8.13, confidence as opacity §11.8.14) · **Status:** M1 BUILT
+2026-09-30 on `feat/commodities-shell`; **the built state is §11.13
 and only §11.13** — read it first when debugging · **Mirror:** Project Brain
 `gods-eye-view/05-prd.md`, re-synced by the build session at every milestone.
 Decisions the grill did not reach are marked `A-n` (assumption) and change by
@@ -2475,7 +2475,7 @@ campuses, ports, chokepoints, pipelines.
 | Probe                     | Result                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Open-Meteo ensemble ids   | `ecmwf_aifs025_ensemble` (50 perturbed members plus the unsuffixed control, 15 days), `ncep_aigefs025` (30 plus control, 16 days), `google_weathernext2_ensemble` (63 plus control, 16 days), `ncep_gefs025`. Mean-and-spread variants `ecmwf_aifs025_ensemble_mean` and `google_weathernext2_ensemble_mean`, archived since March 2026. `[LIVE]`                                                                                                                                                                                                             |
-| Daily variables, AIFS ENS | `temperature_2m_min`, `temperature_2m_max`, `precipitation_sum`, `snowfall_sum`, `wind_speed_10m_max`, `wind_gusts_10m_max`; hourly `temperature_2m`, `precipitation`, `wind_speed_10m`. AIGEFS and WeatherNext 2 answer `temperature_2m_min`, `precipitation_sum`, `wind_speed_10m_max`. `[LIVE]`                                                                                                                                                                                                                                                             |
+| Daily variables, AIFS ENS | `temperature_2m_min`, `temperature_2m_max`, `precipitation_sum`, `snowfall_sum`, `wind_speed_10m_max`; `wind_gusts_10m_max` is accepted but answers **null** for AIFS ENS (probed 2026-09-30, 51 members, 15 days, `_memberNN` suffix, day 0 = the init date); hourly `temperature_2m`, `precipitation`, `wind_speed_10m`. AIGEFS and WeatherNext 2 answer `temperature_2m_min`, `precipitation_sum`, `wind_speed_10m_max`. `[LIVE]`                                                                                                                                                                                                                                                             |
 | Issue time                | `https://ensemble-api.open-meteo.com/data/<model>/static/meta.json`, keyless, CORS `*`: `last_run_initialisation_time`, `last_run_availability_time`, `update_interval_seconds` (21,600 for AIFS and AIGEFS, 43,200 for WeatherNext 2). Today: AIFS 06Z available 15:20Z (9 h 20 m after issue), AIGEFS 06Z at 15:07Z, WeatherNext 2 00Z at 10:54Z. `[LIVE]`                                                                                                                                                                                                  |
 | CORS                      | `ensemble-api`, `archive-api`, `marine-api` and the metadata files all answer `access-control-allow-origin: *`; `api.open-meteo.com` is already read browser-direct by the data center cards. `[LIVE]`                                                                                                                                                                                                                                                                                                                                                       |
 | Request cap               | 300 points in one GET: HTTP 200, 2.3 MB, 1.4 s; the next request answered `Minutely API request limit exceeded`. 1,500 points: HTTP 414 from nginx. Free tier: 600 calls a minute, 5,000 an hour, 10,000 a day, weighted per location, per ten variables and per two weeks. **A field cannot come from this API; ninety points four times a day can.** `[LIVE]`                                                                                                                                                                                                 |
@@ -2644,7 +2644,7 @@ radar). Milestone 6 grows the gazetteer past the United States.
    - **Ensemble.** One `GET https://ensemble-api.open-meteo.com/v1/ensemble`
      for every sample point of every entry (27 today, up to ~90 with the
      milestone-2 assets), `models=<id>`,
-     `daily=temperature_2m_min,temperature_2m_max,precipitation_sum,snowfall_sum,wind_gusts_10m_max`,
+     `daily=temperature_2m_min,temperature_2m_max,precipitation_sum,snowfall_sum,wind_speed_10m_max`,
      `forecast_days=15`, `temperature_unit=fahrenheit`,
      `wind_speed_unit=mph`, `timezone=UTC`. The response is one block per
      point in request order; `_memberNN` columns plus the unsuffixed control
@@ -2693,10 +2693,11 @@ response:
    percentiles across members; `hdd7`, `hdd14`, `cdd7`, `cdd14` are p50 sums;
    `heatingDays` is the count of days with p50 HDD > 0. Never HDD of the mean
    temperature (the oracle measured a 15× understatement).
-5. **Gulf.** `gustP50`, `gustP90` from `wind_gusts_10m_max`; `galeDays` is
-   the count of days with p90 gust ≥ 39 mph (Beaufort 8, printed as
-   `gale ≥ 39 mph`); `waveMax` from the marine payload, its own observation
-   with the marine model's stamp.
+5. **Gulf.** `wind.p50`, `wind.p90` from `wind_speed_10m_max` (AIFS ENS
+   answers gusts as null; Beaufort 8 is defined on sustained wind anyway);
+   `galeDays` is the count of days in the 7-day window with p90 wind ≥ 39 mph
+   (printed as `gale ≥ 39 mph`); `waveMax` from the marine payload, carried
+   on the Gulf rows as `marine[]` with the marine model's own stamp.
 6. **Anomaly.** `anomalyF` = p50 TMIN − the normal for that day of year.
    **A-3** bands, in °F: `much-colder` ≤ −15, `colder` ≤ −7, `near-normal`
    otherwise, `warmer` ≥ +7, `much-warmer` ≥ +15, `unknown` when the normal
@@ -2917,14 +2918,18 @@ both printed on the card so the fade is never a mystery.
    realized inits, expected mid-October 2026). The globe consumes that
    score as a **bundled calibration**, not a live oracle number (R7 holds:
    skill is a rendering parameter, and it is bundled like the gazetteer):
-   `scripts/build-weather-skill.mjs` reads `tools/wx_skill.py --json` from
-   `optaimumsolutions/commodities` at a pinned commit (build time only, `gh
-   api`, the §11.8.1 pattern) and writes
-   `src/data/local_data/weather/skill.json`: per model, per lead day, a
-   confidence in `[0, 1]` derived as `1 − MAE_lead / MAE_climatology`
-   clamped to `[0, 1]` (skill relative to the climatological baseline, the
-   standard skill score), plus `inits`, `vintage`, `commit` and
-   `provisional: true|false`.
+   `scripts/build-weather-skill.mjs --from <json>` reads the output of
+   `tools/wx_skill.py --json` (run read-only on the VPS; the ssh line is in
+   the script header — the desk mirror has no `weather_forecast` rows) and
+   writes `src/data/local_data/weather/skill.json`: per Open-Meteo model id,
+   per lead day 0–16, `confidence` = `MAE(D+1) / MAE(lead)` clamped to
+   `[0, 1]` as a **running minimum** (n falls to 3–5 inits at the tail, so a
+   longer lead never reads more confident than a shorter one; `thin: true`
+   under n = 5, `extrapolated: true` past the last scored lead), plus
+   `inits`, `gate`, `vintage`, `label` and `provisional`. This is decay
+   relative to the model's own D+1 error; it becomes the standard
+   climatology skill score `1 − MAE/MAE_climo` when `wx_skill.py` publishes
+   a climatology baseline (oracle FR-W change, open).
    - **Before the gate** (`inits < 30`): the bundle carries an honest
      **provisional** curve — the same formula on the inits that exist,
      labelled `provisional (n inits)` in the legend and on every card — or,
@@ -2993,9 +2998,9 @@ both printed on the card so the fade is never a mystery.
    reports the run's stamps, the card's fan matches a fixture, the
    scrubber test passes. Ledger row 3 to BUILT (M1) with both SHAs and
    §11.13 rewritten.
-   **M0 first:** widen the layer-token alphabet (`layerState.js` tokens are
-   `/^[a-z0-9]$/` and only `0` is free after row 15) so `3` can be taken
-   without displacing anyone; its own commit, count pins unchanged.
+   (M0, widening the token alphabet, turned out unnecessary for M1: `3` was
+   still free on 2026-09-30. It moves ahead of M5, whose four overlay ids
+   need tokens.)
 2. **Forecast lines on the asset cards.** The service; one line each on the
    campus, crossing and US port cards. Verify: a fixture run shows the line
    on Colossus 2, Sumas WA and Sabine Pass with their own stamps; the
@@ -3107,19 +3112,48 @@ run it again. Ask me only when a decision is genuinely missing from §11.
 <!-- RULE: this is the ONLY place in §11 that describes what exists. The
 session landing a milestone rewrites it whole; stale lines are deleted. -->
 
-**As of 2026-09-30 (claim; nothing built).**
+**As of 2026-09-30 — M1 BUILT** (session jgewi-e1; commits `e97f338` M1a
+bundles, M1b layer = the commit carrying this line). Hosted: **OFF** —
+the free Open-Meteo API is non-commercial (`LICENCES.md` row `open-meteo`),
+so `src/sources/reference.js` withholds the source under
+`GEV_LICENCE_PROFILE=hosted` until an Open-Meteo Professional key is on
+file; the laptop shows it.
 
-| Piece | State |
-| --- | --- |
-| Layer `weather-forecast` (token `3`) | not built — no `src/layers/weather/` yet; upstream's `weather` (token `w`) is an unrelated current-conditions layer |
-| Bundles (`gazetteer.json`, `normals.json`, `skill.json`) | not built |
-| Scrubber (§11.8.13) | not built |
-| Confidence alpha (§11.8.14) | not built; the oracle's `tools/wx_skill.py` gate (30 inits) not yet reached → the first `skill.json` will be `provisional` |
-| Field (M4), truth overlays (M5), beyond-US (M6) | not built |
-| Token alphabet | `/^[a-z0-9]$/`, only `0` free (row 15 took it last) → **M0 widens it before M1** |
+| Piece | Where | State |
+| --- | --- | --- |
+| Layer `weather-forecast`, token `3`, panel `Commodities` → `Weather · Basin Forecast (AIFS ENS)` | `src/layers/weather/index.js`, `src/app/layers/weatherForecast.js` | ten pinned markers created once from the first snapshot (ring = clamped polyline, disc = clamped ellipse, point pinned `HeightReference.NONE`); restyle on scrubber change without a fetch; hover card (3 lines, own throttled pick, R5 pointer rule) and click → overlay card + dossier; horizon culling; `getRowControls()` = one `RESET` chip + the five band swatches with live counts + the confidence blurb; `getAnalystRecords()` = `mapAnalystRecord(row, lead)` |
+| Source | `src/layers/weather/source.js`, `live.js` | metadata poll each `update()` (30 min), ensemble + marine fetched only when `availableAt` changes; failed fetch keeps the cached run and records `errors.{meta,ensemble,marine}`; bundles fetched once as literal `new URL(..., import.meta.url)` assets (a directory prefix is NOT rewritten by Vite — it 404s to index.html); budget test: 59 upstream calls across a simulated day with four runs |
+| Records | `src/layers/weather/records.js` | point-then-weight per member, then p10/p50/p90/spread across members; freeze share/days (basins), HDD/CDD per member from (TMAX+TMIN)/2 (regions), p90 wind gale days (Gulf, 7 d); anomaly vs the ERA5 normal → A-3 bands; `confidenceFor()` = `alphaLead` (A-7 floor 0.35) × `alphaSpread` (A-8 slope 0.6; the spread percentile is taken against the entry's own 15 spreads of this run — the per-marker stand-in until a run archive exists); one `createObservation` per day (`observedAt` init, `publishedAt` availability, `validAt` the day, class `daily`) |
+| Scrubber | `src/layers/weather/scrubber.js` | fixed under the cockpit, `now`,`+1`…`+7` solid \| `+8`…`+16` hatched; `setHorizon({horizon, label, issued})` disables slots past the run (AIFS: `+15`, `+16`, tooltip names the model); `[` `]` / arrows step, `Home` = D+1; reference-counted `acquire/release`; shared singleton `getForecastScrubber()` |
+| Dossier | `src/layers/weather/dossier.js` | shared `dc-` drawer: four stats, the fan (p10–p90 band, p50, normal dotted, threshold dashed, lead cursor), by-day table (p10/p50/p90/spread/freeze%/precip/snow/confidence), the confidence line, provenance |
+| Bundles | `src/data/local_data/weather/` (`README.md`) | `gazetteer.json` (10 entries, oracle yaml @ `28f69db0`, via `gh api`, `--check` byte-identical, `--local ../commodities` reads a checkout); `normals.json` (ERA5 2016–2025, 29 archive calls, raw cache `.gev-cache/weather/normals/`, 429 back-off); `skill.json` (AIFS `provisional (17/30 inits)`, D+1 1.00 → D+7 0.70 → D+14 0.38; WN2 `no skill measured yet`) |
+| Wiring | `layerState.js` (34 layers; pins moved 33→34 in `layerState.test.mjs`, `constructCatalog.test.mjs`), `constructCatalog.js` (`weatherForecast: ['getSnapshot']`), `reference.js` (+ `reference.test.mjs` key), `layerPanel.js`, `package-boundaries.json` (3 sections), `format-scope.json`, `DATA_SOURCES.md` (live row + bundled row), `dataCredits.js` (`open-meteo` extended, `era5-normals`), `LICENCES.md` (`open-meteo` row + 2 bundled rows), `licencePolicy.js` comment, `docs/COMMODITIES.md` row 6 | done |
+| Tests | `src/layers/weather/{bundles,records,source,scrubber,model}.test.mjs` + `fixtures.mjs` | 22 tests; the R11 string test greps `model.js`, `dossier.js`, `index.js` for advice words |
+| M2 service, M3 WN2, M4 field, M5 truth overlays, M6 beyond-US | — | not built; the token alphabet (`/^[a-z0-9]$/`, `0` free after `3` was taken) must widen before M5's four overlay ids |
 
-**Commands:** none yet. **Known issues:** none yet. **Last rewrite:**
-2026-09-30, session jgewi-e1, at the claim.
+**Commands.** `npm run build:weather-gazetteer [-- --check | --local ../commodities]`
+· `npm run build:weather-normals [-- --check]` · `npm run build:weather-skill
+-- --from .gev-cache/weather/wx_skill.json --vintage <date>` · tests: `node
+--test src/layers/weather/*.test.mjs` · render check: `npx vite --port 4173
+--strictPort` then `OUT_DIR=.gev-logs node .gev-logs/render-weather.mjs`
+(gitignored; enables the layer over the south-central US, waits for
+`getStats().count === 10`, steps to D+7, clicks Permian, screenshots
+`weather-d1.png`, `weather-d7.png`, `weather-permian-click.png`).
+Measured 2026-09-30: activation 19.4 s on the dev server (cold; one ensemble
+call of ~900 KB for 29 points plus meta and marine), dossier and fan render,
+zero page errors.
+
+**Known issues / deviations.** (1) AIFS ENS gusts are null → Gulf reads
+sustained wind (§11.8.4.5 edited). (2) Skill is D+1-relative, not
+climatology-relative, until the oracle publishes a baseline (§11.8.14.1
+edited). (3) The hover card is drawn on the overlay canvas, so a DOM text
+search does not see it — verify hover by screenshot. (4) The selected
+overlay card is wide (five long lines); trim when the row-1 hover service
+lands. (5) `+15`/`+16` stay disabled until a 16-day model (M3). (6) The
+per-marker spread percentile uses this run's own 15 days (§11.8.14.2 says
+"trailing distribution"; there is no run archive yet).
+
+**Last rewrite:** 2026-09-30, session jgewi-e1, at M1.
 
 ---
 

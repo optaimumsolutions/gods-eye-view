@@ -95,6 +95,7 @@ export const HOSTED_WITHHELD = Object.freeze([
       file: 'src/layers/datacenters/liveSource.js',
       check: "isWithheld('open-meteo')",
     },
+    // row 3: src/sources/reference.js withholds the weather-forecast source too
   }),
   row({
     id: 'google-news',

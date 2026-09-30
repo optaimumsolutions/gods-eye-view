@@ -837,5 +837,17 @@
   "scripts/build-weather-gazetteer.mjs",
   "scripts/build-weather-normals.mjs",
   "scripts/build-weather-skill.mjs",
-  "src/layers/weather/bundles.test.mjs"
+  "src/layers/weather/bundles.test.mjs",
+  "src/layers/weather/live.js",
+  "src/layers/weather/records.js",
+  "src/layers/weather/source.js",
+  "src/layers/weather/model.js",
+  "src/layers/weather/scrubber.js",
+  "src/layers/weather/dossier.js",
+  "src/layers/weather/index.js",
+  "src/app/layers/weatherForecast.js",
+  "src/layers/weather/records.test.mjs",
+  "src/layers/weather/scrubber.test.mjs",
+  "src/layers/weather/source.test.mjs",
+  "src/layers/weather/model.test.mjs"
 ]
