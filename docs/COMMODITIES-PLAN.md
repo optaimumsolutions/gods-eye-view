@@ -24,7 +24,7 @@ owns layers. Re-check `git status` before every edit to a shared file.
 | 0b  | `commodity-ports` layer                          | layers                               | **BUILT** — commit `f042155`, merged into `commodities`, pushed to origin and mirror; markers pinned in `f238b66` (merged here as `fa8132f`, not pushed); retrofit to the row-1 contract pending |
 | 1   | Shell, observation contract, hover, class groups | shell (worktree `commodities-shell`) | CLAIMED 2026-09-17 — PRD §7; worktree `commodities-shell` on `feat/commodities-shell`; milestone 1 (observation contract) BUILT 2026-09-18, four gates green; next: milestone 2, retrofit 0a and 0b |
 | 2   | `commodity-tankers`                              | layers                               | BLOCKED — AISStream rejects the saved key; verify or rotate on the Account page, enter via POWER UP |
-| 3   | Weather forecast and overlays (`weather-forecast` first) | layers (shell worktree, `feat/commodities-shell`) | **CLAIMED 2026-09-30** (session jgewi-e1; founder: "weather overlay" is the next build under plan path A). PRD §11 from the weather grill (W1 to W9): AIFS ENS via Open-Meteo at the six basins, two market regions and the Gulf, browser-direct, keyless, token `3`; six milestones (point layer → asset-card lines → WN2 challenger → AIFS field → truth overlays → beyond the US). **Amended 2026-09-30 (founder):** the lead-day stepper becomes a forecast-window scrubber D+0…D+7 fine / tail to D+16 (§11.8.13) and confidence renders as opacity/saturation — lead-time decay from the oracle's measured skill (bundled, provisional until the 30-init gate) × per-cell ensemble spread (§11.8.14). Builds on `feat/commodities-shell` (founder rule), no row worktree. **§11.13 is the built state, overwritten at every milestone.** **M1 BUILT 2026-09-30** (`e97f338` bundles; layer + scrubber + confidence in the next commit): ten markers, scrubber `now…+16` with the AIFS horizon at `+14`, provisional skill fade, dossier with the fan; four gates green; render check on the dev server. Hosted OFF (free Open-Meteo API is non-commercial — `LICENCES.md`). M0 not needed for M1 (`3` was free); the alphabet widens before M5. **Hosted path 2026-09-30:** the founder declined Open-Meteo Professional, so the hosted site reads the oracle's own AIFS ENS through `/api/oracle/weather-forecast` (oracle FR-D17d, deployed; globe `d04143c` LIVE deploy-15 16:30Z; 8 markers — no Gulf sample in the store). **M2 BUILT 2026-09-30:** `src/services/weatherForecast.js` (nearest entry ≤ 500 km, follows the scrubber) + one line on the campus cards and the US port cards; crossings wait for row 4 M1. Next: M3 (WN2 challenger) or M4 (the field) — founder's pick |
+| 3   | Weather forecast and overlays (`weather-forecast` first) | layers (shell worktree, `feat/commodities-shell`) | **CLAIMED 2026-09-30** (session jgewi-e1; founder: "weather overlay" is the next build under plan path A). PRD §11 from the weather grill (W1 to W9): AIFS ENS via Open-Meteo at the six basins, two market regions and the Gulf, browser-direct, keyless, token `3`; six milestones (point layer → asset-card lines → WN2 challenger → AIFS field → truth overlays → beyond the US). **Amended 2026-09-30 (founder):** the lead-day stepper becomes a forecast-window scrubber D+0…D+7 fine / tail to D+16 (§11.8.13) and confidence renders as opacity/saturation — lead-time decay from the oracle's measured skill (bundled, provisional until the 30-init gate) × per-cell ensemble spread (§11.8.14). Builds on `feat/commodities-shell` (founder rule), no row worktree. **§11.13 is the built state, overwritten at every milestone.** **M1 BUILT 2026-09-30** (`e97f338` bundles; layer + scrubber + confidence in the next commit): ten markers, scrubber `now…+16` with the AIFS horizon at `+14`, provisional skill fade, dossier with the fan; four gates green; render check on the dev server. Hosted OFF (free Open-Meteo API is non-commercial — `LICENCES.md`). M0 not needed for M1 (`3` was free); the alphabet widens before M5. **Hosted path 2026-09-30:** the founder declined Open-Meteo Professional, so the hosted site reads the oracle's own AIFS ENS through `/api/oracle/weather-forecast` (oracle FR-D17d, deployed; globe `d04143c` LIVE deploy-15 16:30Z; 8 markers — no Gulf sample in the store). **M2 BUILT 2026-09-30:** `src/services/weatherForecast.js` (nearest entry ≤ 500 km, follows the scrubber) + one line on the campus cards and the US port cards; crossings wait for row 4 M1. Founder 2026-09-30: M4 next. **M4 planned** (§11.8.10, A-9: the field is reduced inside the oracle's nightly AIFS ingest — oracle FR-W11 + FR-D17e — and drawn by `weather-field`, token `W` after the alphabet widens); the ordered open-work list is in §11.13 |
 | 4   | `commodity-gas-flows`, gas cross-border crossings | layers                               | **BUILT (substrate) 2026-09-21** — PRD §10. Data layer `f665031`: `scripts/build-gas-bundle.mjs` + `src/data/local_data/eia_energy/` (32,892 features to 234 systems; 99 filings to 60 marks) and the `src/layers/gasFlows/` pure modules. Render layer `4919e03`: PENCIL pips and hairline, token `l`, GRID off by default after the milestone-5 gate breached (~500 MiB to draw; `scripts/qa-gas-flows.mjs` 18/18). Four gates green at every commit. Open: no UI chip calls `setNetworkEnabled` yet. Volumes: decided 2026-09-21 to bundle EIA's keyless dnav monthly point-of-entry series (POE1 imports, POE2 exports, 1973 → 2026-06, verified) instead of waiting for an API key, which becomes the refresh path; milestone 1 is re-scoped accordingly and follows row 11's first slice |
 | 5   | News pinned to assets                            | layers + server                      | OPEN — needs the assets from row 4                                                                  |
 | 6   | Trade-flow arcs                                  | layers + server                      | OPEN                                                                                                |
@@ -2809,33 +2809,61 @@ response:
    Open-Meteo, CC BY 4.0, real-time output under Google's experimental
    terms.
 
-#### 11.8.10 The field (milestone 4)
+#### 11.8.10 The field (milestone 4) — planned 2026-09-30, A-9
 
-1. `scripts/reduce-weather-field.mjs` (Node, `icechunk-js` + `zarrita`)
-   opens the dynamical.org store, finds the newest `init_time`, reads the
-   CONUS window (24°N to 50°N, 126°W to 66°W; about 32 chunks per variable,
-   390 MiB uncompressed per variable per init) for `temperature_2m`,
-   `wind_u_10m`, `wind_v_10m`, `precipitation_surface`, reduces each UTC
-   day to per-member daily min and max, then to `p10`, `p50`, `p90`,
-   `spread`, and `freezeShare` (members with TMIN below 32°F, the physical
-   threshold, printed as such), and writes
-   `.gev-cache/weather-field/<init>.json` (Float16-packed grids, ~3 MB) plus
-   `latest.json`. Run by hand or by a cron on the desk; the VPS is not in
-   the read path.
-2. `server/providers/weatherField.js` serves `/api/weather-field/latest`
-   and `/api/weather-field/<init>/<day>/<stat>` from the cache with the
-   init's stamps in headers; no upstream fetch at request time.
-3. `src/layers/weather/field.js` draws the selected stat as a
-   `SingleTileImageryProvider` from a canvas (the Nepal precedent), under
-   the same stepper, with a row control for the stat (`p50 TMIN`, `spread`,
-   `freeze share`, `gust`), alpha 0.6, a colour bar in the legend chip and
-   the field's own stamp in the meta line.
-4. Latency after ECMWF publishes is measured at build time and recorded
-   here before the milestone closes; if it exceeds twelve hours the
-   reducer falls back to the previous init and says so.
-5. **A-5.** The NDFD official raster is not part of this milestone; it is
-   recorded in §11.8.11 as an optional truth overlay because it is
-   browser-direct and needs no reducer.
+**A-9 (source path, decided 2026-09-30 by the build session under the
+founder's "no subscriptions" constraint; re-open by grill).** The field is
+reduced **inside the oracle's nightly AIFS ingest**, not by a Node reader of
+dynamical.org's Icechunk store. `ingest/wx/aifs.py` already byte-ranges and
+decodes every member's full global 2 m-temperature grid for all 60 steps
+(3,060 messages a night); reducing a CONUS window in that same pass adds a
+few seconds and no dependency, keeps the licence identical (ECMWF open
+data, CC BY 4.0) and serves the hosted site through the proxied oracle
+route like M1's markers. dynamical.org (`icechunk-js` 0.6 + `zarrita` 0.7,
+~400 MB per init per variable, unproven in this repo) stays the documented
+alternative for a laptop with no console. §11.7's "no GRIB decoding in
+this repo, no Python in the read path" holds: the decoding is the oracle's
+existing job, and the read path is JSON.
+
+1. **Reducer (oracle FR-W11).** In `aifs.py`, per decoded message (member ×
+   step) accumulate the running per-member min and max over the CONUS
+   window (24–50 °N, 126–66 °W → 105 × 241 = 25,305 cells at 0.25°) keyed
+   by UTC valid day; after the pass, per day and cell across the 51
+   members: TMIN `p10`, `p50`, `p90`, `spread` (p90 − p10), `freeze` (share
+   of members with TMIN < 32 °F — the physical threshold, printed as such)
+   and TMAX `p50`. Written as `data/wx_field/<init>.npz` (int16 tenths of
+   °F; share ×1000; ~3.5 MB, gitignored) plus `latest.json`; provenance in
+   `ingest_log` (source `wx_aifs`, note `field`). Memory: 51 × 25,305 × 2
+   float32 ≈ 10 MB.
+2. **Route (oracle FR-D17e).** `GET /api/oracle/weather-field` → the
+   manifest `{init, initialisedAt, fetchedAt, days[], stats[], grid: {lat0,
+   lon0, di, ni, nj}, units}`; `GET /api/oracle/weather-field?day=D+n&stat=p50`
+   → one grid as `{init, day, lead, stat, scale, values[]}` (25,305 ints,
+   ~100 KB). Stats: `p10`, `p50`, `p90`, `spread`, `freeze`, `tmax`.
+3. **Layer (globe) `weather-field`, token `W`** — the first uppercase token:
+   milestone 4b widens the registry grammar from `/^[a-z0-9]$/` to
+   `/^[a-z0-9A-Z]$/` (26 more ids; share links carry the token in a query
+   string, where case is preserved). `src/layers/weather/field.js` fetches
+   the manifest, then per (lead, stat) the stat grid **and** the `spread`
+   grid, paints a canvas (nearest-neighbour ×4) with the stat's colour ramp
+   and per-cell alpha = `alphaLead(lead)` × `alphaSpread(percentile of the
+   cell's spread within that lead's CONUS distribution)` (§11.8.14.2), and
+   shows it as a `SingleTileImageryProvider` over the CONUS rectangle at
+   imagery alpha 0.6 (the Bhote Koshi precedent, `src/data/bhoteKoshiEvent.js`).
+   The scrubber drives the lead (grids cached per lead, ≤ 17 × 2 fetches a
+   run); row chips choose the stat (`p50 TMIN` default, `p10`, `p90`,
+   `spread`, `freeze share`, `p50 TMAX`); the legend chip shows the colour
+   bar with the stat's units and the confidence swatch; the meta line
+   stamps the field's own init. The point layer stays independent; both can
+   be on.
+4. **Latency.** ECMWF publishes the 00Z AIFS ENS by ~08Z; the oracle's daily
+   tier runs at 23:00Z, so the field (and the markers) trail the run by
+   ~15 h. Recorded here as an FR-W ops decision, not built: a dedicated
+   `wx_aifs` cron at 10:00Z would cut that to ~2 h.
+5. **Laptop.** With a console proxied (`GEV_CONSOLE_URL`) the field works on
+   the laptop; without one the layer says `needs the oracle console` and
+   draws nothing. A dynamical.org reader is the recorded alternative
+   (§11.2 probe), not built.
 
 #### 11.8.11 Truth overlays (milestone 5)
 
@@ -3019,12 +3047,22 @@ both printed on the card so the fade is never a mystery.
 3. **Challenger.** `WN2` control, second ring, `vs WN2` line, licence rows.
    Verify: toggled off, zero WN2 requests; on, one metadata and one ensemble
    request per run.
-4. **The field.** Reducer, provider, `field.js`, stat control, colour bar,
-   per-cell confidence alpha (§11.8.14.2 over the reduced `spread` grid ×
-   the lead alpha), latency measured and recorded. Verify: `latest.json`
-   for today's newest init; the overlay follows the scrubber across the
-   fine segment and the tail; screenshot at D+1 and D+7; a high-spread
-   fixture cell renders at the expected alpha.
+4. **The field**, three commits (§11.8.10, A-9):
+   - **4a oracle FR-W11 + FR-D17e:** the CONUS reduce in `aifs.py`, the
+     `.npz` + `latest.json`, the two route shapes. Verify on the VPS from a
+     scratch tree against one archived init: 25,305 cells × 14 days, p10 ≤
+     p50 ≤ p90 everywhere, freeze share in [0, 1], the route under 100 ms
+     and ~100 KB; a rehearsal of the reduce inside the nightly pass with its
+     added seconds recorded.
+   - **4b globe:** the token grammar widened (`layerState.js` + its test,
+     the share-link codec tests), `weather-field` (token `W`), `field.js`,
+     the stat chips, the colour bar, the meta line, `qa`/render check.
+     Verify: the overlay follows the scrubber across the fine segment and
+     the tail; screenshot at D+1 and D+7; a high-spread fixture cell renders
+     at the expected alpha; both weather layers on together.
+   - **4c deploy + record:** oracle files deployed (aifs.py rides the next
+     23:00Z tier; the first field lands that night), globe deployed, §11.13
+     rewritten with the measured latency.
 5. **Truth overlays.** Cones, alerts, satellite, radar, the optional NDFD
    official raster; each overlay its own commit; the ledger row records
    which shipped.
@@ -3150,7 +3188,8 @@ tunnel) → 8 markers from the store, run 2026-09-29. **Oracle `56f555e`
 | Wiring | `layerState.js` (34 layers; pins moved 33→34 in `layerState.test.mjs`, `constructCatalog.test.mjs`), `constructCatalog.js` (`weatherForecast: ['getSnapshot']`), `reference.js` (+ `reference.test.mjs` key), `layerPanel.js`, `package-boundaries.json` (3 sections), `format-scope.json`, `DATA_SOURCES.md` (live row + bundled row), `dataCredits.js` (`open-meteo` extended, `era5-normals`), `LICENCES.md` (`open-meteo` row + 2 bundled rows), `licencePolicy.js` comment, `docs/COMMODITIES.md` row 6 | done |
 | Tests | `src/layers/weather/{bundles,records,source,scrubber,model}.test.mjs` + `fixtures.mjs` | 22 tests; the R11 string test greps `model.js`, `dossier.js`, `index.js` for advice words |
 | M2 service + card lines | `src/services/weatherForecast.js` (+ `.test.mjs`), `src/app/layers/weatherForecast.js` `createApplicationWeatherService`, `constructCatalog.js`, `datacenters/index.js` (`forecast` option, `liveFor` → `forecastLine`, refresh after the live feeds, re-render on `subscribe`), `datacenters/model.js` `liveCardLines`, `ports/index.js` (`forecast` option, `forecastLineFor`, selected card), `ports/model.js` `buildSelectedPortCard(row, position, forecastLine)`, `ports/records.js` `isUsPort` | BUILT 2026-09-30: nearest entry within 500 km, one line format per kind, follows the scrubber; render check: Colossus 2 / Amazon Madison → Haynesville 474 / 376 km, Google Pryor → Anadarko 305 km, Fairwater Atlanta none; crossings deferred to row 4 M1 |
-| M3 WN2, M4 field, M5 truth overlays, M6 beyond-US | — | not built; the token alphabet (`/^[a-z0-9]$/`, `0` free after `3` was taken) must widen before M5's four overlay ids |
+| M4 field | plan §11.8.10 (A-9, 2026-09-30) | **planned, building next**: 4a oracle reduce + route, 4b globe layer (widens the token grammar to `[a-z0-9A-Z]`, token `W`), 4c deploy |
+| M3 WN2, M5 truth overlays, M6 beyond-US | — | not built |
 
 **Commands.** `npm run build:weather-gazetteer [-- --check | --local ../commodities]`
 · `npm run build:weather-normals [-- --check]` · `npm run build:weather-skill
@@ -3178,7 +3217,27 @@ markers: the oracle samples no Gulf points — an oracle FR-B addition
 absent there too. (8) The headless click misses the marker under the nav
 strip (30 px offset) — use the direct dev server for the dossier check.
 
-**Last rewrite:** 2026-09-30, session jgewi-e1, at M2.
+**Open work, in order (what needs to be done — kept current):**
+
+1. **M4a** oracle FR-W11 reduce + FR-D17e route (§11.8.10.1–2).
+2. **M4b** globe: widen the token grammar (M0), `weather-field` layer, chips,
+   colour bar, per-cell confidence, render check.
+3. **M4c** deploy both halves; record the measured latency in this table.
+4. **M3** WeatherNext 2 challenger (laptop-only: Open-Meteo).
+5. **M5** truth overlays (NHC cones, NWS alerts, GIBS, RainViewer, optional
+   NDFD) — four ids from the widened alphabet.
+6. **M6** the gazetteer beyond the US.
+7. Oracle follow-ups this row depends on: two Gulf sample points in
+   `wx_basins.yaml` (lights the hosted Gulf markers, FR-B); a climatology
+   MAE in `wx_skill.py --json` so `skill.json` becomes the standard skill
+   score (FR-W); an earlier `wx_aifs` cron (~10:00Z) so the run trails by
+   ~2 h not ~15 h (FR-W ops).
+8. Globe follow-ups: the crossings' forecast line when row 4 M1 gives the
+   pips a card; a run archive for the trailing spread distribution
+   (§11.8.14.2); trim the selected overlay card once the row-1 hover
+   service lands.
+
+**Last rewrite:** 2026-09-30, session jgewi-e1, at the M4 plan.
 
 ---
 
