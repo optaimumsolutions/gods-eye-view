@@ -1,10 +1,10 @@
 # PLAN — Commodities Globe: rules, features and layout for rows 1 to 8
 
-**Version:** 1.9 · **Date:** 2026-09-28 · **Status:** decisions locked in the
+**Version:** 1.10 · **Date:** 2026-09-30 · **Status:** decisions locked in the
 2026-09-17 grill; built so far — rows 0a, 0b, 1 (milestone 1), 4 (substrate)
 and 8 (v3), see the §0 ledger for commits; row 3 re-specced in the
 2026-09-21 weather grill (§11); row 13 (hosting at commodities.optaimum.com)
-specced in the 2026-09-23 hosting grill (§15; coding agents start at §15.0), which supersedes R1 and R7; row 14 (the natural-gas intelligence loop) specced 2026-09-25 (§16), claimed with its decisions made 2026-09-26; v1.9 (2026-09-28) records row 13's founder steps (keys, Access, route) and amends R13.7 (the hosted browser key is not referrer-locked)
+specced in the 2026-09-23 hosting grill (§15; coding agents start at §15.0), which supersedes R1 and R7; row 14 (the natural-gas intelligence loop) specced 2026-09-25 (§16), claimed with its decisions made 2026-09-26; v1.9 (2026-09-28) records row 13's founder steps (keys, Access, route) and amends R13.7 (the hosted browser key is not referrer-locked); v1.10 (2026-09-30) claims row 3 and adds the founder's forecast-window scrubber and confidence rendering to §11 (§11.8.13, §11.8.14, §11.13)
 **Owner:** Jack Gewirz
 **Companions:** [`COMMODITIES.md`](COMMODITIES.md) (verified endpoints, source
 notes), [`../UPGRADE.md`](../UPGRADE.md) (paid enhancement per stream)
@@ -24,7 +24,7 @@ owns layers. Re-check `git status` before every edit to a shared file.
 | 0b  | `commodity-ports` layer                          | layers                               | **BUILT** — commit `f042155`, merged into `commodities`, pushed to origin and mirror; markers pinned in `f238b66` (merged here as `fa8132f`, not pushed); retrofit to the row-1 contract pending |
 | 1   | Shell, observation contract, hover, class groups | shell (worktree `commodities-shell`) | CLAIMED 2026-09-17 — PRD §7; worktree `commodities-shell` on `feat/commodities-shell`; milestone 1 (observation contract) BUILT 2026-09-18, four gates green; next: milestone 2, retrofit 0a and 0b |
 | 2   | `commodity-tankers`                              | layers                               | BLOCKED — AISStream rejects the saved key; verify or rotate on the Account page, enter via POWER UP |
-| 3   | Weather forecast and overlays (`weather-forecast` first) | layers                               | **SPECCED 2026-09-21** — PRD §11 from the weather grill (W1 to W9): AIFS ENS via Open-Meteo at the six basins, two market regions and the Gulf, browser-direct, keyless, token `3`; six milestones (point layer → asset-card lines → WN2 challenger → AIFS field → truth overlays → beyond the US). Not claimed; cut `feat/weather-forecast` from `feat/commodities-shell`; needs no key |
+| 3   | Weather forecast and overlays (`weather-forecast` first) | layers (shell worktree, `feat/commodities-shell`) | **CLAIMED 2026-09-30** (session jgewi-e1; founder: "weather overlay" is the next build under plan path A). PRD §11 from the weather grill (W1 to W9): AIFS ENS via Open-Meteo at the six basins, two market regions and the Gulf, browser-direct, keyless, token `3`; six milestones (point layer → asset-card lines → WN2 challenger → AIFS field → truth overlays → beyond the US). **Amended 2026-09-30 (founder):** the lead-day stepper becomes a forecast-window scrubber D+0…D+7 fine / tail to D+16 (§11.8.13) and confidence renders as opacity/saturation — lead-time decay from the oracle's measured skill (bundled, provisional until the 30-init gate) × per-cell ensemble spread (§11.8.14). Builds on `feat/commodities-shell` (founder rule), no row worktree. **§11.13 is the built state, overwritten at every milestone.** Next: M0 widen the token alphabet, then M1 |
 | 4   | `commodity-gas-flows`, gas cross-border crossings | layers                               | **BUILT (substrate) 2026-09-21** — PRD §10. Data layer `f665031`: `scripts/build-gas-bundle.mjs` + `src/data/local_data/eia_energy/` (32,892 features to 234 systems; 99 filings to 60 marks) and the `src/layers/gasFlows/` pure modules. Render layer `4919e03`: PENCIL pips and hairline, token `l`, GRID off by default after the milestone-5 gate breached (~500 MiB to draw; `scripts/qa-gas-flows.mjs` 18/18). Four gates green at every commit. Open: no UI chip calls `setNetworkEnabled` yet. Volumes: decided 2026-09-21 to bundle EIA's keyless dnav monthly point-of-entry series (POE1 imports, POE2 exports, 1973 → 2026-06, verified) instead of waiting for an API key, which becomes the refresh path; milestone 1 is re-scoped accordingly and follows row 11's first slice |
 | 5   | News pinned to assets                            | layers + server                      | OPEN — needs the assets from row 4                                                                  |
 | 6   | Trade-flow arcs                                  | layers + server                      | OPEN                                                                                                |
@@ -2419,10 +2419,23 @@ from a nightly reducer, and keeps the five overlays as a later milestone. The
 globe consumes the best open AI weather models; it trains nothing and reads
 nothing from the oracle's store.
 
-**Written:** 2026-09-21 · **Status:** decided in the 2026-09-21 grill; build
-not started; not claimed · **Mirror:** Project Brain `gods-eye-view/05-prd.md`,
-synced the same day with the §0 ledger row. Decisions the grill did not reach
-are marked `A-n` (assumption) and change by re-opening them, not by drifting.
+**Written:** 2026-09-21 · **Amended:** 2026-09-30 (founder: forecast-window
+scrubber §11.8.13, confidence as opacity §11.8.14) · **Status:** CLAIMED
+2026-09-30, building on `feat/commodities-shell`; **the built state is §11.13
+and only §11.13** — read it first when debugging · **Mirror:** Project Brain
+`gods-eye-view/05-prd.md`, re-synced by the build session at every milestone.
+Decisions the grill did not reach are marked `A-n` (assumption) and change by
+re-opening them, not by drifting.
+
+**Keep-current rule (founder, 2026-09-30).** This section describes the
+system as it is, not as it was planned. When a milestone lands, the session
+that lands it (1) rewrites §11.13 in place (file map, commands, checks,
+known issues), (2) edits any requirement above that the build changed so the
+text matches the code — superseded sentences are deleted, not struck
+through or appended to — and (3) notes the change in the ledger row with the
+SHA. History lives in git and `§15.14`-style change logs, never in this
+section. A reader debugging the weather layer should need §11.13 plus the
+requirement it points at, and nothing else.
 
 **Provenance:** every figure below was live-probed on 2026-09-21 unless marked
 otherwise. `[LIVE]` means an HTTP response was read that day.
@@ -2722,11 +2735,10 @@ response:
 
 #### 11.8.6 Time (W6)
 
-1. **Lead-day stepper.** The panel row gains `‹ d+1 ›` controls (a range
-   input, 1 to 15, the replay-speed slider's styling) that set the layer's
-   `selectedDay`; the layer republishes labels, colours and discs without a
-   fetch. Day 1 is the first valid day at or after the run's initialisation
-   date. Default 1.
+1. **Forecast-window scrubber** (was a lead-day stepper; the founder's
+   2026-09-30 spec, §11.8.13). One shared time control on the globe sets
+   `selectedDay`; the layer republishes labels, colours, discs and alpha
+   without a fetch. Day 0 is the run's initialisation date. Default D+1.
 2. **Card stamp** = the selected day's observation:
    `issued 06Z 09-21 · valid 09-24`.
 3. **Meta line** in the panel: `issued 06Z 09-21 · 9h ago · valid 15d`, or
@@ -2855,6 +2867,97 @@ forecast`, so the AIFS field can be read beside the official blend.
    for `getStats().count === 10`, step to day 7, hover Permian, click,
    screenshot, assert the stamp string and no page errors.
 
+#### 11.8.13 Forecast-window scrubber (founder, 2026-09-30)
+
+1. **One control, every weather surface.** A time control on the globe —
+   not in the panel row — that the point layer (M1), the asset-card lines
+   (M2), the field (M4) and the truth overlays (M5) all read. It is the
+   globe's twin of the console's `/weather` time-machine scrubber (oracle
+   FR-K3), so the interaction pattern has precedent; it does not replay
+   (no animation, §11.7) and it never triggers a fetch.
+2. **Window.** `D+0` through `D+7` is the **fine segment** (the 0.25° models,
+   AIFS ENS and GEFS/AIGEFS, 240 h); `D+8` through `D+16` is the **tail**,
+   drawn as a visibly coarser segment of the track. What each segment can
+   show is decided by the sources: Open-Meteo's AIFS ENS answers 15 days
+   (`D+0…D+14`) and dynamical.org's AIFS ENS field 61 six-hourly steps (15
+   days); AIGEFS via Open-Meteo answers 16 days; the oracle's own GEFS lane
+   holds 0.25° to 240 h and 0.5° `pgrb2ap5` to 384 h. **A-6:** with AIFS
+   alone the track ends at `D+14` and the `D+15…D+16` slots render disabled
+   with the reason on hover (`AIFS ENS: 15 days`); they light up only when
+   a 16-day model is enabled (M3's challenger control, or AIGEFS as the
+   third id). The segment boundary is a property of the lead, not the
+   model, so the tail styling stays put when models change.
+3. **Selection semantics.** `selectedDay` is an integer lead; the marker
+   label, disc and colour show that day; the ring and the disc's window
+   share stay window-wide (W6). The field shows that day's stat. Cards stamp
+   `issued 06Z 09-21 · valid 09-24 (D+3)`.
+4. **Placement and look.** A horizontal track under the legend chip with
+   tick labels `now`, `+1`…`+7` | `+8`…`+16`, the fine segment solid and the
+   tail hatched; keyboard `[` `]` step, `Home` returns to D+1. It appears
+   when any weather layer is on and hides with the last one. It lives in
+   `src/layers/weather/scrubber.js` (DOM only, no Cesium) and publishes
+   through `subscribe(fn)` on the weather service so other layers' card
+   lines can follow it (this closes the §11.11 open question: the joined
+   lines follow the scrubber and name the day; the worst-day summary stays
+   on the click card).
+5. **Test.** A unit test walks the track from `D+0` to `D+16` against a
+   fixture run and asserts: zero fetches, the label string per day, the
+   disabled slots past the run's horizon, and the tail class from `D+8`.
+
+#### 11.8.14 Confidence as opacity and saturation (founder, 2026-09-30)
+
+Confidence is **not a separate layer**: it is the alpha and saturation of
+whatever the weather surfaces draw, so a marker or a field cell you can
+barely see is one the model is unsure about. Two multiplicative components,
+both printed on the card so the fade is never a mystery.
+
+1. **Lead-time decay — from measured skill, never a hand-drawn curve.**
+   The oracle scores AIFS ENS and GEFS per model per lead against observed
+   GWDD (`tools/wx_skill.py`: MAE, bias, band coverage; the gate is 30
+   realized inits, expected mid-October 2026). The globe consumes that
+   score as a **bundled calibration**, not a live oracle number (R7 holds:
+   skill is a rendering parameter, and it is bundled like the gazetteer):
+   `scripts/build-weather-skill.mjs` reads `tools/wx_skill.py --json` from
+   `optaimumsolutions/commodities` at a pinned commit (build time only, `gh
+   api`, the §11.8.1 pattern) and writes
+   `src/data/local_data/weather/skill.json`: per model, per lead day, a
+   confidence in `[0, 1]` derived as `1 − MAE_lead / MAE_climatology`
+   clamped to `[0, 1]` (skill relative to the climatological baseline, the
+   standard skill score), plus `inits`, `vintage`, `commit` and
+   `provisional: true|false`.
+   - **Before the gate** (`inits < 30`): the bundle carries an honest
+     **provisional** curve — the same formula on the inits that exist,
+     labelled `provisional (n inits)` in the legend and on every card — or,
+     with no scored inits at all, a flat 1.0 with the label `no skill
+     measured yet`. The curve is never invented.
+   - `alphaLead(model, lead)` = `0.35 + 0.65 × confidence` so even the
+     least-skilled lead stays legible (a floor of 0.35, **A-7**); D+0 is by
+     definition 1.0. Rebuilt by re-running the script; the vintage is on
+     the card.
+2. **Spatial confidence — ensemble spread for that lead.** Per marker: the
+   selected day's `spread` (p90 − p10) against the entry's own trailing
+   distribution of spreads for that lead in the bundle window (percentile
+   rank); per field cell (M4): the cell's `spread` for that day against the
+   CONUS distribution of spreads for that lead in the same init.
+   `alphaSpread` = `1 − 0.6 × spreadPercentile` (a cell at the 100th
+   percentile of disagreement renders at 0.4, **A-8**). A cell where 51
+   members disagree fades even at short leads; a tight cell at D+7 stays
+   readable.
+3. **Composition.** `alpha = alphaLead × alphaSpread`; saturation follows
+   alpha through the shared colour slots (desaturate toward the basemap
+   grey as alpha falls) so the colour vocabulary of §11.8.5 is kept and
+   only its weight changes. Ring radius still encodes spread in kilometres
+   (§11.8.5.3): the fade and the ring say the same thing twice on purpose,
+   once for the eye and once for the reading.
+4. **Card and legend lines.** Every card: `confidence 41% · lead D+5 skill
+   0.62 (provisional, 12 inits, vintage 2026-09-30) · spread p78`. The
+   legend chip: a three-step alpha swatch labelled `confident · unsure ·
+   very unsure (lead-time skill × ensemble spread)`. Descriptive (R11):
+   confidence is a property of the forecast, never a recommendation.
+5. **Tests.** `skill.json` pins the model ids, 17 leads and the
+   `provisional` flag; a records test asserts `alpha` for a fixture with
+   known MAE and spread; the string test of §11.6.3 covers the new lines.
+
 ### 11.9 Constraints and invariants
 
 - **R1, R12.** Open-Meteo's free tier is non-commercial; this is a local,
@@ -2883,10 +2986,16 @@ forecast`, so the AIFS field can be read beside the official blend.
 1. **The point layer**, two commits. (a) `build-weather-gazetteer.mjs`,
    `build-weather-normals.mjs`, the two bundles, READMEs, unit tests; verify:
    ten entries, 366 normals per entry, a second run reproduces the JSON.
-   (b) Source, records, model, index, panel row with the stepper, wiring,
+   (b) Source, records, model, index, the scrubber (§11.8.13), the
+   lead-time alpha from the bundled `skill.json` (§11.8.14.1, provisional
+   until the gate) and the marker spread alpha (§11.8.14.2), wiring,
    attribution, render check; verify: goals 1 to 4 and 6, `getStats()`
-   reports the run's stamps, the card's fan matches a fixture. Ledger row 3
-   to BUILT (M1) with both SHAs.
+   reports the run's stamps, the card's fan matches a fixture, the
+   scrubber test passes. Ledger row 3 to BUILT (M1) with both SHAs and
+   §11.13 rewritten.
+   **M0 first:** widen the layer-token alphabet (`layerState.js` tokens are
+   `/^[a-z0-9]$/` and only `0` is free after row 15) so `3` can be taken
+   without displacing anyone; its own commit, count pins unchanged.
 2. **Forecast lines on the asset cards.** The service; one line each on the
    campus, crossing and US port cards. Verify: a fixture run shows the line
    on Colossus 2, Sumas WA and Sabine Pass with their own stamps; the
@@ -2895,8 +3004,11 @@ forecast`, so the AIFS field can be read beside the official blend.
    Verify: toggled off, zero WN2 requests; on, one metadata and one ensemble
    request per run.
 4. **The field.** Reducer, provider, `field.js`, stat control, colour bar,
-   latency measured and recorded. Verify: `latest.json` for today's newest
-   init; the overlay steps with the stepper; screenshot at day 1 and day 7.
+   per-cell confidence alpha (§11.8.14.2 over the reduced `spread` grid ×
+   the lead alpha), latency measured and recorded. Verify: `latest.json`
+   for today's newest init; the overlay follows the scrubber across the
+   fine segment and the tail; screenshot at D+1 and D+7; a high-spread
+   fixture cell renders at the expected alpha.
 5. **Truth overlays.** Cones, alerts, satellite, radar, the optional NDFD
    official raster; each overlay its own commit; the ledger row records
    which shipped.
@@ -2941,26 +3053,24 @@ forecast`, so the AIFS field can be read beside the official blend.
 
 ### 11.12 Bootstrap from a fresh Claude Code session
 
-Assumes this PRD is committed on `feat/commodities-shell` and row 3 is
-claimed in the §0 ledger.
+Row 3 is claimed (2026-09-30) and builds directly in the shell worktree
+on `feat/commodities-shell` — the founder's 2026-09-21 rule: every update
+lands on the shell branch, side branches are scaffolding.
 
 ```powershell
-cd C:\Users\jgewi\gods-eye-view
-git fetch --all --prune
-git worktree add ..\commodities-weather -b feat/weather-forecast feat/commodities-shell
-cd ..\commodities-weather
-npm ci            # a fresh worktree has no node_modules
+cd C:\Users\jgewi\commodities-shell
+git fetch --all --prune; git branch --show-current   # must print feat/commodities-shell
 npm run doctor    # confirms Node 24; row 3 needs no key at all
-npx vite --port 4176   # 4173 is another session's tree — never restart theirs
+npx vite --port 4173 --strictPort   # only if nothing is serving 4173 already
 claude
 ```
 
 **Paste this as the first message to Claude:**
 
 ```text
-Work in C:\Users\jgewi\commodities-weather, a git worktree on branch
-feat/weather-forecast (cut from feat/commodities-shell). This is row 3 of
-docs/COMMODITIES-PLAN.md. Read, in this order, before touching anything:
+Work in C:\Users\jgewi\commodities-shell on branch feat/commodities-shell.
+This is row 3 of docs/COMMODITIES-PLAN.md. Read §11.13 (built state)
+FIRST, then, before touching anything:
 docs/COMMODITIES-PLAN.md §0 (ledger), §2 (rules R1-R13 and the engineering
 rules), §11 (the row 3 PRD, including the probe log); docs/COMMODITIES.md;
 src/layers/commodities/observation.js (the stamp every reading uses);
@@ -2991,6 +3101,25 @@ as render-weather.mjs, point it at http://localhost:4176/. If a render
 reports "Rendering has stopped" on the first load after adding modules,
 run it again. Ask me only when a decision is genuinely missing from §11.
 ```
+
+### 11.13 Built state (kept current — overwritten at every milestone)
+
+<!-- RULE: this is the ONLY place in §11 that describes what exists. The
+session landing a milestone rewrites it whole; stale lines are deleted. -->
+
+**As of 2026-09-30 (claim; nothing built).**
+
+| Piece | State |
+| --- | --- |
+| Layer `weather-forecast` (token `3`) | not built — no `src/layers/weather/` yet; upstream's `weather` (token `w`) is an unrelated current-conditions layer |
+| Bundles (`gazetteer.json`, `normals.json`, `skill.json`) | not built |
+| Scrubber (§11.8.13) | not built |
+| Confidence alpha (§11.8.14) | not built; the oracle's `tools/wx_skill.py` gate (30 inits) not yet reached → the first `skill.json` will be `provisional` |
+| Field (M4), truth overlays (M5), beyond-US (M6) | not built |
+| Token alphabet | `/^[a-z0-9]$/`, only `0` free (row 15 took it last) → **M0 widens it before M1** |
+
+**Commands:** none yet. **Known issues:** none yet. **Last rewrite:**
+2026-09-30, session jgewi-e1, at the claim.
 
 ---
 
