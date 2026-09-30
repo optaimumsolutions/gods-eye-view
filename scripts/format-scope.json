@@ -833,5 +833,9 @@
   "src/hosting/liveRefresh.js",
   "src/hosting/eventHub.test.mjs",
   "src/hosting/events.test.mjs",
-  "src/hosting/liveRefresh.test.mjs"
+  "src/hosting/liveRefresh.test.mjs",
+  "scripts/build-weather-gazetteer.mjs",
+  "scripts/build-weather-normals.mjs",
+  "scripts/build-weather-skill.mjs",
+  "src/layers/weather/bundles.test.mjs"
 ]

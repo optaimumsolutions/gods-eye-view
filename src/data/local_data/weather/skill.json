@@ -1,0 +1,547 @@
+{
+ "vintage": "2026-09-30",
+ "gate": 30,
+ "models": {
+  "ecmwf_aifs025_ensemble": {
+   "skillKey": "AIFS_ENS",
+   "inits": 17,
+   "gate": 30,
+   "provisional": true,
+   "label": "provisional (17/30 inits)",
+   "basis": "MAE(D+1) / MAE(lead) vs observed GWDD, tools/wx_skill.py",
+   "leads": [
+    {
+     "lead": 0,
+     "confidence": 1,
+     "n": 17,
+     "mae": null,
+     "extrapolated": false
+    },
+    {
+     "lead": 1,
+     "confidence": 1,
+     "n": 17,
+     "mae": 1.077,
+     "extrapolated": false,
+     "thin": false
+    },
+    {
+     "lead": 2,
+     "confidence": 0.972,
+     "n": 16,
+     "mae": 1.108,
+     "extrapolated": false,
+     "thin": false
+    },
+    {
+     "lead": 3,
+     "confidence": 0.901,
+     "n": 15,
+     "mae": 1.195,
+     "extrapolated": false,
+     "thin": false
+    },
+    {
+     "lead": 4,
+     "confidence": 0.841,
+     "n": 14,
+     "mae": 1.28,
+     "extrapolated": false,
+     "thin": false
+    },
+    {
+     "lead": 5,
+     "confidence": 0.787,
+     "n": 13,
+     "mae": 1.369,
+     "extrapolated": false,
+     "thin": false
+    },
+    {
+     "lead": 6,
+     "confidence": 0.734,
+     "n": 12,
+     "mae": 1.467,
+     "extrapolated": false,
+     "thin": false
+    },
+    {
+     "lead": 7,
+     "confidence": 0.701,
+     "n": 11,
+     "mae": 1.536,
+     "extrapolated": false,
+     "thin": false
+    },
+    {
+     "lead": 8,
+     "confidence": 0.635,
+     "n": 10,
+     "mae": 1.696,
+     "extrapolated": false,
+     "thin": false
+    },
+    {
+     "lead": 9,
+     "confidence": 0.581,
+     "n": 9,
+     "mae": 1.853,
+     "extrapolated": false,
+     "thin": false
+    },
+    {
+     "lead": 10,
+     "confidence": 0.537,
+     "n": 8,
+     "mae": 2.007,
+     "extrapolated": false,
+     "thin": false
+    },
+    {
+     "lead": 11,
+     "confidence": 0.44,
+     "n": 7,
+     "mae": 2.447,
+     "extrapolated": false,
+     "thin": false
+    },
+    {
+     "lead": 12,
+     "confidence": 0.4,
+     "n": 6,
+     "mae": 2.69,
+     "extrapolated": false,
+     "thin": false
+    },
+    {
+     "lead": 13,
+     "confidence": 0.393,
+     "n": 5,
+     "mae": 2.739,
+     "extrapolated": false,
+     "thin": false
+    },
+    {
+     "lead": 14,
+     "confidence": 0.38,
+     "n": 4,
+     "mae": 2.832,
+     "extrapolated": false,
+     "thin": true
+    },
+    {
+     "lead": 15,
+     "confidence": 0.38,
+     "n": 4,
+     "mae": null,
+     "extrapolated": true
+    },
+    {
+     "lead": 16,
+     "confidence": 0.38,
+     "n": 4,
+     "mae": null,
+     "extrapolated": true
+    }
+   ]
+  },
+  "ncep_aigefs025": {
+   "skillKey": "GEFS",
+   "inits": 17,
+   "gate": 30,
+   "provisional": true,
+   "label": "provisional (17/30 inits)",
+   "basis": "MAE(D+1) / MAE(lead) vs observed GWDD, tools/wx_skill.py",
+   "leads": [
+    {
+     "lead": 0,
+     "confidence": 1,
+     "n": 17,
+     "mae": null,
+     "extrapolated": false
+    },
+    {
+     "lead": 1,
+     "confidence": 1,
+     "n": 17,
+     "mae": 1.334,
+     "extrapolated": false,
+     "thin": false
+    },
+    {
+     "lead": 2,
+     "confidence": 1,
+     "n": 16,
+     "mae": 1.301,
+     "extrapolated": false,
+     "thin": false
+    },
+    {
+     "lead": 3,
+     "confidence": 1,
+     "n": 15,
+     "mae": 1.307,
+     "extrapolated": false,
+     "thin": false
+    },
+    {
+     "lead": 4,
+     "confidence": 0.922,
+     "n": 14,
+     "mae": 1.447,
+     "extrapolated": false,
+     "thin": false
+    },
+    {
+     "lead": 5,
+     "confidence": 0.85,
+     "n": 13,
+     "mae": 1.569,
+     "extrapolated": false,
+     "thin": false
+    },
+    {
+     "lead": 6,
+     "confidence": 0.746,
+     "n": 12,
+     "mae": 1.788,
+     "extrapolated": false,
+     "thin": false
+    },
+    {
+     "lead": 7,
+     "confidence": 0.648,
+     "n": 11,
+     "mae": 2.058,
+     "extrapolated": false,
+     "thin": false
+    },
+    {
+     "lead": 8,
+     "confidence": 0.622,
+     "n": 10,
+     "mae": 2.143,
+     "extrapolated": false,
+     "thin": false
+    },
+    {
+     "lead": 9,
+     "confidence": 0.604,
+     "n": 9,
+     "mae": 2.208,
+     "extrapolated": false,
+     "thin": false
+    },
+    {
+     "lead": 10,
+     "confidence": 0.586,
+     "n": 8,
+     "mae": 2.275,
+     "extrapolated": false,
+     "thin": false
+    },
+    {
+     "lead": 11,
+     "confidence": 0.542,
+     "n": 7,
+     "mae": 2.46,
+     "extrapolated": false,
+     "thin": false
+    },
+    {
+     "lead": 12,
+     "confidence": 0.48,
+     "n": 6,
+     "mae": 2.78,
+     "extrapolated": false,
+     "thin": false
+    },
+    {
+     "lead": 13,
+     "confidence": 0.48,
+     "n": 5,
+     "mae": 2.775,
+     "extrapolated": false,
+     "thin": false
+    },
+    {
+     "lead": 14,
+     "confidence": 0.48,
+     "n": 4,
+     "mae": 2.682,
+     "extrapolated": false,
+     "thin": true
+    },
+    {
+     "lead": 15,
+     "confidence": 0.48,
+     "n": 3,
+     "mae": 2.374,
+     "extrapolated": false,
+     "thin": true
+    },
+    {
+     "lead": 16,
+     "confidence": 0.48,
+     "n": 3,
+     "mae": null,
+     "extrapolated": true
+    }
+   ]
+  },
+  "ncep_gefs025": {
+   "skillKey": "GEFS",
+   "inits": 17,
+   "gate": 30,
+   "provisional": true,
+   "label": "provisional (17/30 inits)",
+   "basis": "MAE(D+1) / MAE(lead) vs observed GWDD, tools/wx_skill.py",
+   "leads": [
+    {
+     "lead": 0,
+     "confidence": 1,
+     "n": 17,
+     "mae": null,
+     "extrapolated": false
+    },
+    {
+     "lead": 1,
+     "confidence": 1,
+     "n": 17,
+     "mae": 1.334,
+     "extrapolated": false,
+     "thin": false
+    },
+    {
+     "lead": 2,
+     "confidence": 1,
+     "n": 16,
+     "mae": 1.301,
+     "extrapolated": false,
+     "thin": false
+    },
+    {
+     "lead": 3,
+     "confidence": 1,
+     "n": 15,
+     "mae": 1.307,
+     "extrapolated": false,
+     "thin": false
+    },
+    {
+     "lead": 4,
+     "confidence": 0.922,
+     "n": 14,
+     "mae": 1.447,
+     "extrapolated": false,
+     "thin": false
+    },
+    {
+     "lead": 5,
+     "confidence": 0.85,
+     "n": 13,
+     "mae": 1.569,
+     "extrapolated": false,
+     "thin": false
+    },
+    {
+     "lead": 6,
+     "confidence": 0.746,
+     "n": 12,
+     "mae": 1.788,
+     "extrapolated": false,
+     "thin": false
+    },
+    {
+     "lead": 7,
+     "confidence": 0.648,
+     "n": 11,
+     "mae": 2.058,
+     "extrapolated": false,
+     "thin": false
+    },
+    {
+     "lead": 8,
+     "confidence": 0.622,
+     "n": 10,
+     "mae": 2.143,
+     "extrapolated": false,
+     "thin": false
+    },
+    {
+     "lead": 9,
+     "confidence": 0.604,
+     "n": 9,
+     "mae": 2.208,
+     "extrapolated": false,
+     "thin": false
+    },
+    {
+     "lead": 10,
+     "confidence": 0.586,
+     "n": 8,
+     "mae": 2.275,
+     "extrapolated": false,
+     "thin": false
+    },
+    {
+     "lead": 11,
+     "confidence": 0.542,
+     "n": 7,
+     "mae": 2.46,
+     "extrapolated": false,
+     "thin": false
+    },
+    {
+     "lead": 12,
+     "confidence": 0.48,
+     "n": 6,
+     "mae": 2.78,
+     "extrapolated": false,
+     "thin": false
+    },
+    {
+     "lead": 13,
+     "confidence": 0.48,
+     "n": 5,
+     "mae": 2.775,
+     "extrapolated": false,
+     "thin": false
+    },
+    {
+     "lead": 14,
+     "confidence": 0.48,
+     "n": 4,
+     "mae": 2.682,
+     "extrapolated": false,
+     "thin": true
+    },
+    {
+     "lead": 15,
+     "confidence": 0.48,
+     "n": 3,
+     "mae": 2.374,
+     "extrapolated": false,
+     "thin": true
+    },
+    {
+     "lead": 16,
+     "confidence": 0.48,
+     "n": 3,
+     "mae": null,
+     "extrapolated": true
+    }
+   ]
+  },
+  "google_weathernext2_ensemble": {
+   "skillKey": null,
+   "inits": 0,
+   "provisional": true,
+   "label": "no skill measured yet",
+   "leads": [
+    {
+     "lead": 0,
+     "confidence": 1,
+     "n": 0,
+     "extrapolated": false
+    },
+    {
+     "lead": 1,
+     "confidence": 1,
+     "n": 0,
+     "extrapolated": true
+    },
+    {
+     "lead": 2,
+     "confidence": 1,
+     "n": 0,
+     "extrapolated": true
+    },
+    {
+     "lead": 3,
+     "confidence": 1,
+     "n": 0,
+     "extrapolated": true
+    },
+    {
+     "lead": 4,
+     "confidence": 1,
+     "n": 0,
+     "extrapolated": true
+    },
+    {
+     "lead": 5,
+     "confidence": 1,
+     "n": 0,
+     "extrapolated": true
+    },
+    {
+     "lead": 6,
+     "confidence": 1,
+     "n": 0,
+     "extrapolated": true
+    },
+    {
+     "lead": 7,
+     "confidence": 1,
+     "n": 0,
+     "extrapolated": true
+    },
+    {
+     "lead": 8,
+     "confidence": 1,
+     "n": 0,
+     "extrapolated": true
+    },
+    {
+     "lead": 9,
+     "confidence": 1,
+     "n": 0,
+     "extrapolated": true
+    },
+    {
+     "lead": 10,
+     "confidence": 1,
+     "n": 0,
+     "extrapolated": true
+    },
+    {
+     "lead": 11,
+     "confidence": 1,
+     "n": 0,
+     "extrapolated": true
+    },
+    {
+     "lead": 12,
+     "confidence": 1,
+     "n": 0,
+     "extrapolated": true
+    },
+    {
+     "lead": 13,
+     "confidence": 1,
+     "n": 0,
+     "extrapolated": true
+    },
+    {
+     "lead": 14,
+     "confidence": 1,
+     "n": 0,
+     "extrapolated": true
+    },
+    {
+     "lead": 15,
+     "confidence": 1,
+     "n": 0,
+     "extrapolated": true
+    },
+    {
+     "lead": 16,
+     "confidence": 1,
+     "n": 0,
+     "extrapolated": true
+    }
+   ]
+  }
+ }
+}

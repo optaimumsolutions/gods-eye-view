@@ -1,0 +1,328 @@
+{
+  "entries": [
+    {
+      "id": "appalachia",
+      "kind": "basin",
+      "name": "Appalachia",
+      "lat": 40.215,
+      "lon": -79.46,
+      "points": [
+        {
+          "name": "Washington PA",
+          "lat": 40.17,
+          "lon": -80.25,
+          "w": 0.5
+        },
+        {
+          "name": "Williamsport PA",
+          "lat": 41.24,
+          "lon": -77,
+          "w": 0.25
+        },
+        {
+          "name": "Clarksburg WV",
+          "lat": 39.28,
+          "lon": -80.34,
+          "w": 0.25
+        }
+      ],
+      "freezeF": 10,
+      "share": 0.4,
+      "commodities": [
+        "natgas",
+        "oil"
+      ],
+      "country": "US"
+    },
+    {
+      "id": "permian",
+      "kind": "basin",
+      "name": "Permian",
+      "lat": 32.048,
+      "lon": -103.222,
+      "points": [
+        {
+          "name": "Midland TX",
+          "lat": 31.99,
+          "lon": -102.08,
+          "w": 0.4
+        },
+        {
+          "name": "Carlsbad NM",
+          "lat": 32.42,
+          "lon": -104.23,
+          "w": 0.4
+        },
+        {
+          "name": "Pecos TX",
+          "lat": 31.42,
+          "lon": -103.49,
+          "w": 0.2
+        }
+      ],
+      "freezeF": 25,
+      "share": 0.22,
+      "commodities": [
+        "natgas",
+        "oil"
+      ],
+      "country": "US"
+    },
+    {
+      "id": "haynesville",
+      "kind": "basin",
+      "name": "Haynesville",
+      "lat": 32.34,
+      "lon": -94.045,
+      "points": [
+        {
+          "name": "Shreveport LA",
+          "lat": 32.52,
+          "lon": -93.75,
+          "w": 0.5
+        },
+        {
+          "name": "Carthage TX",
+          "lat": 32.16,
+          "lon": -94.34,
+          "w": 0.5
+        }
+      ],
+      "freezeF": 25,
+      "share": 0.18,
+      "commodities": [
+        "natgas",
+        "oil"
+      ],
+      "country": "US"
+    },
+    {
+      "id": "anadarko",
+      "kind": "basin",
+      "name": "Anadarko",
+      "lat": 35.74,
+      "lon": -98.665,
+      "points": [
+        {
+          "name": "Woodward OK",
+          "lat": 36.43,
+          "lon": -99.39,
+          "w": 0.5
+        },
+        {
+          "name": "Chickasha OK",
+          "lat": 35.05,
+          "lon": -97.94,
+          "w": 0.5
+        }
+      ],
+      "freezeF": 20,
+      "share": 0.09,
+      "commodities": [
+        "natgas",
+        "oil"
+      ],
+      "country": "US"
+    },
+    {
+      "id": "eagleford",
+      "kind": "basin",
+      "name": "Eagle Ford",
+      "lat": 28.66,
+      "lon": -98.57,
+      "points": [
+        {
+          "name": "Cotulla TX",
+          "lat": 28.44,
+          "lon": -99.24,
+          "w": 0.5
+        },
+        {
+          "name": "Karnes City TX",
+          "lat": 28.88,
+          "lon": -97.9,
+          "w": 0.5
+        }
+      ],
+      "freezeF": 25,
+      "share": 0.07,
+      "commodities": [
+        "natgas",
+        "oil"
+      ],
+      "country": "US"
+    },
+    {
+      "id": "bakken",
+      "kind": "basin",
+      "name": "Bakken",
+      "lat": 47.7267,
+      "lon": -103.3433,
+      "points": [
+        {
+          "name": "Williston ND",
+          "lat": 48.15,
+          "lon": -103.62,
+          "w": 0.666667
+        },
+        {
+          "name": "Dickinson ND",
+          "lat": 46.88,
+          "lon": -102.79,
+          "w": 0.333333
+        }
+      ],
+      "freezeF": -10,
+      "share": 0.04,
+      "commodities": [
+        "natgas",
+        "oil"
+      ],
+      "country": "US"
+    },
+    {
+      "id": "southcentral",
+      "kind": "region",
+      "name": "South Central",
+      "lat": 31.4759,
+      "lon": -95.7439,
+      "points": [
+        {
+          "name": "Houston",
+          "lat": 29.76,
+          "lon": -95.36,
+          "w": 0.288032
+        },
+        {
+          "name": "Dallas",
+          "lat": 32.78,
+          "lon": -96.8,
+          "w": 0.308316
+        },
+        {
+          "name": "San Antonio",
+          "lat": 29.42,
+          "lon": -98.49,
+          "w": 0.105477
+        },
+        {
+          "name": "Austin",
+          "lat": 30.27,
+          "lon": -97.74,
+          "w": 0.093306
+        },
+        {
+          "name": "New Orleans",
+          "lat": 29.95,
+          "lon": -90.07,
+          "w": 0.052738
+        },
+        {
+          "name": "Oklahoma City",
+          "lat": 35.47,
+          "lon": -97.52,
+          "w": 0.056795
+        },
+        {
+          "name": "Birmingham",
+          "lat": 33.52,
+          "lon": -86.8,
+          "w": 0.044625
+        },
+        {
+          "name": "Jackson",
+          "lat": 32.3,
+          "lon": -90.18,
+          "w": 0.024341
+        },
+        {
+          "name": "Wichita",
+          "lat": 37.69,
+          "lon": -97.34,
+          "w": 0.026369
+        }
+      ],
+      "commodities": [
+        "natgas"
+      ],
+      "country": "US"
+    },
+    {
+      "id": "texas",
+      "kind": "region",
+      "name": "Texas",
+      "lat": 30.9458,
+      "lon": -96.6129,
+      "points": [
+        {
+          "name": "Houston",
+          "lat": 29.76,
+          "lon": -95.36,
+          "w": 0.362245
+        },
+        {
+          "name": "Dallas",
+          "lat": 32.78,
+          "lon": -96.8,
+          "w": 0.387755
+        },
+        {
+          "name": "San Antonio",
+          "lat": 29.42,
+          "lon": -98.49,
+          "w": 0.132653
+        },
+        {
+          "name": "Austin",
+          "lat": 30.27,
+          "lon": -97.74,
+          "w": 0.117347
+        }
+      ],
+      "commodities": [
+        "natgas"
+      ],
+      "country": "US"
+    },
+    {
+      "id": "gulf-offshore",
+      "kind": "gulf",
+      "name": "Gulf offshore production",
+      "points": [
+        {
+          "name": "Mississippi Canyon",
+          "lat": 28.2,
+          "lon": -89.8,
+          "w": 1
+        }
+      ],
+      "lat": 28.2,
+      "lon": -89.8,
+      "commodities": [
+        "natgas",
+        "oil"
+      ],
+      "country": "US"
+    },
+    {
+      "id": "gulf-lng",
+      "kind": "gulf",
+      "name": "Gulf LNG coast",
+      "points": [
+        {
+          "name": "Sabine Pass",
+          "lat": 29.73,
+          "lon": -93.87,
+          "w": 1
+        }
+      ],
+      "lat": 29.73,
+      "lon": -93.87,
+      "commodities": [
+        "natgas",
+        "oil"
+      ],
+      "country": "US"
+    }
+  ]
+}
