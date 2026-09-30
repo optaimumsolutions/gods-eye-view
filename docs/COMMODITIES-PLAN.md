@@ -24,7 +24,7 @@ owns layers. Re-check `git status` before every edit to a shared file.
 | 0b  | `commodity-ports` layer                          | layers                               | **BUILT** — commit `f042155`, merged into `commodities`, pushed to origin and mirror; markers pinned in `f238b66` (merged here as `fa8132f`, not pushed); retrofit to the row-1 contract pending |
 | 1   | Shell, observation contract, hover, class groups | shell (worktree `commodities-shell`) | CLAIMED 2026-09-17 — PRD §7; worktree `commodities-shell` on `feat/commodities-shell`; milestone 1 (observation contract) BUILT 2026-09-18, four gates green; next: milestone 2, retrofit 0a and 0b |
 | 2   | `commodity-tankers`                              | layers                               | BLOCKED — AISStream rejects the saved key; verify or rotate on the Account page, enter via POWER UP |
-| 3   | Weather forecast and overlays (`weather-forecast` first) | layers (shell worktree, `feat/commodities-shell`) | **CLAIMED 2026-09-30** (session jgewi-e1; founder: "weather overlay" is the next build under plan path A). PRD §11 from the weather grill (W1 to W9): AIFS ENS via Open-Meteo at the six basins, two market regions and the Gulf, browser-direct, keyless, token `3`; six milestones (point layer → asset-card lines → WN2 challenger → AIFS field → truth overlays → beyond the US). **Amended 2026-09-30 (founder):** the lead-day stepper becomes a forecast-window scrubber D+0…D+7 fine / tail to D+16 (§11.8.13) and confidence renders as opacity/saturation — lead-time decay from the oracle's measured skill (bundled, provisional until the 30-init gate) × per-cell ensemble spread (§11.8.14). Builds on `feat/commodities-shell` (founder rule), no row worktree. **§11.13 is the built state, overwritten at every milestone.** **M1 BUILT 2026-09-30** (`e97f338` bundles; layer + scrubber + confidence in the next commit): ten markers, scrubber `now…+16` with the AIFS horizon at `+14`, provisional skill fade, dossier with the fan; four gates green; render check on the dev server. Hosted OFF (free Open-Meteo API is non-commercial — `LICENCES.md`). M0 not needed for M1 (`3` was free); the alphabet widens before M5. **Hosted path 2026-09-30:** the founder declined Open-Meteo Professional, so the hosted site reads the oracle's own AIFS ENS through `/api/oracle/weather-forecast` (oracle FR-D17d, deployed; globe `d04143c` LIVE deploy-15 16:30Z; 8 markers — no Gulf sample in the store). **M2 BUILT 2026-09-30:** `src/services/weatherForecast.js` (nearest entry ≤ 500 km, follows the scrubber) + one line on the campus cards and the US port cards; crossings wait for row 4 M1. Founder 2026-09-30: M4 next. **M4a + M4b BUILT 2026-09-30** (A-9: oracle FR-W11 reduce + FR-D17e route, both rehearsed on the VPS; globe `weather-field`, token `W`, registry grammar widened to `[a-z0-9A-Z]`, drawn as a classified ground rectangle so it shows over Photorealistic 3D Tiles). **M4c DEPLOYED 2026-09-30 ~18:00Z** (oracle `40392ce` + seeded field; globe `a441db2` LIVE deploy-17) — the CONUS field is on commodities.optaimum.com. Next: the §11.13 open-work list (record tonight's first in-tier reduce; M3; M5 with the widened alphabet; M6; oracle Gulf sample / climatology skill / earlier `wx_aifs` cron) |
+| 3   | Weather forecast and overlays (`weather-forecast` first) | layers (shell worktree, `feat/commodities-shell`) | **CLAIMED 2026-09-30** (session jgewi-e1; founder: "weather overlay" is the next build under plan path A). PRD §11 from the weather grill (W1 to W9): AIFS ENS via Open-Meteo at the six basins, two market regions and the Gulf, browser-direct, keyless, token `3`; six milestones (point layer → asset-card lines → WN2 challenger → AIFS field → truth overlays → beyond the US). **Amended 2026-09-30 (founder):** the lead-day stepper becomes a forecast-window scrubber D+0…D+7 fine / tail to D+16 (§11.8.13) and confidence renders as opacity/saturation — lead-time decay from the oracle's measured skill (bundled, provisional until the 30-init gate) × per-cell ensemble spread (§11.8.14). Builds on `feat/commodities-shell` (founder rule), no row worktree. **§11.13 is the built state, overwritten at every milestone.** **M1 BUILT 2026-09-30** (`e97f338` bundles; layer + scrubber + confidence in the next commit): ten markers, scrubber `now…+16` with the AIFS horizon at `+14`, provisional skill fade, dossier with the fan; four gates green; render check on the dev server. Hosted OFF (free Open-Meteo API is non-commercial — `LICENCES.md`). M0 not needed for M1 (`3` was free); the alphabet widens before M5. **Hosted path 2026-09-30:** the founder declined Open-Meteo Professional, so the hosted site reads the oracle's own AIFS ENS through `/api/oracle/weather-forecast` (oracle FR-D17d, deployed; globe `d04143c` LIVE deploy-15 16:30Z; 8 markers — no Gulf sample in the store). **M2 BUILT 2026-09-30:** `src/services/weatherForecast.js` (nearest entry ≤ 500 km, follows the scrubber) + one line on the campus cards and the US port cards; crossings wait for row 4 M1. Founder 2026-09-30: M4 next. **M4a + M4b BUILT 2026-09-30** (A-9: oracle FR-W11 reduce + FR-D17e route, both rehearsed on the VPS; globe `weather-field`, token `W`, registry grammar widened to `[a-z0-9A-Z]`, drawn as a classified ground rectangle so it shows over Photorealistic 3D Tiles). **M4c DEPLOYED 2026-09-30 ~18:00Z** (oracle `40392ce` + seeded field; globe `a441db2` LIVE deploy-17) — the CONUS field is on commodities.optaimum.com. **M7 demand side grilled 2026-09-30** (§11.8.15, D7.1–D7.8: nine census divisions as demand markers with three sourced lines — HDD/CDD, direct `TMEAN`, EIA-930 regional demand — `HDD`/`CDD`/`HDD × people` field chips on a bundled GPWv4.11 grid, a `gas_state` demand block then `eia930` + `WX_HDD14_POP_*` covariates; M7 is second in the open-work list). Next: record tonight's first in-tier reduce, then M7a |
 | 4   | `commodity-gas-flows`, gas cross-border crossings | layers                               | **BUILT (substrate) 2026-09-21** — PRD §10. Data layer `f665031`: `scripts/build-gas-bundle.mjs` + `src/data/local_data/eia_energy/` (32,892 features to 234 systems; 99 filings to 60 marks) and the `src/layers/gasFlows/` pure modules. Render layer `4919e03`: PENCIL pips and hairline, token `l`, GRID off by default after the milestone-5 gate breached (~500 MiB to draw; `scripts/qa-gas-flows.mjs` 18/18). Four gates green at every commit. Open: no UI chip calls `setNetworkEnabled` yet. Volumes: decided 2026-09-21 to bundle EIA's keyless dnav monthly point-of-entry series (POE1 imports, POE2 exports, 1973 → 2026-06, verified) instead of waiting for an API key, which becomes the refresh path; milestone 1 is re-scoped accordingly and follows row 11's first slice |
 | 5   | News pinned to assets                            | layers + server                      | OPEN — needs the assets from row 4                                                                  |
 | 6   | Trade-flow arcs                                  | layers + server                      | OPEN                                                                                                |
@@ -3007,6 +3007,58 @@ both printed on the card so the fade is never a mystery.
    `provisional` flag; a records test asserts `alpha` for a fixture with
    known MAE and spread; the string test of §11.6.3 covers the new lines.
 
+#### 11.8.15 The demand side (milestone 7) — grilled 2026-09-30, D7.1 to D7.8
+
+**Founder direction (2026-09-30):** the weather overlay must also cover the
+energy-demand regions where weather drives natural-gas power burn and
+consumption, so the model and the hosted user conceptualize the whole
+market — supply basins AND load centres. Decisions, each recommended by the
+session and taken by the founder:
+
+| #    | Question                          | Decision                                                                                                                                                                                                                                                                                                                                                                                                                                 | Rejected                                                                                  |
+| ---- | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| D7.1 | Unit of a demand marker           | The **nine census divisions** — the oracle already ingests per-lead AIFS ENS HDD/CDD ensemble stats for all nine every night (58 pop-weighted metros, `wx_stations.yaml`), and its GWDD is the gas-weighted sum of them (`gwdd_weights.yaml`), so the marker is the number the model is scored on. Marker size = the division's share of US residential + commercial gas deliveries.                                                        | Balancing authorities as the marker (no oracle sample, shapes off the basket); metro clusters (15 more markers, per-metro rows the oracle does not keep) |
+| D7.2 | What a demand marker reads        | **All three, each from one authoritative source:** (A) degree days — `HDD14 · CDD14` p50 sums, per station then pop-weighted (ECMWF AIFS ENS via the oracle); (B) mean temperature — a new `TMEAN` series per division (p10/mean/p90/spread) so the anomaly is direct, never back-derived from HDD; (C) power burn — EIA-930 demand now + day-ahead. Colour = degree-day anomaly vs the ERA5 normal (demand above normal reads the same in both seasons); disc = share of the window's days with p50 HDD > 0 (heating season) / CDD > 0 (cooling); ring = ensemble spread of the day's degree days. | Any single reading; deriving the anomaly from HDD when the temperature exists |
+| D7.3 | How power burn maps to a division | **EIA-930 regional aggregates** (`CAL, CAR, CENT, FLA, MIDA, MIDW, NE, NW, NY, SE, SW, TEN, TEX`), one or two per division: New England → NE; Middle Atlantic → NY + MIDA; East North Central → MIDW; West North Central → CENT; South Atlantic → CAR + SE + FLA; East South Central → TEN + SE; West South Central → TEX; Mountain → SW + NW; Pacific → CAL + NW. The card line **names the region it quotes** (`power demand · TEX 62,100 MW now · day-ahead 68,900 · EIA-930`); no fake division total. | One anchor BA per division (loses SOCO/TVA/Florida); summing every BA whose centroid falls in the division (60+ respondents, messy) |
+| D7.4 | The field, degree days           | **`TMEAN`, `HDD`, `CDD` cell stats** in the same nightly reduce: the accumulator adds a running mean over the four 6-hourly steps; per member per cell HDD = max(0, 65 − TMEAN), CDD likewise; p50 across members. Two chips (`HDD`, `CDD`); ~+1 MB a night; no new source.                                                                                                                                                             | Leaving the field supply-only                                                             |
+| D7.5 | The demand-weighted field        | **A separate chip, `HDD × people`** (and `CDD × people`): value = HDD × population per cell, normalized to that day's CONUS max, its own dark → hot ramp, the same per-cell confidence fade; the plain `HDD` chip keeps the physics. Source: **NASA SEDAC GPWv4.11 population count, 2020, 15 arc-minute** — exactly the field's 0.25° grid, CC BY 4.0, bundled with vintage, never fetched at runtime. Legend prints the vintage and the day's max product. | Population as the alpha channel (alpha already means confidence, §11.8.14); population contours |
+| D7.6 | How demand reaches the model     | **Staged B:** first a `demand` block in `gas_state` (nine divisions ranked by population-weighted HDD14/CDD14 anomaly, plus the EIA-930 regions' demand now / day-ahead / vs last week) that every ask and the 21:30Z close read; then covariates keyed by init `WX_HDD14_POP_<division>` (and CDD) plus a new daily oracle lane `ingest/eia930.py` (keyless, EIA public domain; `SOURCES.md` row, validate tolerance) so `corr.py` and the FR-N17 scorer can use them. | Text only; covariates only                                                                |
+| D7.7 | Order                            | **M7 second** in the open-work list, right after recording the first in-tier reduce, ahead of M3 (WN2), M5 (truth overlays) and M6: the picture is missing half its subject until demand is on it.                                                                                                                                                                                                                                                | After M3/M5                                                                               |
+| D7.8 | Done                             | The five checks in §11.10 milestone 7.                                                                                                                                                                                                                                                                                                                                                                                                       | —                                                                                         |
+
+Requirements, numbered for the build:
+
+1. **Gazetteer (oracle + globe).** `wx_stations.yaml` divisions become nine
+   gazetteer entries (`kind: division`, id = the division name slugged,
+   e.g. `east-north-central`; points = the division's metros with their
+   pop weights; `gasShare` from `gwdd_weights.yaml`; `eia930: ['MIDW']` per
+   D7.3). `build-weather-gazetteer.mjs` reads `gwdd_weights.yaml` too.
+   ERA5 normals extend to the nine (TMIN, TMAX and the derived mean).
+2. **Oracle `TMEAN` (FR-W12).** `gwdd_lib.forecast_rows` writes a `TMEAN`
+   series per division and per market region (p10/mean/p90/spread across
+   members, per station then pop-weighted) beside HDD/CDD; `oracle_api`
+   `weather-forecast` serves it with no change (it lists every series).
+3. **Oracle field stats (FR-W11 extension).** `FieldAccumulator` keeps a
+   running sum → `TMEAN` per member per day; `write_field` adds `tmean`,
+   `hdd`, `cdd` (p50 across members, tenths). `weather-field` serves them.
+4. **Globe division markers.** `oracleSource.js` maps the nine divisions
+   (their TMEAN row gives the direct anomaly; `anomalyOf: 'TMEAN'`); marker
+   size from `gasShare`; the three card lines of D7.2/D7.3; the EIA-930
+   line reuses the datacenters' `eiaGridUrl` with region respondents (the
+   6-BA list gains the 13 regions) — one request per refresh for all nine.
+5. **Field chips.** `HDD`, `CDD` (stat ramps: degree days 0 → 40), and
+   `HDD × people` / `CDD × people` from the bundled GPW grid
+   (`src/data/local_data/weather/population.json`, int32 counts on the
+   105 × 241 grid, built by `scripts/build-weather-population.mjs` from the
+   SEDAC GeoTIFF; `LICENCES.md` + `DATA_SOURCES.md` rows, `dataCredits.js`).
+6. **Model.** `tools/gas_state.py` `demand` block (D7.6); `ingest/eia930.py`
+   daily lane → `power_demand` table (region, hour, MW, day-ahead) with a
+   validate tolerance of 6 h; covariates `WX_HDD14_POP_<DIV>`,
+   `WX_CDD14_POP_<DIV>` written by the AIFS pass; `reads.py` gains an
+   optional demand leg the scorer reports beside weather-only.
+7. **R11 holds.** Every line is a reading with its source and stamp; the
+   `demand` block ranks and quotes, never recommends.
+
 ### 11.9 Constraints and invariants
 
 - **R1, R12.** Open-Meteo's free tier is non-commercial; this is a local,
@@ -3073,6 +3125,27 @@ both printed on the card so the fade is never a mystery.
 5. **Truth overlays.** Cones, alerts, satellite, radar, the optional NDFD
    official raster; each overlay its own commit; the ledger row records
    which shipped.
+7. **The demand side** (§11.8.15), three commits:
+   - **7a oracle (FR-W12 + FR-W11 ext + FR-D12 ext):** `TMEAN` per
+     division, `tmean/hdd/cdd` field stats, the nine divisions in the
+     shared yaml-derived gazetteer, `gas_state` demand block. Verify on the
+     VPS from a scratch tree: nine `TMEAN` rows per lead, field chips
+     ordered (p10 ≤ mean ≤ p90), the block renders for the newest init.
+   - **7b globe:** nine division markers sized by gas weight with the
+     three sourced lines; `HDD`/`CDD`/`HDD × people` chips; the GPW bundle
+     and its licence rows; normals for the divisions; render check on the
+     hosted path (19 markers, chips paint, the legend names GPWv4.11 2020).
+   - **7c oracle:** `ingest/eia930.py` + `power_demand` + validate + Slack
+     tolerance; `WX_HDD14_POP_*` / `WX_CDD14_POP_*` covariates; the scorer's
+     demand leg. Verify: rows land in the daily tier two days running;
+     covariates exist for all nine per init.
+   **Done (D7.8):** (1) hosted globe shows 19 markers, each division with its
+   three lines; (2) the field's `HDD`, `CDD`, `HDD × people` chips paint and
+   step with the scrubber; (3) three consecutive 21:30Z closes cite the
+   `demand` block (a division by name with its anomaly and an EIA-930
+   figure), the bar FR-N14 set for supply; (4) `eia930` rows land daily and
+   the covariates exist per init; (5) `reads.py` reports whether the demand
+   leg moved the weather-only baseline — recorded either way.
 6. **The gazetteer past the US.** `country` beyond `US` with Montney (AECO),
    the North Sea, Qatar, and the chokepoints and non-US dossier ports joined
    through the service. Verify: the bounding-box test becomes a per-entry
@@ -3196,6 +3269,7 @@ tunnel) → 8 markers from the store, run 2026-09-29. **Oracle `56f555e`
 | Tests | `src/layers/weather/{bundles,records,source,scrubber,model}.test.mjs` + `fixtures.mjs` | 22 tests; the R11 string test greps `model.js`, `dossier.js`, `index.js` for advice words |
 | M2 service + card lines | `src/services/weatherForecast.js` (+ `.test.mjs`), `src/app/layers/weatherForecast.js` `createApplicationWeatherService`, `constructCatalog.js`, `datacenters/index.js` (`forecast` option, `liveFor` → `forecastLine`, refresh after the live feeds, re-render on `subscribe`), `datacenters/model.js` `liveCardLines`, `ports/index.js` (`forecast` option, `forecastLineFor`, selected card), `ports/model.js` `buildSelectedPortCard(row, position, forecastLine)`, `ports/records.js` `isUsPort` | BUILT 2026-09-30: nearest entry within 500 km, one line format per kind, follows the scrubber; render check: Colossus 2 / Amazon Madison → Haynesville 474 / 376 km, Google Pryor → Anadarko 305 km, Fairwater Atlanta none; crossings deferred to row 4 M1 |
 | M4 field — oracle half (4a) | oracle `ingest/wx/field.py`, `grib_lib.sample(..., window)`, `aifs.py --field-dir/--no-field`, `tools/oracle_api.py` `weather_field`, `tools/health_agent.py` (FR-W11, FR-D17e) | BUILT 2026-09-30: per-member per-day min/max over 24–50 N / 126–66 W while the nightly pass decodes 2t; reduce to TMIN p10/p50/p90, spread (exact on tenths), freeze share (< 32 °F), TMAX p50 → `data/wx_field/<init>.npz` (int16, 1.9 MB) + `latest.json`; routes: manifest 4 ms, grid 12 ms / 100 KB; rehearsed on the 2026-09-29 run — pass 2:06 wall, 14 days × 105 × 241 |
+| M7 demand side | plan §11.8.15 (grilled 2026-09-30) | **specced, next**: 7a oracle → 7b globe → 7c oracle |
 | M4 deploy (4c) | VPS | DONE 2026-09-30 ~18:00Z: oracle `40392ce` live (field seeded), globe `a441db2` LIVE deploy-17, health probe green |
 | M4 field — globe half (4b) | `src/layers/weather/fieldModel.js` (ramps, `paintField`, `percentileRanks`, `decodeGrid`), `fieldSource.js` (manifest + grids cached per init), `field.js` (layer `weather-field`, token `W`; ground rectangle entity in a `CustomDataSource`, canvas image material, scrubber-driven, stat chips, colour-bar legend), `app/layers/weatherForecast.js` `createApplicationWeatherField`, registry grammar `[a-z0-9A-Z]` (35 layers), `field.test.mjs` (5 tests) | BUILT 2026-09-30: hosted-profile render through a tunnel to a scratch console with the field — paints D+1, follows the scrubber to D+7, switches stat (pixel-probed: p50 tans/greens, freeze navy, spread blues), coexists with the markers; per-cell alpha 0.25–0.42 at D+1 |
 | M3 WN2, M5 truth overlays, M6 beyond-US | — | not built |
@@ -3236,21 +3310,26 @@ strip (30 px offset) — use the direct dev server for the dossier check.
    `api:weather-field ok — run 2026-09-29 (42 h), 14 leads`. **Still to
    record:** tonight's 23:00Z tier is the first in-pass reduce — note its
    added seconds and the run age at 08Z here tomorrow.
-4. **M3** WeatherNext 2 challenger (laptop-only: Open-Meteo).
-5. **M5** truth overlays (NHC cones, NWS alerts, GIBS, RainViewer, optional
+2. **M7 the demand side** (§11.8.15, D7.1–D7.8; founder 2026-09-30): 7a
+   oracle `TMEAN` + field `tmean/hdd/cdd` + division gazetteer + `gas_state`
+   demand block → 7b globe nine division markers, three sourced lines,
+   `HDD`/`CDD`/`HDD × people` chips (GPWv4.11 bundle) → 7c `eia930` lane +
+   `WX_HDD14_POP_*` covariates + the scorer's demand leg.
+3. **M3** WeatherNext 2 challenger (laptop-only: Open-Meteo).
+4. **M5** truth overlays (NHC cones, NWS alerts, GIBS, RainViewer, optional
    NDFD) — four ids from the widened alphabet.
-6. **M6** the gazetteer beyond the US.
-7. Oracle follow-ups this row depends on: two Gulf sample points in
+5. **M6** the gazetteer beyond the US.
+6. Oracle follow-ups this row depends on: two Gulf sample points in
    `wx_basins.yaml` (lights the hosted Gulf markers, FR-B); a climatology
    MAE in `wx_skill.py --json` so `skill.json` becomes the standard skill
    score (FR-W); an earlier `wx_aifs` cron (~10:00Z) so the run trails by
    ~2 h not ~15 h (FR-W ops).
-8. Globe follow-ups: the crossings' forecast line when row 4 M1 gives the
+7. Globe follow-ups: the crossings' forecast line when row 4 M1 gives the
    pips a card; a run archive for the trailing spread distribution
    (§11.8.14.2); trim the selected overlay card once the row-1 hover
    service lands.
 
-**Last rewrite:** 2026-09-30, session jgewi-e1, after the M4 deploy.
+**Last rewrite:** 2026-09-30, session jgewi-e1, after the M7 grill.
 
 ---
 
