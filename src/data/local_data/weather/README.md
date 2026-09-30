@@ -76,7 +76,13 @@ vintage and that maximum. The SEDAC download needs an Earthdata login, so
 the `.asc` is a manual input (like the GEM spreadsheet for the LNG bundle):
 place `gpw_v4_population_count_rev11_2020_15_min.asc` under
 `.gev-cache/weather/` and run the build; `--check` compares byte for byte.
-Until the bundle exists the two chips are disabled and say why.
+Built 2026-09-30 from the zip at
+`data.earthdata.nasa.gov/nasa-earth/human-dimensions/sedac-root/downloads/data/gpw-v4/gpw-v4-population-count-rev11/`
+(the old `sedac.ciesin.columbia.edu` host is gone; the new one wants an
+Earthdata bearer token — `curl -H "Authorization: Bearer <token>"`): window
+total 402,238,849 people (24–50 N includes northern Mexico and southern
+Canada), densest cell New York 2,814,131. Without the bundle the two chips
+are disabled and say why.
 
 Rebuild order after an oracle yaml change: gazetteer → normals → skill;
 population only when SEDAC publishes a new revision.

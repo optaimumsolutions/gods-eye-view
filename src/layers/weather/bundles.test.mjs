@@ -121,6 +121,22 @@ test('the population builder reads an ESRI ASCII grid and quarter-sums the four 
   assert.equal(bundle.values[0], 3);
   assert.equal(bundle.licence, 'CC BY 4.0');
   assert.match(bundle.vintage, /GPWv4\.11/);
+  // the shipped bundle: the field's grid, whole people, New York the densest cell
+  const shipped = read('population.json');
+  assert.deepEqual(shipped.grid, { ...FIELD_GRID });
+  assert.equal(shipped.values.length, 105 * 241);
+  assert.ok(shipped.values.every((x) => Number.isInteger(x) && x >= 0));
+  assert.ok(
+    shipped.total > 350e6 && shipped.total < 450e6,
+    `window total ${shipped.total}`,
+  );
+  const cell = (lat, lon) =>
+    shipped.values[
+      Math.round((50 - lat) / 0.25) * 241 + Math.round((lon + 126) / 0.25)
+    ];
+  assert.equal(Math.max(...shipped.values), cell(40.75, -74), 'New York');
+  assert.equal(cell(35, -70), 0, 'open Atlantic');
+  assert.equal(shipped.licence, 'CC BY 4.0');
   assert.throws(
     () =>
       parseAsciiGrid(
