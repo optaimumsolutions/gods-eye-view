@@ -54,6 +54,8 @@ const UPDATE_INTERVAL_MS = 10 * 60_000;
 export function createDatacentersLayer({
   source,
   liveSource = createDatacenterLiveSource(),
+  /** Row 3 M2: the shared forecast service (src/services/weatherForecast.js); optional. */
+  forecast = null,
   overlayHost,
   context,
   dossier = null,
@@ -86,6 +88,7 @@ export function createDatacentersLayer({
   let _selectedId = null;
   let _hoverId = null;
   let _hoverLastPickAt = 0;
+  let _unsubscribeForecast = null;
   let _cameraMoving = false;
   let _lastUpdate = null;
   let _lastError = null;
@@ -130,12 +133,19 @@ export function createDatacentersLayer({
    * what keeps the static card unchanged while the feeds are cold or down.
    */
   function liveFor(row) {
-    if (!_live) return null;
-    const grid = row.balancingAuthority
-      ? (_live.grid.get(row.balancingAuthority) ?? null)
+    const grid =
+      _live && row.balancingAuthority
+        ? (_live.grid.get(row.balancingAuthority) ?? null)
+        : null;
+    const weather = _live ? (_live.weather.get(row.id) ?? null) : null;
+    // Row 3 M2: the nearest basin or region's forecast at the scrubber's lead
+    const forecastLine =
+      forecast && Number.isFinite(row.lat) && Number.isFinite(row.lon)
+        ? forecast.lineFor(row.lat, row.lon)
+        : null;
+    return grid || weather || forecastLine
+      ? { grid, weather, forecastLine }
       : null;
-    const weather = _live.weather.get(row.id) ?? null;
-    return grid || weather ? { grid, weather } : null;
   }
 
   function rebuildEntries() {
@@ -548,6 +558,10 @@ export function createDatacentersLayer({
 
     enable(viewer = _viewer) {
       _enabled = true;
+      if (forecast && !_unsubscribeForecast)
+        _unsubscribeForecast = forecast.subscribe(() => {
+          if (_enabled) refreshTier({ force: true });
+        });
       if (_dataSource) _dataSource.show = true;
       overlayHost.setVisible(DATACENTER_OVERLAY_SOURCE_ID, true);
       installHandlers(viewer);
@@ -556,6 +570,8 @@ export function createDatacentersLayer({
     },
 
     disable() {
+      _unsubscribeForecast?.();
+      _unsubscribeForecast = null;
       _request?.abort();
       _request = null;
       clearSelection({ publish: false });
@@ -610,6 +626,14 @@ export function createDatacentersLayer({
           );
         } catch (liveError) {
           console.warn('[Data:Datacenters] Live feed error:', liveError);
+        }
+        if (forecast) {
+          // Enrichment too: the service never throws, and a change (new run
+          // or scrubber step) re-renders through the subscription below.
+          await forecast.refresh({ signal: request.signal });
+          if (request.signal.aborted || _request !== request || !_enabled)
+            return true;
+          refreshTier({ force: true });
         }
         return true;
       } catch (e) {

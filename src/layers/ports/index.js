@@ -1,6 +1,7 @@
 import * as Cesium from 'cesium';
 import { horizonOccluder } from '../../data/iconOrientation.js';
 import { isPointerFree } from '../../data/inputOwnership.js';
+import { isUsPort } from './records.js';
 import {
   PORT_LAYER_ID,
   PORT_OVERLAY_SOURCE_ID,
@@ -40,6 +41,8 @@ export function createPortsLayer({
   overlayHost,
   context,
   screenSpaceEventHandlerFactory,
+  /** Row 3 M2: the shared forecast service; lines only on the US ports. */
+  forecast = null,
 } = {}) {
   if (typeof source?.getSnapshot !== 'function')
     throw new TypeError('Ports require a snapshot source');
@@ -64,6 +67,7 @@ export function createPortsLayer({
   /** Always-on-top markers to horizon-cull: `{ entity, position, visible }`. */
   let _cullTargets = [];
   let _rows = [];
+  let _unsubscribeForecast = null;
   let _disruptions = [];
   let _entries = [];
   /** @type {{kind: 'port'|'disruption', id: string}|null} */
@@ -82,6 +86,12 @@ export function createPortsLayer({
     return `${kind}:${id}`;
   }
 
+  /** Row 3 M2: the nearest basin/region/Gulf forecast for a US port, else null. */
+  function forecastLineFor(row) {
+    if (!forecast || !isUsPort(row)) return null;
+    return forecast.lineFor(row.lat, row.lon);
+  }
+
   function publishOverlay() {
     if (!_enabled) return;
     const selectedKey = _selected
@@ -92,7 +102,10 @@ export function createPortsLayer({
       const position = _positionByKey.get(selectedKey);
       if (_selected.kind === 'port') {
         const row = _rowById.get(_selected.id);
-        if (row) entries.push(buildSelectedPortCard(row, position));
+        if (row)
+          entries.push(
+            buildSelectedPortCard(row, position, forecastLineFor(row)),
+          );
       } else {
         const event = _eventById.get(_selected.id);
         if (event) entries.push(buildSelectedDisruptionCard(event, position));
@@ -264,6 +277,10 @@ export function createPortsLayer({
 
     enable(viewer = _viewer) {
       _enabled = true;
+      if (forecast && !_unsubscribeForecast)
+        _unsubscribeForecast = forecast.subscribe(() => {
+          if (_enabled && _selected) publishOverlay();
+        });
       if (_dataSource) _dataSource.show = true;
       overlayHost.setVisible(PORT_OVERLAY_SOURCE_ID, true);
       installClickHandler(viewer);
@@ -272,6 +289,8 @@ export function createPortsLayer({
     },
 
     disable() {
+      _unsubscribeForecast?.();
+      _unsubscribeForecast = null;
       _request?.abort();
       _request = null;
       clearSelection({ publish: false });

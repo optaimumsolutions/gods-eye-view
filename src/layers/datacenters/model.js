@@ -204,7 +204,12 @@ export function createDatacenterOverlayEntry(row, position, tier, live = null) {
  */
 function liveCardLines(row, live) {
   if (!live) return [];
-  return [gridLine(row, live.grid), weatherLine(live.weather)].filter(Boolean);
+  // Row 3 M2: one forecast line, already formatted by the weather service
+  return [
+    gridLine(row, live.grid),
+    weatherLine(live.weather),
+    live.forecastLine ?? null,
+  ].filter(Boolean);
 }
 
 /** Regional card: who, where it is going, how it is powered. */

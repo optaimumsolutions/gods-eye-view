@@ -2,6 +2,7 @@ import * as Cesium from 'cesium';
 import { createWeatherForecastLayer } from '../../layers/weather/index.js';
 import { createWeatherDossier } from '../../layers/weather/dossier.js';
 import { getForecastScrubber } from '../../layers/weather/scrubber.js';
+import { createWeatherForecastService } from '../../services/weatherForecast.js';
 import { overlayHost } from './overlayHost.js';
 import {
   clearSelectedEntityContextForLayer,
@@ -37,4 +38,19 @@ export function createApplicationWeatherForecast(options) {
     ...options,
   });
   return layer;
+}
+
+/**
+ * The shared forecast service the campus and port cards read (row 3 M2),
+ * built on the same source as the layer so it never adds a request; it
+ * follows the shared scrubber when a document exists.
+ */
+export function createApplicationWeatherService(source) {
+  return createWeatherForecastService({
+    source,
+    scrubber:
+      typeof document !== 'undefined'
+        ? getForecastScrubber({ document })
+        : null,
+  });
 }

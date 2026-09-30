@@ -24,7 +24,7 @@ owns layers. Re-check `git status` before every edit to a shared file.
 | 0b  | `commodity-ports` layer                          | layers                               | **BUILT** — commit `f042155`, merged into `commodities`, pushed to origin and mirror; markers pinned in `f238b66` (merged here as `fa8132f`, not pushed); retrofit to the row-1 contract pending |
 | 1   | Shell, observation contract, hover, class groups | shell (worktree `commodities-shell`) | CLAIMED 2026-09-17 — PRD §7; worktree `commodities-shell` on `feat/commodities-shell`; milestone 1 (observation contract) BUILT 2026-09-18, four gates green; next: milestone 2, retrofit 0a and 0b |
 | 2   | `commodity-tankers`                              | layers                               | BLOCKED — AISStream rejects the saved key; verify or rotate on the Account page, enter via POWER UP |
-| 3   | Weather forecast and overlays (`weather-forecast` first) | layers (shell worktree, `feat/commodities-shell`) | **CLAIMED 2026-09-30** (session jgewi-e1; founder: "weather overlay" is the next build under plan path A). PRD §11 from the weather grill (W1 to W9): AIFS ENS via Open-Meteo at the six basins, two market regions and the Gulf, browser-direct, keyless, token `3`; six milestones (point layer → asset-card lines → WN2 challenger → AIFS field → truth overlays → beyond the US). **Amended 2026-09-30 (founder):** the lead-day stepper becomes a forecast-window scrubber D+0…D+7 fine / tail to D+16 (§11.8.13) and confidence renders as opacity/saturation — lead-time decay from the oracle's measured skill (bundled, provisional until the 30-init gate) × per-cell ensemble spread (§11.8.14). Builds on `feat/commodities-shell` (founder rule), no row worktree. **§11.13 is the built state, overwritten at every milestone.** **M1 BUILT 2026-09-30** (`e97f338` bundles; layer + scrubber + confidence in the next commit): ten markers, scrubber `now…+16` with the AIFS horizon at `+14`, provisional skill fade, dossier with the fan; four gates green; render check on the dev server. Hosted OFF (free Open-Meteo API is non-commercial — `LICENCES.md`). M0 not needed for M1 (`3` was free); the alphabet widens before M5. Next: M2 (forecast lines on the asset cards) |
+| 3   | Weather forecast and overlays (`weather-forecast` first) | layers (shell worktree, `feat/commodities-shell`) | **CLAIMED 2026-09-30** (session jgewi-e1; founder: "weather overlay" is the next build under plan path A). PRD §11 from the weather grill (W1 to W9): AIFS ENS via Open-Meteo at the six basins, two market regions and the Gulf, browser-direct, keyless, token `3`; six milestones (point layer → asset-card lines → WN2 challenger → AIFS field → truth overlays → beyond the US). **Amended 2026-09-30 (founder):** the lead-day stepper becomes a forecast-window scrubber D+0…D+7 fine / tail to D+16 (§11.8.13) and confidence renders as opacity/saturation — lead-time decay from the oracle's measured skill (bundled, provisional until the 30-init gate) × per-cell ensemble spread (§11.8.14). Builds on `feat/commodities-shell` (founder rule), no row worktree. **§11.13 is the built state, overwritten at every milestone.** **M1 BUILT 2026-09-30** (`e97f338` bundles; layer + scrubber + confidence in the next commit): ten markers, scrubber `now…+16` with the AIFS horizon at `+14`, provisional skill fade, dossier with the fan; four gates green; render check on the dev server. Hosted OFF (free Open-Meteo API is non-commercial — `LICENCES.md`). M0 not needed for M1 (`3` was free); the alphabet widens before M5. **Hosted path 2026-09-30:** the founder declined Open-Meteo Professional, so the hosted site reads the oracle's own AIFS ENS through `/api/oracle/weather-forecast` (oracle FR-D17d, deployed; globe `d04143c` LIVE deploy-15 16:30Z; 8 markers — no Gulf sample in the store). **M2 BUILT 2026-09-30:** `src/services/weatherForecast.js` (nearest entry ≤ 500 km, follows the scrubber) + one line on the campus cards and the US port cards; crossings wait for row 4 M1. Next: M3 (WN2 challenger) or M4 (the field) — founder's pick |
 | 4   | `commodity-gas-flows`, gas cross-border crossings | layers                               | **BUILT (substrate) 2026-09-21** — PRD §10. Data layer `f665031`: `scripts/build-gas-bundle.mjs` + `src/data/local_data/eia_energy/` (32,892 features to 234 systems; 99 filings to 60 marks) and the `src/layers/gasFlows/` pure modules. Render layer `4919e03`: PENCIL pips and hairline, token `l`, GRID off by default after the milestone-5 gate breached (~500 MiB to draw; `scripts/qa-gas-flows.mjs` 18/18). Four gates green at every commit. Open: no UI chip calls `setNetworkEnabled` yet. Volumes: decided 2026-09-21 to bundle EIA's keyless dnav monthly point-of-entry series (POE1 imports, POE2 exports, 1973 → 2026-06, verified) instead of waiting for an API key, which becomes the refresh path; milestone 1 is re-scoped accordingly and follows row 11's first slice |
 | 5   | News pinned to assets                            | layers + server                      | OPEN — needs the assets from row 4                                                                  |
 | 6   | Trade-flow arcs                                  | layers + server                      | OPEN                                                                                                |
@@ -2420,7 +2420,7 @@ globe consumes the best open AI weather models; it trains nothing and reads
 nothing from the oracle's store.
 
 **Written:** 2026-09-21 · **Amended:** 2026-09-30 (founder: forecast-window
-scrubber §11.8.13, confidence as opacity §11.8.14) · **Status:** M1 BUILT
+scrubber §11.8.13, confidence as opacity §11.8.14) · **Status:** M1 + M2 BUILT
 2026-09-30 on `feat/commodities-shell`; **the built state is §11.13
 and only §11.13** — read it first when debugging · **Mirror:** Project Brain
 `gods-eye-view/05-prd.md`, re-synced by the build session at every milestone.
@@ -2768,20 +2768,30 @@ response:
 
 #### 11.8.8 Forecast service and the asset join (W3; milestone 2)
 
-1. `src/services/weatherForecast.js` wraps the source as a service other
-   commodity layers receive through the construct catalog:
-   `getForecastAt(points, { model, signal })` returns, per point, the same
-   frozen per-day record the layer uses, sampled at that point (no
-   aggregation), and `subscribe(fn)` fires on a new run. Points are batched
-   into the layer's own ensemble request; they never cause a second one.
-2. **Which assets, which line** (each layer edits its own card, R13):
-   - `energy-datacenters` (15 campuses): `forecast · TMAX p90 104°F Thu ·
-     6 cooling days` — heat is what a campus rejects.
-   - `commodity-gas-flows` (the ~40 US crossings): `forecast · TMIN p10 18°F
-     Sat · 4 freeze days (heuristic 25°F, Permian)`, using the threshold of
-     the nearest basin or 25°F when none is within 500 km, printed.
-   - `commodity-ports` dossier ports in the US (Houston, Corpus Christi,
-     Sabine Pass, Port Arthur): `forecast · gust p90 41 mph Tue · wave 2.1 m`.
+1. `src/services/weatherForecast.js` wraps the weather layer's snapshot
+   source as a service the construct catalog hands to the other commodity
+   layers: `refresh({ signal })` (never throws; 30-minute TTL on top of the
+   source's own per-run cache), `peekNear(lat, lon)` and `lineFor(lat, lon)`
+   (synchronous, from the last snapshot), `subscribe(fn)` (a new run or a
+   scrubber step). A card gets the reading of the **nearest gazetteer entry
+   within 500 km**, named with its distance — not a sample at the asset's
+   own coordinates: the hosted site draws the oracle store, which samples
+   only the gazetteer's places, so the nearest-entry reading is the one that
+   exists on both paths and adds no request on either (built 2026-09-30;
+   point sampling on the laptop path is a possible later refinement).
+2. **Which assets, which line** (each layer edits its own card, R13). One
+   format, `forecast D+n · <body> · <entry> <km> km · issued 06Z 09-30`, whose
+   body follows the nearest entry's kind — basin `min p10 18°F · 4 freeze
+   days (heuristic 25°F)`, region `HDD14 62 · CDD14 0`, Gulf `wind p90 41
+   mph · wave 2.1 m · 2 gale days (≥ 39 mph)`:
+   - `energy-datacenters` (15 campuses): on the regional and local cards
+     after the grid and current-weather lines (`liveCardLines`); a campus
+     with no entry within 500 km (Fairwater Atlanta) shows none.
+   - `commodity-ports`: on the selected card of every port inside the
+     contiguous-US box (`isUsPort`), after the PortWatch provenance line.
+   - `commodity-gas-flows` crossings: **deferred to row 4 M1** — the
+     crossings are inert grey pips today (no card, hover or context record to
+     carry a line); the line joins when row 4 gives them a card.
    - Chokepoints and non-US ports: milestone 6.
 3. Every joined line is its own observation with the layer's source string
    and stamps; a missing forecast leaves the line absent, never blank.
@@ -3002,9 +3012,10 @@ both printed on the card so the fade is never a mystery.
    still free on 2026-09-30. It moves ahead of M5, whose four overlay ids
    need tokens.)
 2. **Forecast lines on the asset cards.** The service; one line each on the
-   campus, crossing and US port cards. Verify: a fixture run shows the line
-   on Colossus 2, Sumas WA and Sabine Pass with their own stamps; the
-   request count is unchanged.
+   campus and US port cards (crossings wait for row 4 M1). Verify: a
+   fixture run shows the line on a campus and a US port with the stamp; the
+   request count is unchanged; the line follows the scrubber. BUILT
+   2026-09-30 (§11.13).
 3. **Challenger.** `WN2` control, second ring, `vs WN2` line, licence rows.
    Verify: toggled off, zero WN2 requests; on, one metadata and one ensemble
    request per run.
@@ -3112,7 +3123,7 @@ run it again. Ask me only when a decision is genuinely missing from §11.
 <!-- RULE: this is the ONLY place in §11 that describes what exists. The
 session landing a milestone rewrites it whole; stale lines are deleted. -->
 
-**As of 2026-09-30 — M1 BUILT + hosted path built** (session jgewi-e1;
+**As of 2026-09-30 — M1 + M2 BUILT, hosted path built** (session jgewi-e1;
 `e97f338` M1a bundles, `2989ede` M1b layer, the commit carrying this line =
 the oracle-store source). **Hosted: ON via the oracle** — the free
 Open-Meteo API is non-commercial (`LICENCES.md` row `open-meteo`; the
@@ -3138,7 +3149,8 @@ tunnel) → 8 markers from the store, run 2026-09-29. **Oracle `56f555e`
 | Bundles | `src/data/local_data/weather/` (`README.md`) | `gazetteer.json` (10 entries, oracle yaml @ `28f69db0`, via `gh api`, `--check` byte-identical, `--local ../commodities` reads a checkout); `normals.json` (ERA5 2016–2025, 29 archive calls, raw cache `.gev-cache/weather/normals/`, 429 back-off); `skill.json` (AIFS `provisional (17/30 inits)`, D+1 1.00 → D+7 0.70 → D+14 0.38; WN2 `no skill measured yet`) |
 | Wiring | `layerState.js` (34 layers; pins moved 33→34 in `layerState.test.mjs`, `constructCatalog.test.mjs`), `constructCatalog.js` (`weatherForecast: ['getSnapshot']`), `reference.js` (+ `reference.test.mjs` key), `layerPanel.js`, `package-boundaries.json` (3 sections), `format-scope.json`, `DATA_SOURCES.md` (live row + bundled row), `dataCredits.js` (`open-meteo` extended, `era5-normals`), `LICENCES.md` (`open-meteo` row + 2 bundled rows), `licencePolicy.js` comment, `docs/COMMODITIES.md` row 6 | done |
 | Tests | `src/layers/weather/{bundles,records,source,scrubber,model}.test.mjs` + `fixtures.mjs` | 22 tests; the R11 string test greps `model.js`, `dossier.js`, `index.js` for advice words |
-| M2 service, M3 WN2, M4 field, M5 truth overlays, M6 beyond-US | — | not built; the token alphabet (`/^[a-z0-9]$/`, `0` free after `3` was taken) must widen before M5's four overlay ids |
+| M2 service + card lines | `src/services/weatherForecast.js` (+ `.test.mjs`), `src/app/layers/weatherForecast.js` `createApplicationWeatherService`, `constructCatalog.js`, `datacenters/index.js` (`forecast` option, `liveFor` → `forecastLine`, refresh after the live feeds, re-render on `subscribe`), `datacenters/model.js` `liveCardLines`, `ports/index.js` (`forecast` option, `forecastLineFor`, selected card), `ports/model.js` `buildSelectedPortCard(row, position, forecastLine)`, `ports/records.js` `isUsPort` | BUILT 2026-09-30: nearest entry within 500 km, one line format per kind, follows the scrubber; render check: Colossus 2 / Amazon Madison → Haynesville 474 / 376 km, Google Pryor → Anadarko 305 km, Fairwater Atlanta none; crossings deferred to row 4 M1 |
+| M3 WN2, M4 field, M5 truth overlays, M6 beyond-US | — | not built; the token alphabet (`/^[a-z0-9]$/`, `0` free after `3` was taken) must widen before M5's four overlay ids |
 
 **Commands.** `npm run build:weather-gazetteer [-- --check | --local ../commodities]`
 · `npm run build:weather-normals [-- --check]` · `npm run build:weather-skill
@@ -3166,7 +3178,7 @@ markers: the oracle samples no Gulf points — an oracle FR-B addition
 absent there too. (8) The headless click misses the marker under the nav
 strip (30 px offset) — use the direct dev server for the dossier check.
 
-**Last rewrite:** 2026-09-30, session jgewi-e1, at M1.
+**Last rewrite:** 2026-09-30, session jgewi-e1, at M2.
 
 ---
 

@@ -141,7 +141,7 @@ export function createDisruptionOverlayEntry(event, position) {
 }
 
 /** Selected port card: the two numbers the deviation is made of, the port's scale, and provenance. */
-export function buildSelectedPortCard(row, position) {
+export function buildSelectedPortCard(row, position, forecastLine = null) {
   let flow;
   if (showsDeviation(row))
     flow = `${formatRate(row.recentAvg)} tankers/day · last ${row.recentDays}d · baseline ${formatRate(row.baselineAvg)}`;
@@ -159,6 +159,7 @@ export function buildSelectedPortCard(row, position) {
       flow,
       `${formatRate(row.recentContainers)} container calls/day · ${formatCount(row.annualTankers)} tanker visits/yr · ${row.country ?? 'n/a'}`,
       `latest ${row.latestDate ?? 'n/a'} · IMF PortWatch · AIS-derived, ~5-day lag`,
+      ...(forecastLine ? [forecastLine] : []),
     ],
     selected: true,
     priority: Number.MAX_SAFE_INTEGER,

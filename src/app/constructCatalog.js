@@ -32,7 +32,10 @@ import {
   createApplicationOnshoreWilliston,
 } from './layers/onshore.js';
 import { createApplicationSupplyBoard } from './layers/supplyBoard.js';
-import { createApplicationWeatherForecast } from './layers/weatherForecast.js';
+import {
+  createApplicationWeatherForecast,
+  createApplicationWeatherService,
+} from './layers/weatherForecast.js';
 import { createInfrastructureLayers } from '../data/infrastructure.js';
 import { localGeoJsonServices } from './localGeojsonServices.js';
 import { createBhoteKoshiEventLayer } from '../data/bhoteKoshiEvent.js';
@@ -124,6 +127,10 @@ export function createApplicationCatalog({
     const satellites = createApplicationSatellites({
       source: sources.satellites,
     });
+    // Row 3 M2: one forecast service on the weather source for the cards
+    const weatherService = createApplicationWeatherService(
+      sources.weatherForecast,
+    );
     const catalog = createLayerCatalog(
       [
         createBhoteKoshiEventLayer(),
@@ -153,8 +160,14 @@ export function createApplicationCatalog({
         ...createInfrastructureLayers(localGeoJsonServices),
         createApplicationCables({ source: sources.cables }),
         createApplicationChokepoints({ source: sources.chokepoints }),
-        createApplicationPorts({ source: sources.ports }),
-        createApplicationDatacenters({ source: sources.datacenters }),
+        createApplicationPorts({
+          source: sources.ports,
+          forecast: weatherService,
+        }),
+        createApplicationDatacenters({
+          source: sources.datacenters,
+          forecast: weatherService,
+        }),
         createApplicationGasFlows({ source: sources.gasFlows }),
         createApplicationGulfPlatforms({ source: sources.gulfPlatforms }),
         createApplicationLng({ source: sources.lng }),

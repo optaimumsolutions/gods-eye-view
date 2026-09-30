@@ -309,3 +309,19 @@ export function buildPortSnapshot({
     registryCount: ports.length,
   };
 }
+
+/**
+ * Row 3 M2: the ports that get a forecast line — inside the contiguous US
+ * bounding box (the weather gazetteer's coverage), whatever PortWatch names
+ * the country.
+ */
+export function isUsPort(row) {
+  return (
+    Number.isFinite(row?.lat) &&
+    Number.isFinite(row?.lon) &&
+    row.lat > 24 &&
+    row.lat < 50 &&
+    row.lon > -126 &&
+    row.lon < -66
+  );
+}
