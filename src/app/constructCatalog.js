@@ -33,6 +33,7 @@ import {
 } from './layers/onshore.js';
 import { createApplicationSupplyBoard } from './layers/supplyBoard.js';
 import {
+  createApplicationWeatherField,
   createApplicationWeatherForecast,
   createApplicationWeatherService,
 } from './layers/weatherForecast.js';
@@ -69,6 +70,7 @@ const SOURCE_METHODS = Object.freeze({
   gulfPlatforms: ['getSnapshot'],
   lng: ['getSnapshot'],
   weatherForecast: ['getSnapshot'],
+  weatherField: ['getManifest', 'getGrid'],
 });
 
 /** Construct the current catalog without choosing any source provider.
@@ -186,6 +188,7 @@ export function createApplicationCatalog({
         }),
         createApplicationSupplyBoard({ source: sources.supplyBoard }),
         createApplicationWeatherForecast({ source: sources.weatherForecast }),
+        createApplicationWeatherField({ source: sources.weatherField }),
         createApplicationFirms({
           surface,
           id: 'local-firms',

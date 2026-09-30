@@ -28,7 +28,9 @@ test('reference factories retain compatibility without starting acquisition or s
     'onshorePermianPlatform',
     'supplyBoard',
     'weatherForecast',
+    'weatherField',
   ]);
+  assert.equal(typeof first.weatherField.getManifest, 'function');
   assert.notEqual(first.weatherForecast, second.weatherForecast);
   assert.equal(typeof first.weatherForecast.getSnapshot, 'function');
   assert.notEqual(first.supplyBoard, second.supplyBoard);

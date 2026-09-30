@@ -23,6 +23,7 @@ import {
   createOracleWeatherSource,
   createPreferredWeatherSource,
 } from '../layers/weather/oracleSource.js';
+import { createOracleFieldSource } from '../layers/weather/fieldSource.js';
 import { createWithheldSource, isWithheld } from '../hosting/withheld.js';
 
 /** Why the hosted site shows no PortWatch layer (docs/LICENCES.md). */
@@ -103,5 +104,7 @@ export function createReferenceSources() {
           primary: createOracleWeatherSource(),
           fallback: createOpenMeteoEnsembleSource(),
         }),
+    // Row 3 M4: the CONUS field exists only in the oracle store (both paths)
+    weatherField: createOracleFieldSource(),
   };
 }

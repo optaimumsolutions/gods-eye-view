@@ -1,0 +1,167 @@
+/**
+ * The CONUS forecast field's paint model (docs/COMMODITIES-PLAN.md
+ * §11.8.10.3, §11.8.14.2): a stat grid and the spread grid → RGBA pixels.
+ * Portable by rule: no Cesium, no DOM; the canvas is the caller's.
+ *
+ * Alpha per cell = alphaLead(lead) × alphaSpread(percentile of the cell's
+ * spread within this lead's CONUS distribution): where the 51 members
+ * disagree the colour fades, even at short leads. Colour is the stat's own
+ * ramp; saturation follows alpha toward grey, as the markers do.
+ */
+import { alphaLead, alphaSpread } from './records.js';
+
+export const FIELD_STATS = Object.freeze({
+  p50: { label: 'p50 TMIN', unit: '°F', ramp: 'temperature' },
+  p10: { label: 'p10 TMIN', unit: '°F', ramp: 'temperature' },
+  p90: { label: 'p90 TMIN', unit: '°F', ramp: 'temperature' },
+  tmax: { label: 'p50 TMAX', unit: '°F', ramp: 'temperature' },
+  spread: { label: 'spread (p90 − p10)', unit: '°F', ramp: 'spread' },
+  freeze: {
+    label: 'freeze share',
+    unit: '% of members < 32°F',
+    ramp: 'freeze',
+  },
+});
+export const DEFAULT_FIELD_STAT = 'p50';
+/** Nearest-neighbour upscale so a 0.25° cell is a crisp block, not a blur. */
+export const FIELD_UPSCALE = 4;
+
+/** Temperature ramp in °F: deep cold → freezing → mild → hot. */
+const TEMPERATURE_STOPS = [
+  [-20, [120, 40, 200]],
+  [0, [60, 80, 220]],
+  [20, [40, 150, 240]],
+  [32, [120, 220, 255]],
+  [45, [180, 240, 200]],
+  [60, [250, 240, 120]],
+  [75, [250, 160, 60]],
+  [90, [230, 60, 40]],
+  [105, [150, 0, 40]],
+];
+const SPREAD_STOPS = [
+  [0, [40, 40, 60]],
+  [5, [80, 140, 220]],
+  [12, [250, 200, 80]],
+  [20, [255, 60, 90]],
+];
+const FREEZE_STOPS = [
+  [0, [40, 40, 60]],
+  [0.25, [120, 200, 255]],
+  [0.5, [80, 120, 240]],
+  [1, [200, 80, 255]],
+];
+const RAMPS = {
+  temperature: TEMPERATURE_STOPS,
+  spread: SPREAD_STOPS,
+  freeze: FREEZE_STOPS,
+};
+const GREY = [107, 114, 128];
+
+/** Piecewise-linear colour for `value` on `ramp`. */
+export function rampColor(ramp, value) {
+  const stops = RAMPS[ramp] || TEMPERATURE_STOPS;
+  if (!Number.isFinite(value)) return GREY;
+  if (value <= stops[0][0]) return stops[0][1];
+  for (let i = 1; i < stops.length; i++) {
+    const [v1, c1] = stops[i];
+    if (value <= v1) {
+      const [v0, c0] = stops[i - 1];
+      const t = (value - v0) / (v1 - v0);
+      return [0, 1, 2].map((k) => Math.round(c0[k] + (c1[k] - c0[k]) * t));
+    }
+  }
+  return stops[stops.length - 1][1];
+}
+
+/** The legend's colour bar: `n` stops with their labels. */
+export function rampLegend(stat, n = 5) {
+  const spec = FIELD_STATS[stat] || FIELD_STATS[DEFAULT_FIELD_STAT];
+  const stops = RAMPS[spec.ramp];
+  const lo = stops[0][0];
+  const hi = stops[stops.length - 1][0];
+  return Array.from({ length: n }, (_, i) => {
+    const v = lo + ((hi - lo) * i) / (n - 1);
+    const [r, g, b] = rampColor(spec.ramp, v);
+    return {
+      value: v,
+      label:
+        stat === 'freeze' ? `${Math.round(v * 100)}%` : `${Math.round(v)}°F`,
+      color: `rgb(${r},${g},${b})`,
+    };
+  });
+}
+
+/** Percentile ranks (0..1) of every value within the grid, ignoring NaN. */
+export function percentileRanks(values) {
+  const idx = [];
+  for (let i = 0; i < values.length; i++)
+    if (Number.isFinite(values[i])) idx.push(i);
+  idx.sort((a, b) => values[a] - values[b]);
+  const out = new Float32Array(values.length).fill(NaN);
+  const n = idx.length;
+  for (let r = 0; r < n; r++) out[idx[r]] = n > 1 ? r / (n - 1) : 0.5;
+  return out;
+}
+
+/**
+ * Paint one stat grid (row-major from the north-west, `rows × cols`, already
+ * scaled to the unit) with the spread grid for alpha into an RGBA buffer of
+ * `(rows·upscale) × (cols·upscale)`. Returns `{ data, width, height, alphaLead }`.
+ */
+export function paintField({
+  stat = DEFAULT_FIELD_STAT,
+  values,
+  spread,
+  rows,
+  cols,
+  lead = 1,
+  skill = null,
+  model = 'ecmwf_aifs025_ensemble',
+  upscale = FIELD_UPSCALE,
+  baseAlpha = 1,
+}) {
+  if (!values || values.length !== rows * cols)
+    throw new TypeError('field values do not match rows × cols');
+  const spec = FIELD_STATS[stat] || FIELD_STATS[DEFAULT_FIELD_STAT];
+  const aLead = alphaLead(skill, model, lead);
+  const ranks =
+    spread && spread.length === values.length ? percentileRanks(spread) : null;
+  const width = cols * upscale;
+  const height = rows * upscale;
+  const data = new Uint8ClampedArray(width * height * 4);
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const i = r * cols + c;
+      const v = values[i];
+      const [cr, cg, cb] = rampColor(spec.ramp, v);
+      const a = aLead * (ranks ? alphaSpread(ranks[i]) : 1) * baseAlpha;
+      // desaturate toward grey as alpha falls (§11.8.14.3)
+      const w = 0.4 + 0.6 * a;
+      const R = Math.round(GREY[0] + (cr - GREY[0]) * w);
+      const G = Math.round(GREY[1] + (cg - GREY[1]) * w);
+      const B = Math.round(GREY[2] + (cb - GREY[2]) * w);
+      const A = Number.isFinite(v) ? Math.round(255 * a) : 0;
+      for (let dy = 0; dy < upscale; dy++) {
+        let p = ((r * upscale + dy) * width + c * upscale) * 4;
+        for (let dx = 0; dx < upscale; dx++) {
+          data[p] = R;
+          data[p + 1] = G;
+          data[p + 2] = B;
+          data[p + 3] = A;
+          p += 4;
+        }
+      }
+    }
+  }
+  return { data, width, height, alphaLead: aLead };
+}
+
+/** Decode a route grid: int16 ints × scale → Float32Array in the unit. */
+export function decodeGrid(payload) {
+  const scale = Number(payload?.scale) || 1;
+  const vals = payload?.values;
+  if (!Array.isArray(vals)) return null;
+  const out = new Float32Array(vals.length);
+  for (let i = 0; i < vals.length; i++) out[i] = vals[i] * scale;
+  return out;
+}

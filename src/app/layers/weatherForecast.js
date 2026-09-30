@@ -1,5 +1,6 @@
 import * as Cesium from 'cesium';
 import { createWeatherForecastLayer } from '../../layers/weather/index.js';
+import { createWeatherFieldLayer } from '../../layers/weather/field.js';
 import { createWeatherDossier } from '../../layers/weather/dossier.js';
 import { getForecastScrubber } from '../../layers/weather/scrubber.js';
 import { createWeatherForecastService } from '../../services/weatherForecast.js';
@@ -52,5 +53,16 @@ export function createApplicationWeatherService(source) {
       typeof document !== 'undefined'
         ? getForecastScrubber({ document })
         : null,
+  });
+}
+
+/** Row 3 M4: the CONUS field layer on the oracle-store field source. */
+export function createApplicationWeatherField(options) {
+  return createWeatherFieldLayer({
+    scrubber:
+      typeof document !== 'undefined'
+        ? getForecastScrubber({ document })
+        : null,
+    ...options,
   });
 }

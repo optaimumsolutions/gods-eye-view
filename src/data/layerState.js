@@ -445,6 +445,12 @@ export const LAYER_STATE_REGISTRY = Object.freeze([
   Object.freeze({ id: 'traffic', token: 't', disposition: 'enabled-only' }),
   Object.freeze({ id: 'transit', token: 'j', disposition: 'enabled-only' }),
   // Row 3 (docs/COMMODITIES-PLAN.md §11): the first digit token, reserved in the grill
+  // Row 3 M4: the CONUS field; the first uppercase token (alphabetical: field < forecast)
+  Object.freeze({
+    id: 'weather-field',
+    token: 'W',
+    disposition: 'enabled-only',
+  }),
   Object.freeze({
     id: 'weather-forecast',
     token: '3',
@@ -510,7 +516,9 @@ export function validateLayerStateRegistry(registry = LAYER_STATE_REGISTRY) {
     if (ids.has(entry.id))
       throw new Error(`Duplicate layer-state id: ${entry.id}`);
     ids.add(entry.id);
-    if (!/^[a-z0-9]$/.test(entry.token || ''))
+    // One character, case-sensitive: [a-z0-9] were spent by 2026-09-30, so
+    // the grammar admits A-Z (row 3 M4; share links keep case in the query).
+    if (!/^[a-z0-9A-Z]$/.test(entry.token || ''))
       throw new Error(`Invalid layer-state token: ${entry.id}`);
     if (tokens.has(entry.token))
       throw new Error(`Duplicate layer-state token: ${entry.token}`);

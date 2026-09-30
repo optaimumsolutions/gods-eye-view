@@ -30,6 +30,7 @@ const PANEL_GROUPS = [
       'production-williston',
       'commodity-lng',
       'weather-forecast',
+      'weather-field',
     ],
   },
   {
@@ -104,6 +105,7 @@ const PANEL_LABELS = {
     'Gas · Permian Platform & Shelves Leases (Texas RRC)',
   'commodity-lng': 'LNG · Terminals & Cargoes',
   'weather-forecast': 'Weather · Basin Forecast (AIFS ENS)',
+  'weather-field': 'Weather · Forecast Field (AIFS ENS, CONUS)',
 };
 
 function panelLabel(layer) {
