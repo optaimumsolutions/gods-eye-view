@@ -326,10 +326,29 @@ export function buildWeatherSnapshot({
   return { rows, model, meta, fetchedAt: new Date(fetchedAt).toISOString() };
 }
 
+/**
+ * The day at a lead, by its `lead` field (a run may start at D+1, as the
+ * oracle store's does), clamped to the nearest lead the run answers.
+ */
+export function dayAtLead(row, lead) {
+  const days = row?.days;
+  if (!days?.length) return null;
+  const exact = days.find((d) => d.lead === lead);
+  if (exact) return exact;
+  return lead < days[0].lead ? days[0] : days[days.length - 1];
+}
+
+/** The last lead a run answers (the scrubber's horizon). */
+export function horizonOf(rows) {
+  let max = 0;
+  for (const row of rows || [])
+    for (const d of row.days || []) if (d.lead > max) max = d.lead;
+  return max;
+}
+
 /** Flat row for the context service and the voice engine (§11.8.4.8). */
 export function mapAnalystRecord(row, selectedDay = 1) {
-  const day =
-    row.days[Math.max(0, Math.min(selectedDay, row.days.length - 1))] || null;
+  const day = dayAtLead(row, selectedDay);
   const n = (v) => (Number.isFinite(v) ? v : null);
   return {
     id: row.id,

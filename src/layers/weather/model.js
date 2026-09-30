@@ -1,5 +1,5 @@
 import * as Cesium from 'cesium';
-import { GALE_MPH } from './records.js';
+import { GALE_MPH, dayAtLead } from './records.js';
 
 export const WEATHER_LAYER_ID = 'weather-forecast';
 export const WEATHER_OVERLAY_SOURCE_ID = 'weather-forecast';
@@ -93,8 +93,7 @@ function f0(v) {
 
 /** The selected day's readings on a row, clamped to the run's horizon. */
 export function selectedDay(row, lead) {
-  if (!row?.days?.length) return null;
-  return row.days[Math.max(0, Math.min(lead, row.days.length - 1))];
+  return dayAtLead(row, lead);
 }
 
 /** §11.8.5.5 ambient label: `PERMIAN · d+3 · p10 18°F · 4 frz`. */

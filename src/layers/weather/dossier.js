@@ -12,7 +12,7 @@ import {
 } from '../commodities/dossierChrome.js';
 import { formatAsOf } from '../commodities/observation.js';
 import { BAND_LABELS, confidenceLine } from './model.js';
-import { GALE_MPH } from './records.js';
+import { GALE_MPH, dayAtLead } from './records.js';
 
 const f0 = (v) => (Number.isFinite(v) ? `${Math.round(v)}` : '–');
 const f1 = (v) => (Number.isFinite(v) ? v.toFixed(1) : '–');
@@ -20,7 +20,7 @@ const f1 = (v) => (Number.isFinite(v) ? v.toFixed(1) : '–');
 /** Pure: everything the drawer renders, from a row and the selected lead. */
 export function buildWeatherDossierModel(row, lead) {
   const days = row.days || [];
-  const day = days[Math.max(0, Math.min(lead, days.length - 1))] || null;
+  const day = dayAtLead(row, lead);
   const stats = [];
   if (row.kind === 'basin') {
     stats.push(

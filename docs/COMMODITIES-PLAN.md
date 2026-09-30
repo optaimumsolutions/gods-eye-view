@@ -3112,17 +3112,26 @@ run it again. Ask me only when a decision is genuinely missing from §11.
 <!-- RULE: this is the ONLY place in §11 that describes what exists. The
 session landing a milestone rewrites it whole; stale lines are deleted. -->
 
-**As of 2026-09-30 — M1 BUILT** (session jgewi-e1; commits `e97f338` M1a
-bundles, M1b layer = the commit carrying this line). Hosted: **OFF** —
-the free Open-Meteo API is non-commercial (`LICENCES.md` row `open-meteo`),
-so `src/sources/reference.js` withholds the source under
-`GEV_LICENCE_PROFILE=hosted` until an Open-Meteo Professional key is on
-file; the laptop shows it.
+**As of 2026-09-30 — M1 BUILT + hosted path built** (session jgewi-e1;
+`e97f338` M1a bundles, `2989ede` M1b layer, the commit carrying this line =
+the oracle-store source). **Hosted: ON via the oracle** — the free
+Open-Meteo API is non-commercial (`LICENCES.md` row `open-meteo`; the
+founder declined the $99/mo Professional plan, and the Standard key bought
+2026-09-30 answers 403 on ensembles), so under `GEV_LICENCE_PROFILE=hosted`
+`src/sources/reference.js` reads `/api/oracle/weather-forecast` (oracle
+FR-D17d, `tools/oracle_api.py`: the newest AIFS ENS run the oracle ingests
+from ECMWF open data, CC BY 4.0) with no lag cap; on the laptop the oracle
+route is tried first (lag cap 3 days) and Open-Meteo browser-direct is the
+fallback. Rehearsed end to end 2026-09-30 15:00Z: hosted-profile build in
+`vite preview` against a scratch console with the route (VPS :8111 over a
+tunnel) → 8 markers from the store, run 2026-09-29. **Oracle `56f555e`
+(the route) is pushed but not yet deployed.**
 
 | Piece | Where | State |
 | --- | --- | --- |
 | Layer `weather-forecast`, token `3`, panel `Commodities` → `Weather · Basin Forecast (AIFS ENS)` | `src/layers/weather/index.js`, `src/app/layers/weatherForecast.js` | ten pinned markers created once from the first snapshot (ring = clamped polyline, disc = clamped ellipse, point pinned `HeightReference.NONE`); restyle on scrubber change without a fetch; hover card (3 lines, own throttled pick, R5 pointer rule) and click → overlay card + dossier; horizon culling; `getRowControls()` = one `RESET` chip + the five band swatches with live counts + the confidence blurb; `getAnalystRecords()` = `mapAnalystRecord(row, lead)` |
-| Source | `src/layers/weather/source.js`, `live.js` | metadata poll each `update()` (30 min), ensemble + marine fetched only when `availableAt` changes; failed fetch keeps the cached run and records `errors.{meta,ensemble,marine}`; bundles fetched once as literal `new URL(..., import.meta.url)` assets (a directory prefix is NOT rewritten by Vite — it 404s to index.html); budget test: 59 upstream calls across a simulated day with four runs |
+| Oracle-store source (hosted) | `src/layers/weather/oracleSource.js` | `createOracleWeatherSource()` reads the route every update (40 KB, 5 ms) and rebuilds only on a new `initDate`; maps the oracle's regions (`Permian`, `EagleFord`, `SouthCentral`…) onto the gazetteer ids; TMIN p10/mean/p90 at basins (mean stands in for p50; ring spread = p90 − p10, not the store's std dev), HDD/CDD at regions with a **mean-temperature anomaly derived from degree days** (labelled `anomalyOf`); leads start at D+1 (`dayAtLead` / `horizonOf` in `records.js` replaced index lookups); no Gulf, wind, precip, TMAX → nulls, cards print n/a; `createPreferredWeatherSource()` = oracle then Open-Meteo, fallback notice once. Tests in `oracleSource.test.mjs` |
+| Source (laptop, Open-Meteo) | `src/layers/weather/source.js`, `live.js` | metadata poll each `update()` (30 min), ensemble + marine fetched only when `availableAt` changes; failed fetch keeps the cached run and records `errors.{meta,ensemble,marine}`; bundles fetched once as literal `new URL(..., import.meta.url)` assets (a directory prefix is NOT rewritten by Vite — it 404s to index.html); budget test: 59 upstream calls across a simulated day with four runs |
 | Records | `src/layers/weather/records.js` | point-then-weight per member, then p10/p50/p90/spread across members; freeze share/days (basins), HDD/CDD per member from (TMAX+TMIN)/2 (regions), p90 wind gale days (Gulf, 7 d); anomaly vs the ERA5 normal → A-3 bands; `confidenceFor()` = `alphaLead` (A-7 floor 0.35) × `alphaSpread` (A-8 slope 0.6; the spread percentile is taken against the entry's own 15 spreads of this run — the per-marker stand-in until a run archive exists); one `createObservation` per day (`observedAt` init, `publishedAt` availability, `validAt` the day, class `daily`) |
 | Scrubber | `src/layers/weather/scrubber.js` | fixed under the cockpit, `now`,`+1`…`+7` solid \| `+8`…`+16` hatched; `setHorizon({horizon, label, issued})` disables slots past the run (AIFS: `+15`, `+16`, tooltip names the model); `[` `]` / arrows step, `Home` = D+1; reference-counted `acquire/release`; shared singleton `getForecastScrubber()` |
 | Dossier | `src/layers/weather/dossier.js` | shared `dc-` drawer: four stats, the fan (p10–p90 band, p50, normal dotted, threshold dashed, lead cursor), by-day table (p10/p50/p90/spread/freeze%/precip/snow/confidence), the confidence line, provenance |
@@ -3151,7 +3160,11 @@ search does not see it — verify hover by screenshot. (4) The selected
 overlay card is wide (five long lines); trim when the row-1 hover service
 lands. (5) `+15`/`+16` stay disabled until a 16-day model (M3). (6) The
 per-marker spread percentile uses this run's own 15 days (§11.8.14.2 says
-"trailing distribution"; there is no run archive yet).
+"trailing distribution"; there is no run archive yet). (7) Hosted shows 8
+markers: the oracle samples no Gulf points — an oracle FR-B addition
+(`wx_basins.yaml` gulf entries + marine) would light them; wind/precip
+absent there too. (8) The headless click misses the marker under the nav
+strip (30 px offset) — use the direct dev server for the dossier check.
 
 **Last rewrite:** 2026-09-30, session jgewi-e1, at M1.
 

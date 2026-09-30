@@ -20,7 +20,7 @@ import {
   selectedDay,
   weatherPosition,
 } from './model.js';
-import { MODEL_LABELS, mapAnalystRecord } from './records.js';
+import { MODEL_LABELS, horizonOf, mapAnalystRecord } from './records.js';
 import { DEFAULT_LEAD, getForecastScrubber } from './scrubber.js';
 export * from './model.js';
 export { createOpenMeteoEnsembleSource } from './source.js';
@@ -370,7 +370,7 @@ export function createWeatherForecastLayer({
     );
     const stale = ageH >= 24;
     const pad = (n) => String(n).padStart(2, '0');
-    return `issued ${pad(issued.getUTCHours())}Z ${pad(issued.getUTCMonth() + 1)}-${pad(issued.getUTCDate())} · ${ageH}h ago · ${stale ? 'stale' : `valid ${_rows[0]?.days.length ?? 15}d`}`;
+    return `issued ${pad(issued.getUTCHours())}Z ${pad(issued.getUTCMonth() + 1)}-${pad(issued.getUTCDate())} · ${ageH}h ago · ${stale ? 'stale' : `valid ${horizonOf(_rows)}d`}`;
   }
 
   const layer = {
@@ -447,7 +447,7 @@ export function createWeatherForecastLayer({
         _meta = snapshot.meta;
         const s = scrub();
         if (s) {
-          const horizon = Math.max(0, (rows[0]?.days.length ?? 15) - 1);
+          const horizon = horizonOf(rows);
           const issued = new Date(_meta.initialisedAt);
           const pad = (n) => String(n).padStart(2, '0');
           s.setHorizon({

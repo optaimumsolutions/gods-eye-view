@@ -19,15 +19,15 @@ import {
 } from '../layers/onshore/bundledSource.js';
 import { createSupplyBoardSource } from '../layers/supplyBoard/source.js';
 import { createOpenMeteoEnsembleSource } from '../layers/weather/source.js';
+import {
+  createOracleWeatherSource,
+  createPreferredWeatherSource,
+} from '../layers/weather/oracleSource.js';
 import { createWithheldSource, isWithheld } from '../hosting/withheld.js';
 
 /** Why the hosted site shows no PortWatch layer (docs/LICENCES.md). */
 export const PORTWATCH_WITHHELD_MESSAGE =
   'Withheld on the hosted site until the IMF permits commercial reuse of PortWatch data (docs/LICENCES.md)';
-
-/** Why the hosted site shows no basin forecast (docs/LICENCES.md). */
-export const OPEN_METEO_WITHHELD_MESSAGE =
-  'Withheld on the hosted site until an Open-Meteo API subscription (Professional, ensembles) is on file (docs/LICENCES.md)';
 
 /** Why the hosted site shows no Appalachia wells (docs/LICENCES.md). */
 export const PA_WELLS_WITHHELD_MESSAGE =
@@ -94,8 +94,14 @@ export function createReferenceSources() {
     }),
     // Row 3: AIFS ENS through Open-Meteo, browser-direct, keyless; the free
     // API is non-commercial, so the hosted profile withholds it (LICENCES.md)
+    // Hosted: the oracle store alone (ECMWF open data ingested nightly; a
+    // stale run still shows, stamped). Laptop: the oracle route first when
+    // a console is proxied and fresh, else Open-Meteo browser-direct.
     weatherForecast: isWithheld('open-meteo')
-      ? createWithheldSource('Open-Meteo', OPEN_METEO_WITHHELD_MESSAGE)
-      : createOpenMeteoEnsembleSource(),
+      ? createOracleWeatherSource({ maxLagDays: Infinity })
+      : createPreferredWeatherSource({
+          primary: createOracleWeatherSource(),
+          fallback: createOpenMeteoEnsembleSource(),
+        }),
   };
 }

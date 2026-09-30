@@ -36,6 +36,28 @@ export const WEATHER_SKILL_URL = new URL(
   import.meta.url,
 ).href;
 
+/** The three static bundles, read once; shared by every weather source. */
+export async function loadWeatherBundles({
+  fetchImpl = (...args) => globalThis.fetch(...args),
+  urls = {},
+  signal,
+} = {}) {
+  const read = async (url, label) => {
+    signal?.throwIfAborted();
+    const response = await fetchImpl(url, { signal });
+    if (!response.ok) throw new Error(`${label} HTTP ${response.status}`);
+    return response.json();
+  };
+  const [gazetteer, normals, skill] = await Promise.all([
+    read(urls.gazetteer || WEATHER_GAZETTEER_URL, 'weather gazetteer'),
+    read(urls.normals || WEATHER_NORMALS_URL, 'weather normals'),
+    read(urls.skill || WEATHER_SKILL_URL, 'weather skill'),
+  ]);
+  if (!Array.isArray(gazetteer?.entries))
+    throw new Error('Malformed weather gazetteer');
+  return { entries: gazetteer.entries, normals, skill };
+}
+
 export function createOpenMeteoEnsembleSource({
   fetchImpl = (...args) => globalThis.fetch(...args),
   now = () => Date.now(),
@@ -63,14 +85,7 @@ export function createOpenMeteoEnsembleSource({
 
   async function bundles(signal) {
     if (_bundles) return _bundles;
-    const [gazetteer, normals, skill] = await Promise.all([
-      readJson(gazetteerUrl, signal, 'weather gazetteer'),
-      readJson(normalsUrl, signal, 'weather normals'),
-      readJson(skillUrl, signal, 'weather skill'),
-    ]);
-    if (!Array.isArray(gazetteer?.entries))
-      throw new Error('Malformed weather gazetteer');
-    _bundles = { entries: gazetteer.entries, normals, skill };
+    _bundles = await loadWeatherBundles({ fetchImpl, urls, signal });
     return _bundles;
   }
 

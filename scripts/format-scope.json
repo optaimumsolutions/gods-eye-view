@@ -841,6 +841,8 @@
   "src/layers/weather/live.js",
   "src/layers/weather/records.js",
   "src/layers/weather/source.js",
+  "src/layers/weather/oracleSource.js",
+  "src/layers/weather/oracleSource.test.mjs",
   "src/layers/weather/model.js",
   "src/layers/weather/scrubber.js",
   "src/layers/weather/dossier.js",
