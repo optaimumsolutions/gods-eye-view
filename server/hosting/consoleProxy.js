@@ -14,7 +14,9 @@ import { PROXY_KEY_HEADER, USER_HEADER } from './accessGuard.js';
  */
 
 // Row 16 (oracle FR-D21): the MODEL, OPS and DASHBOARD tabs are console pages.
+// Oracle FR-D22f: /futures (the energy futures board) is one too.
 const PAGE_PATHS = new Set([
+  '/futures',
   '/gas',
   '/weather',
   '/trades',

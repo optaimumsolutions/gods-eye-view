@@ -41,6 +41,7 @@ test('the strip links are the product pages, in order', () => {
     [
       'GLOBE /',
       'MARKET /market',
+      'FUTURES /futures',
       'GAS /gas',
       'WEATHER /weather',
       'TRADES /trades',

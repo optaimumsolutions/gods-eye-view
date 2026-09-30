@@ -14,6 +14,7 @@ test('console routes: pages, POST relays and the reserved oracle API; nothing el
     ['GET', '/market', '/'],
     ['GET', '/market/', '/'],
     ['GET', '/market?tab=1', '/?tab=1'],
+    ['GET', '/futures', '/futures'],
     ['HEAD', '/gas', '/gas'],
     ['GET', '/weather', '/weather'],
     ['GET', '/trades', '/trades'],

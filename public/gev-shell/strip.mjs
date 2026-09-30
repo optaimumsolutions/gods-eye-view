@@ -12,6 +12,8 @@
 export const NAV_LINKS = Object.freeze([
   Object.freeze({ id: 'globe', label: 'GLOBE', href: '/' }),
   Object.freeze({ id: 'market', label: 'MARKET', href: '/market' }),
+  // Oracle FR-D22f: the energy futures board rides the console proxy.
+  Object.freeze({ id: 'futures', label: 'FUTURES', href: '/futures' }),
   Object.freeze({ id: 'gas', label: 'GAS', href: '/gas' }),
   Object.freeze({ id: 'weather', label: 'WEATHER', href: '/weather' }),
   Object.freeze({ id: 'trades', label: 'TRADES', href: '/trades' }),
