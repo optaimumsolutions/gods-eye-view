@@ -1,0 +1,78 @@
+{
+  "id": "gas-overlay-static",
+  "plan": "docs/COMMODITIES-PLAN.md §19 (row 17, P1)",
+  "retrieved": "2026-10-01",
+  "inputs": {
+    "lines": {
+      "file": "eia_energy/gas-network.json",
+      "sha256": "6aad559f7b6e470d6576c75a23e625465958d4e3822a0e008cc75b48d1e046df",
+      "vintage": "JANUARY 2020"
+    },
+    "stations": {
+      "url": "https://services5.arcgis.com/HDRa0B57OVrv2E1q/arcgis/rest/services/Natural_Gas_Compressor_Stations/FeatureServer/0",
+      "note": "third-party re-host of HIFLD (the DHS service is gone); sources circa 2015; public domain"
+    },
+    "validation": {
+      "url": "https://data.epa.gov/efservice/pub_dim_facility/year/2023/state/<STATE>/reported_industry_types/CONTAINING/W-NGTC/JSON",
+      "states": [
+        "AL",
+        "FL",
+        "LA",
+        "MS",
+        "TX"
+      ],
+      "year": 2023,
+      "licence": "public domain (EPA)"
+    },
+    "lng": {
+      "file": "lng/terminals.json",
+      "licence": "CC BY 4.0 (Global Energy Monitor)"
+    }
+  },
+  "thresholds": {
+    "clusterKm": 50,
+    "stationLineKm": 5,
+    "ghgrpMatchKm": 2
+  },
+  "checks": [
+    {
+      "pipeline": "gulf_south",
+      "drawn": true,
+      "km": 9727,
+      "excludedClusters": 6,
+      "stations": 40,
+      "ghgrpMatched": 23,
+      "lineKm": {
+        "p50": 1.06,
+        "p90": 6.76,
+        "max": 92.46
+      },
+      "positionDisagree": [
+        "Carthage Jct vs Gulf South Pipeline - Carthage Jct Station 2.71 km",
+        "Tallulah vs Gulf South Pipeline - Tallulah Station 2.92 km",
+        "Clarence vs Gulf South Pipeline - Clarence Station 15.11 km",
+        "Hall Summit vs Gulf South Pipeline - Hall Summit Station 11.3 km",
+        "Hall Summit (Recip) vs Gulf South Pipeline - Hall Summit Station 11.26 km"
+      ],
+      "offLine": [
+        "Arnaudville 6.76 km",
+        "Cocodrie 11.61 km",
+        "Bistineau 6.66 km",
+        "Gulf South Pipeline - Mira Station 5.17 km",
+        "Gulf South Pipeline - Rodrigue Station 11.19 km",
+        "Gulf South Pipeline - Paris Station 92.46 km"
+      ]
+    },
+    {
+      "pipeline": "gulf_run",
+      "drawn": false,
+      "km": 0,
+      "excludedClusters": 0,
+      "stations": 0,
+      "ghgrpMatched": 0,
+      "lineKm": null,
+      "positionDisagree": [],
+      "offLine": []
+    }
+  ]
+}
