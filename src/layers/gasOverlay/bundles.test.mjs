@@ -11,6 +11,7 @@ import {
   clusterParts,
   distanceToPartsKm,
   haversineKm,
+  partKm,
   pointSegmentKm,
 } from '../../../scripts/build-gas-overlay.mjs';
 
@@ -83,6 +84,22 @@ test('lines: Gulf South is drawn as one network within the cluster threshold, ou
   assert.ok(Math.min(...xs) < -98 && Math.max(...xs) > -88);
 });
 
+test('lines: Gulf Run is the FERC hand trace, its mainline matching the certificated 134 miles', () => {
+  const { pipelines } = read('lines.json');
+  const gr = pipelines.find((p) => p.id === 'gulf_run');
+  assert.equal(gr.method, 'manual_ferc_trace');
+  assert.deepEqual(gr.traced.map((t) => t.accuracyKm), [0.5, 2.5, 3]);
+  const mainMiles = partKm(gr.parts[0]) / 1.609344;
+  assert.ok(Math.abs(mainMiles - 134) / 134 < 0.01, `${mainMiles}`);
+  // Westdale (MP 0) to the Golden Pass Pipeline meter near Starks, Calcasieu Parish.
+  assert.ok(haversineKm(gr.parts[0][0], [-93.48147, 32.19764]) < 0.1);
+  assert.ok(gr.parts[0].at(-1)[1] > 30.3 && gr.parts[0].at(-1)[1] < 30.4);
+  const { stations } = read('stations.json');
+  const grStations = stations.filter((s) => s.pipeline === 'gulf_run');
+  assert.deepEqual(grStations.map((s) => s.name), ['Westdale', 'Vernon', 'Panola']);
+  for (const s of grStations) assert.ok(s.lineKm <= 1, `${s.name} ${s.lineKm}`);
+});
+
 test('stations: every one carries a source method, a pipeline and its measured distance to the line', () => {
   const { stations, lng } = read('stations.json');
   const { pipelines } = read('lines.json');
@@ -91,7 +108,7 @@ test('stations: every one carries a source method, a pipeline and its measured d
   for (const s of stations) {
     assert.ok(!ids.has(s.id), `duplicate ${s.id}`);
     ids.add(s.id);
-    assert.ok(['hifld_copy', 'ghgrp_2023'].includes(s.method));
+    assert.ok(['hifld_copy', 'ghgrp_2023', 'manual_ferc'].includes(s.method));
     assert.ok(PIPELINES[s.pipeline]);
     const parts = pipelines.find((p) => p.id === s.pipeline).parts;
     if (parts.length) {

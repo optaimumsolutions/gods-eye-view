@@ -68,6 +68,7 @@ export const CLUSTER_KM = 50;
  * 2020 linework predates it, a traced file in `manual/` (G17.6).
  *   network:  the row 4 `systems[].operator` string, or null for a trace
  *   trace:    the `manual/` GeoJSON used when network is null
+ *   manualStations: a `manual/` GeoJSON of stations the HIFLD copy lacks
  *   hifld:    a SQL LIKE pattern on the HIFLD copy's OPERATOR
  *   ghgrpName: a regex on the GHGRP facility name that ties it to the pipeline
  *              (never the parent company: Loews/Boardwalk also owns Texas Gas)
@@ -86,6 +87,7 @@ export const PIPELINES = {
     operator: 'Energy Transfer',
     network: null,
     trace: 'gulf-run-route.geojson',
+    manualStations: 'gulf-run-stations.geojson',
     hifld: null,
     ghgrpName: /GULF RUN/i,
     states: ['LA', 'TX'],
@@ -240,11 +242,45 @@ export function buildLines(id, spec, network) {
   return {
     method: 'manual_ferc_trace',
     source: `manual/${spec.trace}`,
-    accuracyKm: gj.features[0]?.properties?.accuracy_km ?? null,
+    accuracyKm: Math.max(...gj.features.map((f) => f.properties.accuracy_km ?? Infinity)),
+    // One entry per traced feature, in part order, so a card can state each piece's own accuracy.
+    traced: gj.features.map((f) => ({
+      name: f.properties.name,
+      accuracyKm: f.properties.accuracy_km ?? null,
+      certificatedMiles: f.properties.certificated_miles ?? null,
+      parts: f.geometry.type === 'LineString' ? 1 : f.geometry.coordinates.length,
+    })),
     parts,
     km: +parts.reduce((s, p) => s + partKm(p), 0).toFixed(1),
     excluded: [],
   };
+}
+
+/** Stations from a hand-sourced `manual/` file (D17.3): each carries its own source. */
+export function manualStations(id, spec, lines) {
+  if (!spec.manualStations) return [];
+  const file = path.join(MANUAL_DIR, spec.manualStations);
+  if (!existsSync(file)) return [];
+  return JSON.parse(readFileSync(file, 'utf8')).features.map((f) => {
+    const at = f.geometry.coordinates;
+    const lineKm = lines.parts.length ? distanceToPartsKm(at, lines.parts) : null;
+    return {
+      id: `${id}-${slug(f.properties.name)}`,
+      name: f.properties.name,
+      pipeline: id,
+      lon: +at[0].toFixed(5),
+      lat: +at[1].toFixed(5),
+      county: f.properties.county,
+      state: f.properties.state,
+      certHp: null,
+      status: null,
+      method: 'manual_ferc',
+      source: f.properties.source,
+      ghgrp: null,
+      lineKm: lineKm === null ? null : +lineKm.toFixed(2),
+      offLine: lineKm !== null && lineKm > STATION_LINE_KM,
+    };
+  });
 }
 
 export function buildStations(id, spec, lines, hifld, ghgrp) {
@@ -337,9 +373,10 @@ async function main() {
   for (const [id, spec] of Object.entries(PIPELINES)) {
     const l = buildLines(id, spec, network);
     lines.push({ id, name: spec.name, operator: spec.operator, method: l.method, source: l.source,
-      accuracyKm: l.accuracyKm ?? null, km: l.km, excluded: l.excluded, parts: round(l.parts) });
+      accuracyKm: l.accuracyKm ?? null, traced: l.traced ?? null, km: l.km, excluded: l.excluded,
+      parts: round(l.parts) });
     const hifld = spec.hifld ? await hifldStations(spec, io) : [];
-    const st = buildStations(id, spec, l, hifld, ghgrp);
+    const st = [...buildStations(id, spec, l, hifld, ghgrp), ...manualStations(id, spec, l)];
     stations.push(...st);
     const off = st.filter((s) => s.offLine);
     checks.push({
