@@ -38,7 +38,7 @@ owns layers. Re-check `git status` before every edit to a shared file.
 | 14  | Natural-gas intelligence loop: the God's Eye View look, regional supply cards with main contributors, live supply feeds into the Oil Oracle, scored learning | shell + layers + server + oracle (`feat/commodities-shell`; oracle twins FR-N14 to FR-N17) | **CLAIMED 2026-09-26** (session jgewi-b9). **Resumed 2026-09-29 18:40Z by session jgewi-e1** (founder gates (a)-(c) all YES: globe deploy of `798a50b` incl. row 15's flares files; oracle FR-J7 deploy + journal section 3 (FR-N14 a); the s02 anchor; M7 = oracle FR-N17's weekly storage read under the narrow d8a amendment; oracle claim `ff29642`). **Landed 2026-09-29:** globe `798a50b` LIVE 19:01:42Z (deploy-12; anonymous `/`, `/market`, `/api/health` → 302 Access login; `ng_regional.py` re-run, store unchanged); oracle FR-J7 DEPLOYED 19:05Z with journal section 3 citing supply + flows (`5ee1058`, `6cad61c`; FR-N14 (a) done, the 09-29 close is the first of (d)'s three); the s02 comparison anchor W-008 live 19:09Z (`8275501`; its eval chain queued on the VPS for 23:35Z); **M7 first slice BUILT + deployed 19:24Z** (oracle `3793933`: `reads` ledger, Wednesday storage read, scorer vs three naive baselines, YOUR RECENT MISSES, console card, Slack line; first read the 09-30 close, first score 10-01). **09-30:** the 09-29 close had timed out at 3,600 s (re-run stored 00:45Z; timeout ceiling 7,200 s, edition prompt trimmed, section 3(a) disambiguated); W-008 chain: s02 still inverts (self-correcting), golden_tools = baseline → anchor v2 12:17Z; FR-N7 corpus: 12 natgas episodes in draft (oracle `e5badca`). PRD §16 from the founder's direction after seeing the hosted build: the keyless hosted globe landed on OSM street tiles (the "Google map" look); region cards show totals, not contributors; nothing from the globe feeds the model. **Decisions D14.1–D14.5 made 2026-09-26** (§16.4): the founder's Google key makes Photorealistic 3D the hosted default and USGS imagery is the keyless fallback; Databento first for NYMEX; the loop scores fundamentals nowcasts (B); pipeline EBBs probed first; Appalachia, Haynesville, Permian. **M0 BUILT** (`61c680b`, `7311e39`: keyless hosted landing = USGS imagery, never OSM; Google terms notice; the founder's Map-Tiles-only key still to come). **Williston corrected** (`f0b6c5b`: NDIC's first 2026-07 workbook held July 2023; the card showed 2023 as 2026 from 09-21). **M1 BUILT** (`ead98bc` data, `df9c4eb` cards and Contributors drawer; both region QAs PASS, G14.2 exact). **Deployed** 2026-09-28 12:42Z (globe `2dead84` LIVE; VPS gates 4,469 / 0 fail; corrected Williston shards streamed, md5 equal). **M5 BUILT + deployed** (oracle `f3f35d4`, FR-N14: `regional_production`, `NG_PROD_<REGION>` covariates, `gas_state` supply block; the store equals the card); its journal section and refresh tier wait for the FR-J owner. **M2 BUILT + deployed** (oracle `608354b` route `supply-board`; globe `175227f` layer `gas-supply-us`). **M3 region 2 BUILT + deployed** (`bca6ef7`: Appalachia, PA unconventional, 21.04 Bcf/d; well layer withheld on the hosted site until PA DEP confirms coordinates). **M4 BUILT + deployed** (oracle `d3aa844` FR-N15: five pipelines, five signals, 45 days back; globe `7b38084` board lines; **Cameron Interstate added 2026-09-28 17:21Z**, oracle `ab24847`: Cameron LNG feedgas + the LEG receipt, board line in `d68bde1`; **Boardwalk Gulf South added 19:23Z**, oracle `8e29338`: Freeport LNG feedgas); its check needs seven daily runs (cron 15:20Z). Globe LIVE `6434609` (19:14Z, session jgewi-d3's deploy with the founder's hosted keys). **Permian (Texas) BUILT + deployed 2026-09-28** (session jgewi-98; globe `6d0f45f` + `38fb8f6`, LIVE 17:41Z; oracle `cc6d440`): RRC's PDQ dump by lease in three layers by county (Delaware 7.51 Bcf/d JUL, Midland 10.59 JUN, Central Platform & Shelves 1.37 JUN; one layer broke G3/G4, founder's split), hosted ON by founder override; the board folds them ("Permian TX 19.33, JUN"); store `NG_PROD_PERMIAN_*` + `NG_PROD_PERMIAN_TX`. Haynesville waits (no SONRIS subscription). **Hand-off 2026-09-28 15:45Z:** the next session starts from the resume prompt at the end of §16.10 (updated 19:35Z: the `gas_state` tool description is fixed, oracle `a58ad55` with the founder's OK; the supply eval re-run scored PASS 3/3 as scored, 2/3 adjudicated (s02 inverts the comparison, now recalibrated); `golden_tools` is unchanged against its baseline, so no regression; Cameron Interstate and Gulf South are live; the founder's hosted keys are in. Next: the s02 slip as an FR-S2 anchor (founder), the hosted M1 check with the founder signed in, Texas Gas (a decision), OH/WV, the M4 seven-run check from 10-04); M6 and M7 wait on the founder and the FR-J owner. Build record §16.10 |
 | 15  | `commodity-flares`: nightly gas-flare heat (VIIRS) matched to wells, calibrated against state flaring | layers + server (`feat/commodities-shell`) | **CLAIMED 2026-09-28** (session a7c9a802). PRD §17 from the founder's "see if wells are producing using the satellite API day to day" and grill F1 to F3 (FIRMS keyless now, `FIRMS_MAP_KEY` only for the backfill; layer + dossier first, oracle feed M7; Williston then Permian). Token `0` (the last free token). **M0 BUILT** (probe + pure module, 17.12). **M1 BUILT** (Williston flare sites: 7,493 pads, 79 % of night detections on a site). Next: M2 `/api/flares` |
 | 16  | System tabs on the hosted site: MODEL (the LLM's record), OPS (a health agent probing every endpoint), DASHBOARD (the status dashboard) | shell + server + oracle (`feat/commodities-shell`; oracle twin FR-D21) | **M1-M3 BUILT + DEPLOYED 2026-09-29** (globe `5d0732f` LIVE 23:36:36Z, deploy-13; oracle `c24c8f1` deployed 23:31Z; health agent on cron */5, first sweep 23:35Z 40 ok / 3 warn / 1 fail = the stale TMIN lane). Open: the founder's signed-in look at the three tabs. **CLAIMED 2026-09-29 20:35Z** (session jgewi-e1). Founder, 2026-09-29: "Model, Ops, the globe and the LLM and dashboard as well as the health check … an agent that could also make sure all the endpoints are healthy" (Docs and Code tabs declined). PRD §18. Touches row 13's hosting files (`consoleProxy.js` page list, `public/gev-shell/strip.mjs` links) under the founder's standing autonomy; row 13's staged `push-hosted-env.sh` change is untouched |
-| 17  | Gas pipeline overlay: pipeline segments, compressor stations and posted meter points colored by daily scheduled flow vs design capacity, with critical notices (the founder's "Godseye Gas Pipeline Overlay" PRD, 2026-10-01) | layers + server (`feat/commodities-shell`; oracle twin FR-N18) | **CLAIMED 2026-10-01** (session jgewi-f1). Founder decisions 2026-10-01: (a) the PRD's NGPL reference case is retargeted to the pipelines already licensed and ingested (Boardwalk Gulf South, Energy Transfer Gulf Run to Golden Pass), because Kinder Morgan postings are ASK-FIRST (`LICENCES.md` §C: written permission required, firewall refuses scripted POSTs); the founder asks Kinder Morgan, and NGPL becomes a config entry once permission is in writing; (b) split: ingest, geocoding and the daily build extend oracle FR-N15 (VPS cron, `/api/oracle/*`), rendering is a Cesium layer here with a built static bundle, no second stack, no GitHub Actions. Phase 0 (recon) in progress. PRD §19 |
+| 17  | Gas pipeline overlay: pipeline segments, compressor stations and posted meter points colored by daily scheduled flow vs design capacity, with critical notices (the founder's "Godseye Gas Pipeline Overlay" PRD, 2026-10-01) | layers + server (`feat/commodities-shell`; oracle twin FR-N18) | **CLAIMED 2026-10-01** (session jgewi-f1). Founder decisions 2026-10-01: (a) the PRD's NGPL reference case is retargeted to the pipelines already licensed and ingested (Boardwalk Gulf South, Energy Transfer Gulf Run to Golden Pass), because Kinder Morgan postings are ASK-FIRST (`LICENCES.md` §C: written permission required, firewall refuses scripted POSTs); the founder asks Kinder Morgan, and NGPL becomes a config entry once permission is in writing; (b) split: ingest, geocoding and the daily build extend oracle FR-N15 (VPS cron, `/api/oracle/*`), rendering is a Cesium layer here with a built static bundle, no second stack, no GitHub Actions. **P0 recon DONE 2026-10-01** (§19.6: all sources free and live except Gulf Run geometry — no public linework for Gulf Run or the Golden Pass Pipeline; no posting publishes coordinates; notices link by text; throughput is per point). **D17.3 open (founder):** Gulf Run as points only, hand-traced from FERC maps, or Gulf South alone. PRD §19 |
 
 Definition of usable, pending founder confirmation of question 13: rows 1
 through 4. Rows 5 to 7 are context and content.
@@ -6550,3 +6550,120 @@ adding three paths and three links), the deploy windows of §16.9, backups
   (the tiers already page it), and — from the same hour — the 09-29 journal
   close had died at its 3,600 s timeout (oracle `93d3f47` raised it to
   5,400 s; the close was re-run at 23:30Z).
+
+## 19. Row 17 PRD — Gas pipeline overlay: segments, compressor stations and posted points colored by daily utilization (FR-G17)
+
+Claimed 2026-10-01 (session jgewi-f1); oracle twin FR-N18
+(`PRD-natgas-vertical.md`).
+
+### 19.1 Founder direction (2026-10-01)
+
+The founder supplied a full PRD ("Godseye Gas Pipeline Overlay", 2026-10-01):
+a natural gas pipeline layer showing centerlines, compressor stations and
+meter points, colored by daily scheduled flow against design capacity, from
+free public data only, with critical notices attached to the affected point.
+Its reference case was NGPL's TEXOK zone (CS302 south to the TX/LA border
+meters feeding Golden Pass, Sabine Pass and Cameron).
+
+Two decisions taken on the first read, both the founder's (2026-10-01):
+
+- **D17.1 Reference case retargeted.** NGPL posts on Kinder Morgan's
+  `pipeline2.kindermorgan.com`, which `LICENCES.md` §C already holds at
+  ASK-FIRST (row 14 M4 recon: "may not be distributed, modified, or
+  reproduced … without the prior written permission"; the firewall refuses
+  scripted POSTs, and fetching around it would break the founder PRD's own
+  "never bypass" rule). v1 is built on the pipelines already licensed and
+  ingested by FR-N15: **Boardwalk Gulf South** (777 posted points a day,
+  Texas through Louisiana to Freeport LNG) and **Energy Transfer Gulf Run**
+  (Haynesville to Golden Pass). The founder asks Kinder Morgan in writing;
+  NGPL becomes a config entry when the answer is yes.
+- **D17.2 Split, no second stack.** The founder PRD assumed a standalone
+  Python repo with MapLibre/Leaflet and GitHub Actions. Here: ingest,
+  geocoding and the daily build extend oracle FR-N15
+  (`ingest/ng_pipeline_flows.py`, `pipeline_flows_daily`, VPS cron, a
+  `/api/oracle/*` route); the globe renders it as a Cesium layer from a
+  built static bundle (`scripts/build-*.mjs` → committed data, the row 4/10
+  pattern). GitHub Actions stays out (billing, PR #1).
+
+### 19.2 What already exists (do not rebuild)
+
+| Founder PRD piece | Already here |
+| --- | --- |
+| `flow_observation` (point, gas day, cycle, design, scheduled, available) | Oracle `pipeline_flows_daily` (FR-N15): point, name, direction, scheduled / operating / design / available Dth, state, county, counterparty, cycle, posted_at; seven pipelines incl. Gulf South and Gulf Run, 45 gas days back, cron `20 15 * * *` |
+| Config-driven fetcher, add-a-pipeline test | `PIPELINES` + `READERS` by kind in `ng_pipeline_flows.py`: a new pipeline of a known posting platform (Energy Transfer, Cheniere, gasnom, Boardwalk) is one dict entry |
+| Pipeline centerlines | Row 4 bundle (`npm run build:gas-pipelines`): EIA linework, **January 2020 vintage** (R4.14), `Operator` not a pipeline name (R4.15–R4.17) |
+| LNG terminals | Row 10 bundle (`npm run build:lng`) |
+
+New work: posted-point coordinates (the lookup), compressor stations,
+critical notices, pipeline segments with a utilization, the globe layer.
+
+### 19.3 Goals (verifiable)
+
+- G17.1 The globe shows Gulf South and Gulf Run as drawn pipelines with their
+  compressor stations and posted points as labeled marks.
+- G17.2 Every segment and point carries the latest gas day's utilization
+  (scheduled ÷ design; null when design is 0 or absent) and names that gas
+  day and cycle.
+- G17.3 The daily data refreshes with the FR-N15 cron, no manual step.
+- G17.4 Every record traces to a source URL and a fetch time.
+- G17.5 Zero spend: free public sources, the existing VPS, no paid tier.
+- G17.6 Adding a pipeline on a known posting platform is a config entry plus
+  a lookup CSV, no fetcher code (the founder PRD's add-a-pipeline test).
+
+### 19.4 Non-goals (v1)
+
+NGPL and every other Kinder Morgan, Williams or Enbridge system until written
+permission (D17.1); intraday cycle history (v1 keeps the latest cycle per
+gas day, as FR-N15 does); paid data of any kind; PHMSA NPMS (restricted to
+government and operators); GasFundies, Criterion, Genscape, Wood Mackenzie
+(licensed research never enters git; a validation that cites one is checked
+by hand, not committed).
+
+### 19.5 Phases
+
+Each phase runs its checks before the next starts; each ends with a commit
+named for the phase and a short summary (passed / not / needed).
+
+| Phase | What | Check |
+| --- | --- | --- |
+| P0 | Recon: every source probed live; endpoints, fields, counts, vintages recorded in §19.6 | §19.6 complete; one raw sample per source in the oracle raw archive |
+| P1 | Static layers: Gulf South (+ Gulf Run) linework, compressor stations, LNG anchors | Linework connected (no Gulf South piece > 50 km from another); stations on the line (≤ 1 km after snapping, or flagged) |
+| P2 | Point geocoding: the lookup CSV (compressor, LNG terminal, interconnect, snap-to-line, manual; human rows never overwritten); unresolved list for the founder | Every Gulf Run point and every Gulf South point with design > 0 has a coordinate and a method; ≥ 80 % non-snap; Freeport delivery `24329-D` within 5 km of the Stratton Ridge facility it names; Gulf Run's Golden Pass delivery `808311` in the parish its posting names, resolved by `lng_terminal`, `interconnect` or `manual` with a reason |
+| P3 | Daily overlay: notices, segment split, utilization per segment and point, `/api/oracle/pipeline-overlay` | A dry run for the newest gas day: non-null utilization on the Freeport and Golden Pass deliveries; scheduled ≤ design logged, not dropped; idempotent |
+| P4 | Globe layer `gas-pipeline-overlay`: segments by utilization ramp, points sized by design, stations, notice ring, hover and click card; deploy | Four gates; deployed; hovering a point shows gas day, design, scheduled, utilization, active notices |
+
+The founder PRD's definition of the first handoff: P0–P2 done, lookup CSV
+committed, a screenshot of the static layers on the globe, and the list of
+unresolved points.
+
+### 19.6 Sources (P0 recon, 2026-10-01)
+
+Probed live 2026-10-01, one request at a time, identified user agent, no
+Kinder Morgan host touched; every response 200, no challenge. Raw samples
+(8.5 MB) in the oracle desk tree `data/raw/fr_n18_recon/2026-10-01/`
+(gitignored; the VPS ingest archives its own on the first run).
+
+| Layer | Source (exact) | What it gives | Verdict |
+| --- | --- | --- | --- |
+| Gulf South point master | Boardwalk infopost: POST `reporting.prod.bwpmlp.org/infopost/infopostdetails` `{"infoPostID":9,"tspId":1,"groupCode":"INFOPOST",…}` (9 = LOCATIONDATADOWNLOAD, from the gasquest.com bundle's MenuItems enum), then GET `/infopost/postings?postingsDocumentId=<id>` (base64 CSV) | 1,240 locations (833 active; LA 636, TX 334, MS 205, AL 47, FL 12, OK 6): NAESB columns Loc, Loc Name, Dir Flo, Loc Type Ind (WHD/LDC/INT/END/VIR/GTH/PLT/STR/LNG), Loc St Abbrev, Loc Cnty, Loc Zone, Up/Dn Name, Up/Dn ID (DUNS), Up/Dn Loc; posted daily ~04:00Z | **Use.** No lat/lon, no DRN |
+| Gulf Run point master | GET `pipelines.energytransfer.com/ipost/locations/index?asset=GR&gasDay=&f=csv&extension=csv` | 312 locations (290 active; Z1 241, Z2 71; LA 233, TX 79), same NAESB columns | **Use.** No lat/lon, no DRN |
+| Daily capacity | FR-N15 as built (`pipeline_flows_daily`) | Gulf South 09-30 ID3: 780 rows, 710 with design > 0; Gulf Run 09-30 Final: 57 rows (33 R, 24 D), 56 with design > 0 | **Have.** Neither file carries compressor or segment throughput rows |
+| Throughput by station / segment | Gulf South Scheduling Group Available Capacity (infoPostID 7); Gulf Run `/ipost/capacity/operationally-available-by-segment` | Gulf South: 61 groups (e.g. "Carthage Compressor East Receipt 1,468,000 / 440,269 / 0") **as a PDF only, no Loc codes**; Gulf Run: endpoint empty ("No Data to Display") | **Not machine-readable.** Segment utilization falls back to the nearest posted point (the founder PRD's own rule) |
+| Critical notices | Gulf South: POST `/infopost/noticedetails` `{"tspId":1,"noticeCategory":"Critical",…}` (55 critical, 81 non-critical), text GET `/infopost/notices?noticeId=` = **base64 PDF**; Gulf Run: GET `/ipost/notice/critical?asset=GR&f=csv&extension=csv` (47) + `/ipost/notice/show/<id>?asset=GR` (HTML) | Type, posted, effective, end, subject, full text | **Use.** Affected locations appear **only in the text** (e.g. "Loc 24352 (St. Charles Power Station)", "Vernon Compressor Station … 900,000 dth/d"): parse Loc codes and station names, an unparsed notice stays pipeline-wide |
+| Linework | EIA shapefile `eia.gov/maps/map_data/NaturalGas_InterIntrastate_Pipelines_US_EIA.zip` (`NaturalGas_Pipelines_US_202001`, Last-Modified 2020-04-27); the row 4 bundle reads the same data from the Esri Federal_User_Community view | Gulf South 584 features | **Gulf South only.** January 2020: **no Gulf Run, no Golden Pass Pipeline** in any public layer (EIA's own service is token-locked; EPA's HIFLD copy and GHGRP Pipelines layer are the same vintage; Enable's predecessor line stops north of 32.15°N) |
+| Compressor stations | HIFLD copy `services5.arcgis.com/HDRa0B57OVrv2E1q/…/Natural_Gas_Compressor_Stations/FeatureServer/0` (user re-host, no licence text; HIFLD itself is dead) | 1,768 stations; Gulf South 34 (26 in TX/LA: Hall Summit 43,500 hp, Tallulah 60,802, Vixen 30,000, Carthage Jct 8,650 …); in the Gulf Run parishes CenterPoint/Enable Westdale, ETC Tiger Bienville and Cannisnia, Trunkline Longville | **Use with care.** Sources ~2015; cross-check each against GHGRP |
+| Station validation | EPA GHGRP `data.epa.gov/efservice/pub_dim_facility/year/2023/state/LA/reported_industry_types/CONTAINING/W-NGTC/JSON` (and TX) | facility name, parent, lat/lon, county; 2023 newest (2024 empty); Gulf South 9 LA + 5 TX (parent "LOEWS CORP"); no "Gulf Run" facility | **Use** (public domain) |
+| LNG anchors | EIA terminals (8 points, "As of Apr 2020"; personal-account host): Sabine Pass 29.7528, −93.8764; Cameron 30.0374, −93.3370; Freeport 28.9341, −95.3105. HIFLD LNG copy: Golden Pass 29.7613, −93.9205 (2019-10-08); GHGRP Golden Pass LNG 29.9084, −93.9199 | Terminal points | **Use.** Freeport's Gulf South meter is Stratton Ridge (the pretreatment site inland), not the terminal: check against the facility the posting names |
+| County polygons | TIGERweb `tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/State_County/MapServer/1/query?where=GEOID='22023'&outSR=4326&f=geojson` (2026 vintage; `maxAllowableOffset=0.005` → 0.7 KB) | County / parish shapes for snap-to-line | **Use** (public domain) |
+
+**P0 conclusion.** Everything the overlay needs is free and live **except
+Gulf Run's geometry**. Points are placed by the join rules from county,
+type and interconnect fields (no source publishes coordinates); notices
+link by text parsing; throughput is per point, not per station.
+
+**D17.3 (open, founder):** Gulf Run without linework. Options: (a) points
+only on the globe, no drawn line; (b) a hand-digitized route traced from
+the route maps in Gulf Run's public FERC certificate docket (docket number to be looked up), marked `manual`,
+confidence stated on the card; (c) Gulf South alone in v1.
+
+### 19.7 Build record
