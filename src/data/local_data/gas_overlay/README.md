@@ -19,10 +19,23 @@ Rebuild with `npm run build:gas-overlay`. Upstream responses are archived to
   13 km piece in Colorado County, TX) are listed under `excluded` with
   their bounding boxes.
 - **Gulf Run:** no public linework exists (it entered service in late 2022).
-  It is drawn from `manual/gulf-run-route.geojson`, a hand trace from the
-  public FERC filings (D17.3), marked `manual_ferc_trace` with its stated
-  accuracy. Until that file exists the pipeline is `missing` and nothing is
-  drawn.
+  It is drawn from `manual/gulf-run-route.geojson`, a hand trace from public
+  FERC filings (D17.3, traced 2026-10-01), with per-vertex provenance in
+  `manual/gulf-run-vertices.csv` (milepost, anchor, document and page). Three
+  pieces, each with its own accuracy in `traced`:
+  - **Mainline** (Westdale compressor station to the Golden Pass Pipeline
+    meter near Starks, 134 certificated miles), ~0.5 km. Chained from the
+    1:24,000 USGS topo route maps in Resource Report 1 (CP20-70, accession
+    20200228-5231). Anchored on EPA FRS Westdale. Five parish-line crossings
+    fall within 0.25 mi of the filed mileposts.
+  - **Line CP** (Panola County, TX to Delhi, LA, 172 certificated miles; sold
+    to Gulf Run under CP20-68), ~2.5 km. From the Final EA's Figure 1,
+    georeferenced. This is why Gulf Run posts points in Texas and in
+    Ouachita and Richland parishes.
+  - **CP-3 west lateral** (Harrison County, TX), ~3 km. Ownership north of
+    the CP-3 meter is uncertain.
+  - Not used: the CP20-70 alignment sheets (stamped proprietary), the 2006
+    Line CP maps (non-internet public), and OpenStreetMap (ODbL share-alike).
 - Coordinates are emitted at 4 decimals (~11 m).
 
 ## `stations.json`
@@ -41,5 +54,8 @@ Rebuild with `npm run build:gas-overlay`. Upstream responses are archived to
   5 km (`offLine`). The median is about 1 km. Stations further than 5 km and
   HIFLD/GHGRP pairs more than 2 km apart are listed in `source.json` checks
   for a human to settle.
+- **Gulf Run stations** (`manual/gulf-run-stations.geojson`, method
+  `manual_ferc`): Westdale, Vernon and Panola, from EPA FRS, checked against
+  the FERC EA figure. Alto is omitted because FRS gives it no coordinates.
 - **LNG anchors:** from the row 10 bundle (`lng/terminals.json`, Global
   Energy Monitor, CC BY 4.0).

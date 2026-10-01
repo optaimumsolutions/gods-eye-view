@@ -1,0 +1,21 @@
+{
+  "type": "FeatureCollection",
+  "note": "Gulf Run's compressor stations (it took over Line CP's; its own new stations were dropped before filing, FERC CP20-70 RR1). Positions from EPA FRS, checked against the FERC EA Figure 1 (D17.3, traced 2026-10-01). Alto (Richland Parish) is omitted: FRS gives only 'Hwy 135, 0.5 mi E of Alto', no coordinates.",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-93.48147, 32.19764] },
+      "properties": { "name": "Westdale", "county": "Red River", "state": "LA", "source": "EPA FRS 110063950087", "note": "Gulf Run MP 0 and the Zone 1/Zone 2 junction" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-92.626216, 32.290578] },
+      "properties": { "name": "Vernon", "county": "Jackson", "state": "LA", "source": "EPA FRS 110071161362", "note": "Line CP MP 101.3; matches the FERC EA figure within 0.2 km. The FRS record filed under Gulf Run's name (32.27747, -92.62828) sits 1.4 km south" }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-94.1539, 32.205] },
+      "properties": { "name": "Panola", "county": "Panola", "state": "TX", "source": "EPA FRS 110034199720", "note": "0.77 km from the independent Line CP trace" }
+    }
+  ]
+}

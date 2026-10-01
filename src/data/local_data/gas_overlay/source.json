@@ -65,12 +65,16 @@
     },
     {
       "pipeline": "gulf_run",
-      "drawn": false,
-      "km": 0,
+      "drawn": true,
+      "km": 513.2,
       "excludedClusters": 0,
-      "stations": 0,
+      "stations": 3,
       "ghgrpMatched": 0,
-      "lineKm": null,
+      "lineKm": {
+        "p50": 0,
+        "p90": 0.77,
+        "max": 0.77
+      },
       "positionDisagree": [],
       "offLine": []
     }
