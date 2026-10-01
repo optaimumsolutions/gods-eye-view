@@ -57,5 +57,33 @@ Rebuild with `npm run build:gas-overlay`. Upstream responses are archived to
 - **Gulf Run stations** (`manual/gulf-run-stations.geojson`, method
   `manual_ferc`): Westdale, Vernon and Panola, from EPA FRS, checked against
   the FERC EA figure. Alto is omitted because FRS gives it no coordinates.
-- **LNG anchors:** from the row 10 bundle (`lng/terminals.json`, Global
+- **LNG anchors (stations.json):** from the row 10 bundle (`lng/terminals.json`, Global
   Energy Monitor, CC BY 4.0).
+
+## `points.csv` and `unresolved.csv`
+
+One coordinate per physical posted point, keyed by the pipeline's own
+location code (`loc`; FR-N15's Gulf South rows add `-R`/`-D`). Rebuild with
+`npm run build:gas-overlay-points` after `build:gas-overlay`.
+
+- Physical means a point in the capacity posting with a design capacity, and
+  not a paper location: virtual transfers (`VIR`) and pooling points (`PPT`;
+  236 of Gulf Run's 290 active rows) are dropped.
+- No posting publishes coordinates. Points are placed by rules, and the first
+  rule that hits wins. `method` and `confidence` say which rule:
+  `station_match` 0.9, `lng_terminal` 0.9, `ghgrp_facility` 0.8,
+  `interconnect` 0.7, `place_snap` 0.5, `snap_to_line` 0.4. `why` gives the
+  evidence. Full rules are in the script header.
+- **Human fixes.** Set `method` to `manual`, `confidence` to `1`, and start
+  `why` with `manual <date>: ` followed by the reason. A rebuild never
+  recomputes a manual row. Two are pinned today: the Freeport LNG feedgas
+  delivery (Stratton Ridge, at the Pretreatment Facility, GHGRP 1013753) and
+  Gulf Run's Golden Pass Pipeline delivery (the GPPL meter near Starks, the
+  end of the FERC trace).
+- **`unresolved.csv`** lists the points no rule could place, each with the
+  reason, for a human to fill. Fill one by moving the row into `points.csv`
+  as `manual`.
+- **Snapshot.** The capacity and location postings are archived to
+  `.gev-cache/gas-overlay-points-raw/`, together with the TIGER counties and
+  places and GHGRP 2023 for each state touched. `--replay <dir>` rebuilds
+  from that archive.

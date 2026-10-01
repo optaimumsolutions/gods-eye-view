@@ -42,6 +42,7 @@
     "preview": "vite preview",
     "build:gas-pipelines": "node scripts/build-gas-bundle.mjs",
     "build:gas-overlay": "node scripts/build-gas-overlay.mjs",
+    "build:gas-overlay-points": "node scripts/build-gas-overlay-points.mjs",
     "build:gulf-platforms": "node scripts/build-gulf-platforms.mjs",
     "build:lng": "node scripts/build-lng-bundle.mjs",
     "build:flares": "node scripts/build-flares.mjs",

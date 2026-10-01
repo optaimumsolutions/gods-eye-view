@@ -424,7 +424,7 @@ async function main() {
   console.log(`lng anchors: ${lng.map((t) => t.name).join(', ')}`);
 }
 
-if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   main().catch((err) => {
     console.error(err.stack || err.message);
     process.exit(1);

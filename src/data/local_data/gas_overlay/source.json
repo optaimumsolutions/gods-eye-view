@@ -78,5 +78,41 @@
       "positionDisagree": [],
       "offLine": []
     }
-  ]
+  ],
+  "points": {
+    "snapshots": {
+      "gulf_south": {
+        "capacity": "10/01/2026 TD4-16:00",
+        "masterRows": 1240,
+        "capacityRows": 780
+      },
+      "gulf_run": {
+        "capacity": "09/30/2026",
+        "masterRows": 312,
+        "capacityRows": 57
+      }
+    },
+    "methods": {
+      "gulf_run": {
+        "snap_to_line": 27,
+        "interconnect": 10,
+        "ghgrp_facility": 8,
+        "manual": 1
+      },
+      "gulf_south": {
+        "place_snap": 150,
+        "ghgrp_facility": 78,
+        "snap_to_line": 316,
+        "station_match": 41,
+        "unresolved": 13,
+        "interconnect": 50,
+        "manual": 1
+      }
+    },
+    "thresholds": {
+      "lngMaxKm": 25,
+      "interconnectKm": 2,
+      "placeSnapMaxKm": 15
+    }
+  }
 }
