@@ -1,0 +1,683 @@
+pipeline,loc,name,type,flows,county,state,counterparty,design_dth,lon,lat,method,confidence,why
+gulf_run,3198,GSPL Header GR,,D,RICHLAND,LA,Gulf South Pipeline Company LP,651000,-91.74742,32.37391,snap_to_line,0.4,middle of the line in Richland
+gulf_run,3201,KN-MEP Header GR,,DR,RICHLAND,LA,Midcontinent Express Pipeline LLC,386000,-91.74742,32.37391,snap_to_line,0.4,middle of the line in Richland
+gulf_run,13545,TGT GR,INT,D,OUACHITA,LA,"Texas Gas Transmission, LLC",1350000,-92.16079,32.32097,snap_to_line,0.4,middle of the line in Ouachita
+gulf_run,13546,TGC GR,INT,D,RICHLAND,LA,"Trunkline Gas Company, LLC",1350000,-91.84026,32.35332,interconnect,0.7,Trunkline Gas Co within 0.26 km
+gulf_run,13547,ANR GR,INT,D,RICHLAND,LA,ANR Pipeline Company,1350000,-91.61246,32.43525,interconnect,0.7,ANR Pipeline Co within 0.28 km
+gulf_run,13548,CGT GR,INT,DR,RICHLAND,LA,Columbia Gulf Transmission LLC,1400000,-91.53474,32.41918,interconnect,0.7,Columbia Gulf Pipeline within 0.42 km
+gulf_run,13793,East TX EGT,,D,HARRISON,TX,"Gulf Run Transmission, LLC",100,-94.10565,32.42442,snap_to_line,0.4,middle of the line in Harrison
+gulf_run,29018,Rockcliff D CRP GR,GTH,R,PANOLA,TX,"Enable Midstream Partners, LP",100000,-94.21322,32.20623,interconnect,0.7,Enable Gas Transmission within 0.12 km
+gulf_run,57580,Tenn 800 Header GR,,D,RICHLAND,LA,"Tennessee Gas Pipeline Company, L.L.C.",650000,-91.74742,32.37391,snap_to_line,0.4,middle of the line in Richland
+gulf_run,80277,RAGLEY EXCHANGE - TRANSCO,,D,BEAUREGARD,LA,"Transcontinental Gas Pipe Line Company, LLC",50000,-93.23259,30.43265,ghgrp_facility,0.8,TRANSCO STATION 45 (transco)
+gulf_run,81717,TETCO (BEAUREGARD PARISH),,D,BEAUREGARD,LA,"Texas Eastern Transmission, LP",10000,-93.52414,30.63344,snap_to_line,0.4,middle of the line in Beauregard
+gulf_run,93084,GILLIS HUB,,R,BEAUREGARD,LA,"Gillis Hub Pipeline, LLC",200000,-93.52414,30.63344,snap_to_line,0.4,middle of the line in Beauregard
+gulf_run,220015,Eastrans DCP Carthage GR,GTH,R,PANOLA,TX,"VMH Gas, LLC",560000,-94.07418,32.21526,snap_to_line,0.4,middle of the line in Panola
+gulf_run,220020,Midcoast DD to GR,,R,PANOLA,TX,Midcoast Pipelines (East Texas) LP,500000,-94.11715,32.21325,interconnect,0.7,Enbridge Pipelines (East Texas) within 0.05 km
+gulf_run,220025,Marlin Midstream,,R,PANOLA,TX,Enterprise Products Operating LLC,141000,-94.07418,32.21526,snap_to_line,0.4,middle of the line in Panola
+gulf_run,220040,EMP Waskom Plant ST-21 GR,,R,PANOLA,TX,"Enable Midstream Partners, LP",247346,-94.21322,32.20623,interconnect,0.7,Enable Gas Transmission within 0.12 km
+gulf_run,220050,Markwest East TX GR,,R,PANOLA,TX,Markwest Energy East Texas Gas Company,256596,-94.07418,32.21526,snap_to_line,0.4,middle of the line in Panola
+gulf_run,220090,TGG @ DeSoto,,R,DE SOTO,LA,"TGG Pipeline, LTD",270000,-93.64205,32.23579,ghgrp_facility,0.8,"TGG PIPELINE, LTD. - HOLLY COMMON POINT #3 COMPRESSOR STATION (tgg)"
+gulf_run,220325,Kinderhawk GR IC,,R,RED RIVER,LA,KinderHawk Field Services LLC,210000,-93.56804,32.2108,snap_to_line,0.4,middle of the line in Red River
+gulf_run,290706,Rockcliff Z CRP GR,GTH,R,PANOLA,TX,"Gemini Carthage Pipeline, LLC",60000,-94.07418,32.21526,snap_to_line,0.4,middle of the line in Panola
+gulf_run,291010,Gemini Panola GR,,R,PANOLA,TX,"Gemini Carthage Pipeline, LLC",956000,-94.07418,32.21526,snap_to_line,0.4,middle of the line in Panola
+gulf_run,291239,EGT @ NT-2,,D,CADDO,LA,"Gulf Run Transmission, LLC",65000,-93.97812,32.21551,snap_to_line,0.4,middle of the line in Caddo
+gulf_run,291856,EGT Delhi,,DR,RICHLAND,LA,"Gulf Run Transmission, LLC",500000,-91.74742,32.37391,snap_to_line,0.4,middle of the line in Richland
+gulf_run,292272,EGT @ LIM-3,,D,DE SOTO,LA,"Gulf Run Transmission, LLC",65000,-93.86333,32.21229,snap_to_line,0.4,middle of the line in De Soto
+gulf_run,292279,EGT @ CP-3,,R,PANOLA,TX,"Gulf Run Transmission, LLC",200000,-94.07418,32.21526,snap_to_line,0.4,middle of the line in Panola
+gulf_run,292475,Performance Proppants,,D,BEAUREGARD,LA,"Performance Proppants, LLC",3600,-93.52414,30.63344,snap_to_line,0.4,middle of the line in Beauregard
+gulf_run,292545,Trunkline @ Vinton,INT,D,CALCASIEU,LA,"Trunkline Gas Company, LLC",900000,-93.60273,30.38289,snap_to_line,0.4,middle of the line in Calcasieu
+gulf_run,292616,EGT Monument,,DR,HARRISON,TX,"Gulf Run Transmission, LLC",174000,-94.10565,32.42442,snap_to_line,0.4,middle of the line in Harrison
+gulf_run,292621,EGT RIGS,,R,CADDO,LA,"Enable Gas Transmission, LLC",50000,-93.94905,32.2164,interconnect,0.7,Enable Gas Transmission within 0.24 km
+gulf_run,293123,Ajax Plant,,R,DESOTO,LA,ET Gathering & Processing LLC,400000,-93.86333,32.21229,snap_to_line,0.4,middle of the line in De Soto
+gulf_run,293136,North Holly,,R,DESOTO,LA,KinderHawk Field Services LLC,500000,-93.64205,32.23579,ghgrp_facility,0.8,"TGG PIPELINE, LTD. - HOLLY COMMON POINT #3 COMPRESSOR STATION (holly)"
+gulf_run,808311,Golden Pass Pipeline,,D,CALCASIEU,LA,Golden Pass Pipeline LLC,2000000,-93.6024,30.3595,manual,1,"manual 2026-10-01: GPPL meter station near Starks = Gulf Run MP 134, the end of the FERC trace (RR1 accession 20200228-5231); GPPL is not in the 2020 linework so the interconnect rule cannot fire"
+gulf_run,808762,Acadian Red River GR,,DR,RED RIVER,LA,Acadian Gas Pipeline System,510000,-93.49107,32.17463,interconnect,0.7,Acadian Haynesville Pipeline within 1.88 km
+gulf_run,810066,Cadeville GR,,DR,OUACHITA,LA,Cadeville Gas Storage LLC,250000,-92.16079,32.32097,snap_to_line,0.4,middle of the line in Ouachita
+gulf_run,822000,ETC HPL to GR,,DR,PANOLA,TX,Houston Pipe Line Company LP,1400000,-94.07418,32.21526,snap_to_line,0.4,middle of the line in Panola
+gulf_run,822033,PVG Storage Header GR,,DR,RICHLAND,LA,Perryville Gas Storage LLC,709113,-91.74742,32.37391,snap_to_line,0.4,middle of the line in Richland
+gulf_run,822040,Magnolia Gas - Keatchie,,R,DE SOTO,LA,"Magnolia Midstream Gas Services, LLC",858624,-93.99446,32.14439,ghgrp_facility,0.8,Keatchie Gas Plant (keatchie)
+gulf_run,822050,CHK/Lamid - Mansfield,,R,DE SOTO,LA,Louisiana Midstream Gas Services LLC,770875,-93.86333,32.21229,snap_to_line,0.4,middle of the line in De Soto
+gulf_run,822062,Clear Lake GR,,R,RED RIVER,LA,"Enable Midstream Partners, LP",411072,-93.3341,32.23233,interconnect,0.7,Enable Gas Transmission within 0.45 km
+gulf_run,822064,Magnolia GR,,R,BIENVILLE,LA,"Enable Midstream Partners, LP",867960,-93.29861,32.26785,ghgrp_facility,0.8,Magnolia Amine Plant (magnolia)
+gulf_run,822070,State Line Gath - Momentum GR,,R,CADDO,LA,Enterprise Products Operating LLC,250000,-93.97812,32.21551,snap_to_line,0.4,middle of the line in Caddo
+gulf_run,822072,Regency @ Logansport,,R,CADDO,LA,"ETC Texas Pipeline, LTD.",368000,-93.93148,32.21272,interconnect,0.7,ETC Tiger Pipeline within 0.58 km
+gulf_run,822080,Bistineau Whiskey Bay,,R,RED RIVER,LA,"ETC Texas Pipeline, LTD.",500000,-93.4413,32.2107,ghgrp_facility,0.8,WEST BISTINEAU FACILITY (bistineau)
+gulf_run,822090,Arcadia GR,,DR,BIENVILLE,LA,"Arcadia Gas Storage, LLC",500000,-93.05333,32.29329,snap_to_line,0.4,middle of the line in Bienville
+gulf_run,822320,Enterprise Bulldog,,R,PANOLA,TX,Enterprise Products Operating LLC,500000,-94.26879,32.14563,ghgrp_facility,0.8,Bulldog Gas Plant (Panola III) (bulldog)
+gulf_run,898400,Sesh 42 Header GR,,DR,RICHLAND,LA,"Southeast Supply Header, LLC",1987000,-91.49201,32.41005,ghgrp_facility,0.8,Delhi (SESH) Compressor Station (sesh)
+gulf_south,6,Raceland Sugar Factory,END,D,Lafourche,LA,Raceland Sugars Inc,8618,-90.60614,29.72337,place_snap,0.5,Raceland snapped 2.3 km
+gulf_south,8,Gonzales City Gate,LDC,D,Ascension,LA,"Gonzales, City Of",13040,-90.92208,30.22323,place_snap,0.5,Gonzales snapped 1.2 km
+gulf_south,14,Arabi City Gate,END,D,St Bernard,LA,"Trans Louisiana Gas Pipeline, Inc",14148,-89.98241,29.94742,place_snap,0.5,Arabi snapped 1.5 km
+gulf_south,45,Golden Meadow City Gate,LDC,D,Lafourche,LA,South Coast Gas Co Inc,14640,-90.27871,29.3416,place_snap,0.5,Golden Meadow snapped 5.0 km
+gulf_south,68,Willow Glen Power (To Gsu),END,D,Iberville,LA,"Entergy Gulf States, Inc.",326887,-91.1164,30.2743,ghgrp_facility,0.8,Willow Glen (willow glen entergy)
+gulf_south,70,St Amant Brittany & Acy City Gate,LDC,D,Ascension,LA,St Amant Gas Co Inc,2016,-91.03597,30.22581,snap_to_line,0.4,middle of the line in Ascension
+gulf_south,73,Nine Mile Power Plt (To Lp&L),END,D,Jefferson,LA,"Entergy Louisiana, LLC",222151,-90.1211,29.73728,snap_to_line,0.4,middle of the line in Jefferson
+gulf_south,99,Kaiser Coke Calciner Plant,END,D,St Charles,LA,Rain CII Carbon LLC,17640,-90.39711,30.00235,ghgrp_facility,0.8,Rain CII CARBON LLC - NORCO COKE PLANT (rain cii carbon coke rain cii carbon)
+gulf_south,116,Livingston City Gate,LDC,D,Livingston,LA,"Livingston, Village Of",808,-90.74394,30.49459,place_snap,0.5,Livingston snapped 0.3 km
+gulf_south,118,Walker-Livingston Etal City Gate,LDC,D,Livingston,LA,"Walker, City Of",8736,-90.75734,30.45535,place_snap,0.5,Walker snapped 11.0 km
+gulf_south,121,Marathon - Garyville Plt,END,D,St John The Baptist,LA,,80756,-90.59353,30.06132,ghgrp_facility,0.8,Garyville Refinery (marathon)
+gulf_south,177,Bayou Sale/Shadyside (To Sng),INT,D,St Mary,LA,"Southern Natural Gas Company, L.L.C.",274742,-91.42002,29.73039,station_match,0.9,Bayou Sale
+gulf_south,178,Oak Hills-Br,INT,D,East Baton Rouge,LA,"Delta Capital Gas Company, LLC",9195,-91.07297,30.4936,snap_to_line,0.4,middle of the line in East Baton Rouge
+gulf_south,180,Old Hammond Hwy-Br,INT,D,East Baton Rouge,LA,"Delta Capital Gas Company, LLC",17712,-91.07297,30.4936,snap_to_line,0.4,middle of the line in East Baton Rouge
+gulf_south,184,Hexion Chemical - Norco,END,D,St Charles,LA,"Shell Energy North America (US), L.P.",32358,-90.42335,29.99904,ghgrp_facility,0.8,SHELL CHEMICAL LP - NORCO CHEMICAL PLANT WEST SITE (shell chemical chemical shell chemical)
+gulf_south,185,Shell: Norco Complex,END,D,St Charles,LA,"Shell Energy North America (US), L.P.",104363,-90.40386,30.00096,ghgrp_facility,0.8,Norco Manufacturing Complex (complex shell)
+gulf_south,187,Oak Point Plant @ Belle Chase,END,D,Plaquemines,LA,Chevron U.S.A. Inc.,18301,-89.44241,29.38539,snap_to_line,0.4,middle of the line in Plaquemines
+gulf_south,188,Monsanto Luling Plant,END,D,St Charles,LA,Bayer Corporation,15168,-90.30308,29.94485,snap_to_line,0.4,middle of the line in St. Charles
+gulf_south,193,Petro-United Sunshine Terminal,END,D,Iberville,LA,"LBC Baton Rouge, LLC",1536,-91.09613,30.22718,snap_to_line,0.4,middle of the line in Iberville
+gulf_south,198,Shell Plant @ Geismar,END,D,Ascension,LA,Shell Oil Company,67307,-90.99289,30.18416,ghgrp_facility,0.8,SHELL CHEMICAL CO - GEISMAR PLANT (shell geismar shell)
+gulf_south,235,La Paving Plt @Bayou Blue,END,D,Terrebone,LA,South Coast Gas Co Inc,145,-90.77482,29.29146,snap_to_line,0.4,middle of the line in Terrebonne
+gulf_south,298,N Turtle Bayou Cp #1,WHD,R,Terrebone,LA,"Petrodome Operating, LLC",84995,-90.77482,29.29146,snap_to_line,0.4,middle of the line in Terrebonne
+gulf_south,300,West Lake Verret,WHD,R,St Martin,LA,"White Oak Energy, LLC Operating Co.",21156,-91.85696,30.19258,snap_to_line,0.4,middle of the line in St. Martin
+gulf_south,355,Lake Hatch C.P. #1,WHD,R,Terrebone,LA,"Westlake, City Of",22093,-90.77482,29.29146,snap_to_line,0.4,middle of the line in Terrebonne
+gulf_south,453,West Pointe-A-La Hache (From Atmos),INT,R,Plaquemines,LA,Atmos Energy Corporation,9045,-89.44241,29.38539,snap_to_line,0.4,middle of the line in Plaquemines
+gulf_south,464,Venice Plt (From Targa Midstream),PLT,R,Plaquemines,LA,"Targa Midstream Services, LP",235250,-89.38555,29.23632,ghgrp_facility,0.8,Venice Gas Plant (targa)
+gulf_south,489,Huntington City Gate,LDC,D,Angelina,TX,"Huntington, City Of",1800,-94.69803,31.31727,place_snap,0.5,Huntington snapped 12.3 km
+gulf_south,492,Newton City Gate,LDC,D,Newton,TX,"Newton, City Of",3144,-93.87,30.8525,place_snap,0.5,Newton snapped 11.1 km
+gulf_south,561,Bullard City Gate,LDC,D,Cherokee,TX,CenterPoint Energy Resources Corp.,1044,-95.12471,32.10469,snap_to_line,0.4,middle of the line in Cherokee
+gulf_south,562,Garrison City Gate,LDC,D,Nacogdoches,TX,"Garrison, City Of",1949,-94.50033,31.78185,place_snap,0.5,Garrison snapped 5.0 km
+gulf_south,563,Pineland City Gate,LDC,D,Sabine,TX,"Pineland, City Of",2664,-93.97625,31.24932,place_snap,0.5,Pineland snapped 0.3 km
+gulf_south,571,Alto/Wells City Gate,LDC,D,Angelina,TX,"Alto, City Of",6026,-94.70745,31.29464,snap_to_line,0.4,middle of the line in Angelina
+gulf_south,572,Water Injection Plant @ Wright Mountain,END,D,Smith,TX,"Basa Resources, Inc.",2276,-95.40962,32.58673,snap_to_line,0.4,middle of the line in Smith
+gulf_south,575,New Summerfield #1 City Gate,LDC,D,Cherokee,TX,New Summerfield City Of,1680,-95.19008,32.06028,place_snap,0.5,New Summerfield snapped 11.3 km
+gulf_south,576,Boral Brick - Henderson Plant,END,D,Rusk,TX,Boral Bricks Inc,6623,-94.78182,32.17418,snap_to_line,0.4,middle of the line in Rusk
+gulf_south,577,Easton City Gate,LDC,D,Gregg,TX,"Easton, City Of",726,-94.60039,32.36802,place_snap,0.5,Easton snapped 1.8 km
+gulf_south,578,Appleby City Gate,LDC,D,Nacogdoches,TX,"Appleby Natural Gas System, City Of",1265,-94.51104,31.67675,place_snap,0.5,Appleby snapped 10.2 km
+gulf_south,579,Gary City Gate,LDC,D,Panola,TX,"Gary, City Of",2948,-94.31282,32.00293,place_snap,0.5,Gary City snapped 5.9 km
+gulf_south,580,New Summerfield #2 City Gate,LDC,D,Cherokee,TX,New Summerfield City Of,1656,-95.19008,32.06028,place_snap,0.5,New Summerfield snapped 11.3 km
+gulf_south,581,Lufkin Trailer Mfg. (To Lufkin Ind),END,D,Angelina,TX,"Desoto Pipeline Company, Inc.",816,-94.69943,31.31391,place_snap,0.5,Lufkin snapped 3.0 km
+gulf_south,583,Reklaw/Laneville/New Salem/Sacul Cg,LDC,D,Cherokee,TX,Magnum Gas Marketing LLC,2563,-95.12471,32.10469,snap_to_line,0.4,middle of the line in Cherokee
+gulf_south,584,Mt Enterprise Cg,LDC,D,Nacogdoches,TX,Rockin M Gas LLC,1308,-94.52602,31.6501,snap_to_line,0.4,middle of the line in Nacogdoches
+gulf_south,592,Kirkpatrick Heights Subd City Gate,LDC,D,Smith,TX,CenterPoint Energy Resources Corp.,876,-95.40962,32.58673,snap_to_line,0.4,middle of the line in Smith
+gulf_south,599,Chester City Gate,LDC,D,Tyler,TX,"Chester, City Of",696,-94.57214,30.87997,place_snap,0.5,Chester snapped 5.3 km
+gulf_south,975,Corley C.P. #1,WHD,R,Smith,TX,Eagle Oil & Gas Co,10727,-95.40962,32.58673,snap_to_line,0.4,middle of the line in Smith
+gulf_south,988,Cherokee Water #1 Well,WHD,R,Rusk,TX,Craton Bravo LLC,3713,-94.78182,32.17418,snap_to_line,0.4,middle of the line in Rusk
+gulf_south,1262,Neuhoff Field C.P. #1,WHD,R,Wood,TX,"Montare Operating, Ltd.",11400,-95.3874,32.63779,snap_to_line,0.4,middle of the line in Wood
+gulf_south,1265,Chapel Hill Plant (Gas Solutions),PLT,R,Smith,TX,J. Global Energy Midstream LLC,35096,-95.40962,32.58673,snap_to_line,0.4,middle of the line in Smith
+gulf_south,1285,Van Plant Discharge,PLT,R,Van Zandt,TX,"Basa Resources, Inc.",14193,-95.79454,32.6875,snap_to_line,0.4,middle of the line in Van Zandt
+gulf_south,1336,Chandler #1 Well,WHD,R,Nacogdoches,TX,"Jandar Exploration, L.C.",8657,-94.52602,31.6501,snap_to_line,0.4,middle of the line in Nacogdoches
+gulf_south,1421,Vinland Energy Texas,WHD,R,Shelby,TX,Vinland Energy Operations LLC,15235,-94.13505,31.80434,snap_to_line,0.4,middle of the line in Shelby
+gulf_south,1607,Goodrich (From Midcoast Pipelines),INT,R,Polk,TX,Midcoast Pipelines (East Texas) L.P.,80000,-94.9385,30.60847,station_match,0.9,Goodrich #2
+gulf_south,1649,Frost #1 Well,WHD,R,Angelina,TX,Buffco Production Inc,14864,-94.70745,31.29464,snap_to_line,0.4,middle of the line in Angelina
+gulf_south,1651,Brown C 1 & 2 Wells,WHD,R,Angelina,TX,"Crescent Pass Energy, LLC",10785,-94.70745,31.29464,snap_to_line,0.4,middle of the line in Angelina
+gulf_south,1688,Ne Red Land C.P. #2,WHD,R,Angelina,TX,"Orion Pipeline, Ltd.",2849,-94.70745,31.29464,snap_to_line,0.4,middle of the line in Angelina
+gulf_south,1715,Shelby County Cp,WHD,R,Shelby,TX,"Brg Energy, Inc.",7719,-94.13505,31.80434,snap_to_line,0.4,middle of the line in Shelby
+gulf_south,1743,Highmark's Hutching Minor Cp,WHD,R,Rusk,TX,"HighMark Energy Operating, LLC",27199,-94.78182,32.17418,snap_to_line,0.4,middle of the line in Rusk
+gulf_south,2412,Bay Springs City Gate,LDC,D,Jasper,MS,"Bay Springs, City Of",1440,-89.28229,31.91131,place_snap,0.5,Bay Springs snapped 7.4 km
+gulf_south,2413,Bay St Louis City Gate,LDC,D,Hancock,MS,Bay St Louis City Of,4464,-89.54808,30.30309,snap_to_line,0.4,middle of the line in Hancock
+gulf_south,2417,Ascend - Pensacola Plt,END,D,Escambia,FL,Ascend Performance Materials Operations LLC,147183,-87.25198,30.59668,ghgrp_facility,0.8,Ascend Performance Materials LLC (ascend performance materials ascend performance materials)
+gulf_south,2418,Desoto/Quitman/Shubuta/Waynesboro Cg,LDC,D,Clarke,MS,Chickasawhay Natural Gas District,9369,-88.57228,31.96171,snap_to_line,0.4,middle of the line in Clarke
+gulf_south,2420,Taminco Floridatown Plant,END,D,Santa Rosa,FL,"Taminco, Inc",66871,-87.1378,30.58059,ghgrp_facility,0.8,TAMINCO US LLC (taminco)
+gulf_south,2421,Fairhope City Gate,LDC,D,Baldwin,AL,"Fairhope, City Of",14708,-87.61227,30.80707,snap_to_line,0.4,middle of the line in Baldwin
+gulf_south,2424,Greensburg City Gate,LDC,D,St Helena,LA,"Greensburg, Town Of",2244,-90.57004,30.78468,place_snap,0.5,Greensburg snapped 10.8 km
+gulf_south,2425,Gulf Power Plt @ Pensacola - Plt Crist,END,D,Escambia,FL,Florida Power & Light Company,33816,-87.39473,30.50518,snap_to_line,0.4,middle of the line in Escambia
+gulf_south,2428,Lucedale City Gate,LDC,D,George,MS,Atmos Energy Corporation,2852,-88.62803,30.84159,place_snap,0.5,Lucedale snapped 10.4 km
+gulf_south,2432,Kentwood City Gate,LDC,D,Tangipahoa,LA,"Kentwood Louisiana, Town Of",3191,-90.51537,30.93347,place_snap,0.5,Kentwood snapped 0.0 km
+gulf_south,2443,Madisonville City Gate,LDC,D,St Tammany,LA,Madisonville Town Of,3168,-90.17062,30.48535,place_snap,0.5,Madisonville snapped 9.7 km
+gulf_south,2463,Picayune City Gate,LDC,D,Pearl River,MS,"Picayune, City Of",12076,-89.66602,30.53889,place_snap,0.5,Picayune snapped 1.0 km
+gulf_south,2464,Port Gibson City Gate,LDC,D,Warren,MS,"Port Gibson, City Of",11340,-90.84746,32.3582,snap_to_line,0.4,middle of the line in Warren
+gulf_south,2467,Akzo - Salco Chemical Plant,END,D,Mobile,AL,,8200,-88.08151,30.71355,snap_to_line,0.4,middle of the line in Mobile
+gulf_south,2468,St. Joe Brick Plant @ Slidell,END,D,St Tammany,LA,St Joe Brick Works Inc,2400,-89.99015,30.38846,snap_to_line,0.4,middle of the line in St. Tammany
+gulf_south,2509,Keesler Air Force Base,LDC,D,Harrison,MS,"Delta Mississippi Gas Company, LLC",29493,-89.15512,30.45241,snap_to_line,0.4,middle of the line in Harrison
+gulf_south,2514,Waveland City Gate,LDC,D,Hancock,MS,"Waveland Mississippi, City Of",5037,-89.3789,30.3177,place_snap,0.5,Waveland snapped 2.7 km
+gulf_south,2515,Cooper Lighting,END,D,Warren,MS,"NextEra Energy Services Gas, LLC",1488,-90.84746,32.3582,snap_to_line,0.4,middle of the line in Warren
+gulf_south,2516,Braxton City Gate,LDC,D,Simpson,MS,Spire Mississippi Inc.,185,-89.94497,32.04026,place_snap,0.5,Braxton snapped 2.9 km
+gulf_south,2530,Zapata Haynie (Ms Menhaden Inc) @ Moss,END,D,Jackson,MS,"Omega Protein, Inc.",11356,-88.71351,30.50266,snap_to_line,0.4,middle of the line in Jackson
+gulf_south,2534,Jack Watson Power Plant @ Gulfport,END,D,Harrison,MS,"Southern Company Services, Inc.",294376,-89.0265,30.4408,ghgrp_facility,0.8,Watson Electric Generating Plant (watson southern)
+gulf_south,2536,Brewton Mill Georgia Pacific,END,D,Escambia,AL,Georgia-Pacific Brewton LLC,31858,-87.11527,31.07952,ghgrp_facility,0.8,GEORGIA-PACIFIC BREWTON LLC (georgia pacific)
+gulf_south,2540,Sterling Fibers @ Pensacola,END,D,Santa Rosa,FL,Sterling Fibers Inc,288,-87.03918,30.53658,snap_to_line,0.4,middle of the line in Santa Rosa
+gulf_south,2541,Calciner Ind Purvis Plt,END,D,Lamar,MS,,1824,-89.44636,31.12622,snap_to_line,0.4,middle of the line in Lamar
+gulf_south,2543,Milton City Gate,LDC,D,Santa Rosa,FL,"Milton, Florida, City Of",14487,-87.03133,30.53785,place_snap,0.5,Milton snapped 10.4 km
+gulf_south,2548,Salco (Clark Mobile) City Gate,END,D,Mobile,AL,Clarke Mobile Counties Gas District,54078,-88.0483,30.73621,ghgrp_facility,0.8,KIMBERLY-CLARK TISSUE COMPANY (clark clark)
+gulf_south,2549,Montpelier & Pine Grove City Gate,LDC,D,St Helena,LA,Montpelier Village Of,194,-90.64104,30.67662,place_snap,0.5,Montpelier snapped 1.8 km
+gulf_south,2550,Bogue Chitto/Norfield City Gate,LDC,D,Lincoln,MS,"Mississippi River Gas, LLC",456,-90.43113,31.42405,place_snap,0.5,Bogue Chitto snapped 3.0 km
+gulf_south,2551,Williamsville City Gate,LDC,D,Attala,MS,Atmos Energy Corporation,989,-89.5314,32.96491,snap_to_line,0.4,middle of the line in Attala
+gulf_south,2553,Bryan Field Lease Operations,END,D,Jasper,MS,Eagle Oil & Gas Co,1560,-89.16668,31.81764,snap_to_line,0.4,middle of the line in Jasper
+gulf_south,2556,Conecuh-Monroe (Delivery) City Gate,LDC,D,Escambia,AL,South Alabama Gas District,30029,-87.12374,31.04302,snap_to_line,0.4,middle of the line in Escambia
+gulf_south,2568,Nasa: John C Stennis Space Center,LDC,D,Hancock,MS,"Mercuria Energy America, LLC",7384,-89.54808,30.30309,snap_to_line,0.4,middle of the line in Hancock
+gulf_south,2570,Beaumont City Gate,LDC,D,Perry,MS,"Beaumont, Town Of",335,-88.87028,31.21807,place_snap,0.5,Beaumont snapped 7.9 km
+gulf_south,2582,International Paper @ Vicksburg,END,D,Warren,MS,International Paper Company,34187,-90.77224,32.5278,ghgrp_facility,0.8,International Paper - Vicksburg Mill (international paper international paper)
+gulf_south,2583,Kentwood Brick & Tile Plant,END,D,Tangipahoa,LA,"Kentwood Brick & Tile, LLC",573,-90.51537,30.93347,place_snap,0.5,Kentwood snapped 0.0 km
+gulf_south,2584,First Chem: Bayou Casotte Plant,END,D,Jackson,MS,Oleo-X LLC,11558,-88.49611,30.355,ghgrp_facility,0.8,FIRST CHEMICAL CORP (first)
+gulf_south,2586,Ovett Field Lease Operations,END,D,Perry,MS,R W Tyson Producing Co Inc,1044,-88.89994,31.24289,snap_to_line,0.4,middle of the line in Perry
+gulf_south,2587,Georgia Pacific Monticello,END,D,Lawrence,MS,Georgia-Pacific Monticello LLC,66216,-90.07937,31.62146,ghgrp_facility,0.8,GEORGIA PACIFIC MONTICELLO LLC (georgia pacific)
+gulf_south,2593,Century City Gate,LDC,D,Escambia,FL,"Century Florida, Town Of",1608,-87.27044,30.98498,place_snap,0.5,Century snapped 1.0 km
+gulf_south,2594,Lumberton Refinery,END,D,Lamar,MS,"NextEra Energy Services Gas, LLC",1700,-89.45492,31.022,place_snap,0.5,Lumberton snapped 1.8 km
+gulf_south,2595,Rogerslacy Refinery @ Sandersville,END,D,Jasper,MS,"NextEra Energy Services Gas, LLC",6854,-89.16668,31.81764,snap_to_line,0.4,middle of the line in Jasper
+gulf_south,2598,Dupont,END,D,Mobile,AL,E.I. Du Pont De Nemours Company,8100,-88.08151,30.71355,snap_to_line,0.4,middle of the line in Mobile
+gulf_south,2599,Franklinton City Gate,LDC,D,Washington,LA,"Franklinton, Town Of",5665,-89.83204,30.82128,snap_to_line,0.4,middle of the line in Washington
+gulf_south,2602,Benndale Power Plant,END,D,George,MS,"Cooperative Energy, A Mississippi Electric Cooperative",12444,-88.79899,30.88669,place_snap,0.5,Benndale snapped 2.1 km
+gulf_south,2605,Moselle Power Plant,END,D,Jones,MS,"Cooperative Energy, A Mississippi Electric Cooperative",44148,-89.26237,31.53125,place_snap,0.5,Moselle snapped 3.1 km
+gulf_south,2607,Ga.Pac-Plywood Plt @ Taylorsville,END,D,Smith,MS,Georgia-Pacific Monticello LLC,2064,-89.46952,31.84127,ghgrp_facility,0.8,Georgia Pacific Plywood (georgia pacific plywood)
+gulf_south,2621,Town Of Citronelle/Bayou La Batre Dist,LDC,D,Mobile,AL,"Citronelle,The Utility Board Of The Town",16956,-88.08151,30.71355,snap_to_line,0.4,middle of the line in Mobile
+gulf_south,2690,Holmesville (To Transco),INT,D,Pike,MS,"Transcontinental Gas Pipe Line Company, LLC",532000,-90.4684,31.2451,interconnect,0.7,Transcontinental Gas PL within 0.00 km
+gulf_south,2836,Spooner Petro-Walker 17-3 #1,WHD,R,Forrest,MS,"Skye MS, LLC",3112,-89.23381,31.3368,snap_to_line,0.4,middle of the line in Forrest
+gulf_south,2867,Stringer C.P. #1,WHD,R,Jasper,MS,Texas Petroleum Investment Company,2065,-89.16668,31.81764,snap_to_line,0.4,middle of the line in Jasper
+gulf_south,2893,Gwinnville C.P. #1 - Texla,WHD,R,Jefferson Davis,MS,"Will-Drill Resources, Inc.",10230,-89.79026,31.74709,snap_to_line,0.4,middle of the line in Jefferson Davis
+gulf_south,2925,Canton (From Tet),INT,R,Madison,MS,"Texas Eastern Transmission, LP",45125,-90.1331,32.5762,interconnect,0.7,Texas Eastern Trans Co within 0.00 km
+gulf_south,2926,Flomaton-(Florida Gas Crossover),INT,R,Escambia,AL,"Florida Gas Transmission Company, LLC",42395,-87.24107,31.00075,place_snap,0.5,Flomaton snapped 1.6 km
+gulf_south,2936,Baldwin City Gate,LDC,D,St Mary,LA,"Baldwin, Town Of",1080,-91.58505,29.81502,place_snap,0.5,Baldwin snapped 4.1 km
+gulf_south,2938,Breaux Bridge City Gate,LDC,D,St Martin,LA,Atmos Energy Corporation,5874,-91.90327,30.28055,place_snap,0.5,Breaux Bridge snapped 0.0 km
+gulf_south,2939,Carencro City Gate,LDC,D,Lafayette,LA,"Carencro, Town Of",7330,-92.0444,30.31365,place_snap,0.5,Carencro snapped 0.6 km
+gulf_south,2941,Delcambre City Gate,LDC,D,Vermilion,LA,"Delcambre, Town Of",926,-91.98,29.9139,place_snap,0.5,Delcambre snapped 4.3 km
+gulf_south,2946,Iota City Gate,LDC,D,Acadia,LA,"Iota, Town Of",986,-92.50453,30.25417,place_snap,0.5,Iota snapped 8.0 km
+gulf_south,2947,Kaplan City Gate,LDC,D,Vermilion,LA,"Kaplan, City Of",9824,-92.28252,30.0047,place_snap,0.5,Kaplan snapped 0.2 km
+gulf_south,2951,Moreauville City Gate,LDC,D,Avoyelles,LA,"Moreauville Louisiana, Town Of",1104,-92.06667,31.06536,place_snap,0.5,Moreauville snapped 8.8 km
+gulf_south,2952,Scott City Gate,LDC,D,Lafayette,LA,"Scott, Town Of",1387,-92.06482,30.23407,place_snap,0.5,Scott snapped 3.0 km
+gulf_south,2955,Sterling Sugars Inc,END,D,St Mary,LA,Sterling Sugars Inc,12442,-91.36893,29.65661,snap_to_line,0.4,middle of the line in St. Mary
+gulf_south,2956,Sunset City Gate,LDC,D,St Landry,LA,"Sunset, Town Of",2829,-92.02903,30.401,place_snap,0.5,Sunset snapped 3.4 km
+gulf_south,2993,Roy Nelson Plant,END,D,Calcasieu,LA,"Entergy Gulf States, Inc.",205246,-93.2917,30.2861,ghgrp_facility,0.8,Nelson Industrial Steam Company (nelson nelson)
+gulf_south,3001,Zapata Haynie - Vermilion (Pogy Plant),END,D,Vermilion,LA,"Omega Protein, Inc.",6249,-92.07681,30.05968,snap_to_line,0.4,middle of the line in Vermilion
+gulf_south,3004,La Sugarcane Inc-St. Martinville Factory,END,D,St Martin,LA,"Louisiana Sugarcane Cooperative, Inc",12980,-91.85696,30.19258,snap_to_line,0.4,middle of the line in St. Martin
+gulf_south,3005,Cameron #1 City Gate,LDC,D,Cameron,LA,"Delta South Louisiana Gas Company, LLC",317,-93.2957,29.8029,place_snap,0.5,Cameron snapped 0.9 km
+gulf_south,3009,Hornbeck & Anacoco City Gate,LDC,D,Vernon,LA,"Hornbeck, Town Of",7927,-93.27405,31.01584,snap_to_line,0.4,middle of the line in Vernon
+gulf_south,3011,Lake Charles Refinery (Citgo),END,D,Calcasieu,LA,Citgo Petroleum Corp,53776,-93.32524,30.18887,ghgrp_facility,0.8,CITGO PETROLEUM CORP - LAKE CHARLES MANUFACTURING COMPLEX (citgo)
+gulf_south,3012,Packaging Corporation Of America,END,D,Beauregard,LA,Packaging Corporation Of America,67206,-93.3751,30.8627,ghgrp_facility,0.8,PACKAGING CORPORATION OF AMERICA (packaging america packaging america)
+gulf_south,3014,Cameron #2 City Gate,LDC,D,Cameron,LA,"Delta South Louisiana Gas Company, LLC",100,-93.2957,29.8029,place_snap,0.5,Cameron snapped 0.9 km
+gulf_south,3016,Deridder Tall Oil Plt (To Ingevity),END,D,Beauregard,LA,Ingevity Virginia Corporation,11340,-93.28933,30.82769,ghgrp_facility,0.8,"INGEVITY SOUTH CAROLINA, LLC - DeRidder Plant (ingevity ingevity)"
+gulf_south,3024,Arnaudville City Gate,LDC,D,St Landry,LA,"Arnaudville, Town Of",4005,-91.95813,30.3841,place_snap,0.5,Arnaudville snapped 3.2 km
+gulf_south,3063,Opelousas (To Tet),INT,D,St Landry,LA,"Texas Eastern Transmission, LP",387831,-92.01116,30.56799,station_match,0.9,Opelousas
+gulf_south,3064,Arnaudville/St Landry (To Fgt),INT,D,St Landry,LA,"Florida Gas Transmission Company, LLC",135167,-91.89683,30.41445,station_match,0.9,Arnaudville
+gulf_south,3071,Sasol - Lake Charles Chemical,END,D,Calcasieu,LA,Sasol North America Inc,59186,-93.2937,30.2588,ghgrp_facility,0.8,Sasol Chemicals (USA) LLC - LAKE CHARLES CHEMICAL COMPLEX (sasol chemical sasol)
+gulf_south,3155,Acadia Plant @ Egan (From Targa),PLT,R,Acadia,LA,"Targa Louisiana Field Services, LLC",26932,-92.50929,30.21821,ghgrp_facility,0.8,Targa Midstream Services LLC - Acadia Gas Plant (targa targa)
+gulf_south,3262,Centerville (From Trunkline),INT,R,St Mary,LA,"Trunkline Gas Company, LLC",700000,-91.4633,29.7096,interconnect,0.7,Trunkline Gas Co within 0.00 km
+gulf_south,3263,Deep Lake (From Ngpl),INT,R,Cameron,LA,Natural Gas Pipeline Company of America,72200,-93.10646,29.87536,snap_to_line,0.4,middle of the line in Cameron
+gulf_south,3290,Gillis (From Texas Eastern),INT,R,Beauregard,LA,"Texas Eastern Transmission, LP",205246,-93.2183,30.457,interconnect,0.7,Texas Eastern Trans Co within 0.00 km
+gulf_south,3297,Cameron (From Kinetica),INT,R,Cameron,LA,"Kinetica Energy Express, LLC",958,-93.2957,29.8029,place_snap,0.5,Cameron snapped 0.9 km
+gulf_south,3298,Deep Lake (Fr Bridgeline)/Grand Chenier,INT,R,Cameron,LA,"Bridgeline Holdings, LP",53960,-93.34445,29.806,interconnect,0.7,Bridgeline Holdings Pipeline LP within 0.14 km
+gulf_south,3317,Perryville (To Mrt),INT,D,Ouachita,LA,"Enable Mississippi River Transmission, LLC",250290,-92.0059,32.6767,interconnect,0.7,Enable Gas Transmission within 0.00 km
+gulf_south,3339,Chatham City Gate,LDC,D,Jackson,LA,"Chatham, Town Of",958,-92.4606,32.31811,place_snap,0.5,Chatham snapped 1.3 km
+gulf_south,3343,West Monroe (To Tet),INT,D,Ouachita,LA,"Texas Eastern Transmission, LP",268967,-92.1499,32.6022,interconnect,0.7,Texas Eastern Trans Co within 0.00 km
+gulf_south,3344,Springhill Mill (International Paper),END,D,Webster,LA,International Paper Company,34322,-93.46629,33.00123,place_snap,0.5,Springhill snapped 0.5 km
+gulf_south,3355,Montgomery & Clarence (Villages Of),LDC,D,Natchitoches,LA,"Montgomery, Town Of",996,-93.00698,31.93542,snap_to_line,0.4,middle of the line in Natchitoches
+gulf_south,3362,Lonewa (To Texas Gas),INT,D,Ouachita,LA,"Texas Gas Transmission, LLC",714204,-92.20706,32.47877,snap_to_line,0.4,middle of the line in Ouachita
+gulf_south,3364,Mill Gansville / Tannehill Comm Cg,LDC,D,Winn,LA,Atmos Energy Corporation,888,-92.44523,31.89814,snap_to_line,0.4,middle of the line in Winn
+gulf_south,3477,Haughton (To Texas Gas),INT,D,Bossier,LA,"Texas Gas Transmission, LLC",81000,-93.49094,32.53041,place_snap,0.5,Haughton snapped 1.3 km
+gulf_south,3492,Farmers Grain Terminal Inc. @ Mound,END,D,Madison,LA,"Farmers Grain Terminal, Inc.",1056,-91.32289,32.41146,snap_to_line,0.4,middle of the line in Madison
+gulf_south,3667,Kalmbach #1 Well,WHD,R,De Soto,LA,"Wynn-Crosby (Texas), LLC",3479,-93.82458,32.18271,snap_to_line,0.4,middle of the line in De Soto
+gulf_south,4089,Sligo Plant (From Enable Midstream),PLT,R,Bossier,LA,"Enable Midstream Partners, LP",42911,-93.52574,32.44279,ghgrp_facility,0.8,Goat Hill Compressor Station (enable)
+gulf_south,4382,Sample #1 & #2 Wells,WHD,R,Red River,LA,"Brammer Engineering, Inc.",15912,-93.18911,32.0834,snap_to_line,0.4,middle of the line in Red River
+gulf_south,4416,Sibley C.P. #5,WHD,R,Webster,LA,KM Gas Marketing LLC,7600,-93.30103,32.55371,place_snap,0.5,Sibley snapped 1.4 km
+gulf_south,4551,Castor Station (From Tet),INT,R,Bienville,LA,"Texas Eastern Transmission, LP",155000,-93.06626,32.29132,station_match,0.9,Castor
+gulf_south,4691,Delhi Plant - Ngs Sub Corp,PLT,R,Richland,LA,"Denbury Onshore, LLC",3949,-91.47903,32.47272,place_snap,0.5,Delhi snapped 2.4 km
+gulf_south,4695,West Carroll (From Tet),INT,R,West Carroll,LA,"Texas Eastern Transmission, LP",12221,-91.4877,32.6475,interconnect,0.7,Texas Eastern Trans Co within 0.00 km
+gulf_south,4708,Erath (From Sea Robin),INT,R,Vermilion,LA,"Sea Robin Pipeline Company, LLC",477936,-92.0576,29.8921,interconnect,0.7,Sea Robin Pipeline within 0.00 km
+gulf_south,6355,Chemtura - Lake Charles,END,D,Calcasieu,LA,"Delta Energy Resources, LLC",737,-93.19542,30.23036,snap_to_line,0.4,middle of the line in Calcasieu
+gulf_south,6366,Goodrich (From Kinder Morgan),INT,R,Polk,TX,"Kinder Morgan Texas Pipeline, Inc.",50000,-94.9385,30.60847,station_match,0.9,Goodrich #2
+gulf_south,6611,Misc Area 01 130 Aggregate,LDC,D,Copiah,MS,"Delta Mississippi Gas Company, LLC",9908,-90.32906,31.87197,snap_to_line,0.4,middle of the line in Copiah
+gulf_south,6612,Laurel Aggregate,LDC,D,Jones,MS,"Delta Mississippi Gas Company, LLC",74289,-89.1305,31.6431,place_snap,0.5,Laurel snapped 5.5 km
+gulf_south,6613,Brookhaven Aggregate,LDC,D,Lincoln,MS,"Delta Mississippi Gas Company, LLC",74074,-90.39464,31.57142,place_snap,0.5,Brookhaven snapped 4.7 km
+gulf_south,6615,Pearl River Aggregate,LDC,D,St Tammany,LA,"Delta South Louisiana Gas Company, LLC",1500,-89.76882,30.36876,place_snap,0.5,Pearl River snapped 2.3 km
+gulf_south,6616,Stonewall Aggregate,LDC,D,Clarke,MS,"Delta Mississippi Gas Company, LLC",8860,-88.84829,32.15882,place_snap,0.5,Stonewall snapped 5.5 km
+gulf_south,6617,Gulfport Aggregate,LDC,D,Harrison,MS,"Delta Mississippi Gas Company, LLC",116905,-89.06978,30.45381,place_snap,0.5,Gulfport snapped 3.8 km
+gulf_south,6618,Bogalusa Aggregate,LDC,D,Washington,LA,"Delta South Louisiana Gas Company, LLC",30092,-89.84609,30.76648,place_snap,0.5,Bogalusa snapped 1.8 km
+gulf_south,6619,Wiggins Aggregate,LDC,D,Stone,MS,"Delta Mississippi Gas Company, LLC",6953,-89.11933,30.94634,place_snap,0.5,Wiggins snapped 10.2 km
+gulf_south,6620,San Augustine Aggregate,LDC,D,San Augustine,TX,CenterPoint Energy Resources Corp.,20,-94.08491,31.53749,place_snap,0.5,San Augustine snapped 2.6 km
+gulf_south,6621,New Iberia Aggregate,LDC,D,Iberia,LA,"Delta South Louisiana Gas Company, LLC",46395,-91.83464,29.98876,place_snap,0.5,New Iberia snapped 2.3 km
+gulf_south,6622,Franklin Aggregate,LDC,D,St Mary,LA,"Delta South Louisiana Gas Company, LLC",49638,-91.52983,29.76729,place_snap,0.5,Franklin snapped 2.8 km
+gulf_south,6623,Avoyelles-Rapides Aggregate,LDC,D,Avoyelles,LA,"Delta South Louisiana Gas Company, LLC",6468,-92.16592,30.91667,snap_to_line,0.4,middle of the line in Avoyelles
+gulf_south,6624,Southwest La Aggregate 06,LDC,D,Calcasieu,LA,"Delta South Louisiana Gas Company, LLC",109032,-93.19542,30.23036,snap_to_line,0.4,middle of the line in Calcasieu
+gulf_south,6625,Oakdale Aggregate,LDC,D,Allen,LA,"Delta South Louisiana Gas Company, LLC",31913,-92.64841,30.80287,place_snap,0.5,Oakdale snapped 1.7 km
+gulf_south,6626,Crowley Aggregate,LDC,D,Acadia,LA,"Delta South Louisiana Gas Company, LLC",50242,-92.37187,30.2419,place_snap,0.5,Crowley snapped 2.7 km
+gulf_south,6627,Longview Aggregate,LDC,D,Gregg,TX,CenterPoint Energy Resources Corp.,45637,-94.76434,32.5122,place_snap,0.5,Longview snapped 0.9 km
+gulf_south,6628,Tyler Aggregate,LDC,D,Smith,TX,CenterPoint Energy Resources Corp.,2550,-95.2639,32.3533,place_snap,0.5,Tyler snapped 5.7 km
+gulf_south,6629,Henderson Aggregate,LDC,D,Rusk,TX,CenterPoint Energy Resources Corp.,73692,-94.79299,32.15711,place_snap,0.5,Henderson snapped 0.5 km
+gulf_south,6630,Carthage Aggregate,LDC,D,Panola,TX,CenterPoint Energy Resources Corp.,824,-94.31841,32.16959,place_snap,0.5,Carthage snapped 2.6 km
+gulf_south,6631,Crockett Aggregate,LDC,D,Houston,TX,CenterPoint Energy Resources Corp.,17797,-95.45663,31.3171,place_snap,0.5,Crockett snapped 0.0 km
+gulf_south,6633,Misc Area 08-266 Aggregate,LDC,D,Panola,TX,CenterPoint Energy Resources Corp.,12939,-94.23299,32.30214,snap_to_line,0.4,middle of the line in Panola
+gulf_south,6634,Tatum Aggregate,LDC,D,Rusk,TX,CenterPoint Energy Resources Corp.,1250,-94.51499,32.32018,place_snap,0.5,Tatum snapped 0.6 km
+gulf_south,6638,Nacogdoches Aggregate,LDC,D,Nacogdoches,TX,CenterPoint Energy Resources Corp.,32077,-94.567,31.5808,place_snap,0.5,Nacogdoches snapped 8.8 km
+gulf_south,6639,Jasper Aggregate,LDC,D,Jasper,TX,CenterPoint Energy Resources Corp.,12517,-93.95238,30.92439,place_snap,0.5,Jasper snapped 3.9 km
+gulf_south,6640,Houston Aggregate,LDC,D,Harris,TX,CenterPoint Energy Resources Corp.,98810,-95.60882,29.92064,snap_to_line,0.4,middle of the line in Harris
+gulf_south,6641,Livingston Aggregate,LDC,D,Polk,TX,CenterPoint Energy Resources Corp.,8362,-94.91047,30.7037,place_snap,0.5,Livingston snapped 2.7 km
+gulf_south,6642,Opelousas Aggregate,LDC,D,St Landry,LA,"Delta South Louisiana Gas Company, LLC",53346,-92.04317,30.53255,place_snap,0.5,Opelousas snapped 3.8 km
+gulf_south,6643,Richton Aggregate,LDC,D,Jones,MS,"Delta Mississippi Gas Company, LLC",3474,-89.24914,31.7938,snap_to_line,0.4,middle of the line in Jones
+gulf_south,6644,Tyler #5 Aggregate,LDC,D,Smith,TX,CenterPoint Energy Resources Corp.,10,-95.2639,32.3533,place_snap,0.5,Tyler snapped 5.7 km
+gulf_south,6645,Colmesneil Aggregate,LDC,D,Tyler,TX,CenterPoint Energy Resources Corp.,210,-94.44482,30.94332,place_snap,0.5,Colmesneil snapped 4.3 km
+gulf_south,6646,Center Aggregate,LDC,D,Shelby,TX,CenterPoint Energy Resources Corp.,24082,-94.13439,31.79563,place_snap,0.5,Center snapped 4.3 km
+gulf_south,6684,Denham Springs #4 City Gate,LDC,D,Livingston,LA,"Denham Springs, Louisiana, City Of",10584,-91.03688,30.43728,place_snap,0.5,Denham Springs snapped 8.5 km
+gulf_south,6861,Bienville (From Panenergy),INT,R,Bienville,LA,"DCP Midstream, LP",26154,-92.97548,32.36296,place_snap,0.5,Bienville snapped 0.1 km
+gulf_south,7051,Black Bayou Central Facility,WHD,R,Nacogdoches,TX,Buffco Production Inc,24728,-94.52602,31.6501,snap_to_line,0.4,middle of the line in Nacogdoches
+gulf_south,7328,S Bogalusa Ft-Dairyman/Covington Pavers,LDC,D,Washington,LA,"Delta South Louisiana Gas Company, LLC",95,-89.83204,30.82128,snap_to_line,0.4,middle of the line in Washington
+gulf_south,7376,Wilmer Road - South Alabama Utilities,LDC,D,Mobile,AL,"Citronelle,The Utility Board Of The Town",345,-88.08151,30.71355,snap_to_line,0.4,middle of the line in Mobile
+gulf_south,7849,Stevens Utilities-Livingston City Gate,LDC,D,Polk,TX,Rockin M Gas LLC,912,-94.83544,30.94255,snap_to_line,0.4,middle of the line in Polk
+gulf_south,7865,Cellu Tissue Wiggins Mill,END,D,Stone,MS,"Cellu Tissue Holdings, Inc.",4010,-88.88903,30.90941,snap_to_line,0.4,middle of the line in Stone
+gulf_south,8298,Flomaton #1 City Gate,LDC,D,Escambia,AL,South Alabama Gas District,1834,-87.24107,31.00075,place_snap,0.5,Flomaton snapped 1.6 km
+gulf_south,8304,Madden Heirs #1 Well,WHD,R,Bienville,LA,"Mineral Ventures, Inc",13950,-93.08657,32.26529,snap_to_line,0.4,middle of the line in Bienville
+gulf_south,8340,Paradis (From Bridgeline),INT,R,St Charles,LA,"Bridgeline Holdings, LP",25000,-90.32612,29.95325,interconnect,0.7,Bridgeline Holdings Pipeline LP within 0.36 km
+gulf_south,8389,Morton Salt @ Grand Saline,END,D,Van Zandt,TX,"NextEra Energy Services Gas, LLC",6255,-95.79454,32.6875,snap_to_line,0.4,middle of the line in Van Zandt
+gulf_south,8452,Bayou Steel - Montz Delivery,END,D,St John The Baptist,LA,"Arcelormittal Laplace, LLC",7061,-90.46454,30.03686,ghgrp_facility,0.8,"BD LAPLACE, LLC (steel)"
+gulf_south,8455,Raceland (From Texas Eastern),INT,R,Lafourche,LA,"Texas Eastern Transmission, LP",250000,-90.60545,29.67598,interconnect,0.7,Texas Eastern Trans Co within 0.05 km
+gulf_south,8531,Gaston Trust #1 Well,WHD,R,Smith,TX,Big Run Production Company,1980,-95.40962,32.58673,snap_to_line,0.4,middle of the line in Smith
+gulf_south,8544,Lufkin Creosote Plant,END,D,Angelina,TX,Lufkin Creosoting Company,432,-94.69943,31.31391,place_snap,0.5,Lufkin snapped 3.0 km
+gulf_south,8580,Vicksburg City Gate,LDC,D,Warren,MS,"Vicksburg Mississippi, City Of",9931,-90.86018,32.3173,place_snap,0.5,Vicksburg snapped 2.1 km
+gulf_south,8666,Morton Salt,END,D,Iberia,LA,"Delta Energy Resources, LLC",1887,-91.77733,29.89302,snap_to_line,0.4,middle of the line in Iberia
+gulf_south,8715,Simmesport City Gate,LDC,D,Avoyelles,LA,"Simmesport Louisiana, Town Of",880,-92.16592,30.91667,snap_to_line,0.4,middle of the line in Avoyelles
+gulf_south,8828,Luling (To Atmos Energy),INT,D,St Charles,LA,Atmos Energy Corporation,73945,-90.41137,29.92842,place_snap,0.5,Luling snapped 6.5 km
+gulf_south,8835,Delta Asphalt Plt @ Convent,END,D,St James,LA,"Southern Gas Services, Inc.",2112,-90.81375,30.10551,snap_to_line,0.4,middle of the line in St. James
+gulf_south,8999,Bracky Branch C.P.,WHD,R,Red River,LA,ET Gathering & Processing LLC,46528,-93.18911,32.0834,snap_to_line,0.4,middle of the line in Red River
+gulf_south,9080,Dupont - Pontchartrain Plt,END,D,St John The Baptist,LA,E.I. Du Pont De Nemours Company,6500,-90.5241,30.0589,ghgrp_facility,0.8,DU PONT PONTCHARTRAIN WORKS (pont pontchartrain dupont nemours)
+gulf_south,9089,D & L Wood Veneer Plant,END,D,Covington,MS,"D & L, Inc.",1028,-89.72574,31.75125,snap_to_line,0.4,middle of the line in Covington
+gulf_south,9110,Entergy-Atalla Power Plant Del,END,D,Attala,MS,"Entergy Mississippi, LLC",238197,-89.6758,33.0142,ghgrp_facility,0.8,Attala Generating Plant (entergy)
+gulf_south,9123,Tyler Pipe & Foundry - North Plant,END,D,Smith,TX,Tyler Pipe,4180,-95.2639,32.3533,place_snap,0.5,Tyler snapped 5.7 km
+gulf_south,9124,Tyler Pipe & Foundry - South Plant,END,D,Smith,TX,Tyler Pipe,4180,-95.2639,32.3533,place_snap,0.5,Tyler snapped 5.7 km
+gulf_south,9140,Iberville Parish Prison,LDC,D,Iberville,LA,Iberville Parish Natural Gas System,3030,-91.09613,30.22718,snap_to_line,0.4,middle of the line in Iberville
+gulf_south,9141,Little Gypsy Power (To Lp&L),END,D,St Charles,LA,"Entergy Louisiana, LLC",214875,-90.4611,30.0033,ghgrp_facility,0.8,Little Gypsy (little gypsy entergy)
+gulf_south,9143,Cheneyville Field Well,WHD,R,Rapides,LA,Presidio Oil & Gas,2861,-92.26716,31.01971,place_snap,0.5,Cheneyville snapped 2.4 km
+gulf_south,9153,Firestone Plant @ Lake Charles,END,D,Calcasieu,LA,Firestone Synthetic Rubber And Latex Co,10870,-93.40344,30.13955,ghgrp_facility,0.8,FIRESTONE POLYMERS - LAKE CHARLES FACILITY (firestone)
+gulf_south,9154,Sabine Fee #1 Well,WHD,R,Lafourche,LA,Badger Oil Corporation,3281,-90.34388,29.28566,snap_to_line,0.4,middle of the line in Lafourche
+gulf_south,9182,Olla (To Trunkline),INT,D,La Salle,LA,"Trunkline Gas Company, LLC",674870,-92.26199,31.87569,station_match,0.9,Olla
+gulf_south,9230,Ergon Refinery,END,D,Warren,MS,"Ergon Refining, Inc.",14729,-90.90834,32.38637,ghgrp_facility,0.8,ERGON REFINING INC (ergon refining ergon)
+gulf_south,9252,Petroquest Energy,WHD,R,Terrebone,LA,"Brammer Engineering, Inc.",4033,-90.77482,29.29146,snap_to_line,0.4,middle of the line in Terrebonne
+gulf_south,9258,Sterlington Power (To Lp&L ),END,D,Ouachita,LA,"Entergy Louisiana, LLC",74106,-92.05712,32.68878,place_snap,0.5,Sterlington snapped 0.3 km
+gulf_south,9311,Westlake: Lake Charles South Plant,END,D,Calcasieu,LA,Westlake Chemical Energy LLC,192823,-93.26308,30.2297,place_snap,0.5,Westlake snapped 3.5 km
+gulf_south,9314,Cotton Valley City Gate,LDC,D,Webster,LA,"Delta North Louisiana Gas Company, LLC",846,-93.40951,32.8208,place_snap,0.5,Cotton Valley snapped 1.5 km
+gulf_south,9332,West Monroe (From Enable),INT,R,Ouachita,LA,"Enable Gas Transmission, LLC",289114,-92.0059,32.6767,interconnect,0.7,Enable Gas Transmission within 0.00 km
+gulf_south,9351,Trinity Ind @ Longview (To Oncor),END,D,Harrison,TX,"NextEra Energy Services Gas, LLC",1900,-94.48554,32.4365,snap_to_line,0.4,middle of the line in Harrison
+gulf_south,9421,Town Of Flomaton,LDC,D,Escambia,AL,South Alabama Gas District,50,-87.12374,31.04302,snap_to_line,0.4,middle of the line in Escambia
+gulf_south,9429,Sport Pipeline East Baton Rouge,END,D,East Baton Rouge,LA,"Trans Louisiana Gas Pipeline, Inc",78500,-91.0794,30.50373,interconnect,0.7,Florida Gas Trans Co within 0.40 km
+gulf_south,9522,Tifton Aluminum @ Delhi (To Sigco),END,D,Richland,LA,"American Midstream (Midla), LLC",11340,-91.69022,32.53795,snap_to_line,0.4,middle of the line in Richland
+gulf_south,9559,Sonat - Kosciusko Del,INT,D,Attala,MS,"Southern Natural Gas Company, L.L.C.",275500,-89.5155,32.9873,interconnect,0.7,Southern Natural Gas Co within 0.00 km
+gulf_south,9560,Tetco - Kosciusko Del,INT,D,Attala,MS,"Texas Eastern Transmission, LP",1025000,-89.5155,32.9873,interconnect,0.7,Texas Eastern Trans Co within 0.00 km
+gulf_south,9564,Gulf South - Kosci Del,INT,D,Attala,MS,"Gulf South Pipeline Company, LLC",400000,-89.5314,32.96491,snap_to_line,0.4,middle of the line in Attala
+gulf_south,9641,Beckville (From Egpt Texas Pl),INT,R,Panola,TX,Enterprise Texas Pipeline LLC,80000,-94.43924,32.26214,place_snap,0.5,Beckville snapped 2.6 km
+gulf_south,9652,Turtle Bayou Field C.P.,WHD,R,Terrebone,LA,"Petrodome Operating, LLC",32034,-90.77482,29.29146,snap_to_line,0.4,middle of the line in Terrebonne
+gulf_south,9694,Bully Camp Fld Gas Lift Operations,END,D,Lafourche,LA,Badger Oil Corporation,3355,-90.34388,29.28566,snap_to_line,0.4,middle of the line in Lafourche
+gulf_south,9699,East Tx Asphalt Plt @ Center,END,D,Shelby,TX,"Desoto Pipeline Company, Inc.",3600,-94.13505,31.80434,snap_to_line,0.4,middle of the line in Shelby
+gulf_south,9702,Knox Lee Power (Swepco),END,D,Gregg,TX,Southwestern Electric Power Company,120213,-94.72997,32.42756,snap_to_line,0.4,middle of the line in Gregg
+gulf_south,9741,Nucor Steel Jackson @ Flowood,END,D,Rankin,MS,"Nucor Steel Jackson, Inc.",11633,-90.13728,32.31217,ghgrp_facility,0.8,NUCOR STEEL JACKSON INC (nucor steel nucor)
+gulf_south,9756,W Lake Verret Gas Lift Milagro,END,D,St Martin,LA,"White Oak Energy, LLC Operating Co.",2758,-91.85696,30.19258,snap_to_line,0.4,middle of the line in St. Martin
+gulf_south,9778,Flowood-Terra Mississippi Nitrogen,END,D,Rankin,MS,"Delta Mississippi Gas Company, LLC",36253,-90.05264,32.3325,place_snap,0.5,Flowood snapped 1.9 km
+gulf_south,9779,Diamond B Asphalt Plant,END,D,Tangipahoa,LA,"Delta Energy Resources, LLC",2880,-90.49654,30.59736,snap_to_line,0.4,middle of the line in Tangipahoa
+gulf_south,9803,Loftis Resch Unit,WHD,R,Harrison,TX,NFR Energy LLC,22818,-94.48554,32.4365,snap_to_line,0.4,middle of the line in Harrison
+gulf_south,9807,Uncle Sam Chem Plt - To Imc Global,END,D,St James,LA,"Mosaic Fertilizer, LLC",10598,-90.77,30.02,ghgrp_facility,0.8,Mosaic Uncle Sam Facility (mosaic uncle sam mosaic)
+gulf_south,9829,Atalco Gramercy Refinery,END,D,St James,LA,Atalco Gramercy LLC,103765,-90.89677,30.10846,ghgrp_facility,0.8,CONVENT REFINERY (refinery)
+gulf_south,9842,Bush Corp Plant (To Enbridge),END,D,St Tammany,LA,"American Midstream (Midla), LLC",1925,-89.99015,30.38846,snap_to_line,0.4,middle of the line in St. Tammany
+gulf_south,9851,Southern Hens Plant @ Moselle,END,D,Jones,MS,Southern Hens Inc,4224,-89.30225,31.52688,ghgrp_facility,0.8,"Southern Hens, Inc. (southern hens southern hens)"
+gulf_south,9915,Jackson City Gates Aggregate,LDC,D,Hinds,MS,Atmos Energy Corporation,322964,-90.21294,32.3495,place_snap,0.5,Jackson snapped 3.7 km
+gulf_south,9921,NOPSI Aggregate,LDC,D,St Bernard,LA,"Delta New Orleans Gas Company, LLC",492495,-89.94466,29.95372,snap_to_line,0.4,middle of the line in St. Bernard
+gulf_south,9922,Pensacola Aggregate,LDC,D,Escambia,FL,"Pensacola, Florida, City Of",180715,-87.21681,30.49275,place_snap,0.5,Pensacola snapped 6.3 km
+gulf_south,9929,Bay Minette Aggregate,LDC,D,Baldwin,AL,North Baldwin Utilities,12637,-87.75727,30.77706,place_snap,0.5,Bay Minette snapped 13.1 km
+gulf_south,9930,Pascagoula Aggregate,LDC,D,Jackson,MS,City Of Pascagoula Ms(Agent Services),41309,-88.71351,30.50266,snap_to_line,0.4,middle of the line in Jackson
+gulf_south,9931,Brewton Aggregate,LDC,D,Escambia,AL,"Brewton Alabama, City Of",20179,-87.05621,31.06396,place_snap,0.5,Brewton snapped 5.4 km
+gulf_south,9959,Canton Municipal Aggregate,LDC,D,Madison,MS,Canton Municipal Utilities,13691,-90.1331,32.5762,place_snap,0.5,Canton snapped 9.8 km
+gulf_south,9960,Moss Point Aggregate,LDC,D,Jackson,MS,Moss Point City Of,17405,-88.57438,30.54037,place_snap,0.5,Moss Point snapped 13.3 km
+gulf_south,9961,Hattiesburg Aggregate,LDC,D,Forrest,MS,Spire Mississippi Inc.,73100,-89.29862,31.35262,place_snap,0.5,Hattiesburg snapped 5.3 km
+gulf_south,9962,Collins Aggregate,LDC,D,Covington,MS,Spire Mississippi Inc.,7248,-89.5918,31.62904,place_snap,0.5,Collins snapped 3.1 km
+gulf_south,9963,D'Lo Aggregate,LDC,D,Simpson,MS,Spire Mississippi Inc.,600,-89.90483,31.98502,place_snap,0.5,D'Lo snapped 0.4 km
+gulf_south,9964,East Jackson Aggregate,LDC,D,Rankin,MS,Spire Mississippi Inc.,1657,-90.07616,32.23816,snap_to_line,0.4,middle of the line in Rankin
+gulf_south,9965,Magee Aggregate,LDC,D,Simpson,MS,Spire Mississippi Inc.,5340,-89.67592,31.90369,place_snap,0.5,Magee snapped 6.5 km
+gulf_south,9966,Mendenhall Aggregate,LDC,D,Simpson,MS,Spire Mississippi Inc.,2020,-89.86853,31.9681,place_snap,0.5,Mendenhall snapped 0.8 km
+gulf_south,9967,Mt Olive Aggregate,LDC,D,Covington,MS,Spire Mississippi Inc.,3096,-89.72574,31.75125,snap_to_line,0.4,middle of the line in Covington
+gulf_south,9968,Sanford Aggregate,LDC,D,Covington,MS,Spire Mississippi Inc.,185,-89.72574,31.75125,snap_to_line,0.4,middle of the line in Covington
+gulf_south,9969,Seminary Aggregate,LDC,D,Covington,MS,Spire Mississippi Inc.,588,-89.51007,31.54999,place_snap,0.5,Seminary snapped 1.3 km
+gulf_south,9972,Mobile Gas Service Aggregate,LDC,D,Mobile,AL,Spire Gulf Inc.,3310,-88.11681,30.68746,place_snap,0.5,Mobile snapped 2.3 km
+gulf_south,10128,Dequincy Aggregate,LDC,D,Calcasieu,LA,"De Quincy, City Of",19392,-93.45156,30.43062,place_snap,0.5,DeQuincy snapped 2.1 km
+gulf_south,10129,Kinder Aggregate,LDC,D,Allen,LA,"Kinder, Town Of",4116,-92.87743,30.49528,place_snap,0.5,Kinder snapped 2.8 km
+gulf_south,10130,Livingston Parish Aggregate 04,LDC,D,Livingston,LA,Livingston Parish Gas Utility District #1,3652,-90.74394,30.49459,place_snap,0.5,Livingston snapped 0.3 km
+gulf_south,10131,Oberlin Aggregate,LDC,D,Allen,LA,"Delta South Louisiana Gas Company, LLC",792,-92.7977,30.61894,place_snap,0.5,Oberlin snapped 2.5 km
+gulf_south,10132,St James Parish Aggregate 03,LDC,D,St James,LA,St James Parish Gas & Water Distribution,10772,-90.81375,30.10551,snap_to_line,0.4,middle of the line in St. James
+gulf_south,10134,Washington Aggregate 05,LDC,D,St Landry,LA,"Washington, Town Of",9660,-92.06512,30.61452,place_snap,0.5,Washington snapped 0.5 km
+gulf_south,10135,Westlake La Aggregate,LDC,D,Calcasieu,LA,"Westlake, City Of",10929,-93.26308,30.2297,place_snap,0.5,Westlake snapped 3.5 km
+gulf_south,10144,Goodrich (From Ngpl),INT,R,Polk,TX,Natural Gas Pipeline Company of America,175000,-94.9385,30.60847,station_match,0.9,Goodrich #2
+gulf_south,10166,Avoyelles Rapides Aggregate,LDC,D,Avoyelles,LA,"Delta South Louisiana Gas Company, LLC",1400,-92.16592,30.91667,snap_to_line,0.4,middle of the line in Avoyelles
+gulf_south,10168,Huntsville Aggregate,LDC,D,Walker,TX,CenterPoint Energy Resources Corp.,750,-95.47117,30.66847,place_snap,0.5,Huntsville snapped 8.7 km
+gulf_south,10169,Tyler-Aggregate,LDC,D,Smith,TX,CenterPoint Energy Resources Corp.,24123,-95.2639,32.3533,place_snap,0.5,Tyler snapped 5.7 km
+gulf_south,10170,Tenaha Aggregate,LDC,D,Shelby,TX,CenterPoint Energy Resources Corp.,1920,-94.2303,31.9687,place_snap,0.5,Tenaha snapped 3.1 km
+gulf_south,10175,Flomaton (Sgt)-Alabama River Pulp,END,D,Escambia,AL,"Bay Gas Storage Company, LLC",33190,-87.24107,31.00075,place_snap,0.5,Flomaton snapped 1.6 km
+gulf_south,10287,Winona City Gate,INT,D,Smith,TX,Magnum Gas Marketing LLC,7032,-95.1498,32.5935,place_snap,0.5,Winona snapped 11.4 km
+gulf_south,10314,Dreher Plant @ Bastrop (Sigco),INT,D,Morehouse,LA,"American Midstream (Midla), LLC",1392,-91.83004,32.59893,snap_to_line,0.4,middle of the line in Morehouse
+gulf_south,10333,Air Liquide Algus,END,D,Ascension,LA,Air Liquide Large Industries U.S. LP,25425,-91.0027,30.21608,ghgrp_facility,0.8,AIR LIQUIDE GEISMAR UTILITY SERVICES (air liquide air liquide)
+gulf_south,10336,Mobil Natural: Intracoastal Loading Dock,END,D,St Mary,LA,ExxonMobil Oil Corporation,2357,-91.30837,29.71301,ghgrp_facility,0.8,CALUMET GAS PLANT (mobil)
+gulf_south,10394,Assumption Parish (From Lgs),INT,R,Assumption,LA,Lgs Natural Gas Company,95317,-91.01007,29.99695,snap_to_line,0.4,middle of the line in Assumption
+gulf_south,10401,Bistineau Injection,STR,SI,Bienville,LA,"Gulf South Pipeline Company, LLC",519000,-93.35938,32.37807,station_match,0.9,Bistineau
+gulf_south,10402,Bistineau Withdrawal,STR,SW,Bienville,LA,"Gulf South Pipeline Company, LLC",970000,-93.35938,32.37807,station_match,0.9,Bistineau
+gulf_south,10675,Pirkey Power Plant (To Swepco),END,D,Harrison,TX,Southwestern Electric Power Company,22093,-94.4852,32.4607,ghgrp_facility,0.8,H W Pirkey Power Plant (pirkey electric electric)
+gulf_south,10676,Meraux Refinery Valero,END,D,St Bernard,LA,"Valero Refining- New Orleans, L.L.C.",27304,-89.99764,29.95374,ghgrp_facility,0.8,AMERICAN SUGAR REFINING INC - Chalmette Refinery (refining refinery)
+gulf_south,10708,Allentown - Four Square Gas,INT,R,Angelina,TX,,17607,-94.70745,31.29464,snap_to_line,0.4,middle of the line in Angelina
+gulf_south,10709,Frito-Lay Rosenberg Plant,END,D,Fort Bend,TX,"Frito-Lay, Inc.",1299,-95.8162,29.51972,snap_to_line,0.4,middle of the line in Fort Bend
+gulf_south,10715,West Monroe Aggregate,LDC,D,Ouachita,LA,Atmos Energy Corporation,130482,-92.20223,32.51619,place_snap,0.5,West Monroe snapped 4.8 km
+gulf_south,10717,Gloster Farm Aggregate,LDC,D,Union,LA,Atmos Energy Corporation,175,-92.29757,32.70624,snap_to_line,0.4,middle of the line in Union
+gulf_south,10718,North Louisiana TBS Aggregate,LDC,D,West Carroll,LA,Atmos Energy Corporation,1022,-91.45099,32.72845,snap_to_line,0.4,middle of the line in West Carroll
+gulf_south,10719,Northeast Louisiana Aggregate,LDC,D,West Carroll,LA,Atmos Energy Corporation,68250,-91.45099,32.72845,snap_to_line,0.4,middle of the line in West Carroll
+gulf_south,10720,Hammond/Ponchatoula Aggregate,LDC,D,Tangipahoa,LA,Atmos Energy Corporation,51956,-90.48428,30.50316,place_snap,0.5,Hammond snapped 2.8 km
+gulf_south,10721,Amite/Indep Aggregate,LDC,D,Tangipahoa,LA,Atmos Energy Corporation,13048,-90.49654,30.59736,snap_to_line,0.4,middle of the line in Tangipahoa
+gulf_south,10722,Slidell Aggregate,LDC,D,St Tammany,LA,Atmos Energy Corporation,159148,-89.78644,30.29063,place_snap,0.5,Slidell snapped 0.4 km
+gulf_south,10723,Mandeville Aggregate,LDC,D,St Tammany,LA,Atmos Energy Corporation,42560,-90.03936,30.33204,place_snap,0.5,Mandeville snapped 8.1 km
+gulf_south,10724,Delacroix/B.Chasse/Reserve Agg,LDC,D,Plaquemines,LA,Atmos Energy Corporation,87401,-89.44241,29.38539,snap_to_line,0.4,middle of the line in Plaquemines
+gulf_south,10725,Buras / Venice Aggregate,LDC,D,Plaquemines,LA,Atmos Energy Corporation,15863,-89.51978,29.35757,place_snap,0.5,Buras snapped 0.6 km
+gulf_south,10726,Goodwood/Webber Aggregate,LDC,D,East Baton Rouge,LA,Atmos Energy Corporation,37805,-91.07297,30.4936,snap_to_line,0.4,middle of the line in East Baton Rouge
+gulf_south,10821,Boutte-Luling-Des Allemands Agg,LDC,D,St Charles,LA,Atmos Energy Corporation,7696,-90.42455,29.90954,place_snap,0.5,Boutte snapped 4.2 km
+gulf_south,11291,Farmerville Aggregate,LDC,D,Union,LA,"Delta North Louisiana Gas Company, LLC",2721,-92.395,32.70442,place_snap,0.5,Farmerville snapped 7.9 km
+gulf_south,11303,Meridian South City Gate,LDC,D,Lauderdale,MS,Atmos Energy Corporation,38781,-88.7927,32.3239,place_snap,0.5,Meridian snapped 11.8 km
+gulf_south,11314,Lafayette Aggregate 05,LDC,D,Lafayette,LA,Atmos Energy Corporation,31200,-92.06976,30.21483,place_snap,0.5,Lafayette snapped 4.0 km
+gulf_south,11315,Many Etal Aggregate,LDC,D,Sabine,LA,Atmos Energy Corporation,13630,-93.49657,31.58691,place_snap,0.5,Many snapped 3.0 km
+gulf_south,11316,D'Arbonne Hills Aggregate,LDC,D,Ouachita,LA,Atmos Energy Corporation,2060,-92.20706,32.47877,snap_to_line,0.4,middle of the line in Ouachita
+gulf_south,11573,Boise Plywood Plant,END,D,Allen,LA,"Delta Energy Resources, LLC",5232,-92.6769,30.7844,ghgrp_facility,0.8,Boise Cascade Wood Products - Oakdale Operations (boise boise)
+gulf_south,11586,Ballard-Hudson Poultry (To Tenngpl),END,D,Lawrence,MS,"Tennessee Gas Pipeline Company, L.L.C.",15966,-90.1972,31.6472,snap_to_line,0.4,middle of the line in Lawrence
+gulf_south,11648,South Coast Aggregate,LDC,D,Lafourche,LA,South Coast Gas Co Inc,24101,-90.34388,29.28566,snap_to_line,0.4,middle of the line in Lafourche
+gulf_south,11673,Longview Plt (From Midcoast Pipelines),INT,R,Gregg,TX,Midcoast Pipelines (East Texas) L.P.,50000,-94.72601,32.45655,station_match,0.9,Longview #2
+gulf_south,11745,International Paper @ Mansfield,END,D,De Soto,LA,International Paper Company,57893,-93.55991,32.15657,ghgrp_facility,0.8,International Paper - Mansfield Mill (international paper international paper)
+gulf_south,11869,Basf Catalysts - Jackson Ms,END,D,Hinds,MS,"NextEra Energy Services Gas, LLC",1920,-90.47343,32.12828,snap_to_line,0.4,middle of the line in Hinds
+gulf_south,12026,Elizabeth NG - Oberlin Farm Taps,LDC,D,Allen,LA,"Elizabeth Natural Gas, Inc.",60,-92.69,30.786,place_snap,0.5,Elizabeth snapped 13.9 km
+gulf_south,12063,Shell: St Rose Refinery,END,D,St Charles,LA,"Shell Energy North America (US), L.P.",7322,-90.42335,29.99904,ghgrp_facility,0.8,SHELL CHEMICAL LP - NORCO CHEMICAL PLANT WEST SITE (shell shell)
+gulf_south,12081,Champion International @ Cantonment,END,D,Escambia,FL,International Paper Company,27684,-87.32294,30.60539,ghgrp_facility,0.8,International Paper - Pensacola Mill (international paper international paper)
+gulf_south,12292,Union Carbide @ Taft,END,D,St Charles,LA,Union Carbide Corporation,65406,-90.4437,29.9829,ghgrp_facility,0.8,St Charles Operations (Taft/Star) Union Carbide Corp (carbide)
+gulf_south,12569,La Pacific Jasper Osb Mill,END,D,Jasper,TX,,3696,-93.92102,30.90852,ghgrp_facility,0.8,Louisiana Pacific Corporation Jasper OSB Mill (pacific osb mill pacific)
+gulf_south,12587,Washington Parish Wards 5/7 Agg,LDC,D,Washington,LA,Washington Parish-Gas Utility Dist #1 Of,1356,-89.83204,30.82128,snap_to_line,0.4,middle of the line in Washington
+gulf_south,12731,Compressor Fuel - Uprc,END,D,Gregg,TX,TGNR East Texas LLC,3175,-94.5947,32.37964,ghgrp_facility,0.8,Oakhill Compressor Station (compressor)
+gulf_south,12775,Westlake Ind - Ethylene Plt,END,D,Calcasieu,LA,Westlake Chemical Energy LLC,50664,-93.37921,30.16178,ghgrp_facility,0.8,WESTLAKE PETROCHEMICALS LP - ETHYLENE MANUFACTURING COMPLEX (PETRO I/PETRO II) (ethylene chemical)
+gulf_south,12776,Westlake Ind - Polymer Plt,END,D,Calcasieu,LA,Westlake Polymers Corporation,11636,-93.26308,30.2297,place_snap,0.5,Westlake snapped 3.5 km
+gulf_south,12780,Teco Polk County - Enterprise,INT,R,Polk,TX,Teco Gas Gathering LLC,110439,-94.83544,30.94255,snap_to_line,0.4,middle of the line in Polk
+gulf_south,12824,Copperfield,LDC,D,Lafayette,LA,Atmos Energy Corporation,290,-92.04652,30.3054,snap_to_line,0.4,middle of the line in Lafayette
+gulf_south,12826,Cypress Bayou Casino (To TransLa),LDC,D,St Mary,LA,Atmos Energy Corporation,114,-91.36893,29.65661,snap_to_line,0.4,middle of the line in St. Mary
+gulf_south,12832,Waskom Plant - Centerpoint,PLT,R,Harrison,TX,"Enable Midstream Partners, LP",28004,-94.187,32.4514,interconnect,0.7,Enable Gas Transmission within 0.00 km
+gulf_south,12833,Mobil Refin - Chalmette,END,D,St Bernard,LA,Pbf Holding Company LLC,222151,-89.83326,29.86859,ghgrp_facility,0.8,Toca Gas Processing Plant (mobil)
+gulf_south,12844,Denbury Conroe Plant Cp,PLT,R,Montgomery,TX,"VR6-Conroe, LP",9007,-95.3738,30.26364,ghgrp_facility,0.8,Conroe Gas Processing Plant (denbury)
+gulf_south,13460,Warren Asphalt (To Entex),END,D,Harrison,MS,"Delta Mississippi Gas Company, LLC",8665,-89.15512,30.45241,snap_to_line,0.4,middle of the line in Harrison
+gulf_south,13472,Nachez Road - S.E.Alabama Utilities,LDC,D,Mobile,AL,Southeast Alabama Gas District,20,-88.34055,30.6106,interconnect,0.7,Southeast Supply Header Pipeline Co within 0.09 km
+gulf_south,13484,West Trout Creek Field,END,D,La Salle,LA,"XTO Energy, Inc.",3064,-92.25873,31.71237,snap_to_line,0.4,middle of the line in LaSalle
+gulf_south,13488,Wiley #1,WHD,R,Smith,TX,Goldston Oil Corporation,4929,-95.40962,32.58673,snap_to_line,0.4,middle of the line in Smith
+gulf_south,15824,Tyson Plant @ Center,END,D,Shelby,TX,Gateway Red Oak LLC,5904,-94.13505,31.80434,snap_to_line,0.4,middle of the line in Shelby
+gulf_south,15872,Nautilus (From Nautilus),INT,R,St Mary,LA,"Nautilus Pipeline Company, L.L.C.",335496,-91.45945,29.7063,interconnect,0.7,Nautilus Pipeline System within 0.01 km
+gulf_south,15898,Dedeaux Road To Centerpoint City Gate,INT,D,Harrison,MS,"Delta Mississippi Gas Company, LLC",2472,-89.15512,30.45241,snap_to_line,0.4,middle of the line in Harrison
+gulf_south,15903,Jackson County (From Destin),INT,R,Jackson,MS,Destin Pipeline Company LLC,230000,-88.5112,30.55755,interconnect,0.7,Destin Pipeline Offshore (SHELL) within 0.01 km
+gulf_south,15911,Air Liquide @ Geismar,END,D,Ascension,LA,Air Liquide Large Industries U.S. LP,38150,-91.0027,30.21608,ghgrp_facility,0.8,AIR LIQUIDE GEISMAR UTILITY SERVICES (air liquide geismar air liquide)
+gulf_south,15912,Duke - Mobile Bay,PLT,R,Mobile,AL,"Dcp Midstream, LLC",181507,-88.08151,30.71355,snap_to_line,0.4,middle of the line in Mobile
+gulf_south,15935,Pig Trap Yard,LDC,D,Harrison,MS,"Delta Mississippi Gas Company, LLC",3572,-89.15512,30.45241,snap_to_line,0.4,middle of the line in Harrison
+gulf_south,17114,Santa Rosa (From FGT) FFP,INT,R,Santa Rosa,FL,"Florida Gas Transmission Company, LLC",52000,-87.03918,30.53658,snap_to_line,0.4,middle of the line in Santa Rosa
+gulf_south,17149,Williams Fld Service - Mobile Bay,PLT,R,Mobile,AL,Williams Field Services - Gulf Coast Co,312794,-88.17722,30.40056,ghgrp_facility,0.8,WILLIAMS MOBILE BAY GAS PROCESSING FACILITY (williams williams)
+gulf_south,17157,Shell-Yellowhammer - Mobile Bay,PLT,R,Mobile,AL,"Shell Energy North America (US), L.P.",310924,-88.13056,30.4025,ghgrp_facility,0.8,Yellowhammer Gas Plant (yellowhammer)
+gulf_south,17160,Pilgrim S Pride Feed Mill,END,D,Shelby,TX,CenterPoint Energy Resources Corp.,2500,-94.13505,31.80434,snap_to_line,0.4,middle of the line in Shelby
+gulf_south,17568,CEGT Bistineau Delivery,LDC,D,Bienville,LA,"Enable Gas Transmission, LLC",100000,-93.30035,32.3378,interconnect,0.7,Enable Gas Transmission within 0.13 km
+gulf_south,17576,Aquasition Llc Delivery,END,D,Mobile,AL,Aquasition LLC,31162,-88.08151,30.71355,snap_to_line,0.4,middle of the line in Mobile
+gulf_south,17589,Scotlandville (To Midla),INT,D,East Baton Rouge,LA,Mid Louisiana Gas Transmission Company,78500,-91.07297,30.4936,snap_to_line,0.4,middle of the line in East Baton Rouge
+gulf_south,20470,Acadian St Charles Parish (To Acadian),INT,D,St Charles,LA,Acadian Gas Pipeline System,100000,-90.33453,29.95577,interconnect,0.7,Acadian Gas Pipeline Sys within 0.13 km
+gulf_south,20476,BR/NO St Rose-Marchand,LDC,D,St James,LA,Atmos Energy Corporation,52367,-90.81375,30.10551,snap_to_line,0.4,middle of the line in St. James
+gulf_south,20477,Fort Johnson Aggregate (Ft Polk) Aggregate,LDC,D,Vernon,LA,United States Of America Ft Johnson,36760,-93.27405,31.01584,snap_to_line,0.4,middle of the line in Vernon
+gulf_south,20529,Plant Daniels (Power Plant),END,D,Jackson,MS,"Southern Company Services, Inc.",268967,-88.71351,30.50266,snap_to_line,0.4,middle of the line in Jackson
+gulf_south,20546,Texas Petro Gas Lift(Bayou Des Allemands,END,D,St Charles,LA,Texas Petroleum Investment Company,2989,-90.30308,29.94485,snap_to_line,0.4,middle of the line in St. Charles
+gulf_south,20646,St Mary Parish School - Trans La,LDC,D,St Mary,LA,Atmos Energy Corporation,613,-91.36893,29.65661,snap_to_line,0.4,middle of the line in St. Mary
+gulf_south,20666,Northwest La Aggregate,LDC,D,Union,LA,"Delta North Louisiana Gas Company, LLC",250,-92.29757,32.70624,snap_to_line,0.4,middle of the line in Union
+gulf_south,20709,Bayou Dinde City Gate,INT,D,Calcasieu,LA,"Delta South Louisiana Gas Company, LLC",5690,-93.19542,30.23036,snap_to_line,0.4,middle of the line in Calcasieu
+gulf_south,20740,Claiborne Parish Prison (To Arkla),LDC,D,Claiborne,LA,"Delta North Louisiana Gas Company, LLC",2144,-93.00876,32.80609,snap_to_line,0.4,middle of the line in Claiborne
+gulf_south,20764,Byram City Gate,LDC,D,Hinds,MS,"Delta Mississippi Gas Company, LLC",17201,-90.26979,32.18985,place_snap,0.5,Byram snapped 1.6 km
+gulf_south,20776,Whistler Junction (To Mobile Gas),LDC,D,Mobile,AL,Spire Gulf Inc.,189483,-88.08151,30.71355,snap_to_line,0.4,middle of the line in Mobile
+gulf_south,20777,Jacinto Port (Bayou Sara Junction),LDC,D,Mobile,AL,Spire Gulf Inc.,110212,-88.08151,30.71355,snap_to_line,0.4,middle of the line in Mobile
+gulf_south,20841,Belle Isle,WHD,R,St Mary,LA,Texas Petroleum Investment Company,175629,-91.36893,29.65661,snap_to_line,0.4,middle of the line in St. Mary
+gulf_south,20847,Ip Paper Mill @ Wiggins-Entex,LDC,D,Stone,MS,"Delta Mississippi Gas Company, LLC",231,-88.88903,30.90941,snap_to_line,0.4,middle of the line in Stone
+gulf_south,20862,Calcasieu Power Lake Charles,END,D,Calcasieu,LA,"Entergy Gulf States, Inc.",205704,-93.19542,30.23036,snap_to_line,0.4,middle of the line in Calcasieu
+gulf_south,20874,Palmetto Aggregate,LDC,D,St Landry,LA,"Palmetto, Village Of",10355,-92.07011,30.63313,snap_to_line,0.4,middle of the line in St. Landry
+gulf_south,20922,Union Parish Re-1473 (To Reliant),LDC,D,Union,LA,"Delta North Louisiana Gas Company, LLC",130,-92.29757,32.70624,snap_to_line,0.4,middle of the line in Union
+gulf_south,20934,Friendship Road (From Centerpoint),INT,R,De Soto,LA,"Delta South Louisiana Gas Company, LLC",75197,-93.82458,32.18271,snap_to_line,0.4,middle of the line in De Soto
+gulf_south,20941,Barriere Asphalt,END,D,St Charles,LA,"Delta Energy Resources, LLC",2229,-90.30308,29.94485,snap_to_line,0.4,middle of the line in St. Charles
+gulf_south,20953,Snake Creek/Raymond Pigging (From Tet),INT,R,Hinds,MS,"Texas Eastern Transmission, LP",35620,-90.46538,32.12322,interconnect,0.7,Texas Eastern Trans Co within 0.47 km
+gulf_south,20975,Tom Gaston Road/Jeff Hamilton City Gate,LDC,D,Mobile,AL,Spire Gulf Inc.,3072,-88.08151,30.71355,snap_to_line,0.4,middle of the line in Mobile
+gulf_south,20979,Black Jack Creek,END,D,Santa Rosa,FL,"Black Creek Energy, LLC",3384,-87.03918,30.53658,snap_to_line,0.4,middle of the line in Santa Rosa
+gulf_south,20985,St Mary Parish Drainage Aggregate,LDC,D,St Mary,LA,Louisiana Municipal Natural Gas Purchasing and Distribution Authority,2989,-91.36893,29.65661,snap_to_line,0.4,middle of the line in St. Mary
+gulf_south,21004,Okaloosa Gas Aggregate,LDC,D,Escambia,FL,Okaloosa Gas District,126526,-87.39473,30.50518,snap_to_line,0.4,middle of the line in Escambia
+gulf_south,21008,Johnson Rippy #1-H Well,WHD,R,Nacogdoches,TX,"Team Operating, LLC",5354,-94.52602,31.6501,snap_to_line,0.4,middle of the line in Nacogdoches
+gulf_south,21041,Daphne Alabama City Gate,LDC,D,Baldwin,AL,Utilities Board Of The City Of Daphne,9504,-87.91464,30.74002,place_snap,0.5,Daphne snapped 12.5 km
+gulf_south,21052,Union Parish Farm Tap (Reliant),LDC,D,Union,LA,"Delta North Louisiana Gas Company, LLC",180,-92.29757,32.70624,snap_to_line,0.4,middle of the line in Union
+gulf_south,21054,Mobile Gas Highway 225,LDC,D,Baldwin,AL,Spire Gulf Inc.,365,-87.61227,30.80707,snap_to_line,0.4,middle of the line in Baldwin
+gulf_south,21103,L.O. Peck,LDC,D,Lafayette,LA,Atmos Energy Corporation,101,-92.04652,30.3054,snap_to_line,0.4,middle of the line in Lafayette
+gulf_south,21134,Santa Rosa Cogen Plant,END,D,Santa Rosa,FL,"Santa Rosa Energy Center, LLC",110212,-87.03918,30.53658,snap_to_line,0.4,middle of the line in Santa Rosa
+gulf_south,21139,Davis #1 Legacy Reserves,WHD,R,Shelby,TX,Legacy Reserves Operating Gp LLC,13220,-94.13505,31.80434,snap_to_line,0.4,middle of the line in Shelby
+gulf_south,21169,City Of Foley Aggregate,LDC,D,Baldwin,AL,"Foley, Utilities Board Of The City Of",31606,-87.61227,30.80707,snap_to_line,0.4,middle of the line in Baldwin
+gulf_south,21175,Aep - Eastex Cogen,END,D,Gregg,TX,"AEP Energy Services, Inc.",63647,-94.72997,32.42756,snap_to_line,0.4,middle of the line in Gregg
+gulf_south,21228,Townsend #1 Well,WHD,R,Jackson,LA,White Rock Oil & Gas LLC,3395,-92.56976,32.38097,snap_to_line,0.4,middle of the line in Jackson
+gulf_south,21262,Airport (To Florida Gas),INT,D,Mobile,AL,"Florida Gas Transmission Company, LLC",532734,-88.36311,30.63529,station_match,0.9,Airport Road
+gulf_south,21264,Gulfstream Interconnect,INT,D,Mobile,AL,"Gulfstream Natural Gas System, L.L.C.",315000,-88.08151,30.71355,snap_to_line,0.4,middle of the line in Mobile
+gulf_south,21267,Zeolite Industrial,END,D,Rapides,LA,"Delta South Louisiana Gas Company, LLC",11952,-92.25021,31.42966,snap_to_line,0.4,middle of the line in Rapides
+gulf_south,21289,Oxychem Cogen (St Charles Parish),END,D,St Charles,LA,Occidental Chemical Corporation,130213,-90.30308,29.94485,snap_to_line,0.4,middle of the line in St. Charles
+gulf_south,21293,Red Chute Cp,WHD,R,Bossier,LA,Aethon United BR LP,20576,-93.62441,32.50413,place_snap,0.5,Red Chute snapped 7.4 km
+gulf_south,21349,Marshall Power Plant (Entergy),END,D,Harrison,TX,East Texas Electric Coop &  Ne Texas Electric Coop,173720,-94.35001,32.4474,place_snap,0.5,Marshall snapped 10.2 km
+gulf_south,21365,Entergy Louisiana Baton Rouge Aggregate,LDC,D,East Baton Rouge,LA,"Delta Capital Gas Company, LLC",25852,-91.07297,30.4936,snap_to_line,0.4,middle of the line in East Baton Rouge
+gulf_south,21391,Holly Field Cp #2 Exco,WHD,R,De Soto,LA,"Tgg Pipeline, Ltd.",42512,-93.82458,32.18271,snap_to_line,0.4,middle of the line in De Soto
+gulf_south,21409,Texas Petroleum Kent Bayou Aggregate,WHD,R,Terrebone,LA,Texas Petroleum Investment Company,36213,-90.77482,29.29146,snap_to_line,0.4,middle of the line in Terrebonne
+gulf_south,21416,Section 23 Cp - Aethon United,WHD,R,Bossier,LA,Aethon United BR LP,126360,-93.59926,32.50107,snap_to_line,0.4,middle of the line in Bossier
+gulf_south,21429,Castor Cp,WHD,R,Bienville,LA,Diversified Production LLC,23375,-93.06626,32.29132,station_match,0.9,Castor
+gulf_south,21430,Gus Irwin Cp - Enerquest,WHD,R,Nacogdoches,TX,Enerquest Corporation,15365,-94.52602,31.6501,snap_to_line,0.4,middle of the line in Nacogdoches
+gulf_south,21432,Augustine #1 - Noble Energy,WHD,R,Jefferson Davis,LA,,2425,-92.81633,30.29583,snap_to_line,0.4,middle of the line in Jefferson Davis
+gulf_south,21435,Keystone Gu -  Rockcliff Energy,WHD,R,Nacogdoches,TX,"Team Operating, LLC",8665,-94.52602,31.6501,snap_to_line,0.4,middle of the line in Nacogdoches
+gulf_south,21463,Leakesville - FGT,INT,R,Greene,MS,"Florida Gas Transmission Company, LLC",2500,-88.62003,31.06738,place_snap,0.5,Leakesville snapped 11.0 km
+gulf_south,21486,St Louis Canal Road - Atmos City Gate,LDC,D,Terrebone,LA,Atmos Energy Corporation,2650,-90.77482,29.29146,snap_to_line,0.4,middle of the line in Terrebonne
+gulf_south,21519,Eastman Chemical @ Tyler,END,D,Smith,TX,"NextEra Energy Services Gas, LLC",130,-95.40962,32.58673,snap_to_line,0.4,middle of the line in Smith
+gulf_south,21575,Mallalieu - Denbury,END,D,Lincoln,MS,"Denbury Onshore, LLC",851,-90.42003,31.4928,ghgrp_facility,0.8,Mallalieu EOR Facility (mallalieu denbury)
+gulf_south,21576,Little Creek - Denbury,END,D,Pike,MS,"Denbury Onshore, LLC",418,-90.35831,31.34589,ghgrp_facility,0.8,Little Creek EOR Facility (little denbury)
+gulf_south,21603,Apache Gas Lift,END,D,St Charles,LA,Texas Petroleum Investment Company,1791,-90.30308,29.94485,snap_to_line,0.4,middle of the line in St. Charles
+gulf_south,21611,Cl&F #7-1 Well,WHD,R,Terrebone,LA,"NextEra Energy Services Gas, LLC",37795,-90.77482,29.29146,snap_to_line,0.4,middle of the line in Terrebonne
+gulf_south,21613,Patterson #1,WHD,R,Nacogdoches,TX,Enerquest Corporation,8678,-94.52602,31.6501,snap_to_line,0.4,middle of the line in Nacogdoches
+gulf_south,21621,John Montesano #1,WHD,R,Lafayette,LA,"Pledger West Broussard Operating, LLC",5405,-92.04652,30.3054,snap_to_line,0.4,middle of the line in Lafayette
+gulf_south,21638,Starrville C P,WHD,R,Smith,TX,"NextEra Energy Services Gas, LLC",5041,-95.40962,32.58673,snap_to_line,0.4,middle of the line in Smith
+gulf_south,21659,Patoutville Mill Farm Gate (Sugar Mill),LDC,D,Iberia,LA,"Delta Energy Resources, LLC",1024,-91.77733,29.89302,snap_to_line,0.4,middle of the line in Iberia
+gulf_south,21660,TDC Jasper Prison (To Entex),LDC,D,Jasper,TX,CenterPoint Energy Resources Corp.,240,-93.92977,30.87469,snap_to_line,0.4,middle of the line in Jasper
+gulf_south,21681,Hargis Hebert Power Plant,END,D,Lafayette,LA,"The Energy Authority, Inc.",25000,-91.9923,30.1694,ghgrp_facility,0.8,Hargis-Hebert Electric Generating Statio (hargis hebert)
+gulf_south,21692,Ventex Allar 6-1 #1,WHD,R,Forrest,MS,Ventex Operating Corp,2723,-89.23381,31.3368,snap_to_line,0.4,middle of the line in Forrest
+gulf_south,21705,Chacahoula (From Texas Gas MSN 9473),INT,R,Lafourche,LA,"Texas Gas Transmission, LLC",241000,-90.34388,29.28566,snap_to_line,0.4,middle of the line in Lafourche
+gulf_south,21722,Excalibur 22 #1 Well,WHD,R,Calcasieu,LA,Upstream Energy Services LLC,15680,-93.19542,30.23036,snap_to_line,0.4,middle of the line in Calcasieu
+gulf_south,21724,Burford C P,WHD,R,De Soto,LA,"Petro-Hunt, LLC",15065,-93.82458,32.18271,snap_to_line,0.4,middle of the line in De Soto
+gulf_south,21733,La Minerals Common Point,WHD,R,Bienville,LA,"Grayrock Energy IV, LLC",5701,-93.08657,32.26529,snap_to_line,0.4,middle of the line in Bienville
+gulf_south,21734,Tristate Midstream  Harrison County Tx,WHD,R,Harrison,TX,"Tristate North Louisiana Midstream, LLC",38765,-94.48554,32.4365,snap_to_line,0.4,middle of the line in Harrison
+gulf_south,21737,Calcasieu Industries,END,D,Calcasieu,LA,"Delta Energy Resources, LLC",15509,-93.29241,30.23098,ghgrp_facility,0.8,"PPG Industries, Inc (industries industries)"
+gulf_south,21738,Calcasieu Refining,END,D,Calcasieu,LA,"Delta Energy Resources, LLC",23540,-93.12779,30.2487,ghgrp_facility,0.8,PELICAN REFINING CO LLC (refining refining)
+gulf_south,21741,G L Smith Gas Unit,WHD,R,Rusk,TX,"Orion Pipeline, Ltd.",3674,-94.78182,32.17418,snap_to_line,0.4,middle of the line in Rusk
+gulf_south,21745,Vixen Cp 1,WHD,R,Caldwell,LA,Onshore Royalties LLC,50261,-92.23675,32.09936,snap_to_line,0.4,middle of the line in Caldwell
+gulf_south,21762,Northgate (To Gulf South),INT,R,Smith,TX,Midcoast Pipelines (East Texas) L.P.,17555,-95.25695,32.3724,interconnect,0.7,Enbridge Pipelines (East Texas) within 0.14 km
+gulf_south,21767,Gs To Dcp @ Mile Pole 27,INT,D,Panola,TX,"East Texas Gas Systems, LP",31875,-94.23299,32.30214,snap_to_line,0.4,middle of the line in Panola
+gulf_south,21772,Woodardville Cp #1 (Qep),WHD,R,Bienville,LA,"Haynesville Gathering, LP",14922,-93.08657,32.26529,snap_to_line,0.4,middle of the line in Bienville
+gulf_south,21786,Anadarko Central Compression Panola,END,D,Panola,TX,TGNR East Texas LLC,6756,-94.39943,32.16027,ghgrp_facility,0.8,CENTRAL COMPRESSOR STATION (anadarko)
+gulf_south,21793,Barlow #1 Well,WHD,R,Red River,LA,Qep Field Services Company,7587,-93.18911,32.0834,snap_to_line,0.4,middle of the line in Red River
+gulf_south,21796,Patoutville From Texas Gas,INT,R,Iberia,LA,"Texas Gas Transmission, LLC",200000,-91.77733,29.89302,snap_to_line,0.4,middle of the line in Iberia
+gulf_south,21805,Discovery Gas Transmission,INT,R,Lafourche,LA,Discovery Gas Transmission LLC,250000,-90.33093,29.49095,interconnect,0.7,Discovery Pipeline System within 0.31 km
+gulf_south,21812,Driscoll Gathering Cp,WHD,R,Bienville,LA,Diversified Energy Marketing LLC,47394,-93.08657,32.26529,snap_to_line,0.4,middle of the line in Bienville
+gulf_south,21823,Terrell Gas Unit #1 Well,WHD,R,Harrison,TX,"Stroud Energy, Ltd",7066,-94.48554,32.4365,snap_to_line,0.4,middle of the line in Harrison
+gulf_south,21828,East Vernon Field Cp #1,WHD,R,Jackson,LA,"Tygr Operating Company, LLC",45601,-92.56976,32.38097,snap_to_line,0.4,middle of the line in Jackson
+gulf_south,21829,Almond Bros. Cp,WHD,R,De Soto,LA,"Brammer Engineering, Inc.",7249,-93.82458,32.18271,snap_to_line,0.4,middle of the line in De Soto
+gulf_south,21839,Hodde Etal H Well,WHD,R,Jackson,LA,"Grayrock Energy IV, LLC",33201,-92.56976,32.38097,snap_to_line,0.4,middle of the line in Jackson
+gulf_south,21842,Martinville Field Delivery,END,D,Simpson,MS,"Denbury Onshore, LLC",1598,-89.76714,31.99192,ghgrp_facility,0.8,Martinville EOR Facility (martinville denbury)
+gulf_south,21848,Holly Field Cp #4 Exco,WHD,R,De Soto,LA,"Tgg Pipeline, Ltd.",98207,-93.82458,32.18271,snap_to_line,0.4,middle of the line in De Soto
+gulf_south,21856,Colorado Bend Energy Center,END,D,Wharton,TX,"Exgen Texas Power, LLC",130213,-96.16775,29.18717,snap_to_line,0.4,middle of the line in Wharton
+gulf_south,21860,Lucky Cp,WHD,R,Bienville,LA,"VR6-ArkLa, LP",17688,-93.0134,32.26544,place_snap,0.5,Lucky snapped 2.4 km
+gulf_south,21890,Lincoln Road (From Trunkline),INT,R,Calcasieu,LA,"Trunkline Gas Company, LLC",500000,-92.94863,30.12887,interconnect,0.7,Trunkline Gas Co within 0.11 km
+gulf_south,21905,Apache Corporation Common Point,WHD,R,Nacogdoches,TX,"Patara Oil & Gas, LLC",33789,-94.52602,31.6501,snap_to_line,0.4,middle of the line in Nacogdoches
+gulf_south,21911,Madisonville City Gate #2,LDC,D,Tangipahoa,LA,Madisonville Town Of,5544,-90.49654,30.59736,snap_to_line,0.4,middle of the line in Tangipahoa
+gulf_south,21920,Garner #1 Well,WHD,R,Ouachita,LA,"Ensight Energy Management, LLC",11143,-92.20706,32.47877,snap_to_line,0.4,middle of the line in Ouachita
+gulf_south,21921,Midcoast - Carthage (Expansion),INT,R,Panola,TX,Midcoast Pipelines (East Texas) L.P.,361144,-94.33785,32.11936,station_match,0.9,Carthage Jct
+gulf_south,21922,Energy Transfer - Carthage (Expansion),INT,R,Panola,TX,Houston Pipe Line Company LP,1822782,-94.33785,32.11936,station_match,0.9,Carthage Jct
+gulf_south,21923,Enterprise - Carthage (Expansion),INT,R,Panola,TX,Enterprise Texas Pipeline LLC,570165,-94.33785,32.11936,station_match,0.9,Carthage Jct
+gulf_south,21929,Castor Cp 3,WHD,R,Bienville,LA,"Grayrock Energy IV, LLC",23370,-93.06626,32.29132,station_match,0.9,Castor
+gulf_south,21930,Castor Cp 1,WHD,R,Bienville,LA,"Cypress Operating, Inc.",3974,-93.06626,32.29132,station_match,0.9,Castor
+gulf_south,21954,Woodardville Cp #2 (Qep),WHD,R,Bienville,LA,"Haynesville Gathering, LP",109921,-93.08657,32.26529,snap_to_line,0.4,middle of the line in Bienville
+gulf_south,21967,Aethon United Desoto Aggregate,WHD,R,De Soto,LA,Aethon United BR LP,120442,-93.82458,32.18271,snap_to_line,0.4,middle of the line in De Soto
+gulf_south,21974,Craton Cp,WHD,R,Harrison,TX,Amplify Energy Operating LLC,17052,-94.48554,32.4365,snap_to_line,0.4,middle of the line in Harrison
+gulf_south,21975,Kent Bayou / South Gibson (From Txgt),INT,R,Terrebone,LA,"Texas Gas Transmission, LLC",305564,-90.77482,29.29146,snap_to_line,0.4,middle of the line in Terrebonne
+gulf_south,22089,Livingston Gas & Utility Aggregate,LDC,D,Livingston,LA,Livingston Gas & Utility Co,2027,-90.74394,30.49459,place_snap,0.5,Livingston snapped 0.3 km
+gulf_south,22091,Davis Gu #1,WHD,R,Harrison,TX,Amplify Energy Operating LLC,13531,-94.48554,32.4365,snap_to_line,0.4,middle of the line in Harrison
+gulf_south,22094,Agnes Toup Investment #1 Well,WHD,R,Terrebone,LA,"Castex Energy, Inc.",15089,-90.77482,29.29146,snap_to_line,0.4,middle of the line in Terrebonne
+gulf_south,22110,Gulf Run Delhi,INT,R,Richland,LA,"Gulf Run Transmission, LLC",280000,-91.492,32.40945,station_match,0.9,Delhi
+gulf_south,22111,Delhi (To Sesh),INT,D,Richland,LA,"Southeast Supply Header, LLC",2289786,-91.492,32.40945,station_match,0.9,Delhi
+gulf_south,22113,South Raymond - Expansion (To Tet),INT,D,Hinds,MS,"Texas Eastern Transmission, LP",722288,-90.46538,32.12322,interconnect,0.7,Texas Eastern Trans Co within 0.47 km
+gulf_south,22122,Harrison County (To Dcp),INT,D,Harrison,TX,"Dcp Intrastate Network, LLC",5000,-94.48554,32.4365,snap_to_line,0.4,middle of the line in Harrison
+gulf_south,22124,DCP East Texas Plant (Expansion Area 16),PLT,R,Panola,TX,"EasTrans, LLC",486000,-94.3427,32.2433,ghgrp_facility,0.8,GEORGE GRAY PLANT (dcp)
+gulf_south,22128,Clarke County (To Destin),INT,D,Clarke,MS,Destin Pipeline Company LLC,966906,-88.79339,31.91266,station_match,0.9,Destin
+gulf_south,22129,Tennessee Heidelburg (Expansion),INT,D,Jasper,MS,"Tennessee Gas Pipeline Company, L.L.C.",684476,-88.97543,31.89517,interconnect,0.7,Tennessee Gas Pipeline within 0.43 km
+gulf_south,22151,Mary Russell #3-1 Well,WHD,R,Red River,LA,Aethon United BR LP,24044,-93.18911,32.0834,snap_to_line,0.4,middle of the line in Red River
+gulf_south,22153,Coker Price Cp,WHD,R,Ouachita,LA,"Ensight Energy Management, LLC",11155,-92.20706,32.47877,snap_to_line,0.4,middle of the line in Ouachita
+gulf_south,22159,Southtex Jdp Landfill Gas Plant,WHD,R,Jefferson Davis,LA,"Morrow Energy, LLC",2538,-92.81633,30.29583,snap_to_line,0.4,middle of the line in Jefferson Davis
+gulf_south,22168,Adeline Sugar Factory Etal #1 Well,WHD,R,St Mary,LA,"Castex Energy, Inc.",14559,-91.36893,29.65661,snap_to_line,0.4,middle of the line in St. Mary
+gulf_south,22171,Bta Plant Rec - Carthage (Expansion),PLT,R,Panola,TX,BTA Gas Processing LLC,172007,-94.23299,32.30214,snap_to_line,0.4,middle of the line in Panola
+gulf_south,22182,Montpelier/St Helena (To Fgt),INT,D,St Helena,LA,"Florida Gas Transmission Company, LLC",674870,-90.66261,30.6552,station_match,0.9,Montpelier
+gulf_south,22200,George Cason #1 Well,WHD,R,Nacogdoches,TX,,7874,-94.52602,31.6501,snap_to_line,0.4,middle of the line in Nacogdoches
+gulf_south,22201,Broussard Heirs #1,WHD,R,Vermilion,LA,"Precision Holdings, LLC",8704,-92.07681,30.05968,snap_to_line,0.4,middle of the line in Vermilion
+gulf_south,22323,Dcp East Tx Plant (Legacy Area 8),PLT,R,Panola,TX,"EasTrans, LLC",538103,-94.3427,32.2433,ghgrp_facility,0.8,GEORGE GRAY PLANT (dcp)
+gulf_south,22331,Paris (From Atmos North Texas),INT,R,Lamar,TX,"Atmos Pipeline and Storage, LLC",400000,-95.64631,33.51787,station_match,0.9,Gulf South Pipeline - Paris Station
+gulf_south,22332,Sterlington (To Texas Gas),INT,D,Ouachita,LA,"Texas Gas Transmission, LLC",1127388,-92.08705,32.67185,station_match,0.9,Sterlington #2
+gulf_south,22333,North Delhi (To Columbia Gulf),INT,D,Madison,LA,"Columbia Gulf Transmission, LLC",1166583,-91.47828,32.47657,interconnect,0.7,Columbia Gulf Pipeline within 1.28 km
+gulf_south,22369,Joe Mchugh,WHD,R,Lafourche,LA,"Castex Energy, Inc.",12734,-90.34388,29.28566,snap_to_line,0.4,middle of the line in Lafourche
+gulf_south,22373,Central C P,WHD,R,La Salle,LA,"XTO Energy, Inc.",21204,-92.25873,31.71237,snap_to_line,0.4,middle of the line in LaSalle
+gulf_south,22382,Thornlake Aethon,WHD,R,Red River,LA,"Haynesville Gathering, LP",79374,-93.18911,32.0834,snap_to_line,0.4,middle of the line in Red River
+gulf_south,22400,Shaw 16-1Well,WHD,R,Webster,LA,Amplify Energy Operating LLC,6396,-93.32092,32.54479,snap_to_line,0.4,middle of the line in Webster
+gulf_south,22401,Bagley C P,WHD,R,De Soto,LA,Diversified Production LLC,20193,-93.82458,32.18271,snap_to_line,0.4,middle of the line in De Soto
+gulf_south,22406,Delhi (To SESH / SNG),INT,D,Richland,LA,"Southern Natural Gas Company, L.L.C.",1109696,-91.492,32.40945,station_match,0.9,Delhi
+gulf_south,22410,Plantation West Cp (Kinderhawk),WHD,R,Red River,LA,KinderHawk Field Services LLC,402989,-93.18911,32.0834,snap_to_line,0.4,middle of the line in Red River
+gulf_south,22484,Martin Field Cp #1,WHD,R,Red River,LA,"Enable Midstream Partners, LP",75762,-93.50317,32.22113,interconnect,0.7,Enable Gas Transmission within 0.45 km
+gulf_south,22493,Air Products Hydrogen @ Garyville,END,D,St John The Baptist,LA,"Air Products and Chemicals, Inc.",122097,-90.64885,30.09959,ghgrp_facility,0.8,AIR PRODUCTS AND CHEMICALS INC - GARYVILLE (air chemicals air chemicals)
+gulf_south,22498,Kosciusko (From Texas Gas),INT,R,Attala,MS,"Texas Gas Transmission, LLC",400000,-89.5071,32.9994,place_snap,0.5,Kosciusko snapped 10.1 km
+gulf_south,22507,Hall Summit C P,WHD,R,Bienville,LA,ET Gathering & Processing LLC,166750,-93.28297,32.24714,station_match,0.9,Hall Summit
+gulf_south,22509,East Texas Renewables Receipt,END,R,Smith,TX,"East Texas Renewables, LLC",6529,-95.40962,32.58673,snap_to_line,0.4,middle of the line in Smith
+gulf_south,22510,East Texas Renewables Delivery,END,D,Smith,TX,"East Texas Renewables, LLC",166750,-95.40962,32.58673,snap_to_line,0.4,middle of the line in Smith
+gulf_south,22511,Stateline Gathering System (Legacy),INT,R,De Soto,LA,"Enterprise Gathering, LLC",388861,-93.82458,32.18271,snap_to_line,0.4,middle of the line in De Soto
+gulf_south,22520,Bolan 27-1 Well,WHD,R,Red River,LA,"Enable Midstream Partners, LP",198495,-93.50317,32.22113,interconnect,0.7,Enable Gas Transmission within 0.45 km
+gulf_south,22523,Kinderhawk Sligo Cp,WHD,R,Bossier,LA,KinderHawk Field Services LLC,4161,-93.59926,32.50107,snap_to_line,0.4,middle of the line in Bossier
+gulf_south,22527,Brushy Bayou Cp - (Legacy),WHD,R,De Soto,LA,ET Gathering & Processing LLC,143000,-93.82458,32.18271,snap_to_line,0.4,middle of the line in De Soto
+gulf_south,22537,Louisiana Delta Farms #1,WHD,R,Lafourche,LA,Louisiana Delta Oil Company LLC,100,-90.34388,29.28566,snap_to_line,0.4,middle of the line in Lafourche
+gulf_south,22545,Holly Field Cp - Chesapeake,WHD,R,De Soto,LA,"Louisiana Midstream Gas Services, LLC",304212,-93.82458,32.18271,snap_to_line,0.4,middle of the line in De Soto
+gulf_south,22546,Kent Bayou Field Cp,WHD,R,Terrebone,LA,,16678,-90.77482,29.29146,snap_to_line,0.4,middle of the line in Terrebonne
+gulf_south,22551,Holly Field Cp - Hawk Field Services,WHD,R,De Soto,LA,KinderHawk Field Services LLC,140074,-93.82458,32.18271,snap_to_line,0.4,middle of the line in De Soto
+gulf_south,22554,Dcp Compressor Delivery,END,D,Panola,TX,"EasTrans, LLC",5175,-94.39943,32.16027,ghgrp_facility,0.8,CENTRAL COMPRESSOR STATION (compressor)
+gulf_south,22561,Plantation West Ii - Expansion,WHD,R,Red River,LA,KinderHawk Field Services LLC,402988,-93.18911,32.0834,snap_to_line,0.4,middle of the line in Red River
+gulf_south,22562,Terrebonne Govt Aggregate,LDC,D,Terrebone,LA,Terrebonne Parish Consolidated Government,42467,-90.77482,29.29146,snap_to_line,0.4,middle of the line in Terrebonne
+gulf_south,22568,Holly Field Cp #5 - Exco,WHD,R,De Soto,LA,"Tgg Pipeline, Ltd.",81674,-93.82458,32.18271,snap_to_line,0.4,middle of the line in De Soto
+gulf_south,22585,Woodardville Cp #3,WHD,R,Bienville,LA,"Haynesville Gathering, LP",87641,-93.08657,32.26529,snap_to_line,0.4,middle of the line in Bienville
+gulf_south,22617,Wiggins #2 Well,WHD,R,Red River,LA,ET Gathering & Processing LLC,66529,-93.18911,32.0834,snap_to_line,0.4,middle of the line in Red River
+gulf_south,22622,Magnolia Cdp (Cefs) Legacy,WHD,R,Bienville,LA,"Enable Midstream Partners, LP",646686,-93.30035,32.3378,interconnect,0.7,Enable Gas Transmission within 0.13 km
+gulf_south,22624,Bregstedt Kuttner #1 Well,WHD,R,Calcasieu,LA,Upstream Energy Services LLC,9038,-93.19542,30.23036,snap_to_line,0.4,middle of the line in Calcasieu
+gulf_south,22630,Bolan 27 Ii - Expansion,WHD,R,Red River,LA,"Enable Midstream Partners, LP",540025,-93.50317,32.22113,interconnect,0.7,Enable Gas Transmission within 0.45 km
+gulf_south,22631,Magnolia Cdp Ii - Expansion,WHD,R,Bienville,LA,"Enable Midstream Partners, LP",592534,-93.30035,32.3378,interconnect,0.7,Enable Gas Transmission within 0.13 km
+gulf_south,22633,Petrodome Pointe A La Hache,END,D,Plaquemines,LA,"Pinnacle Energy, LLC",2664,-89.44241,29.38539,snap_to_line,0.4,middle of the line in Plaquemines
+gulf_south,22636,Logansport Cp 1,WHD,R,De Soto,LA,KinderHawk Field Services LLC,44494,-94.0043,31.9849,place_snap,0.5,Logansport snapped 1.4 km
+gulf_south,22641,Brushy Bayou Cdp Ii - (Expansion),WHD,R,De Soto,LA,ET Gathering & Processing LLC,346327,-93.82458,32.18271,snap_to_line,0.4,middle of the line in De Soto
+gulf_south,22653,Desoto Parish (Etc Field Services),WHD,R,De Soto,LA,ET Gathering & Processing LLC,185443,-93.82458,32.18271,snap_to_line,0.4,middle of the line in De Soto
+gulf_south,22662,Holly Field Cp - Exco (Expanson),WHD,R,De Soto,LA,"Tgg Pipeline, Ltd.",712632,-93.82458,32.18271,snap_to_line,0.4,middle of the line in De Soto
+gulf_south,22681,Dugas & Leblanc Co Ltd #3,WHD,R,Assumption,LA,"Mantle Oil & Gas, LLC",15779,-91.01007,29.99695,snap_to_line,0.4,middle of the line in Assumption
+gulf_south,22682,Davis Brothers 9 #1 Well,WHD,R,Bienville,LA,Will-Drill Production Company Inc,8403,-93.08657,32.26529,snap_to_line,0.4,middle of the line in Bienville
+gulf_south,22701,Football Cp - Haynesville Gathering,WHD,R,Red River,LA,"Haynesville Gathering, LP",47948,-93.18911,32.0834,snap_to_line,0.4,middle of the line in Red River
+gulf_south,22708,Bulldog Panola (Bta Egt Gathering),INT,R,Panola,TX,Bta Etg Gathering LLC,560402,-94.23299,32.30214,snap_to_line,0.4,middle of the line in Panola
+gulf_south,22709,Central Crude Lake Charles,END,D,Calcasieu,LA,"Central Crude, Inc.",4143,-93.19542,30.23036,snap_to_line,0.4,middle of the line in Calcasieu
+gulf_south,22723,Bay Springs (To Sng) Expansion,INT,D,Smith,MS,"Southern Natural Gas Company, L.L.C.",505379,-89.43672,31.92567,interconnect,0.7,Southern Natural Gas Co within 0.48 km
+gulf_south,22748,Acadian - Red River (Expansion),INT,R,Red River,LA,Acadian Gas Pipeline System,574036,-93.18911,32.0834,snap_to_line,0.4,middle of the line in Red River
+gulf_south,22749,Air Products Hydrogen @ Luling,END,D,St Charles,LA,"Air Products and Chemicals, Inc.",134926,-90.34702,29.93061,ghgrp_facility,0.8,Air Products and Chemicals Inc. Luling SMR Facility (air chemicals air chemicals)
+gulf_south,22791,Neil Field Gas Lift (Texas Petroleum),END,D,Beauregard,LA,Texas Petroleum Investment Company,1293,-93.39424,30.75026,snap_to_line,0.4,middle of the line in Beauregard
+gulf_south,22792,Targa Field Service@Gillis,INT,D,Calcasieu,LA,"Targa Louisiana Field Services, LLC",36743,-93.19542,30.23036,snap_to_line,0.4,middle of the line in Calcasieu
+gulf_south,22806,Bistineau Injection Expansion,STR,SI,Bienville,LA,"Gulf South Pipeline Company, LLC",260000,-93.35938,32.37807,station_match,0.9,Bistineau
+gulf_south,22807,Bistineau Withdrawal Expansion,STR,SW,Bienville,LA,"Gulf South Pipeline Company, LLC",471000,-93.35938,32.37807,station_match,0.9,Bistineau
+gulf_south,22810,Wharton (From Enterprise Texas),INT,R,Wharton,TX,Enterprise Texas Pipeline LLC,230000,-96.05522,29.26746,place_snap,0.5,Wharton snapped 7.2 km
+gulf_south,22950,Rosenberg (To Kinder Morgan),LDC,D,Fort Bend,TX,"Kinder Morgan Texas Pipeline, Inc.",12768,-95.83622,29.47265,interconnect,0.7,Kinder Morgan Texas Pipeline Co within 0.17 km
+gulf_south,23018,Edna (From Boardwalk Texas Intrastate),INT,R,Jackson,TX,"Gulf South Pipeline Company, LLC",179329,-96.57529,28.89625,place_snap,0.5,Edna snapped 11.3 km
+gulf_south,23036,Denbury Expansion @ Delhi,END,D,Richland,LA,"Denbury Onshore, LLC",6045,-91.59193,32.44462,ghgrp_facility,0.8,Delhi EOR Facility (denbury)
+gulf_south,23042,Air Products - Norco,END,D,St Charles,LA,"Air Products and Chemicals, Inc.",136981,-90.34702,29.93061,ghgrp_facility,0.8,Air Products and Chemicals Inc. Luling SMR Facility (air chemicals air chemicals)
+gulf_south,23044,Praxair Hydrogen St. Charles/Valero,END,D,St Charles,LA,Linde Inc.,131446,-90.39278,29.98528,ghgrp_facility,0.8,"Valero Refining - New Orleans, L.L.C. (valero valero)"
+gulf_south,23091,Nucor Steel Mill,END,D,St James,LA,"Nucor Steel Louisiana, LLC",141109,-90.86053,30.08131,ghgrp_facility,0.8,Nucor Steel Louisiana LLC (nucor steel nucor)
+gulf_south,23111,Willmut/Lakeview Hattiesburg Delivery,INT,D,Forrest,MS,Spire Mississippi Inc.,20000,-89.23381,31.3368,snap_to_line,0.4,middle of the line in Forrest
+gulf_south,23112,Willmut/Dunn Hattiesburg Delivery,INT,D,Forrest,MS,Spire Mississippi Inc.,5000,-89.23381,31.3368,snap_to_line,0.4,middle of the line in Forrest
+gulf_south,23123,Ldc-Llc Wharton County,END,D,Wharton,TX,"Ldc, LLC",437,-96.16775,29.18717,snap_to_line,0.4,middle of the line in Wharton
+gulf_south,23150,Dte La Gas Sabine Parish,WHD,R,Sabine,LA,"DTM Louisiana Gathering, LLC",38433,-93.52212,31.5697,snap_to_line,0.4,middle of the line in Sabine
+gulf_south,23159,Huntsville Montgomery Gas,END,D,Walker,TX,"Montgomery Gas Transmission, Inc",586,-95.47117,30.66847,place_snap,0.5,Huntsville snapped 8.7 km
+gulf_south,23168,Valero St Charles Aggregate,END,D,St Charles,LA,"Valero Refining- New Orleans, L.L.C.",153487,-90.39278,29.98528,ghgrp_facility,0.8,"Valero Refining - New Orleans, L.L.C. (valero refining valero)"
+gulf_south,23169,Rock Springs (To Transco/Sabal Trail),INT,D,Choctaw,AL,"Sabal Trail Transmission, LLC",1800000,-88.41188,32.02944,snap_to_line,0.4,middle of the line in Choctaw
+gulf_south,23202,NNS-A Houston Aggregate Centerpoint,LDC,D,Harris,TX,CenterPoint Energy Resources Corp.,61851,-95.60882,29.92064,snap_to_line,0.4,middle of the line in Harris
+gulf_south,23204,Huxley Aggregate,LDC,D,Shelby,TX,"Huxley, City Of",4650,-94.13505,31.80434,snap_to_line,0.4,middle of the line in Shelby
+gulf_south,23337,Iowa (Texas Gas),INT,DR,Calcasieu,LA,"Texas Gas Transmission, LLC",80000,-93.01231,30.24192,place_snap,0.5,Iowa snapped 0.1 km
+gulf_south,23350,Jackson County Tx (Texas Eastern),INT,DR,Jackson,TX,"Texas Eastern Transmission, LP",418440,-96.4065,29.0161,interconnect,0.7,Texas Eastern Trans Co within 0.00 km
+gulf_south,23351,Tres Palacios Storage,INT,DR,Wharton,TX,Tres Palacios Gas Storage LLC,1540604,-96.16775,29.18717,snap_to_line,0.4,middle of the line in Wharton
+gulf_south,23352,Bay Gas Storage @ Axis,INT,DR,Mobile,AL,"Bay Gas Storage Company, LLC",185145,-88.08151,30.71355,snap_to_line,0.4,middle of the line in Mobile
+gulf_south,23353,Bay Gas Storage @ Whistler Junction,INT,DR,Mobile,AL,"Bay Gas Storage Company, LLC",189836,-88.15369,30.75898,station_match,0.9,Whistler Jct.
+gulf_south,23354,Delhi (Columbia Gulf),INT,DR,Richland,LA,"Columbia Gulf Transmission, LLC",1489044,-91.492,32.40945,station_match,0.9,Delhi
+gulf_south,23355,Destin (Petal Pipeline),INT,DR,Clarke,MS,Destin Pipeline Company LLC,735000,-88.79339,31.91266,station_match,0.9,Destin
+gulf_south,23358,Enstor Katy Storage,INT,DR,Fort Bend,TX,"Katy Storage And Transportation, L.P.",505000,-95.8162,29.51972,snap_to_line,0.4,middle of the line in Fort Bend
+gulf_south,23359,Kosciusko (Texas Eastern),INT,DR,Attala,MS,"Texas Eastern Transmission, LP",556167,-89.5155,32.9873,interconnect,0.7,Texas Eastern Trans Co within 0.00 km
+gulf_south,23360,Arcadia Gas Storage,INT,DR,Bienville,LA,"Arcadia Gas Storage, LLC",350566,-93.0463,32.4935,place_snap,0.5,Arcadia snapped 13.3 km
+gulf_south,23361,Bobcat Storage,INT,DR,St Landry,LA,"Port Barre Investments, LLC",193772,-92.07011,30.63313,snap_to_line,0.4,middle of the line in St. Landry
+gulf_south,23362,Sesh (Petal Storage),INT,DR,Forrest,MS,"Southeast Supply Header, LLC",1000000,-89.38706,31.41958,interconnect,0.7,Southeast Supply Header Pipeline Co within 0.43 km
+gulf_south,23364,Coastal Bend (Ngpl),INT,DR,Wharton,TX,Natural Gas Pipeline Company of America,889564,-96.16775,29.18717,snap_to_line,0.4,middle of the line in Wharton
+gulf_south,23365,Henry Hub (Sabine),INT,DR,Vermilion,LA,Sabine Pipe Line LLC,640000,-92.0576,29.8921,interconnect,0.7,Sabine LLC within 0.00 km
+gulf_south,23366,Southern Nat (Petal Pipeline),INT,DR,Clarke,MS,"Southern Natural Gas Company, L.L.C.",890331,-88.90527,32.07156,interconnect,0.7,Southern Natural Gas Co within 0.24 km
+gulf_south,23367,Kiln (Tennesse Gas),INT,DR,Hancock,MS,"Tennessee Gas Pipeline Company, L.L.C.",453951,-89.45961,30.42961,station_match,0.9,Kiln
+gulf_south,23368,Coastal Bend (Tennessee Gas),INT,DR,Wharton,TX,"Tennessee Gas Pipeline Company, L.L.C.",889564,-96.00193,29.30339,interconnect,0.7,Tennessee Gas Pipeline within 0.36 km
+gulf_south,23369,Tennessee Gas (Petal Storage),INT,DR,Forrest,MS,"Tennessee Gas Pipeline Company, L.L.C.",824123,-89.29755,30.98993,interconnect,0.7,Tennessee Gas Pipeline within 0.20 km
+gulf_south,23370,Transco (Hattiesburg),INT,DR,Covington,MS,"Transcontinental Gas Pipe Line Company, LLC",400000,-89.4099,31.6272,interconnect,0.7,Transcontinental Gas PL within 0.00 km
+gulf_south,23371,Bosco (Texas Gas),INT,DR,Ouachita,LA,"Texas Gas Transmission, LLC",628777,-92.20706,32.47877,snap_to_line,0.4,middle of the line in Ouachita
+gulf_south,23372,Coastal Bend (Transco),INT,DR,Wharton,TX,"Transcontinental Gas Pipe Line Company, LLC",805890,-96.19357,29.16964,interconnect,0.7,Transcontinental Gas PL within 0.41 km
+gulf_south,23373,Transco (Petal Pipeline),INT,DR,Jasper,MS,"Transcontinental Gas Pipe Line Company, LLC",1468165,-89.01413,31.83056,interconnect,0.7,Transcontinental Gas PL within 0.17 km
+gulf_south,23376,Coastal Bend (Enterprise),INT,DR,Wharton,TX,Enterprise Texas Pipeline LLC,850000,-96.16775,29.18717,snap_to_line,0.4,middle of the line in Wharton
+gulf_south,23377,Bistineau Storage (Enable),INT,DR,Bienville,LA,"Enable Gas Transmission, LLC",125000,-93.35938,32.37807,station_match,0.9,Bistineau
+gulf_south,23378,Leaf River Storage,INT,DR,Jasper,MS,"Leaf River Energy Center, LLC",325125,-89.16668,31.81764,snap_to_line,0.4,middle of the line in Jasper
+gulf_south,23380,BBT Mississippi  (Petal  Storage),INT,DR,Covington,MS,"Bbt Mississippi, LLC",146602,-89.72574,31.75125,snap_to_line,0.4,middle of the line in Covington
+gulf_south,23389,Atmos TX Pipeline (Fort Bend),INT,DR,Fort Bend,TX,"Atmos Pipeline and Storage, LLC",300000,-95.75974,29.64919,interconnect,0.7,Atmos Pipeline - Texas within 0.28 km
+gulf_south,23390,Kosciusko (Southern Natural),INT,DR,Attala,MS,"Southern Natural Gas Company, L.L.C.",131408,-89.5155,32.9873,interconnect,0.7,Southern Natural Gas Co within 0.00 km
+gulf_south,23417,Washington Aggregate 06,LDC,D,St Landry,LA,"Washington, Town Of",500,-92.06512,30.61452,place_snap,0.5,Washington snapped 0.5 km
+gulf_south,23429,Lake Charles Aggregate  Lc 24,LDC,D,Calcasieu,LA,"Delta South Louisiana Gas Company, LLC",1631,-93.21125,30.2302,place_snap,0.5,Lake Charles snapped 3.5 km
+gulf_south,23435,Westlake Aggregate   LC24,LDC,D,Calcasieu,LA,"Westlake, City Of",50,-93.26308,30.2297,place_snap,0.5,Westlake snapped 3.5 km
+gulf_south,23601,Jackson Storage Injection,STR,SI,Rankin,MS,"Gulf South Pipeline Company, LLC",104000,-90.09292,32.30167,station_match,0.9,Jackson
+gulf_south,23602,Jackson Storage Withdrawal,STR,SW,Rankin,MS,"Gulf South Pipeline Company, LLC",303000,-90.09292,32.30167,station_match,0.9,Jackson
+gulf_south,24229,George Co Seme (Merrill To Fgt),INT,D,George,MS,"Florida Gas Transmission Company, LLC",475774,-88.60181,30.83467,snap_to_line,0.4,middle of the line in George
+gulf_south,24244,Abbeville Asphalt Plant System,END,D,Vermilion,LA,"Empirical Marketing & Services Company, LLC",4968,-92.06773,29.98051,place_snap,0.5,Abbeville snapped 5.8 km
+gulf_south,24245,Markwest Carthage [Expansion],INT,R,Panola,TX,"MarkWest Energy East Texas Gas Company, L.L.C.",290000,-94.33785,32.11936,station_match,0.9,Carthage Jct
+gulf_south,24246,Longview Plant (J. Global Energy),PLT,R,Gregg,TX,J. Global Energy Midstream LLC,30170,-94.73285,32.45842,ghgrp_facility,0.8,Joy Global Longview Operations (global)
+gulf_south,24248,Bastrop Line Meter Skid City Gate,LDC,D,Ouachita,LA,Atmos Energy Corporation,15779,-92.20706,32.47877,snap_to_line,0.4,middle of the line in Ouachita
+gulf_south,24251,Pascagoula High Pressure (To Chevron),END,D,Jackson,MS,Chevron U.S.A. Inc.,127781,-88.4938,30.34373,ghgrp_facility,0.8,Chevron Pascagoula Refinery (chevron chevron)
+gulf_south,24255,Methanex Geismer 2,END,D,Ascension,LA,Methanex Louisiana LLC,350427,-91.0207,30.20595,ghgrp_facility,0.8,"Methanex USA, LLC - Geismar Methanol Plant (methanex methanex)"
+gulf_south,24260,Elizabeth Gas Allen Parish Jail,LDC,D,Allen,LA,"Elizabeth Natural Gas, Inc.",360,-92.69,30.786,place_snap,0.5,Elizabeth snapped 13.9 km
+gulf_south,24268,Tlgp Delivery @ Urania,END,D,La Salle,LA,"Delta Energy Resources, LLC",4464,-92.25873,31.71237,snap_to_line,0.4,middle of the line in LaSalle
+gulf_south,24271,Devon Donner 13-11 #1 Well,WHD,R,Ouachita,LA,"C6 Operating, LLC",9790,-92.20706,32.47877,snap_to_line,0.4,middle of the line in Ouachita
+gulf_south,24274,Square Mile Energy Kearns #1 Well,WHD,R,Lafourche,LA,Cokinos Natural Gas Company,17426,-90.34388,29.28566,snap_to_line,0.4,middle of the line in Lafourche
+gulf_south,24287,Colorado Bend Plant (State Hwy 60),END,D,Wharton,TX,"Constellation Energy Generation, LLC",301982,-96.16775,29.18717,snap_to_line,0.4,middle of the line in Wharton
+gulf_south,24300,Chemours Delisle Plt (Centerpoint),END,D,Harrison,MS,"Delta Mississippi Gas Company, LLC",79374,-89.30889,30.38919,ghgrp_facility,0.8,CHEMOURS DELISLE PLANT (chemours chemours)
+gulf_south,24302,Gary City Gate #2,LDC,D,Shelby,TX,"Gary, City Of",1800,-94.13505,31.80434,snap_to_line,0.4,middle of the line in Shelby
+gulf_south,24318,Coastal Bend Hpl Receipt,INT,R,Wharton,TX,Houston Pipe Line Company LP,336634,-96.16775,29.18717,snap_to_line,0.4,middle of the line in Wharton
+gulf_south,24329,Stratton Ridge (To Freeport Lng),LNG,D,Brazoria,TX,"Freeport Lng Development, L.P.",1779129,-95.30867,28.98494,manual,1,"manual 2026-10-01: Freeport LNG Pretreatment Facility (EPA GHGRP 1013753, CR 690, Freeport) where Gulf South delivers feedgas; the rules matched the terminal 6 km south"
+gulf_south,24333,Delhi Franklin Parish (To Tennessee Gas),INT,D,Richland,LA,"Tennessee Gas Pipeline Company, L.L.C.",666250,-91.492,32.40945,station_match,0.9,Delhi
+gulf_south,24334,Delhi Madison Parish (To Tennessee Gas),INT,D,Madison,LA,"Tennessee Gas Pipeline Company, L.L.C.",666250,-91.39881,32.44132,interconnect,0.7,Tennessee Gas Pipeline within 0.11 km
+gulf_south,24336,Metairie City Gate #1,INT,D,Orleans,LA,"Trans Louisiana Gas Pipeline, Inc",44734,-89.73725,30.07619,snap_to_line,0.4,middle of the line in Orleans
+gulf_south,24341,West Monroe (From Tennessee),INT,R,Ouachita,LA,"Tennessee Gas Pipeline Company, L.L.C.",346450,-92.1955,32.5517,interconnect,0.7,Tennessee Gas Pipeline within 0.00 km
+gulf_south,24342,Echo Papa #1  (Sklar),WHD,R,Bienville,LA,"Brammer Engineering, Inc.",9798,-93.08657,32.26529,snap_to_line,0.4,middle of the line in Bienville
+gulf_south,24343,Weyerhaeuser 15-10  Hc #1 Well,WHD,R,Jackson,LA,"Grayrock Energy IV, LLC",40475,-92.56976,32.38097,snap_to_line,0.4,middle of the line in Jackson
+gulf_south,24344,Bachtel #1 Well (Jamex),WHD,R,Van Zandt,TX,"Jamex, Inc.",10747,-95.79454,32.6875,snap_to_line,0.4,middle of the line in Van Zandt
+gulf_south,24346,Tooke Well W/D,INT,R,Bossier,LA,"Brammer Engineering, Inc.",5747,-93.59926,32.50107,snap_to_line,0.4,middle of the line in Bossier
+gulf_south,24351,Davis Brothers 34-3 Hc #1 Cp,WHD,R,Jackson,LA,"Grayrock Energy IV, LLC",37592,-92.56976,32.38097,snap_to_line,0.4,middle of the line in Jackson
+gulf_south,24352,St Charles Power Station,END,D,St Charles,LA,"Entergy Louisiana, LLC",249160,-90.30308,29.94485,snap_to_line,0.4,middle of the line in St. Charles
+gulf_south,24355,Amp Ii Etx  Panola (Legacy),WHD,R,Panola,TX,"Amp II Etx Gathering II, LLC",102414,-94.23299,32.30214,snap_to_line,0.4,middle of the line in Panola
+gulf_south,24360,Coastal Bend Fgt Receipt,INT,R,Wharton,TX,"Florida Gas Transmission Company, LLC",126516,-96.16775,29.18717,snap_to_line,0.4,middle of the line in Wharton
+gulf_south,24362,Momentum Midstream (M5 Desoto),WHD,R,De Soto,LA,"DTM Louisiana Gathering, LLC",602894,-93.82458,32.18271,snap_to_line,0.4,middle of the line in De Soto
+gulf_south,24372,Coastal Bend Dow Delivery,END,D,Brazoria,TX,Dow Hydrocarbons And Resources Llc,294736,-95.34227,28.98015,ghgrp_facility,0.8,DOW TEXAS OPERATIONS FREEPORT (dow dow)
+gulf_south,24375,Pine Hill Renewables Receipt,END,R,Gregg,TX,"Pine Hill Renewables, LLC",3321,-94.72997,32.42756,snap_to_line,0.4,middle of the line in Gregg
+gulf_south,24379,Royomartin Corrigan Osb Plant,END,D,Polk,TX,Gateway Corrigan LLC,8201,-94.83544,30.94255,snap_to_line,0.4,middle of the line in Polk
+gulf_south,24383,Brookhaven Co2 Recycling Denbury,END,D,Lincoln,MS,"Denbury Onshore, LLC",1896,-90.50485,31.59027,ghgrp_facility,0.8,Brookhaven EOR Facility (denbury)
+gulf_south,24397,Lake Charles (From Boardwalk La Gas),INT,R,Calcasieu,LA,"Boardwalk Louisiana Gas Transmission, LLC",214445,-93.21125,30.2302,place_snap,0.5,Lake Charles snapped 3.5 km
+gulf_south,24415,Tri Delta Timber 13-12 #1 Well,WHD,R,Jackson,LA,"Grayrock Energy IV, LLC",39378,-92.56976,32.38097,snap_to_line,0.4,middle of the line in Jackson
+gulf_south,24417,Align Midstream Angelina County Cp,WHD,R,Angelina,TX,"Align Midstream Partners II, LLC",70000,-94.70745,31.29464,snap_to_line,0.4,middle of the line in Angelina
+gulf_south,24418,Paris To Atmos North Texas,INT,D,Lamar,TX,"Atmos Pipeline and Storage, LLC",400000,-95.64631,33.51787,station_match,0.9,Gulf South Pipeline - Paris Station
+gulf_south,24424,Aethon Hwy 5 (Expansion),WHD,R,De Soto,LA,Aethon United BR LP,183691,-93.82458,32.18271,snap_to_line,0.4,middle of the line in De Soto
+gulf_south,24435,Rockcliff Deadwood Cp (Expansion),WHD,R,Panola,TX,"Gemini Carthage Pipeline, LLC",205836,-94.23299,32.30214,snap_to_line,0.4,middle of the line in Panola
+gulf_south,24439,Lake Charles Power Station,END,D,Calcasieu,LA,"Entergy Louisiana, LLC",317520,-93.21125,30.2302,place_snap,0.5,Lake Charles snapped 3.5 km
+gulf_south,24440,Tellurian Cp Desoto Parish,WHD,R,De Soto,LA,Aethon United BR LP,47005,-93.82458,32.18271,snap_to_line,0.4,middle of the line in De Soto
+gulf_south,24445,Mineola (To Cp Energy Intrastate),INT,D,Wood,TX,"Centerpoint Energy Intrastate Pipelines, LLC",1900,-95.54241,32.6823,station_match,0.9,Mineola
+gulf_south,24446,Gemini Panola County Tx (Expansion),WHD,R,Panola,TX,"Gemini Carthage Pipeline, LLC",732672,-94.23299,32.30214,snap_to_line,0.4,middle of the line in Panola
+gulf_south,24451,Montgomery County Power Plant,END,D,Montgomery,TX,"Entergy Texas, Inc.",200000,-95.5215,30.4364,ghgrp_facility,0.8,Montgomery County Power Station (county entergy)
+gulf_south,24454,Amp Ii Etx  Panola (Expansion),WHD,R,Panola,TX,"Amp II Etx Gathering II, LLC",318240,-94.23299,32.30214,snap_to_line,0.4,middle of the line in Panola
+gulf_south,24469,Bland Lake-Kudu,WHD,R,San Augustine,TX,Kudu Midstream LLC,710960,-94.1016,31.57898,snap_to_line,0.4,middle of the line in San Augustine
+gulf_south,24493,Tristate Nla Blocker Cp Well,WHD,R,Harrison,TX,"Tristate North Louisiana Midstream, LLC",37013,-94.48554,32.4365,snap_to_line,0.4,middle of the line in Harrison
+gulf_south,24494,Tristate Longview (From Tristate),INT,R,Gregg,TX,"Tristate North Louisiana Midstream, LLC",110738,-94.72601,32.45655,station_match,0.9,Longview #2
+gulf_south,24500,Align Midstream (Tuco) Expansion,INT,R,Panola,TX,"Align Midstream Partners II, LLC",299084,-94.23299,32.30214,snap_to_line,0.4,middle of the line in Panola
+gulf_south,24501,Sponte Cp Panola County,WHD,R,Panola,TX,"Sponte Operating, Inc.",110738,-94.23299,32.30214,snap_to_line,0.4,middle of the line in Panola
+gulf_south,24504,Nextera (Lowman) Choctaw County,INT,D,Choctaw,AL,"Nextera Energy Pipeline Holdings (Lowman), Inc.",120000,-88.41188,32.02944,snap_to_line,0.4,middle of the line in Choctaw
+gulf_south,24511,Ratcliffe Plant Southern Company,END,D,Kemper,MS,"Southern Company Services, Inc.",308540,-88.6057,32.7976,ghgrp_facility,0.8,David M Ratcliffe (ratcliffe southern)
+gulf_south,24520,Tristate Longview (To Tristate),INT,D,Gregg,TX,"Tristate North Louisiana Midstream, LLC",63117,-94.72601,32.45655,station_match,0.9,Longview #2
+gulf_south,24526,Complex Chemicals Ii @ Tallulah,END,D,Madison,LA,"NextEra Energy Services Gas, LLC",33432,-91.32289,32.41146,snap_to_line,0.4,middle of the line in Madison
+gulf_south,24529,Plant Morrow - Cooperative Energy,END,D,Lamar,MS,"Cooperative Energy, A Mississippi Electric Cooperative",250000,-89.3933,31.2194,ghgrp_facility,0.8,R D Morrow Senior Generating Plant (morrow cooperative electric cooperative)
+gulf_south,24533,Big Oaks Farm Llc #1 Well,WHD,R,St Martin,LA,"Termo Company, The",37013,-91.85696,30.19258,snap_to_line,0.4,middle of the line in St. Martin
+gulf_south,24538,Texas Petroleum Investment Co (Tpic),WHD,D,St Mary,LA,Texas Petroleum Investment Company,3850,-91.36893,29.65661,snap_to_line,0.4,middle of the line in St. Mary
+gulf_south,24543,Atmos Energy Lucedale #2 Cg,LDC,D,George,MS,Atmos Energy Corporation,11000,-88.60181,30.83467,snap_to_line,0.4,middle of the line in George
+gulf_south,24576,Lumberton Centerpoint,END,D,Lamar,MS,"Delta Mississippi Gas Company, LLC",4700,-89.45492,31.022,place_snap,0.5,Lumberton snapped 1.8 km
+gulf_south,24580,Aquasition Delivery Mobile County,END,D,Mobile,AL,Aquasition LLC,100,-88.08151,30.71355,snap_to_line,0.4,middle of the line in Mobile
+gulf_south,24584,Cedar Crossing (To Texas Republic),LDC,D,Montgomery,TX,"Texas Republic Utility, LLC",3000,-95.32918,30.28065,snap_to_line,0.4,middle of the line in Montgomery
+gulf_south,26003,Borneo Pie LA Operating,WHD,R,Beauregard,LA,"Pie La Operating, LLC",3000,-93.39424,30.75026,snap_to_line,0.4,middle of the line in Beauregard
+gulf_south,26004,Hilcorp Harris County Cp,WHD,R,Fort Bend,TX,Hilcorp Energy Company,4000,-95.8162,29.51972,snap_to_line,0.4,middle of the line in Fort Bend
+gulf_south,26007,Deadwood Panola (To Chevron),END,D,Panola,TX,Chevron U.S.A. Inc.,10800,-94.15915,32.08494,ghgrp_facility,0.8,South Deadwood Compressor Station (deadwood)
+gulf_south,26013,"Matterhorn Express Pipeline, Llc (Mxp)",INT,R,Wharton,TX,"Matterhorn Express Pipeline, LLC",750000,-96.16775,29.18717,snap_to_line,0.4,middle of the line in Wharton
+gulf_south,26021,Paloma Daboval Lease Cp Well,WHD,R,Wharton,TX,"Paloma Operating, LLC",180,-96.16775,29.18717,snap_to_line,0.4,middle of the line in Wharton
+gulf_south,26035,Weeks Island Gas Lift,END,D,Iberia,LA,Texas Petroleum Investment Company,1181,-91.77733,29.89302,snap_to_line,0.4,middle of the line in Iberia
+gulf_south,26108,"GEP Haynesville II, LLC",WHD,R,Natchitoches,LA,"GEP Haynesville II, LLC",150000,-93.26269,31.74818,interconnect,0.7,Acadian Haynesville Pipeline within 0.39 km
+gulf_south,26109,San Jacinto Receipt,INT,R,Wharton,TX,"Gulf South Pipeline Company, LLC",200000,-96.16775,29.18717,snap_to_line,0.4,middle of the line in Wharton
+gulf_south,26119,Pecan Grove Delivery,END,D,Harrison,MS,"Gulf South Pipeline Company, LLC",2610,-89.26689,30.427,ghgrp_facility,0.8,"WASTE MANAGEMENT OF MISSISSIPPI INC, PECAN GROVE LANDFILL AND RECYCLING CENTER A (pecan)"
+gulf_south,26120,Pecan Grove Receipt,WHD,R,Harrison,MS,"Gulf South Pipeline Company, LLC",2610,-89.15512,30.45241,snap_to_line,0.4,middle of the line in Harrison
