@@ -102,10 +102,13 @@ export function layoutLeftPanelRail({
       bottomObstacles.push({ top: rect.top });
     }
   }
+  const minimumLaneHeight = viewportHeight * 0.16;
   safeBottom = resolveLeftStackBottomBoundary({
     baseBottom: safeBottom,
     obstacles: bottomObstacles,
     safeGap,
+    topBoundary: obstacleSafeTop,
+    minimumHeight: minimumLaneHeight,
   });
 
   const obstacleSafeBottom = safeBottom;
@@ -113,7 +116,6 @@ export function layoutLeftPanelRail({
   // Keep the accordion visually centered when the balanced corridor remains
   // useful. During live viewport-height changes, retain the aligned lane
   // instead of extending a tiny midpoint corridor through a lower obstacle.
-  const minimumLaneHeight = viewportHeight * 0.16;
   ({ safeTop, safeBottom } = resolvePanelStackCorridor({
     viewportHeight,
     safeTop,

@@ -53,19 +53,36 @@ export function allocatePanelStackHeights({
  * @param {object} input Corridor measurements.
  * @param {number} input.baseBottom Viewport-inset bottom boundary, in px.
  * @param {Array<{top: number}>} [input.obstacles] Live obstacle tops.
+ * An obstacle that starts less than `minimumHeight` below `topBoundary`
+ * leaves no usable corridor above it, so it cannot bound the rail from
+ * below. On a short viewport the tactical HUD's top-left block slips under
+ * the rail's base top and would otherwise squeeze an expanded panel to a
+ * sliver (34 px at 542 px tall, the hosted site on 2026-10-02); the rail
+ * overlaps that HUD text instead, as it already does while collapsed.
+ *
+ * @param {object} input Corridor measurements.
+ * @param {number} input.baseBottom Viewport-inset bottom boundary, in px.
+ * @param {Array<{top: number}>} [input.obstacles] Live obstacle tops.
  * @param {number} [input.safeGap=0] Clearance kept above each obstacle, in px.
+ * @param {number} [input.topBoundary] The rail's top boundary, in px.
+ * @param {number} [input.minimumHeight=0] Shortest useful corridor, in px.
  * @returns {number} Bottom boundary in px.
  */
 export function resolveLeftStackBottomBoundary({
   baseBottom,
   obstacles = [],
   safeGap = 0,
+  topBoundary,
+  minimumHeight = 0,
 }) {
   let bottom = Number(baseBottom) || 0;
   const gap = Number(safeGap) || 0;
+  const floor = Number(topBoundary);
+  const minimum = Math.max(0, Number(minimumHeight) || 0);
   for (const obstacle of obstacles) {
     const top = Number(obstacle?.top);
     if (!Number.isFinite(top)) continue;
+    if (Number.isFinite(floor) && top - gap - floor < minimum) continue;
     bottom = Math.min(bottom, top - gap);
   }
   return bottom;
