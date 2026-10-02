@@ -46,6 +46,14 @@ const SUPPLY_FLOWS = [
   'NG_FLOW_APPALACHIA_ROVER_REC',
   'NG_FLOW_HAYNESVILLE_LEG_CIP_REC',
 ];
+/**
+ * STEO's DUC series end about a month before each release and releases are
+ * 4-5 weeks apart, so the newest month is ~70 days old just before a release
+ * (oracle PRD-duc-tracker G9); older than this and the DUC lines are dropped.
+ */
+export const DUCS_MAX_AGE_DAYS = 100;
+/** Short names for the STEO regions on the card. */
+const DUC_SHORT = Object.freeze({ R48: 'rest L48' });
 /** The onshore and offshore regions the plan names (§14.5 eleven + the Gulf). */
 export const SUPPLY_REGIONS_PLANNED = 12;
 
@@ -116,8 +124,56 @@ export function normaliseBoard(payload, { now = Date.now() } = {}) {
       chg7Bcfd: finite(row.chg7Bcfd),
     });
   }
-  if (!monthly.size && !storage && !flows.size) return null;
-  return { asOf: payload.asOf ?? null, monthly, storage, flows };
+  const ducs = normaliseDucs(payload.ducs, now);
+  if (!monthly.size && !storage && !flows.size && !ducs) return null;
+  return { asOf: payload.asOf ?? null, monthly, storage, flows, ducs };
+}
+
+/**
+ * The store's `ducs` section (oracle PRD-duc-tracker G9): EIA STEO's DUC
+ * count per basin for every viewer, plus the well-level reconstruction only
+ * when the route included it (the founder; the oracle withholds it from
+ * invitees while the FracFocus licence question is open).
+ */
+function normaliseDucs(d, now) {
+  if (!d || typeof d !== 'object' || !Array.isArray(d.basins)) return null;
+  const basins = [];
+  for (const b of d.basins) {
+    const duc = finite(b?.duc);
+    if (!b?.basin || duc === null || !b.observedAt) continue;
+    if (ageDays(b.observedAt, now) > DUCS_MAX_AGE_DAYS) continue;
+    basins.push({
+      code: String(b.code ?? ''),
+      basin: String(b.basin),
+      duc,
+      vs12mo: finite(b.vs12mo),
+      drilled: finite(b.drilled),
+      completed: finite(b.completed),
+    });
+  }
+  const reconstruction = [];
+  for (const r of Array.isArray(d.reconstruction) ? d.reconstruction : []) {
+    const duc = finite(r?.duc);
+    if (!r?.label || duc === null || !r.observedAt) continue;
+    if (ageDays(r.observedAt, now) > DUCS_MAX_AGE_DAYS) continue;
+    reconstruction.push({
+      label: String(r.label),
+      month: String(r.month),
+      duc,
+      rangeLow: finite(r.rangeLow),
+      provisional: Boolean(r.provisional),
+      trackMedianPct: finite(r.track?.median_pct),
+    });
+  }
+  if (!basins.length && !reconstruction.length) return null;
+  return {
+    release: d.release ? String(d.release) : null,
+    month: d.month ? String(d.month) : null,
+    fiveBasins: finite(d.fiveBasins),
+    usTotal: finite(d.usTotal),
+    basins,
+    reconstruction,
+  };
 }
 
 const signed = (n, digits = 1) =>
@@ -272,6 +328,75 @@ export function regionsLines(regions) {
   return wrapParts('Filed:', parts);
 }
 
+/** `head part · part · … part`, wrapped onto continuation lines at LINE_MAX. */
+function wrapPlain(head, parts) {
+  const lines = [];
+  let line = head;
+  parts.forEach((part, i) => {
+    const tail = i === parts.length - 1 ? '' : ' ·';
+    const next = `${line} ${part}${tail}`;
+    if (next.length > LINE_MAX && line !== head) {
+      lines.push(line);
+      line = `${part}${tail}`;
+    } else line = next;
+  });
+  lines.push(line);
+  return lines;
+}
+
+/**
+ * `DUCs (EIA STEO, AUG; released 09-09): Permian 839 (−227 y/y) · … · 5 basins
+ * 2,655 · US 4,919`, then `Drilled/completed (AUG): Permian 500/488 · …`, then
+ * the founder's reconstruction lines when the store sent them. A falling DUC
+ * count means wells are being completed faster than drilled.
+ */
+export function ducsLines(board) {
+  const d = board?.ducs;
+  if (!d) return [];
+  const lines = [];
+  const mon = d.month ? monthAbbrev(d.month) : '';
+  if (d.basins.length) {
+    const parts = d.basins.map(
+      (b) =>
+        `${DUC_SHORT[b.code] ?? b.basin} ${INT.format(b.duc)}${
+          b.vs12mo !== null ? ` (${signed(b.vs12mo, 0)} y/y)` : ''
+        }`,
+    );
+    if (d.fiveBasins !== null)
+      parts.push(`5 basins ${INT.format(d.fiveBasins)}`);
+    if (d.usTotal !== null) parts.push(`US ${INT.format(d.usTotal)}`);
+    lines.push(
+      ...wrapPlain(
+        `DUCs (EIA STEO, ${mon}${d.release ? `; released ${d.release.slice(5)}` : ''}):`,
+        parts,
+      ),
+    );
+    const flow = d.basins
+      .filter(
+        (b) => b.drilled !== null && b.completed !== null && b.code !== 'R48',
+      )
+      .map(
+        (b) => `${b.basin} ${INT.format(b.drilled)}/${INT.format(b.completed)}`,
+      );
+    if (flow.length)
+      lines.push(...wrapPlain(`Drilled/completed (${mon}):`, flow));
+  }
+  for (const r of d.reconstruction) {
+    lines.push(
+      joinParts([
+        `${r.label} reconstruction ${INT.format(r.duc)} (${monthAbbrev(r.month)}${
+          r.provisional ? ', provisional' : ''
+        }${r.rangeLow !== null && r.rangeLow !== r.duc ? `; ${INT.format(r.rangeLow)}–${INT.format(r.duc)}` : ''})`,
+        r.trackMedianPct !== null
+          ? `track ${signed(r.trackMedianPct, 0)}% vs EIA`
+          : null,
+        'founder only',
+      ]),
+    );
+  }
+  return lines;
+}
+
 /** The card's lines, store lines first when the store answered. */
 export function supplyBoardLines({
   regions = [],
@@ -285,11 +410,12 @@ export function supplyBoardLines({
     ...feedgasLines(board),
     ...pipeSupplyLines(board),
     ...regionsLines(regions),
+    ...ducsLines(board),
     joinParts([
       `${built} of ${SUPPLY_REGIONS_PLANNED} regions built on filings; the rest are inside the EIA total`,
     ]),
     board
-      ? `Oil Oracle store (EIA${board.flows?.size ? ', pipeline postings' : ''}) · state and BSEE filings · descriptive only`
+      ? `Oil Oracle store (EIA${board.ducs ? ' incl. STEO' : ''}${board.flows?.size ? ', pipeline postings' : ''}) · state and BSEE filings · descriptive only`
       : `Oil Oracle store not reachable${boardError ? ` (${boardError})` : ''} · state and BSEE filings`,
   ]
     .filter(Boolean)
@@ -305,6 +431,9 @@ export function supplyBoardMetaLine({ regions = [], board = null } = {}) {
     'US GAS',
     dry ? `${dry.bcfd.toFixed(1)} BCF/D DRY (${monthAbbrev(dry.month)})` : null,
     s ? `STORAGE ${INT.format(s.l48Bcf)} BCF (${s.weekEnding.slice(5)})` : null,
+    board?.ducs?.fiveBasins != null
+      ? `DUCS ${INT.format(board.ducs.fiveBasins)} (${monthAbbrev(board.ducs.month)})`
+      : null,
     `${built} REGION${built === 1 ? '' : 'S'} FILED`,
   ]).toUpperCase();
 }

@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import {
   balanceLine,
+  ducsLines,
   createSupplyBoardOverlayEntry,
   feedgasLines,
   normaliseBoard,
@@ -310,5 +311,132 @@ test('the source reads the regions once, the store every time, and survives a de
   assert.throws(
     () => createSupplyBoardSource({ regions: [] }),
     /requires its regions/,
+  );
+});
+
+// Oracle PRD-duc-tracker G9: the DUC backlog rows. The route's `ducs` section as
+// the scratch store answered on 2026-10-02 (STEO release 2026-09-09).
+const STEO_BASINS = [
+  ['PM', 'Permian', 839, -227, 500, 488],
+  ['AP', 'Appalachia', 630, -145, 65, 91],
+  ['HA', 'Haynesville', 547, -91, 57, 67],
+  ['EF', 'Eagle Ford', 409, 57, 122, 118],
+  ['BK', 'Bakken', 230, -104, 58, 69],
+  ['R48', 'rest of L48', 2264, 57, 239, 239],
+].map(([code, basin, duc, vs12mo, drilled, completed]) => ({
+  code,
+  basin,
+  duc,
+  vs3mo: null,
+  vs12mo,
+  drilled,
+  completed,
+  rigs: null,
+  observedAt: '2026-08-31',
+  publishedAt: '2026-09-09',
+  fetchedAt: null,
+}));
+const DUCS_FOUNDER = {
+  release: '2026-09-09',
+  nextRelease: '2026-10-06',
+  month: '2026-08',
+  fiveBasins: 2655,
+  usTotal: 4919,
+  basins: STEO_BASINS,
+  reconstructionWithheld: false,
+  reconstruction: [
+    {
+      basin: 'Bakken',
+      label: 'Bakken (ND only)',
+      month: '2026-09',
+      duc: 300,
+      provisional: true,
+      confidential: 139,
+      rangeLow: 161,
+      medianAgeMonths: 4,
+      track: { median_pct: -11.5, n: 152, within15_pct: 53 },
+      top3: null,
+      observedAt: '2026-09-30',
+      publishedAt: null,
+      fetchedAt: null,
+    },
+  ],
+};
+const DUCS_INVITEE = {
+  ...DUCS_FOUNDER,
+  reconstructionWithheld: true,
+  reconstruction: null,
+};
+const DUC_NOW = Date.parse('2026-10-02T15:00:00Z');
+
+test('DUC rows: STEO headline for everyone, every basin, totals, release stamp', () => {
+  const board = normaliseBoard(
+    { ...BOARD, ducs: DUCS_INVITEE },
+    { now: DUC_NOW },
+  );
+  const lines = ducsLines(board);
+  const text = lines.join('\n');
+  assert.match(
+    lines[0],
+    /^DUCs \(EIA STEO, AUG; released 09-09\): Permian 839 \(−227 y\/y\)/,
+  );
+  for (const part of [
+    'Appalachia 630',
+    'Haynesville 547',
+    'Eagle Ford 409',
+    'Bakken 230',
+    'rest L48 2,264',
+    '5 basins 2,655',
+    'US 4,919',
+  ])
+    assert.ok(text.includes(part), `missing ${part}`);
+  assert.match(text, /Drilled\/completed \(AUG\): Permian 500\/488/);
+  assert.ok(
+    !/rest of L48 239/.test(text),
+    'R48 stays out of the drilled/completed line',
+  );
+  assert.ok(
+    !/reconstruction|founder/i.test(text),
+    'an invitee payload carries no reconstruction line',
+  );
+  for (const line of lines)
+    assert.ok(line.length <= 110, `line too long: ${line}`);
+});
+
+test('DUC rows: the founder payload adds the labelled reconstruction with its range and track', () => {
+  const board = normaliseBoard(
+    { ...BOARD, ducs: DUCS_FOUNDER },
+    { now: DUC_NOW },
+  );
+  const last = ducsLines(board).at(-1);
+  assert.equal(
+    last,
+    'Bakken (ND only) reconstruction 300 (SEP, provisional; 161–300) · track −12% vs EIA · founder only',
+  );
+});
+
+test('DUC rows: a STEO month past the age limit is dropped; nothing else breaks', () => {
+  const old = {
+    ...DUCS_INVITEE,
+    basins: STEO_BASINS.map((b) => ({ ...b, observedAt: '2026-05-31' })),
+  };
+  const board = normaliseBoard({ ...BOARD, ducs: old }, { now: DUC_NOW });
+  assert.equal(board.ducs, null);
+  assert.deepEqual(ducsLines(board), []);
+});
+
+test('DUC rows: a store that only has DUCs still makes a board; the meta line names them', () => {
+  const board = normaliseBoard(
+    { asOf: '2026-10-02', ducs: DUCS_INVITEE },
+    { now: DUC_NOW },
+  );
+  assert.ok(board && board.ducs.basins.length === 6);
+  assert.match(
+    supplyBoardMetaLine({ regions: [], board }),
+    /DUCS 2,655 \(AUG\)/,
+  );
+  assert.match(
+    supplyBoardLines({ regions: [], board }).join('\n'),
+    /EIA incl\. STEO/,
   );
 });
