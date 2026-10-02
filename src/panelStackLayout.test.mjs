@@ -50,6 +50,34 @@ test('the Cesium credit line limits the corridor even in Cockpit', () => {
   assert.equal(boundary, 748.5);
 });
 
+// Measured on the hosted site at 920x542 (2026-10-02): title bar clears at
+// y126, the tactical HUD's top-left block starts at y166 (below the 141 px
+// base top), its bottom-left block at y377. Without the minimum-lane rule the
+// expanded Data Layers panel got a 34 px corridor and could not open.
+const shortViewport = {
+  baseBottom: 520.3,
+  safeGap: 6.5,
+  topBoundary: 125.5,
+  minimumHeight: 86.7,
+  obstacles: [{ top: 166 }, { top: 377 }],
+};
+
+test('an obstacle hugging the top boundary does not squeeze the rail shut', () => {
+  assert.equal(resolveLeftStackBottomBoundary(shortViewport), 370.5);
+});
+
+test('obstacles a useful corridor below the top boundary still bound it', () => {
+  assert.equal(
+    resolveLeftStackBottomBoundary({ ...shortViewport, obstacles: [{ top: 300 }] }),
+    293.5,
+  );
+});
+
+test('without a top boundary every obstacle bounds the corridor as before', () => {
+  const { topBoundary, minimumHeight, ...legacy } = shortViewport;
+  assert.equal(resolveLeftStackBottomBoundary(legacy), 159.5);
+});
+
 test('an empty or malformed obstacle set leaves the viewport inset intact', () => {
   assert.equal(resolveLeftStackBottomBoundary({ baseBottom: 700 }), 700);
   assert.equal(
