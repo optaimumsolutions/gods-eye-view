@@ -215,3 +215,15 @@ test('the field source caches grids per init and drops them on a new run', async
   );
   assert.equal(source.getStats().init, '2026-09-30');
 });
+
+test('field freshness: the oracle verdict wins, else the run age on the 48 h / 96 h tiers', async () => {
+  const { fieldFreshness } = await import('./fieldSource.js');
+  const now = Date.parse('2026-10-06T20:00:00Z');
+  assert.equal(
+    fieldFreshness({ init: '2026-10-05', freshness: { state: 'stale' } }, now),
+    'stale',
+  );
+  assert.equal(fieldFreshness({ init: '2026-10-05' }, now), 'ok');
+  assert.equal(fieldFreshness({ init: '2026-10-03' }, now), 'late');
+  assert.equal(fieldFreshness({ init: '2026-09-30' }, now), 'stale');
+});

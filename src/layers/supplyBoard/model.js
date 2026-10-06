@@ -83,27 +83,53 @@ function ageDays(isoDay, now) {
 
 const INT = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 });
 
-/** The store's payload with the too-old parts dropped; null when nothing is left. */
+/**
+ * ok | late | stale for one part (oracle DATA-MAP P1.1): the oracle's one
+ * staleness rule wins when the payload carries it (`freshness.state`); an
+ * older payload falls back to this file's age limits.
+ */
+function verdict(row, observedAt, maxDays, now) {
+  const st = row?.freshness?.state;
+  if (typeof st === 'string' && st !== 'none') return st;
+  return ageDays(observedAt, now) > maxDays ? 'stale' : 'ok';
+}
+
+/**
+ * The store's payload with the stale parts held back (named in `held`, so the
+ * card says so instead of dropping them silently) and late ones marked;
+ * null when the store sent nothing at all.
+ */
 export function normaliseBoard(payload, { now = Date.now() } = {}) {
   if (!payload || typeof payload !== 'object' || payload.error) return null;
+  const held = [];
   const monthly = new Map();
   for (const row of Array.isArray(payload.monthly) ? payload.monthly : []) {
     const bcfd = finite(row?.bcfd);
     if (!row?.label || bcfd === null || !row.observedAt) continue;
-    if (ageDays(row.observedAt, now) > MONTHLY_MAX_AGE_DAYS) continue;
+    const mv = verdict(row, row.observedAt, MONTHLY_MAX_AGE_DAYS, now);
+    if (mv === 'stale') {
+      held.push(`${row.label} (${monthAbbrev(String(row.month))})`);
+      continue;
+    }
     monthly.set(String(row.label), {
       label: String(row.label),
       month: String(row.month),
       bcfd,
       yoyBcfd: finite(row.yoyBcfd),
+      late: mv === 'late',
     });
   }
   const s = payload.storage;
+  const sv =
+    s && finite(s.l48Bcf) !== null
+      ? verdict(s, s.observedAt, STORAGE_MAX_AGE_DAYS, now)
+      : null;
+  if (sv === 'stale')
+    held.push(`storage (wk ${String(s.weekEnding).slice(5)})`);
   const storage =
-    s &&
-    finite(s.l48Bcf) !== null &&
-    ageDays(s.observedAt, now) <= STORAGE_MAX_AGE_DAYS
+    sv && sv !== 'stale'
       ? {
+          late: sv === 'late',
           weekEnding: String(s.weekEnding),
           l48Bcf: finite(s.l48Bcf),
           weeklyBuildBcf: finite(s.weeklyBuildBcf),
@@ -113,10 +139,15 @@ export function normaliseBoard(payload, { now = Date.now() } = {}) {
         }
       : null;
   const flows = new Map();
+  let staleGasDay = null;
   for (const row of Array.isArray(payload.flows) ? payload.flows : []) {
     const bcfd = finite(row?.bcfd);
     if (!row?.id || bcfd === null || !row.gasDay) continue;
-    if (ageDays(row.gasDay, now) > FLOWS_MAX_AGE_DAYS) continue;
+    if (verdict(row, row.gasDay, FLOWS_MAX_AGE_DAYS, now) === 'stale') {
+      const gd = String(row.gasDay).slice(0, 10);
+      if (!staleGasDay || gd > staleGasDay) staleGasDay = gd;
+      continue;
+    }
     flows.set(String(row.id), {
       id: String(row.id),
       gasDay: String(row.gasDay).slice(0, 10),
@@ -124,9 +155,12 @@ export function normaliseBoard(payload, { now = Date.now() } = {}) {
       chg7Bcfd: finite(row.chg7Bcfd),
     });
   }
-  const ducs = normaliseDucs(payload.ducs, now);
-  if (!monthly.size && !storage && !flows.size && !ducs) return null;
-  return { asOf: payload.asOf ?? null, monthly, storage, flows, ducs };
+  if (staleGasDay)
+    held.push(`pipeline flows (gas day ${staleGasDay.slice(5)})`);
+  const ducs = normaliseDucs(payload.ducs, now, held);
+  if (!monthly.size && !storage && !flows.size && !ducs && !held.length)
+    return null;
+  return { asOf: payload.asOf ?? null, monthly, storage, flows, ducs, held };
 }
 
 /**
@@ -135,13 +169,19 @@ export function normaliseBoard(payload, { now = Date.now() } = {}) {
  * when the route included it (the founder; the oracle withholds it from
  * invitees while the FracFocus licence question is open).
  */
-function normaliseDucs(d, now) {
+function normaliseDucs(d, now, held = []) {
   if (!d || typeof d !== 'object' || !Array.isArray(d.basins)) return null;
   const basins = [];
   for (const b of d.basins) {
     const duc = finite(b?.duc);
     if (!b?.basin || duc === null || !b.observedAt) continue;
-    if (ageDays(b.observedAt, now) > DUCS_MAX_AGE_DAYS) continue;
+    if (verdict(b, b.observedAt, DUCS_MAX_AGE_DAYS, now) === 'stale') {
+      if (!held.some((h) => h.startsWith('DUCs')))
+        held.push(
+          `DUCs (${monthAbbrev(String(d.month ?? b.observedAt).slice(0, 7))})`,
+        );
+      continue;
+    }
     basins.push({
       code: String(b.code ?? ''),
       basin: String(b.basin),
@@ -155,7 +195,7 @@ function normaliseDucs(d, now) {
   for (const r of Array.isArray(d.reconstruction) ? d.reconstruction : []) {
     const duc = finite(r?.duc);
     if (!r?.label || duc === null || !r.observedAt) continue;
-    if (ageDays(r.observedAt, now) > DUCS_MAX_AGE_DAYS) continue;
+    if (verdict(r, r.observedAt, DUCS_MAX_AGE_DAYS, now) === 'stale') continue;
     reconstruction.push({
       label: String(r.label),
       month: String(r.month),
@@ -188,7 +228,7 @@ export function balanceLine(board) {
   const consumption = board.monthly.get('total consumption');
   const lng = board.monthly.get('LNG exports');
   return joinParts([
-    `Dry production ${dry.bcfd.toFixed(1)} Bcf/d (EIA, ${monthAbbrev(dry.month)})`,
+    `Dry production ${dry.bcfd.toFixed(1)} Bcf/d (EIA, ${monthAbbrev(dry.month)}${dry.late ? ', late' : ''})`,
     dry.yoyBcfd !== null ? `YoY ${signed(dry.yoyBcfd)}` : null,
     consumption ? `consumption ${consumption.bcfd.toFixed(1)}` : null,
     lng ? `LNG exports ${lng.bcfd.toFixed(1)} Bcf/d` : null,
@@ -200,7 +240,7 @@ export function storageLine(board) {
   const s = board?.storage;
   if (!s) return null;
   return joinParts([
-    `Storage ${INT.format(s.l48Bcf)} Bcf (wk ${s.weekEnding.slice(5)})`,
+    `Storage ${INT.format(s.l48Bcf)} Bcf (wk ${s.weekEnding.slice(5)}${s.late ? ', late' : ''})`,
     s.weeklyBuildBcf !== null
       ? `${signed(s.weeklyBuildBcf, 0)} ${s.weeklyBuildBcf >= 0 ? 'build' : 'draw'}`
       : null,
@@ -411,6 +451,9 @@ export function supplyBoardLines({
     ...pipeSupplyLines(board),
     ...regionsLines(regions),
     ...ducsLines(board),
+    board?.held?.length
+      ? `Held back as stale: ${board.held.join(' · ')}`
+      : null,
     joinParts([
       `${built} of ${SUPPLY_REGIONS_PLANNED} regions built on filings; the rest are inside the EIA total`,
     ]),

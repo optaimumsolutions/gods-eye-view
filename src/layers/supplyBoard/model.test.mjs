@@ -440,3 +440,55 @@ test('DUC rows: a store that only has DUCs still makes a board; the meta line na
     /EIA incl\. STEO/,
   );
 });
+
+test("the oracle's staleness verdict wins, late parts say so, stale ones are named not dropped silently", () => {
+  const now = Date.parse('2026-10-06T20:00:00Z');
+  const payload = {
+    asOf: '2026-10-06',
+    monthly: [
+      {
+        label: 'dry production',
+        month: '2026-07',
+        bcfd: 108.4,
+        yoyBcfd: 2.1,
+        observedAt: '2026-07-31',
+        freshness: { state: 'late', ageHours: 1600 },
+      },
+    ],
+    storage: {
+      weekEnding: '2026-09-25',
+      l48Bcf: 3415,
+      weeklyBuildBcf: 64,
+      yoyBcf: -12,
+      avg5yrBcf: 3334,
+      bandPositionPct: 75.7,
+      observedAt: '2026-09-25',
+      freshness: { state: 'stale', ageHours: 900 }, // the oracle says stale: held back
+    },
+    flows: [],
+  };
+  const board = normaliseBoard(payload, { now });
+  assert.equal(board.storage, null);
+  assert.deepEqual(board.held, ['storage (wk 09-25)']);
+  assert.match(balanceLine(board), /\(EIA, JUL, late\)/);
+  const lines = supplyBoardLines({ board });
+  assert.ok(lines.includes('Held back as stale: storage (wk 09-25)'));
+});
+
+test('a store that answered with only stale parts is not "not reachable"', () => {
+  const board = normaliseBoard(
+    {
+      monthly: [],
+      storage: {
+        weekEnding: '2026-08-07',
+        l48Bcf: 3000,
+        observedAt: '2026-08-07',
+      },
+    },
+    { now: Date.parse('2026-10-06T00:00:00Z') },
+  );
+  assert.ok(board, 'a board with held parts');
+  const lines = supplyBoardLines({ board }).join('\n');
+  assert.match(lines, /Held back as stale: storage \(wk 08-07\)/);
+  assert.doesNotMatch(lines, /not reachable/);
+});

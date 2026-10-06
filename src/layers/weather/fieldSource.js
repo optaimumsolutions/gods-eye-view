@@ -10,6 +10,20 @@ export const ORACLE_FIELD_URL = '/api/oracle/weather-field';
 export const FIELD_SOURCE_LABEL =
   'ECMWF AIFS ENS (open data) via Oil Oracle store';
 
+/**
+ * ok | late | stale for the run (oracle DATA-MAP P1.1): the oracle's verdict
+ * when the manifest carries it, else the run's age on the same tiers (a 00Z
+ * run is ok to 48 h, late to 96 h, stale after).
+ */
+export function fieldFreshness(payload, now = Date.now()) {
+  const st = payload?.freshness?.state;
+  if (typeof st === 'string' && st !== 'none') return st;
+  const t = Date.parse(payload?.observedAt || `${payload?.init}T00:00:00Z`);
+  if (!Number.isFinite(t)) return 'stale';
+  const h = (now - t) / 3_600_000;
+  return h <= 48 ? 'ok' : h <= 96 ? 'late' : 'stale';
+}
+
 export function normalizeFieldManifest(payload) {
   if (!payload || payload.error || !payload.init || !payload.grid) return null;
   const grid = payload.grid;
@@ -25,6 +39,7 @@ export function normalizeFieldManifest(payload) {
       Date.parse(payload.observedAt || `${payload.init}T00:00:00Z`),
     ).toISOString(),
     fetchedAt: payload.fetchedAt || null,
+    freshness: fieldFreshness(payload),
     days: payload.days || [],
     leads: payload.leads || [],
     stats: payload.stats || [],

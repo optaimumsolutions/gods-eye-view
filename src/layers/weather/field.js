@@ -298,7 +298,7 @@ export function createWeatherFieldLayer({
           s.setHorizon({
             horizon: manifest.leads[manifest.leads.length - 1],
             label: layer.source,
-            issued: `issued ${pad(issued.getUTCHours())}Z ${pad(issued.getUTCMonth() + 1)}-${pad(issued.getUTCDate())}`,
+            issued: `issued ${pad(issued.getUTCHours())}Z ${pad(issued.getUTCMonth() + 1)}-${pad(issued.getUTCDate())}${manifest.freshness && manifest.freshness !== 'ok' ? ` · ${manifest.freshness}` : ''}`,
           });
           _lead = s.getLead();
         }
@@ -404,7 +404,7 @@ export function createWeatherFieldLayer({
       return {
         count: _manifest ? _manifest.leads.length : 0,
         countLabel: _manifest
-          ? `${_manifest.leads.length} days · run ${_manifest.init} · ${FIELD_STATS[_stat].label}`
+          ? `${_manifest.leads.length} days · run ${_manifest.init}${_manifest.freshness && _manifest.freshness !== 'ok' ? ` (${_manifest.freshness})` : ''} · ${FIELD_STATS[_stat].label}`
           : '',
         cells: g ? g.rows * g.cols : 0,
         lastUpdate: _lastUpdate,
