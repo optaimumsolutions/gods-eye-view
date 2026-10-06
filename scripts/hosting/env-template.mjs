@@ -136,6 +136,11 @@ export const GROUPS = [
         'http://127.0.0.1:8014',
         'askd: probed by the hub, and its /relay/slack pages health transitions.',
       ],
+      [
+        'GEV_EVENTS_PUBLISH_HOST',
+        '',
+        'Publish listener address; leave empty (loopback). Kubernetes sets 0.0.0.0 (FR-E0a).',
+      ],
     ],
   },
 ];

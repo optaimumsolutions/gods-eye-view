@@ -167,7 +167,12 @@ export function eventsPlugin({
     listener.on('error', (error) =>
       log.error?.('[gev-events] publish listener', error.message),
     );
-    listener.listen(port, '127.0.0.1', () => {
+    // Loopback on the VPS. In Kubernetes (FR-E0a) the ingest CronJobs post from
+    // other pods, so the overlay sets GEV_EVENTS_PUBLISH_HOST=0.0.0.0; the
+    // proxy key still gates every publish and the network policy the port.
+    const host =
+      String(env.GEV_EVENTS_PUBLISH_HOST ?? '').trim() || '127.0.0.1';
+    listener.listen(port, host, () => {
       state.address = listener.address();
     });
     hub.start();
