@@ -15,6 +15,7 @@ import { PROXY_KEY_HEADER, USER_HEADER } from './accessGuard.js';
 
 // Row 16 (oracle FR-D21): the MODEL, OPS and DASHBOARD tabs are console pages.
 // Oracle FR-D22f: /futures (the energy futures board) is one too.
+// Oracle FR-R6: /desk (the release desk; the console keeps it founder-only).
 const PAGE_PATHS = new Set([
   '/futures',
   '/gas',
@@ -24,8 +25,17 @@ const PAGE_PATHS = new Set([
   '/model',
   '/ops',
   '/dashboard',
+  '/desk',
 ]);
-const POST_PATHS = new Set(['/ask', '/grill', '/trade', '/trade_close']);
+// FR-R6: the desk's two founder-only JSON writes (the console checks the viewer).
+const POST_PATHS = new Set([
+  '/ask',
+  '/grill',
+  '/trade',
+  '/trade_close',
+  '/desk/consensus',
+  '/desk/rate',
+]);
 const ORACLE_API_PREFIX = '/api/oracle/';
 // FR-D19 (oracle FR-J1) async ask jobs: poll and cancel.
 const ASK_JOB = /^\/ask\/\d+$/;

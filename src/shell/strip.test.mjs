@@ -49,6 +49,7 @@ test('the strip links are the product pages, in order', () => {
       'MODEL /model',
       'OPS /ops',
       'DASHBOARD /dashboard',
+      'DESK /desk',
     ],
   );
   assert.ok(Object.isFrozen(NAV_LINKS) && Object.isFrozen(NAV_LINKS[0]));
@@ -60,6 +61,7 @@ test('the current page is highlighted; unknown pages highlight nothing', () => {
   assert.equal(activeLinkId('/market'), 'market');
   assert.equal(activeLinkId('/market/'), 'market');
   assert.equal(activeLinkId('/trades'), 'trades');
+  assert.equal(activeLinkId('/desk'), 'desk');
   assert.equal(activeLinkId('/elsewhere'), null);
   assert.equal(activeLinkId(undefined), 'globe');
 });

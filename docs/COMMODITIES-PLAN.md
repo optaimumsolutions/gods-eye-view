@@ -6497,6 +6497,9 @@ and not chosen. GLOBE, MARKET and CHAT already exist.
 - G16.1 Three new strip tabs behind the same Access login, in this order
   after CHAT: MODEL `/model`, OPS `/ops`, DASHBOARD `/dashboard`. Each
   answers 200 through the globe origin with the strip; anonymous → 302.
+  (2026-10-06, oracle PRD-desk FR-R6: a DESK `/desk` tab follows DASHBOARD,
+  same pattern; the proxy also relays `POST /desk/consensus` and
+  `/desk/rate`, which the console keeps founder-only. Built, not deployed.)
 - G16.2 MODEL shows the LLM's own record from the canonical store: model
   and serving config, every journal edition (grounding, gate, timing), the
   scored reads and skill vs baselines (FR-N17), eval scores over time, the
