@@ -28,6 +28,7 @@ const PAGE_PATHS = new Set([
   '/ops',
   '/dashboard',
   '/desk',
+  '/scorecard', // Oracle FR-E3d: the track record
 ]);
 // FR-R6: the desk's two founder-only JSON writes (the console checks the viewer).
 const POST_PATHS = new Set([

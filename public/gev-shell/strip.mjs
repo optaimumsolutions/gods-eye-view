@@ -26,6 +26,8 @@ export const NAV_LINKS = Object.freeze([
   Object.freeze({ id: 'dashboard', label: 'DASHBOARD', href: '/dashboard' }),
   // Oracle FR-R6 (PRD-desk): the release desk (storage, model-run and COT notes), founder-only.
   Object.freeze({ id: 'desk', label: 'DESK', href: '/desk' }),
+  // Oracle FR-E3d (PRD-ng-analyst §4.9): the track record, the whole team's.
+  Object.freeze({ id: 'scorecard', label: 'SCORECARD', href: '/scorecard' }),
 ]);
 
 /** A source is stale past twice its tolerance, the console's own rule. */
