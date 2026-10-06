@@ -23,7 +23,13 @@ import {
   weatherPosition,
 } from './model.js';
 import { readPower } from './power.js';
-import { MODEL_LABELS, horizonOf, mapAnalystRecord } from './records.js';
+import { ORACLE_WEATHER_SOURCE_LABEL } from './oracleSource.js';
+import {
+  MODEL_LABELS,
+  horizonOf,
+  mapAnalystRecord,
+  snapshotLabel,
+} from './records.js';
 import { DEFAULT_LEAD, getForecastScrubber } from './scrubber.js';
 export * from './model.js';
 export { createOpenMeteoEnsembleSource } from './source.js';
@@ -91,10 +97,13 @@ export function createWeatherForecastLayer({
   let _meta = null;
   let _lead = DEFAULT_LEAD;
   let _enabled = false;
+  // an oracle-only source says so from the start; the others name their model
   let _sourceLabel =
-    MODEL_LABELS[source.model] ||
-    source.label ||
-    'ECMWF AIFS ENS via Open-Meteo';
+    source.label === ORACLE_WEATHER_SOURCE_LABEL
+      ? source.label
+      : MODEL_LABELS[source.model] ||
+        source.label ||
+        'ECMWF AIFS ENS via Open-Meteo';
   const _rowById = new Map();
   const _positionById = new Map();
   /** Pinned entities per entry id: `{ ring, disc, radius, visible }`. */
@@ -386,7 +395,9 @@ export function createWeatherForecastLayer({
     id: WEATHER_LAYER_ID,
     name: 'Weather · Basin Forecast',
     icon: '🌡️',
-    source: 'ECMWF AIFS ENS via Open-Meteo',
+    get source() {
+      return _sourceLabel; // the live attribution, not a constant
+    },
     updateInterval: UPDATE_INTERVAL_MS,
 
     init(viewer) {
@@ -449,7 +460,7 @@ export function createWeatherForecastLayer({
           return false;
         const rows = Array.isArray(snapshot?.rows) ? snapshot.rows : null;
         if (!rows) throw new Error('Malformed weather snapshot');
-        _sourceLabel = MODEL_LABELS[snapshot.model] || _sourceLabel;
+        _sourceLabel = snapshotLabel(snapshot, _sourceLabel);
         createPins(rows);
         _rows = rows;
         for (const row of rows) _rowById.set(row.id, row);

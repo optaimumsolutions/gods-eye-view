@@ -17,6 +17,17 @@ export const MODEL_LABELS = Object.freeze({
   ncep_aigefs025: 'NOAA AIGEFS via Open-Meteo',
   ncep_gefs025: 'NOAA GEFS via Open-Meteo',
 });
+/**
+ * The attribution for a weather snapshot (oracle DATA-MAP P1.8): a source that
+ * names itself wins (the oracle's "… via Oil Oracle store"), else the Open-Meteo
+ * model label, else what was shown before. The hosted site draws the oracle's
+ * numbers, so it must never read "via Open-Meteo".
+ */
+export function snapshotLabel(snapshot, previous) {
+  const own =
+    typeof snapshot?.source === 'string' ? snapshot.source.trim() : '';
+  return own || MODEL_LABELS[snapshot?.model] || previous;
+}
 export const DEFAULT_MODEL = 'ecmwf_aifs025_ensemble';
 export const FORECAST_DAYS = 15;
 /**

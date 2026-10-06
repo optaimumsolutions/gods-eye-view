@@ -191,3 +191,22 @@ test('every day carries a daily-class observation stamped issued/valid/published
   for (const v of Object.values(rec))
     assert.ok(v === null || ['string', 'number'].includes(typeof v));
 });
+
+test('snapshotLabel: a self-naming source (the oracle) wins; else the Open-Meteo model label', async () => {
+  const { snapshotLabel, MODEL_LABELS } = await import('./records.js');
+  const oracle = 'ECMWF AIFS ENS (open data) via Oil Oracle store';
+  assert.equal(
+    snapshotLabel({ source: oracle, model: 'ecmwf_aifs025_ensemble' }, 'x'),
+    oracle,
+  );
+  assert.equal(
+    snapshotLabel({ model: 'ncep_gefs025' }, 'x'),
+    MODEL_LABELS.ncep_gefs025,
+  );
+  assert.equal(snapshotLabel({ model: 'unknown' }, 'previous'), 'previous');
+  assert.equal(
+    snapshotLabel({ source: '  ', model: 'ncep_gefs025' }, 'x'),
+    MODEL_LABELS.ncep_gefs025,
+  );
+  assert.ok(!snapshotLabel({ source: oracle }, '').includes('Open-Meteo'));
+});
