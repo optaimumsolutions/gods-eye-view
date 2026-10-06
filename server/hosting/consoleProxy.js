@@ -16,7 +16,9 @@ import { PROXY_KEY_HEADER, USER_HEADER } from './accessGuard.js';
 // Row 16 (oracle FR-D21): the MODEL, OPS and DASHBOARD tabs are console pages.
 // Oracle FR-D22f: /futures (the energy futures board) is one too.
 // Oracle FR-R6: /desk (the release desk; the console keeps it founder-only).
+// Oracle FR-D27 (DATA-MAP P5): /oracle, the narrative tab (FR-D23n).
 const PAGE_PATHS = new Set([
+  '/oracle',
   '/futures',
   '/gas',
   '/weather',
@@ -37,6 +39,9 @@ const POST_PATHS = new Set([
   '/desk/rate',
 ]);
 const ORACLE_API_PREFIX = '/api/oracle/';
+// FR-D27: the market page's chart workspace reads its series here (licence and
+// viewer gates are the console's, server-side).
+const MARKET_SERIES = '/api/market/series';
 // FR-D19 (oracle FR-J1) async ask jobs: poll and cancel.
 const ASK_JOB = /^\/ask\/\d+$/;
 const ASK_JOB_CANCEL = /^\/ask\/\d+\/cancel$/;
@@ -78,6 +83,7 @@ export function consoleRoute(method, url) {
     if (pathname === '/market' || pathname === '/market/') return `/${search}`;
     if (PAGE_PATHS.has(pathname)) return pathname + search;
     if (pathname.startsWith(ORACLE_API_PREFIX)) return pathname + search;
+    if (pathname === MARKET_SERIES) return pathname + search;
     if (ASK_JOB.test(pathname)) return pathname + search;
     return null;
   }

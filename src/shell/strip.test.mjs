@@ -41,6 +41,7 @@ test('the strip links are the product pages, in order', () => {
     [
       'GLOBE /',
       'MARKET /market',
+      'ORACLE /oracle',
       'FUTURES /futures',
       'GAS /gas',
       'WEATHER /weather',
@@ -62,6 +63,7 @@ test('the current page is highlighted; unknown pages highlight nothing', () => {
   assert.equal(activeLinkId('/market/'), 'market');
   assert.equal(activeLinkId('/trades'), 'trades');
   assert.equal(activeLinkId('/desk'), 'desk');
+  assert.equal(activeLinkId('/oracle'), 'oracle');
   assert.equal(activeLinkId('/elsewhere'), null);
   assert.equal(activeLinkId(undefined), 'globe');
 });

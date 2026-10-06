@@ -12,6 +12,8 @@
 export const NAV_LINKS = Object.freeze([
   Object.freeze({ id: 'globe', label: 'GLOBE', href: '/' }),
   Object.freeze({ id: 'market', label: 'MARKET', href: '/market' }),
+  // Oracle FR-D27 (DATA-MAP P5): the narrative cards that left the market page (FR-D23n).
+  Object.freeze({ id: 'oracle', label: 'ORACLE', href: '/oracle' }),
   // Oracle FR-D22f: the energy futures board rides the console proxy.
   Object.freeze({ id: 'futures', label: 'FUTURES', href: '/futures' }),
   Object.freeze({ id: 'gas', label: 'GAS', href: '/gas' }),
