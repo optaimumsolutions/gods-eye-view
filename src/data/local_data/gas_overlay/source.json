@@ -47,21 +47,22 @@
         "p90": 6.76,
         "max": 92.46
       },
-      "positionDisagree": [
-        "Carthage Jct vs Gulf South Pipeline - Carthage Jct Station 2.71 km",
-        "Tallulah vs Gulf South Pipeline - Tallulah Station 2.92 km",
-        "Clarence vs Gulf South Pipeline - Clarence Station 15.11 km",
-        "Hall Summit vs Gulf South Pipeline - Hall Summit Station 11.3 km",
-        "Hall Summit (Recip) vs Gulf South Pipeline - Hall Summit Station 11.26 km"
-      ],
+      "positionDisagree": [],
       "offLine": [
-        "Arnaudville 6.76 km",
-        "Cocodrie 11.61 km",
-        "Bistineau 6.66 km",
         "Gulf South Pipeline - Mira Station 5.17 km",
         "Gulf South Pipeline - Rodrigue Station 11.19 km",
         "Gulf South Pipeline - Paris Station 92.46 km"
-      ]
+      ],
+      "checked": {
+        "verified": 10,
+        "unverified": [
+          "Gulf South Pipeline - Mira Station",
+          "Gulf South Pipeline - Rodrigue Station",
+          "Gulf South Pipeline - Jasper Station",
+          "Gulf South Pipeline - Paris Station",
+          "Gulf South Pipeline - Magasco Station"
+        ]
+      }
     },
     {
       "pipeline": "gulf_run",
@@ -76,7 +77,11 @@
         "max": 0.77
       },
       "positionDisagree": [],
-      "offLine": []
+      "offLine": [],
+      "checked": {
+        "verified": 0,
+        "unverified": []
+      }
     }
   ],
   "points": {
@@ -104,9 +109,9 @@
         "ghgrp_facility": 78,
         "snap_to_line": 316,
         "station_match": 41,
-        "unresolved": 13,
+        "manual": 2,
         "interconnect": 50,
-        "manual": 1
+        "unresolved": 12
       }
     },
     "thresholds": {

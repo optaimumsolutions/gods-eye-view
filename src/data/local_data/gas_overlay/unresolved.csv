@@ -1,5 +1,4 @@
 pipeline,loc,name,type,flows,county,state,counterparty,design_dth,method,why
-gulf_south,289,E.I.Blk 32 Pltfm A,WHD,R,Eugene Island,LA,"Gulf South Pipeline Company, LLC",16397,unresolved,"county ""Eugene Island, LA"" not found in TIGER"
 gulf_south,9500,Tennessee - Greenville Del,INT,D,Washington,MS,"Tennessee Gas Pipeline Company, L.L.C.",512500,unresolved,"the drawn line does not cross Washington, MS"
 gulf_south,9504,Trunkline Burdette Del,INT,D,Washington,MS,"Trunkline Gas Company, LLC",538125,unresolved,"the drawn line does not cross Washington, MS"
 gulf_south,9505,Tennessee- (800) Isola Del,INT,D,Humphreys,MS,"Tennessee Gas Pipeline Company, L.L.C.",512500,unresolved,"the drawn line does not cross Humphreys, MS"

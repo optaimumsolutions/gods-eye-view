@@ -32,6 +32,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { readArgs } from './arcgis-paging.mjs';
+import { parseCsv } from './gas-overlay-csv.mjs';
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DATA = path.join(root, 'src', 'data', 'local_data');
@@ -342,6 +343,34 @@ export function buildStations(id, spec, lines, hifld, ghgrp) {
   return stations;
 }
 
+/**
+ * Apply the human station checks (`manual/station-checks.csv`): `verified`
+ * stamps the station, `moved` replaces its coordinate (and re-measures it
+ * against the line), `unverified` keeps the coordinate but says it is not
+ * trusted. Every check names its evidence; a check for an unknown station
+ * fails the build, so a renamed station cannot silently lose its check.
+ */
+export function applyStationChecks(stations, checks, linesById) {
+  const byId = new Map(stations.map((s) => [s.id, s]));
+  for (const c of checks) {
+    const s = byId.get(c.station_id);
+    if (!s) throw new Error(`station-checks.csv: no station ${c.station_id}`);
+    if (c.verdict === 'moved') {
+      s.lon = +Number(c.lon).toFixed(5);
+      s.lat = +Number(c.lat).toFixed(5);
+      const parts = linesById[s.pipeline] ?? [];
+      if (parts.length) {
+        s.lineKm = +distanceToPartsKm([s.lon, s.lat], parts).toFixed(2);
+        s.offLine = s.lineKm > STATION_LINE_KM;
+      }
+    } else if (!['verified', 'unverified'].includes(c.verdict)) {
+      throw new Error(`station-checks.csv: verdict "${c.verdict}" for ${c.station_id}`);
+    }
+    s.check = { verdict: c.verdict, evidence: c.evidence, checked: c.checked };
+  }
+  return stations;
+}
+
 export function lngAnchors(terminals) {
   const want = /Golden Pass|Freeport|Sabine Pass|Cameron LNG|Calcasieu Pass|Corpus Christi LNG|Port Arthur LNG|Plaquemines/i;
   return terminals.terminals
@@ -394,6 +423,22 @@ async function main() {
     });
   }
 
+  const checksFile = path.join(MANUAL_DIR, 'station-checks.csv');
+  if (existsSync(checksFile)) {
+    applyStationChecks(stations, parseCsv(readFileSync(checksFile, 'utf8')),
+      Object.fromEntries(lines.map((l) => [l.id, l.parts])));
+    for (const c of checks) {
+      const st = stations.filter((s) => s.pipeline === c.pipeline);
+      // A disagreement or an off-line flag that imagery settled is not open any more.
+      const settled = (s) => s.check && s.check.verdict !== 'unverified';
+      c.offLine = st.filter((s) => s.offLine && !settled(s)).map((s) => `${s.name} ${s.lineKm} km`);
+      c.positionDisagree = st
+        .filter((s) => s.ghgrp && s.ghgrp.km > GHGRP_MATCH_KM && !settled(s))
+        .map((s) => `${s.name} vs ${s.ghgrp.name} ${s.ghgrp.km} km`);
+      c.checked = { verified: st.filter((s) => s.check && s.check.verdict !== 'unverified').length,
+        unverified: st.filter((s) => s.check?.verdict === 'unverified').map((s) => s.name) };
+    }
+  }
   const lng = lngAnchors(terminals);
   mkdirSync(OUT_DIR, { recursive: true });
   const linesOut = { id: 'gas-overlay-lines', retrieved: RETRIEVED, pipelines: lines };

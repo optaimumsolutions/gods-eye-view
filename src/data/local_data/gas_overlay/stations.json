@@ -35,7 +35,12 @@
     "km": 2.71
    },
    "lineKm": 4.85,
-   "offLine": false
+   "offLine": false,
+   "check": {
+    "verdict": "verified",
+    "evidence": "USGS orthoimagery z16: station complex under the point",
+    "checked": "2026-10-01"
+   }
   },
   {
    "id": "gulf_south-bayou-sale",
@@ -70,7 +75,12 @@
     "km": 2.92
    },
    "lineKm": 1.42,
-   "offLine": false
+   "offLine": false,
+   "check": {
+    "verdict": "verified",
+    "evidence": "USGS orthoimagery z16: station pad under the point; the GHGRP coordinate 2.9 km away is a crop field at the town edge",
+    "checked": "2026-10-01"
+   }
   },
   {
    "id": "gulf_south-castor",
@@ -280,7 +290,12 @@
     "km": 15.11
    },
    "lineKm": 4.66,
-   "offLine": false
+   "offLine": false,
+   "check": {
+    "verdict": "verified",
+    "evidence": "USGS orthoimagery z16: station pad beside a major right-of-way; the GHGRP coordinate 15.1 km away is woods and houses",
+    "checked": "2026-10-01"
+   }
   },
   {
    "id": "gulf_south-arnaudville",
@@ -300,7 +315,12 @@
     "km": 0.37
    },
    "lineKm": 6.76,
-   "offLine": true
+   "offLine": true,
+   "check": {
+    "verdict": "verified",
+    "evidence": "USGS orthoimagery z16: station pad under the point; its 6.8 km from the line is the coarse 2020 linework",
+    "checked": "2026-10-01"
+   }
   },
   {
    "id": "gulf_south-whistler-jct",
@@ -355,7 +375,12 @@
     "km": 11.3
    },
    "lineKm": 0.2,
-   "offLine": false
+   "offLine": false,
+   "check": {
+    "verdict": "verified",
+    "evidence": "USGS orthoimagery z16: compressor complex under the point with converging rights-of-way; the GHGRP coordinate 11.3 km north is a lakeside residential area (an address geocode)",
+    "checked": "2026-10-01"
+   }
   },
   {
    "id": "gulf_south-koran-2",
@@ -390,7 +415,12 @@
     "km": 11.26
    },
    "lineKm": 0.24,
-   "offLine": false
+   "offLine": false,
+   "check": {
+    "verdict": "verified",
+    "evidence": "Same complex as Hall Summit (two HIFLD units 40 m apart)",
+    "checked": "2026-10-01"
+   }
   },
   {
    "id": "gulf_south-harrisville-1-recip",
@@ -465,7 +495,12 @@
     "km": 0.58
    },
    "lineKm": 3.51,
-   "offLine": false
+   "offLine": false,
+   "check": {
+    "verdict": "verified",
+    "evidence": "USGS orthoimagery z16: industrial yard under the point",
+    "checked": "2026-10-01"
+   }
   },
   {
    "id": "gulf_south-cocodrie",
@@ -480,7 +515,12 @@
    "method": "hifld_copy",
    "ghgrp": null,
    "lineKm": 11.61,
-   "offLine": true
+   "offLine": true,
+   "check": {
+    "verdict": "verified",
+    "evidence": "USGS orthoimagery z16: coastal facility in the marsh; 11.6 km from the line is the coarse 2020 linework",
+    "checked": "2026-10-01"
+   }
   },
   {
    "id": "gulf_south-napoleonville",
@@ -580,7 +620,12 @@
    "method": "hifld_copy",
    "ghgrp": null,
    "lineKm": 6.66,
-   "offLine": true
+   "offLine": true,
+   "check": {
+    "verdict": "verified",
+    "evidence": "USGS orthoimagery z16: large station complex in a grid of rights-of-way; 6.7 km from the line is the coarse 2020 linework",
+    "checked": "2026-10-01"
+   }
   },
   {
    "id": "gulf_south-destin",
@@ -615,7 +660,12 @@
     "km": 0
    },
    "lineKm": 5.17,
-   "offLine": true
+   "offLine": true,
+   "check": {
+    "verdict": "unverified",
+    "evidence": "USGS orthoimagery z16: the GHGRP point is a rural crossroads with no station (an address geocode); Mira is on Gulf Crossing whose line is not drawn yet",
+    "checked": "2026-10-01"
+   }
   },
   {
    "id": "gulf_south-ghgrp-1011947",
@@ -635,7 +685,12 @@
     "km": 0
    },
    "lineKm": 11.19,
-   "offLine": true
+   "offLine": true,
+   "check": {
+    "verdict": "unverified",
+    "evidence": "USGS orthoimagery z15: marsh-edge roadside with no station; the drawn line is not in the 4 km frame",
+    "checked": "2026-10-01"
+   }
   },
   {
    "id": "gulf_south-ghgrp-1014699",
@@ -655,7 +710,12 @@
     "km": 0
    },
    "lineKm": 0.34,
-   "offLine": false
+   "offLine": false,
+   "check": {
+    "verdict": "unverified",
+    "evidence": "USGS orthoimagery z15: woods at a road junction; the only candidate is a small fenced pad ~1.2 km NE at a right-of-way crossing (possibly a meter station)",
+    "checked": "2026-10-01"
+   }
   },
   {
    "id": "gulf_south-ghgrp-1005028",
@@ -675,14 +735,19 @@
     "km": 0
    },
    "lineKm": 92.46,
-   "offLine": true
+   "offLine": true,
+   "check": {
+    "verdict": "unverified",
+    "evidence": "USGS orthoimagery z16: the GHGRP point is on a road between two industrial compounds (one ~650 m east looks like a compressor station); Paris is on Gulf Crossing whose line is not drawn yet",
+    "checked": "2026-10-01"
+   }
   },
   {
    "id": "gulf_south-ghgrp-1013935",
    "name": "Gulf South Pipeline - Wilson Station",
    "pipeline": "gulf_south",
-   "lon": -95.93733,
-   "lat": 29.2959,
+   "lon": -95.94214,
+   "lat": 29.2962,
    "county": "Wharton County",
    "state": "TX",
    "certHp": null,
@@ -694,8 +759,13 @@
     "parent": "LOEWS CORP (100%)",
     "km": 0
    },
-   "lineKm": 4.79,
-   "offLine": false
+   "lineKm": 4.47,
+   "offLine": false,
+   "check": {
+    "verdict": "moved",
+    "evidence": "USGS orthoimagery z15: fenced station pad ~470 m west of the GHGRP point (which is on the road beside it); position read off the image (~100 m)",
+    "checked": "2026-10-01"
+   }
   },
   {
    "id": "gulf_south-ghgrp-1013988",
@@ -715,7 +785,12 @@
     "km": 0
    },
    "lineKm": 0.33,
-   "offLine": false
+   "offLine": false,
+   "check": {
+    "verdict": "unverified",
+    "evidence": "USGS orthoimagery z15: the GHGRP point is in Magasco town; no station visible near the drawn line",
+    "checked": "2026-10-01"
+   }
   },
   {
    "id": "gulf_run-westdale",

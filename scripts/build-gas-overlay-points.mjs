@@ -38,6 +38,9 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { readArgs } from './arcgis-paging.mjs';
 import { haversineKm, pointSegmentKm } from './build-gas-overlay.mjs';
+import { parseCsv, toCsv } from './gas-overlay-csv.mjs';
+
+export { parseCsv, toCsv };
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DATA = path.join(root, 'src', 'data', 'local_data');
@@ -79,33 +82,6 @@ const OWNER_TYPES = new Set(['END', 'PLT', 'STR', 'LNG']);
 const stationName = (s) => s.replace(/^.*\s-\s/, '');
 
 // ------------------------------------------------------------- text ----
-
-export function parseCsv(text) {
-  const rows = [];
-  let row = [], field = '', quoted = false;
-  for (let i = 0; i < text.length; i += 1) {
-    const c = text[i];
-    if (quoted) {
-      if (c === '"') {
-        if (text[i + 1] === '"') { field += '"'; i += 1; } else quoted = false;
-      } else field += c;
-    } else if (c === '"') quoted = true;
-    else if (c === ',') { row.push(field); field = ''; }
-    else if (c === '\n') { row.push(field.replace(/\r$/, '')); rows.push(row); row = []; field = ''; }
-    else field += c;
-  }
-  if (field || row.length) { row.push(field.replace(/\r$/, '')); rows.push(row); }
-  const header = (rows.shift() ?? []).map((h) => h.replace(/\s+/g, ' ').trim());
-  return rows
-    .filter((r) => r.length > 1)
-    .map((r) => Object.fromEntries(header.map((h, i) => [h, (r[i] ?? '').trim()])));
-}
-
-const csvCell = (v) => {
-  const s = v === null || v === undefined ? '' : String(v);
-  return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
-};
-export const toCsv = (cols, rows) => [cols.join(','), ...rows.map((r) => cols.map((c) => csvCell(r[c])).join(','))].join('\n') + '\n';
 
 /** Misspellings found in the postings, mapped to the TIGER name. */
 const COUNTY_ALIASES = { terrebone: 'terrebonne' };

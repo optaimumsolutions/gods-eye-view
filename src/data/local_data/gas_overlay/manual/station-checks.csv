@@ -1,0 +1,16 @@
+station_id,verdict,lon,lat,evidence,checked
+gulf_south-hall-summit,verified,,,USGS orthoimagery z16: compressor complex under the point with converging rights-of-way; the GHGRP coordinate 11.3 km north is a lakeside residential area (an address geocode),2026-10-01
+gulf_south-hall-summit-recip,verified,,,Same complex as Hall Summit (two HIFLD units 40 m apart),2026-10-01
+gulf_south-clarence,verified,,,USGS orthoimagery z16: station pad beside a major right-of-way; the GHGRP coordinate 15.1 km away is woods and houses,2026-10-01
+gulf_south-tallulah,verified,,,USGS orthoimagery z16: station pad under the point; the GHGRP coordinate 2.9 km away is a crop field at the town edge,2026-10-01
+gulf_south-carthage-jct,verified,,,USGS orthoimagery z16: station complex under the point,2026-10-01
+gulf_south-carthage-2,verified,,,USGS orthoimagery z16: industrial yard under the point,2026-10-01
+gulf_south-arnaudville,verified,,,USGS orthoimagery z16: station pad under the point; its 6.8 km from the line is the coarse 2020 linework,2026-10-01
+gulf_south-bistineau,verified,,,USGS orthoimagery z16: large station complex in a grid of rights-of-way; 6.7 km from the line is the coarse 2020 linework,2026-10-01
+gulf_south-cocodrie,verified,,,USGS orthoimagery z16: coastal facility in the marsh; 11.6 km from the line is the coarse 2020 linework,2026-10-01
+gulf_south-ghgrp-1013935,moved,-95.94214,29.29620,USGS orthoimagery z15: fenced station pad ~470 m west of the GHGRP point (which is on the road beside it); position read off the image (~100 m),2026-10-01
+gulf_south-ghgrp-1005027,unverified,,,USGS orthoimagery z16: the GHGRP point is a rural crossroads with no station (an address geocode); Mira is on Gulf Crossing whose line is not drawn yet,2026-10-01
+gulf_south-ghgrp-1005028,unverified,,,USGS orthoimagery z16: the GHGRP point is on a road between two industrial compounds (one ~650 m east looks like a compressor station); Paris is on Gulf Crossing whose line is not drawn yet,2026-10-01
+gulf_south-ghgrp-1014699,unverified,,,USGS orthoimagery z15: woods at a road junction; the only candidate is a small fenced pad ~1.2 km NE at a right-of-way crossing (possibly a meter station),2026-10-01
+gulf_south-ghgrp-1013988,unverified,,,USGS orthoimagery z15: the GHGRP point is in Magasco town; no station visible near the drawn line,2026-10-01
+gulf_south-ghgrp-1011947,unverified,,,USGS orthoimagery z15: marsh-edge roadside with no station; the drawn line is not in the 4 km frame,2026-10-01

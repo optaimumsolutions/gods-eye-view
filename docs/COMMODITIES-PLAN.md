@@ -6759,3 +6759,30 @@ what changes daily: capacity, notices, the point-master refresh, and the
     - An LNG match must say LNG ("Cameron City Gate" had landed on Cameron
       LNG).
     - The posting's "Terrebone" is aliased to Terrebonne.
+- **Verification pass + open-items register (2026-10-01, session jgewi-f1, founder: "try and resolve the unverified coordinates … if not, include them as a missing data point … so the agent is easily able to reference them").**
+  - **Stations, against USGS orthoimagery (public domain, zoom 16 ≈ 2 m/px):**
+    - Verified at the HIFLD coordinate: Hall Summit (and Recip), Clarence,
+      Tallulah, Carthage Jct, Carthage #2, Arnaudville, Bistineau,
+      Cocodrie. The off-line ones are the coarse 2020 line, not the station.
+    - Moved: Wilson, to the station pad ~470 m west.
+    - Every GHGRP coordinate that disagreed with HIFLD was an address
+      geocode, and so were the GHGRP-only stations Mira, Paris, Jasper,
+      Magasco and Rodrigue: still `unverified`, each with what the imagery
+      showed.
+  - **Points:**
+    - Eugene Island 32 platform A pinned from the row 11 BSEE bundle
+      (structure 21798-1).
+    - Freeport feedgas `24329` confirmed on the pretreatment complex.
+  - **New finding:**
+    - 11 of the 12 unresolved points are Gulf South's zone GC (Gulf
+      Crossing, absent from the 2020 linework under any operator) and zone
+      KOS (the Greenville–Kosciusko lateral). FERC hand trace running.
+    - The Coastal Bend Header is missing too, so Brazoria County is not
+      crossed.
+  - **Register:** `gas_overlay/open-items.csv` holds 24 items: 12 points,
+    6 stations (incl. Gulf Run's Alto), 4 lines, the 343 county-snapped
+    points, and the Kinder Morgan permission.
+    - `manual/station-checks.csv` records the checks.
+    - `openItems.test.mjs` keeps the register in step with the data.
+    - `/comm` prints it: `~/.claude/skills/comm/snapshot.sh` gained an
+      "open data items" section, and the report a DATA line.

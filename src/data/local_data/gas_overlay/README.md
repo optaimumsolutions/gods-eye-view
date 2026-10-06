@@ -87,3 +87,25 @@ location code (`loc`; FR-N15's Gulf South rows add `-R`/`-D`). Rebuild with
   `.gev-cache/gas-overlay-points-raw/`, together with the TIGER counties and
   places and GHGRP 2023 for each state touched. `--replay <dir>` rebuilds
   from that archive.
+
+## Verification and open items
+
+- **`manual/station-checks.csv`** records a human check per station:
+  - Verdicts are `verified`, `moved` (with a new lon/lat) or `unverified`.
+  - Each row carries its evidence. The build applies them, and a check
+    naming an unknown station fails the build.
+  - 2026-10-01: 15 stations checked against USGS orthoimagery (public
+    domain, keyless, zoom 16 ≈ 2 m/px).
+  - HIFLD sat on the station every time. Every GHGRP-only coordinate was an
+    address geocode (crossroads, town centres, fields).
+- **`open-items.csv`** is the register of everything not verified: points
+  no rule could place, stations with only an address coordinate, missing
+  linework, and external blockers.
+  - Each row gives `id` (GO-nn), `status`, `kind`, `ref`, `issue`,
+    `current`, `candidate` and `next_step`.
+  - `/comm` prints its open rows at the start of every session.
+  - `src/layers/gasOverlay/openItems.test.mjs` keeps it in step with the
+    data. An unresolved point or unverified station without an open item
+    fails, and so does an open item whose gap is already fixed.
+  - To resolve an item, fix the data and set `status` to `resolved` in the
+    same commit.

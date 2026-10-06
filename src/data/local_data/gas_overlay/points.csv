@@ -66,6 +66,7 @@ gulf_south,188,Monsanto Luling Plant,END,D,St Charles,LA,Bayer Corporation,15168
 gulf_south,193,Petro-United Sunshine Terminal,END,D,Iberville,LA,"LBC Baton Rouge, LLC",1536,-91.09613,30.22718,snap_to_line,0.4,middle of the line in Iberville
 gulf_south,198,Shell Plant @ Geismar,END,D,Ascension,LA,Shell Oil Company,67307,-90.99289,30.18416,ghgrp_facility,0.8,SHELL CHEMICAL CO - GEISMAR PLANT (shell geismar shell)
 gulf_south,235,La Paving Plt @Bayou Blue,END,D,Terrebone,LA,South Coast Gas Co Inc,145,-90.77482,29.29146,snap_to_line,0.4,middle of the line in Terrebonne
+gulf_south,289,E.I.Blk 32 Pltfm A,WHD,R,Eugene Island,LA,"Gulf South Pipeline Company, LLC",16397,-91.536375,29.31081,manual,1,"manual 2026-10-01: BSEE structure 21798-1 = Eugene Island 32 platform A (Union Oil; row 11 bundle platforms.json; NAD27 as published, ~20 m from WGS84 here); Gulf South valve platform 516-1 sits 250 m NW"
 gulf_south,298,N Turtle Bayou Cp #1,WHD,R,Terrebone,LA,"Petrodome Operating, LLC",84995,-90.77482,29.29146,snap_to_line,0.4,middle of the line in Terrebonne
 gulf_south,300,West Lake Verret,WHD,R,St Martin,LA,"White Oak Energy, LLC Operating Co.",21156,-91.85696,30.19258,snap_to_line,0.4,middle of the line in St. Martin
 gulf_south,355,Lake Hatch C.P. #1,WHD,R,Terrebone,LA,"Westlake, City Of",22093,-90.77482,29.29146,snap_to_line,0.4,middle of the line in Terrebonne
