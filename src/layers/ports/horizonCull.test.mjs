@@ -164,3 +164,10 @@ test('disable and destroy release the camera listeners', async () => {
   assert.equal(viewer.camera.moveEnd.size, 0);
   assert.equal(viewer.camera.changed.size, 0);
 });
+
+test('FR-D29: PortWatch is weekly, so the timer polls once a day', () => {
+  const viewer = fakeViewer(ATLANTIC);
+  const { layer } = fakeLayer(viewer);
+  assert.equal(layer.updateInterval, 24 * 60 * 60_000);
+  layer.destroy(viewer);
+});

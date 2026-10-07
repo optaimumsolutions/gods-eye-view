@@ -8,6 +8,7 @@ import {
   createPreferredWeatherSource,
 } from './oracleSource.js';
 import { createOpenMeteoEnsembleSource } from './source.js';
+import { createSharedFetch } from '../../data/sharedFetch.js';
 
 /** The route's shape as rehearsed on the VPS 2026-09-30 (AIFS_ENS, 14 valid days after the init). */
 function routePayload(initDate = '2026-09-29') {
@@ -220,4 +221,34 @@ test('preferred: the oracle answers first; without a console Open-Meteo answers 
   const controller = new AbortController();
   controller.abort();
   await assert.rejects(() => source.getSnapshot({ signal: controller.signal }));
+});
+
+test('FR-D29: the layer and the forecast service share one weather-forecast request per tick', async () => {
+  const fx = fixtureFetch();
+  let calls = 0;
+  let payload = routePayload('2026-09-29');
+  const fetchImpl = async (url, opts) => {
+    if (String(url).startsWith('/api/oracle/weather-forecast')) {
+      calls += 1;
+      return { ok: true, status: 200, json: async () => payload };
+    }
+    return fx.fetchImpl(url, opts);
+  };
+  const now = () => Date.UTC(2026, 8, 30, 12);
+  const shared = createSharedFetch({ fetchImpl, now });
+  const source = createOracleWeatherSource({ fetchImpl, now, shared });
+  // The layer's update and the service's read land on the same tick.
+  const [layerRead, serviceRead] = await Promise.all([
+    source.getSnapshot(),
+    source.getSnapshot(),
+  ]);
+  assert.equal(calls, 1, 'one request for both readers');
+  assert.equal(layerRead.meta.initialisedAt, serviceRead.meta.initialisedAt);
+  await source.getSnapshot();
+  assert.equal(calls, 1, 'reused inside the TTL');
+  payload = routePayload('2026-09-30');
+  shared.invalidate(); // a wx_aifs store write (liveRefresh)
+  const fresh = await source.getSnapshot();
+  assert.equal(calls, 2);
+  assert.equal(fresh.meta.initialisedAt, '2026-09-30T00:00:00.000Z');
 });

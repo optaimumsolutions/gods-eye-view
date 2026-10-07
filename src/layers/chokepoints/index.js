@@ -23,8 +23,12 @@ export * from './records.js';
 export { CHOKEPOINT_GAZETTEER } from './gazetteer.js';
 export { createPortWatchChokepointSource } from './source.js';
 
-/** PortWatch publishes daily; a half-hour poll is plenty and polite. */
-const UPDATE_INTERVAL_MS = 30 * 60_000;
+/**
+ * PortWatch publishes weekly (daily rows, a weekly drop), so the timer polls
+ * once a day (FR-D29); a store write on `portwatch` refreshes the layer
+ * within seconds through src/hosting/liveRefresh.js.
+ */
+const UPDATE_INTERVAL_MS = 24 * 60 * 60_000;
 
 /** A pinned strait before its first feed: known place, unknown flow. */
 function emptyRow(point) {

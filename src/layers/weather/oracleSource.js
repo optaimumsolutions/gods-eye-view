@@ -25,6 +25,10 @@ import {
   dayOfYear,
 } from './records.js';
 import { loadWeatherBundles } from './source.js';
+import {
+  createSharedFetch,
+  sharedOracleFetch,
+} from '../../data/sharedFetch.js';
 
 export const ORACLE_WEATHER_URL = '/api/oracle/weather-forecast';
 export const ORACLE_WEATHER_SOURCE_LABEL =
@@ -255,8 +259,17 @@ export function buildOracleWeatherSnapshot(
   };
 }
 
+/**
+ * The weather layer and the forecast service (src/services/weatherForecast.js)
+ * both read this source; with the default fetch the route goes through
+ * `sharedOracleFetch`, so one tick costs one request (FR-D29). An injected
+ * `fetchImpl` gets a private, uncached reader unless `shared` is passed too.
+ */
 export function createOracleWeatherSource({
-  fetchImpl = (...args) => globalThis.fetch(...args),
+  fetchImpl,
+  shared = fetchImpl
+    ? createSharedFetch({ fetchImpl, ttlMs: 0 })
+    : sharedOracleFetch,
   now = () => Date.now(),
   model = DEFAULT_MODEL,
   url = ORACLE_WEATHER_URL,
@@ -264,6 +277,7 @@ export function createOracleWeatherSource({
   maxLagDays = ORACLE_MAX_LAG_DAYS,
 } = {}) {
   const oracleModel = ORACLE_MODEL_KEYS[model];
+  const bundleFetch = fetchImpl ?? ((...args) => globalThis.fetch(...args));
   let _bundles = null;
   let _run = null;
   let _requests = 0;
@@ -273,15 +287,19 @@ export function createOracleWeatherSource({
     async getSnapshot({ signal } = {}) {
       if (!oracleModel) throw new Error(`Oil Oracle store has no ${model}`);
       if (!_bundles)
-        _bundles = await loadWeatherBundles({ fetchImpl, urls, signal });
+        _bundles = await loadWeatherBundles({
+          fetchImpl: bundleFetch,
+          urls,
+          signal,
+        });
       signal?.throwIfAborted();
       _requests += 1;
-      const response = await fetchImpl(`${url}?model=${oracleModel}`, {
+      const response = await shared.getJson(`${url}?model=${oracleModel}`, {
         signal,
       });
       if (!response.ok)
         throw new Error(`Oil Oracle weather-forecast HTTP ${response.status}`);
-      const payload = await response.json();
+      const payload = response.body;
       signal?.throwIfAborted();
       if (payload?.error)
         throw new Error(`Oil Oracle weather-forecast: ${payload.error}`);

@@ -8,6 +8,11 @@
  * console, an older console without the route, or a stale store, the card
  * simply has no weather line. Portable: no Cesium, no DOM.
  */
+import {
+  createSharedFetch,
+  sharedOracleFetch,
+} from '../../data/sharedFetch.js';
+
 export const ORACLE_BASINS_URL = '/api/oracle/basins';
 /**
  * The oracle ingests observations and forecasts daily; older than this (a
@@ -115,21 +120,27 @@ export function basinWeatherLine(reading) {
   return parts.length > 1 ? parts.join(' · ') : null;
 }
 
+/**
+ * The five onshore layers each own one of these; with the default fetch they
+ * all read through `sharedOracleFetch`, so a refresh tick costs one request
+ * (FR-D29). An injected `fetchImpl` gets a private, uncached reader unless
+ * `shared` is passed too, so tests never see another source's body.
+ */
 export function createOracleBasinWeatherSource({
-  fetchImpl = (...args) => globalThis.fetch(...args),
+  fetchImpl,
   url = ORACLE_BASINS_URL,
+  shared = fetchImpl
+    ? createSharedFetch({ fetchImpl, ttlMs: 0 })
+    : sharedOracleFetch,
 } = {}) {
   return {
     label: 'Oil Oracle store',
     async getReadings({ signal } = {}) {
       signal?.throwIfAborted();
-      const response = await fetchImpl(url, {
-        signal,
-        headers: { Accept: 'application/json' },
-      });
+      const response = await shared.getJson(url, { signal });
       if (!response.ok)
         throw new Error(`Oil Oracle basins HTTP ${response.status}`);
-      const readings = normaliseBasinWeather(await response.json());
+      const readings = normaliseBasinWeather(response.body);
       signal?.throwIfAborted();
       if (!readings) throw new Error('Malformed Oil Oracle basins');
       return readings;

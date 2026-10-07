@@ -8,6 +8,7 @@ import {
   pickBasinReading,
 } from './basinWeather.js';
 import { createRegionOverlayEntry } from './model.js';
+import { createSharedFetch } from '../../data/sharedFetch.js';
 
 const NOW = Date.parse('2026-09-24T16:00:00Z');
 
@@ -119,4 +120,42 @@ test('the source reads the route and rejects HTTP errors and malformed bodies', 
     });
     await assert.rejects(source.getReadings());
   }
+});
+
+test('FR-D29: the five onshore layers share one basins request per tick', async () => {
+  let calls = 0;
+  let release;
+  const gate = new Promise((resolve) => (release = resolve));
+  const fetchImpl = async (url) => {
+    calls += 1;
+    await gate;
+    return { ok: true, status: 200, json: async () => payload() };
+  };
+  const shared = createSharedFetch({ fetchImpl });
+  const sources = Array.from({ length: 5 }, () =>
+    createOracleBasinWeatherSource({ fetchImpl, shared }),
+  );
+  const reads = sources.map((source) => source.getReadings());
+  release();
+  const all = await Promise.all(reads);
+  assert.equal(calls, 1, 'one request for five layers');
+  for (const readings of all) assert.equal(readings.get('Bakken').tminF, 52);
+  await sources[2].getReadings();
+  assert.equal(calls, 1, 'the next layer inside the TTL reuses the body');
+  shared.invalidate(); // a wx_ghcn / wx_aifs store write (liveRefresh)
+  await sources[0].getReadings();
+  assert.equal(calls, 2, 'a store write forces a fresh read');
+});
+
+test('FR-D29: an injected fetchImpl alone reads uncached, never the shared memo', async () => {
+  let calls = 0;
+  const source = createOracleBasinWeatherSource({
+    fetchImpl: async () => {
+      calls += 1;
+      return { ok: true, status: 200, json: async () => payload() };
+    },
+  });
+  await source.getReadings();
+  await source.getReadings();
+  assert.equal(calls, 2);
 });

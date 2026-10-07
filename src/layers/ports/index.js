@@ -27,8 +27,11 @@ export * from './model.js';
 export * from './records.js';
 export { createPortWatchPortSource } from './source.js';
 
-/** PortWatch publishes daily; a half-hour poll is plenty and polite. */
-const UPDATE_INTERVAL_MS = 30 * 60_000;
+/**
+ * PortWatch publishes weekly (daily rows, a weekly drop) and the port source
+ * has no Oracle copy, so the timer polls once a day (FR-D29).
+ */
+const UPDATE_INTERVAL_MS = 24 * 60 * 60_000;
 
 /**
  * Own one port display: a marker per port sized by its annual tanker visits
