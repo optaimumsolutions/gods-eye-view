@@ -13,13 +13,23 @@ import { createSharedFetch } from '../../data/sharedFetch.js';
 const NOW = Date.parse('2026-09-24T16:00:00Z');
 
 /** The /api/oracle/basins payload shape (oracle tools/oracle_api.py). */
-function payload({ observed = '2026-09-20', init = '2026-09-23' } = {}) {
+function payload({
+  observed = '2026-09-20',
+  init = '2026-09-23',
+  obsFreshness,
+  fcFreshness,
+} = {}) {
   return {
     source: 'Oil Oracle store',
     basins: [
       {
         region: 'Bakken',
-        observed: { observedAt: observed, tminF: 52.0, series: [[observed, 52.0]] },
+        observed: {
+          observedAt: observed,
+          tminF: 52.0,
+          series: [[observed, 52.0]],
+          ...(obsFreshness ? { freshness: obsFreshness } : {}),
+        },
         forecast: {
           model: 'AIFS_ENS',
           publishedAt: init,
@@ -27,6 +37,7 @@ function payload({ observed = '2026-09-20', init = '2026-09-23' } = {}) {
           frzdd14: 0,
           tminF: [],
           frzdd: [],
+          ...(fcFreshness ? { freshness: fcFreshness } : {}),
         },
       },
       { region: 'Permian', observed: null, forecast: null },
@@ -43,6 +54,8 @@ test('normaliseBasinWeather reads the route into readings by basin', () => {
     forecastInit: '2026-09-23',
     frzdd14: 0,
     model: 'AIFS_ENS',
+    observedState: null,
+    forecastState: null,
   });
   assert.equal(readings.get('Permian').tminF, null);
   assert.equal(normaliseBasinWeather({}), null);
@@ -56,26 +69,70 @@ test('pickBasinReading takes the first of the region basins the store knows', ()
   assert.equal(pickBasinReading(null, ['Bakken']), null);
 });
 
-test('currentBasinReading drops halves older than five days', () => {
-  const fresh = normaliseBasinWeather(payload()).get('Bakken');
-  assert.equal(currentBasinReading(fresh, { now: NOW }).tminF, 52);
-  const oldObs = normaliseBasinWeather(payload({ observed: '2026-09-04' })).get('Bakken');
-  const partial = currentBasinReading(oldObs, { now: NOW });
-  assert.equal(partial.tminF, null);
-  assert.equal(partial.frzdd14, 0);
-  const allOld = normaliseBasinWeather(
-    payload({ observed: '2026-09-04', init: '2026-09-04' }),
-  ).get('Bakken');
-  assert.equal(currentBasinReading(allOld, { now: NOW }), null);
+test('globe row 18: each half gets ok / late / stale by the oracle tiers (TMIN 3 d, run 2 d)', () => {
+  const at = (observed, init) =>
+    currentBasinReading(normaliseBasinWeather(payload({ observed, init })).get('Bakken'), {
+      now: NOW,
+    });
+  const fresh = at('2026-09-23', '2026-09-23');
+  assert.equal(fresh.observedState, 'ok');
+  assert.equal(fresh.observedAgeDays, 1);
+  assert.equal(fresh.tminF, 52);
+  assert.equal(at('2026-09-20', '2026-09-23').observedState, 'late');
+  const stale = at('2026-09-04', '2026-09-04');
+  assert.equal(stale.observedState, 'stale');
+  assert.equal(stale.tminF, null, 'a stale low is not shown as a value');
+  assert.equal(stale.observedAt, '2026-09-04', 'but its date is kept to name it');
+  assert.equal(stale.forecastState, 'stale');
+  assert.equal(stale.frzdd14, null);
+  assert.equal(
+    basinWeatherLine(stale),
+    'Bakken weather (Oil Oracle) · low: stale, last 09-04 (20 d ago) · 14d freeze: stale, AIFS 09-04',
+    'named, not dropped',
+  );
+  assert.equal(at('2026-09-23', '2026-09-21').forecastState, 'late');
 });
 
-test('basinWeatherLine states the reading, labelled as the oracle store', () => {
+test("globe row 18: the route's own freshness verdict wins over the age rule", () => {
+  const reading = currentBasinReading(
+    normaliseBasinWeather(
+      payload({
+        observed: '2026-09-04',
+        obsFreshness: { state: 'late', ageHours: 480 },
+        fcFreshness: { state: 'stale', ageHours: 30 },
+      }),
+    ).get('Bakken'),
+    { now: NOW },
+  );
+  assert.equal(reading.observedState, 'late');
+  assert.equal(reading.tminF, 52);
+  assert.equal(reading.forecastState, 'stale');
+  assert.equal(reading.frzdd14, null);
+  const none = normaliseBasinWeather(payload({ obsFreshness: { state: 'none' } })).get('Bakken');
+  assert.equal(none.observedState, null, "'none' falls back to the age rule");
+});
+
+test('currentBasinReading is null only when neither half exists', () => {
+  const empty = normaliseBasinWeather(payload()).get('Permian');
+  assert.equal(currentBasinReading(empty, { now: NOW }), null);
+  assert.equal(currentBasinReading(null), null);
+});
+
+test('basinWeatherLine states the reading and its age, labelled as the oracle store', () => {
   const reading = currentBasinReading(normaliseBasinWeather(payload()).get('Bakken'), {
     now: NOW,
   });
   assert.equal(
     basinWeatherLine(reading),
-    'Bakken weather (Oil Oracle) · low 52°F on 09-20 · 14d freeze 0.0 °F·d, AIFS 09-23',
+    'Bakken weather (Oil Oracle) · low 52°F on 09-20 (4 d ago, late) · 14d freeze 0.0 °F·d, AIFS 09-23',
+  );
+  const fresh = currentBasinReading(
+    normaliseBasinWeather(payload({ observed: '2026-09-24', init: '2026-09-21' })).get('Bakken'),
+    { now: NOW },
+  );
+  assert.equal(
+    basinWeatherLine(fresh),
+    'Bakken weather (Oil Oracle) · low 52°F on 09-24 (today) · 14d freeze 0.0 °F·d, AIFS 09-21 (late)',
   );
   assert.equal(basinWeatherLine(null), null);
   assert.equal(
