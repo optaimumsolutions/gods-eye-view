@@ -623,9 +623,11 @@ test('an expanded Cockpit left panel stays above Contact, HUD, and attribution',
     /rect\.top >= baseTop\) \{\s*\n\s*bottomObstacles\.push\(\{ top: rect\.top \}\);/,
     'every rendered lower-lane obstacle must constrain the panel corridor',
   );
+  // the lower obstacles and the gap bound the corridor; later arguments
+  // (topBoundary, minimumHeight since 2ed034f) may follow inside the same call
   assert.match(
     leftLayout,
-    /safeBottom = resolveLeftStackBottomBoundary\(\{[\s\S]*?safeGap,\s*\n\s*\}\);/,
+    /safeBottom = resolveLeftStackBottomBoundary\(\{\s*baseBottom: safeBottom,\s*obstacles: bottomObstacles,\s*safeGap,[^}]*\}\);/,
   );
   const cockpitHud = css.match(/#cockpit-hud\s*\{[\s\S]*?z-index:\s*(\d+);/);
   const cockpitIntelHud = css.match(
