@@ -1,7 +1,10 @@
 import * as Cesium from 'cesium';
+import { isPointerFree } from '../../data/inputOwnership.js';
 import {
   CROSSING_PIXEL_SIZE,
   CROSSING_UNKNOWN_CSS,
+  FEEDGAS_PIN_PIXEL_SIZE,
+  GAS_FLOWS_OVERLAY_SOURCE_ID,
   GAS_TIER_GLOBAL,
   NETWORK_COLOR_CSS,
   NETWORK_DRAW_COST_MEASURED,
@@ -14,21 +17,35 @@ import {
   pencilMetaLine,
 } from './model.js';
 import { GAS_FLOWS_LAYER_ID, geometryOnlyHeadline } from './records.js';
+import { createFeedgasCardEntry, feedgasPinCss } from './oracleFlows.js';
 
 export * from './model.js';
 export * from './records.js';
 export { createBundledGasSource } from './bundledSource.js';
+export * from './oracleFlows.js';
 
 /**
- * `commodity-gas-flows` — the PENCIL substrate.
+ * `commodity-gas-flows` — the PENCIL substrate, plus five feedgas pins.
  *
  * Two bundled, stale, geometry-only datasets: the January-2020 US transmission
  * network drawn as an inert 1 px hairline, and the 2017 NACEI border crossings
- * drawn as fixed-size grey pips. **Nothing in this layer carries a number**,
- * because nothing in the bundle is a measurement — the volumes arrive later,
- * from a server-side EIA provider that does not exist yet, and until then
- * R4.29 says the layer still draws the network and the pips and says the
- * volumes are unavailable.
+ * drawn as fixed-size grey pips. **Neither carries a number**, because nothing
+ * in the bundle is a measurement — the EIA volumes arrive later, from a
+ * server-side EIA provider that does not exist yet, and until then R4.29 says
+ * the layer still draws the network and the pips and says the volumes are
+ * unavailable.
+ *
+ * **The one exception (founder, 2026-10-07, row 18 / #71, R4.29 amendment):**
+ * five pickable, fixed-size pins at the Sabine Pass, Corpus Christi, Golden
+ * Pass, Cameron and Freeport LNG terminals carry the Oil Oracle store's LNG
+ * feedgas signals from `/api/oracle/flows` — scheduled quantities from
+ * interstate pipeline postings (nominations, not meter readings),
+ * `published` class. Each pin's hover/click card shows the newest gas day's
+ * Bcf/d, the 7-day mean and the 7-day change; colour states the verdict
+ * (ok / late / stale) and a stale pin shows no number. The route is re-read
+ * on every update and refresh; with no route (no console, an older one) the
+ * layer is exactly the substrate below. The three pipeline receipt signals
+ * stay on the supply board.
  *
  * Three decisions are load-bearing and are not preferences:
  *
@@ -47,17 +64,22 @@ export { createBundledGasSource } from './bundledSource.js';
  *     Interstate/Intrastate alpha step silently collapses to one flat colour.
  *     Precedent: `src/data/contactTrailRenderer.js`.
  *
- * The bundle is static, so there is no poll: `update()` reads once and then
- * only restyles.
+ * The bundle is static, so it is read once and then only restyled; only the
+ * feedgas route is re-read on `update()`.
  */
 
 /** Static bundles. The interval exists for the manager's contract, not to poll. */
 const UPDATE_INTERVAL_MS = 24 * 60 * 60_000;
+/** With the feedgas route: daily postings, re-read half-hourly like the supply board. */
+const FEEDGAS_UPDATE_INTERVAL_MS = 30 * 60_000;
+const FEEDGAS_HOVER_THROTTLE_MS = 120;
 
 export function createGasFlowsLayer({
   source,
   overlayHost = null,
   requestRender = null,
+  oracleFlows = null,
+  screenSpaceEventHandlerFactory = null,
 } = {}) {
   if (!source || typeof source.getSnapshot !== 'function') {
     throw new TypeError('Gas flows layer requires a source with getSnapshot()');
@@ -101,6 +123,19 @@ export function createGasFlowsLayer({
   const _interstateIds = [];
   const _intrastateIds = [];
   let _removeReadyProbe = null;
+
+  // Row 18 / #71: the LNG feedgas pins from `/api/oracle/flows`.
+  /** Normalised readings in signal order; empty when the route is absent. */
+  let _feedgas = [];
+  /** signal id -> `{ entity, position }` */
+  const _feedgasPins = new Map();
+  let _feedgasRequest = null;
+  let _feedgasWarned = false;
+  let _feedgasError = null;
+  let _hoverFeedgasId = null;
+  let _selectedFeedgasId = null;
+  let _hoverLastPickAt = 0;
+  let _handler = null;
 
   const cameraHeight = () => _viewer?.camera?.positionCartographic?.height;
   const currentTier = () => detailTierForHeight(cameraHeight());
@@ -292,6 +327,238 @@ export function createGasFlowsLayer({
     _removeCameraChanged = null;
   }
 
+  // Feedgas pins -------------------------------------------------------------
+
+  const readingById = (id) =>
+    id ? (_feedgas.find((reading) => reading.id === id) ?? null) : null;
+
+  /**
+   * One fixed-size point per feedgas reading at its terminal. Colour is the
+   * verdict, never the volume. Pins for readings that left the payload are
+   * removed; the crossings and the network are not touched.
+   */
+  function syncFeedgasPins(terminals) {
+    if (!_dataSource) return;
+    const keep = new Set();
+    for (const reading of _feedgas) {
+      const terminal = terminals?.get(reading.id);
+      if (!terminal) continue;
+      keep.add(reading.id);
+      const colour = Cesium.Color.fromCssColorString(
+        feedgasPinCss(reading.state),
+      );
+      const pin = _feedgasPins.get(reading.id);
+      if (pin) {
+        pin.entity.point.color = colour;
+        continue;
+      }
+      const position = Cesium.Cartesian3.fromDegrees(
+        terminal.lon,
+        terminal.lat,
+      );
+      const entity = _dataSource.entities.add({
+        id: `${GAS_FLOWS_LAYER_ID}:feedgas:${reading.id}`,
+        position,
+        point: {
+          pixelSize: FEEDGAS_PIN_PIXEL_SIZE,
+          color: colour,
+          outlineColor: Cesium.Color.BLACK.withAlpha(0.7),
+          outlineWidth: 1.5,
+          disableDepthTestDistance: Number.POSITIVE_INFINITY,
+        },
+      });
+      entity.__gasFeedgasId = reading.id;
+      _feedgasPins.set(reading.id, { entity, position });
+    }
+    for (const [id, pin] of _feedgasPins) {
+      if (keep.has(id)) continue;
+      _dataSource.entities.remove(pin.entity);
+      _feedgasPins.delete(id);
+    }
+    if (_hoverFeedgasId && !keep.has(_hoverFeedgasId)) _hoverFeedgasId = null;
+    if (_selectedFeedgasId && !keep.has(_selectedFeedgasId))
+      _selectedFeedgasId = null;
+  }
+
+  function clearFeedgasPins() {
+    for (const pin of _feedgasPins.values())
+      _dataSource?.entities.remove(pin.entity);
+    _feedgasPins.clear();
+    _hoverFeedgasId = null;
+    _selectedFeedgasId = null;
+  }
+
+  /**
+   * Re-read the route (and, once, the LNG terminals). Optional by design: any
+   * failure leaves the layer without pins — exactly the substrate — and says
+   * so once on the console, never per tick.
+   */
+  async function refreshFeedgas() {
+    if (!oracleFlows || !_dataSource) return;
+    _feedgasRequest?.abort();
+    const request = new AbortController();
+    _feedgasRequest = request;
+    try {
+      const [terminals, flows] = await Promise.all([
+        oracleFlows.getTerminals({ signal: request.signal }),
+        oracleFlows.getFlows({ signal: request.signal }),
+      ]);
+      if (request.signal.aborted || !_enabled || !_dataSource) return;
+      _feedgas = flows;
+      _feedgasError = null;
+      syncFeedgasPins(terminals);
+    } catch (error) {
+      if (request.signal.aborted) return;
+      _feedgas = [];
+      _feedgasError = error instanceof Error ? error.message : String(error);
+      clearFeedgasPins();
+      if (!_feedgasWarned) {
+        _feedgasWarned = true;
+        console.info(
+          `[Data:GasFlows] Oil Oracle flows unavailable: ${_feedgasError}`,
+        );
+      }
+    } finally {
+      if (_feedgasRequest === request) _feedgasRequest = null;
+    }
+    publishOverlay();
+    nudgeRender();
+  }
+
+  /** Hover and click cards only; there is no ambient label on a pin. */
+  function publishOverlay() {
+    if (!_enabled || !overlayHost?.setEntries) return;
+    const entries = [];
+    const selected = readingById(_selectedFeedgasId);
+    const selectedPin = selected ? _feedgasPins.get(selected.id) : null;
+    if (selected && selectedPin)
+      entries.push(
+        createFeedgasCardEntry(selected, selectedPin.position, {
+          selected: true,
+        }),
+      );
+    const hover =
+      _hoverFeedgasId !== _selectedFeedgasId
+        ? readingById(_hoverFeedgasId)
+        : null;
+    const hoverPin = hover ? _feedgasPins.get(hover.id) : null;
+    if (hover && hoverPin)
+      entries.push(createFeedgasCardEntry(hover, hoverPin.position));
+    overlayHost.setEntries(GAS_FLOWS_OVERLAY_SOURCE_ID, entries, {
+      cohortLimit: 2,
+      collisionCapacity: 4,
+      moving: false,
+    });
+  }
+
+  const pickedFeedgasId = (picked) => picked?.id?.__gasFeedgasId ?? null;
+
+  function setFeedgasHover(id) {
+    if (id === _hoverFeedgasId) return;
+    _hoverFeedgasId = id;
+    const canvas = _viewer?.scene?.canvas;
+    if (canvas) canvas.style.cursor = id ? 'pointer' : '';
+    publishOverlay();
+    nudgeRender();
+  }
+
+  function handleHoverMove(position) {
+    if (!_enabled || !position || !_viewer || !_feedgasPins.size) return;
+    if (!isPointerFree()) {
+      if (_hoverFeedgasId) setFeedgasHover(null);
+      return;
+    }
+    const now = Date.now();
+    if (now - _hoverLastPickAt < FEEDGAS_HOVER_THROTTLE_MS) return;
+    _hoverLastPickAt = now;
+    let picked = null;
+    try {
+      picked = _viewer.scene.pick(position);
+    } catch {
+      picked = null;
+    }
+    setFeedgasHover(pickedFeedgasId(picked));
+  }
+
+  function handleClick(position) {
+    if (!_enabled || !position || !_viewer || !isPointerFree()) return;
+    let picked = null;
+    try {
+      picked = _viewer.scene.pick(position);
+    } catch {
+      picked = null;
+    }
+    const id = pickedFeedgasId(picked);
+    if (id) {
+      _selectedFeedgasId = id;
+    } else {
+      // A pick that belongs to a sibling layer is not empty space.
+      if (picked || !_selectedFeedgasId) return;
+      _selectedFeedgasId = null;
+    }
+    publishOverlay();
+    nudgeRender();
+  }
+
+  function installHandlers(viewer) {
+    if (
+      _handler ||
+      !oracleFlows ||
+      typeof screenSpaceEventHandlerFactory !== 'function' ||
+      !viewer?.scene?.canvas
+    )
+      return;
+    _handler = screenSpaceEventHandlerFactory(viewer.scene.canvas);
+    _handler.setInputAction(
+      (click) => handleClick(click?.position),
+      Cesium.ScreenSpaceEventType.LEFT_CLICK,
+    );
+    _handler.setInputAction(
+      (movement) => handleHoverMove(movement?.endPosition),
+      Cesium.ScreenSpaceEventType.MOUSE_MOVE,
+    );
+  }
+
+  function removeHandlers() {
+    _handler?.destroy();
+    _handler = null;
+    const canvas = _viewer?.scene?.canvas;
+    if (canvas && _hoverFeedgasId) canvas.style.cursor = '';
+    _hoverFeedgasId = null;
+  }
+
+  /** The bundle read behind `update()`; true once the substrate is drawn. */
+  async function loadBundle() {
+    _request?.abort();
+    const request = new AbortController();
+    _request = request;
+    try {
+      const snapshot = await source.getSnapshot({ signal: request.signal });
+      if (request.signal.aborted || _request !== request || !_enabled) {
+        return false;
+      }
+      _snapshot = snapshot;
+      buildCrossings(snapshot.crossings.crossings);
+      refreshTier({ force: true });
+      _lastUpdate = Date.now();
+      _lastError = null;
+      if (snapshot.networkError) {
+        console.warn(
+          `[Data:GasFlows] Network bundle unavailable (${snapshot.networkError}); crossings only`,
+        );
+      }
+      nudgeRender();
+      return true;
+    } catch (error) {
+      if (request.signal.aborted) return false;
+      _lastError = error instanceof Error ? error.message : String(error);
+      console.warn(`[Data:GasFlows] ${_lastError}`);
+      return false;
+    } finally {
+      if (_request === request) _request = null;
+    }
+  }
+
   function releaseNetwork() {
     _removeReadyProbe?.();
     _removeReadyProbe = null;
@@ -310,9 +577,12 @@ export function createGasFlowsLayer({
     name: 'Gas · Cross-Border Flows',
     icon: '⛽',
     source: 'EIA · NACEI',
-    // Both bundles are years old. This must never resolve to LIVE.
+    // Both bundles are years old, and the feedgas pins are daily scheduled
+    // postings read from the store. This must never resolve to LIVE.
     freshnessClass: 'published',
-    updateInterval: UPDATE_INTERVAL_MS,
+    updateInterval: oracleFlows
+      ? FEEDGAS_UPDATE_INTERVAL_MS
+      : UPDATE_INTERVAL_MS,
 
     init(viewer) {
       if (_viewer) throw new Error('Gas flows layer is already initialized');
@@ -332,12 +602,18 @@ export function createGasFlowsLayer({
       _enabled = true;
       if (_dataSource) _dataSource.show = true;
       installCameraListeners(viewer);
+      installHandlers(viewer);
       refreshTier({ force: true });
     },
 
     disable() {
       _request?.abort();
       _request = null;
+      _feedgasRequest?.abort();
+      _feedgasRequest = null;
+      removeHandlers();
+      _selectedFeedgasId = null;
+      overlayHost?.clearSource?.(GAS_FLOWS_OVERLAY_SOURCE_ID);
       _enabled = false;
       removeCameraListeners();
       _removeReadyProbe?.();
@@ -353,44 +629,30 @@ export function createGasFlowsLayer({
       // the data manager treats a false update as a rejected enable and runs
       // the disable cleanup, so a second enable used to leave the marks
       // hidden (found by the onshore QA's disable/enable pass, 2026-09-21).
-      if (_snapshot) return true;
-      _request?.abort();
-      const request = new AbortController();
-      _request = request;
-      try {
-        const snapshot = await source.getSnapshot({ signal: request.signal });
-        if (request.signal.aborted || _request !== request || !_enabled) {
-          return false;
-        }
-        _snapshot = snapshot;
-        buildCrossings(snapshot.crossings.crossings);
-        refreshTier({ force: true });
-        _lastUpdate = Date.now();
-        _lastError = null;
-        if (snapshot.networkError) {
-          console.warn(
-            `[Data:GasFlows] Network bundle unavailable (${snapshot.networkError}); crossings only`,
-          );
-        }
-        nudgeRender();
+      // The feedgas route is the only thing re-read, on every update and
+      // every refresh (row 18 / #71); it never fails the update.
+      if (_snapshot) {
+        await refreshFeedgas();
         return true;
-      } catch (error) {
-        if (request.signal.aborted) return false;
-        _lastError = error instanceof Error ? error.message : String(error);
-        console.warn(`[Data:GasFlows] ${_lastError}`);
-        return false;
-      } finally {
-        if (_request === request) _request = null;
       }
+      if (!(await loadBundle())) return false;
+      await refreshFeedgas();
+      return true;
     },
 
     destroy(viewer = _viewer) {
       _request?.abort();
       _request = null;
+      _feedgasRequest?.abort();
+      _feedgasRequest = null;
+      removeHandlers();
       _enabled = false;
       removeCameraListeners();
       releaseNetwork();
-      overlayHost?.clearSource?.(GAS_FLOWS_LAYER_ID);
+      overlayHost?.clearSource?.(GAS_FLOWS_OVERLAY_SOURCE_ID);
+      _feedgasPins.clear();
+      _feedgas = [];
+      _selectedFeedgasId = null;
       if (_dataSource) {
         viewer?.dataSources.remove(_dataSource, true);
         _dataSource = null;
@@ -448,14 +710,30 @@ export function createGasFlowsLayer({
         // Every grade in this layer is PENCIL until an EIA key exists.
         grade: 'pencil',
         stamp: network ? networkStampFor(network.vintage.label) : null,
-        source: pencilMetaLine({
-          crossings: crossings?.crossings.length ?? 0,
-          systems: network?.systems.length ?? 0,
-          networkVintage: network?.vintage.label ?? '',
-          crossingVintage: crossings?.vintage.label ?? '',
-          networkOff: !_networkRequested,
-          keyRequired: true,
-        }),
+        source: [
+          pencilMetaLine({
+            crossings: crossings?.crossings.length ?? 0,
+            systems: network?.systems.length ?? 0,
+            networkVintage: network?.vintage.label ?? '',
+            crossingVintage: crossings?.vintage.label ?? '',
+            networkOff: !_networkRequested,
+            keyRequired: true,
+          }),
+          // Row 18 / #71: the only marks here with a number, named as such.
+          _feedgasPins.size
+            ? `LNG FEEDGAS ${_feedgasPins.size} PINS · OIL ORACLE · SCHEDULED`
+            : null,
+        ]
+          .filter(Boolean)
+          .join(' · '),
+        // The feedgas pins by verdict, and why there are none when there are none.
+        feedgas: {
+          pins: _feedgasPins.size,
+          ok: _feedgas.filter((reading) => reading.state === 'ok').length,
+          late: _feedgas.filter((reading) => reading.state === 'late').length,
+          stale: _feedgas.filter((reading) => reading.state === 'stale').length,
+          error: _feedgasError,
+        },
         lastUpdate: _lastUpdate,
         error: _lastError,
       };

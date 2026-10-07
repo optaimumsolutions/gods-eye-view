@@ -25,7 +25,8 @@ export const LIVE_REFRESH_LAYERS = Object.freeze({
   ng_storage: Object.freeze(['gas-supply-us']),
   ng_monthly: Object.freeze(['gas-supply-us']),
   ng_regional: Object.freeze(['gas-supply-us']),
-  ng_pipeline_flows: Object.freeze(['gas-supply-us']),
+  // Row 18 / #71: the gas-flows layer pins the five LNG feedgas signals.
+  ng_pipeline_flows: Object.freeze(['gas-supply-us', 'commodity-gas-flows']),
   // FR-D29: the board's DUC and STEO parts. duc_build is not an ingest_log
   // source yet (docs/DATA-MAP.md §3), so the hub cannot emit it until it is;
   // the entry is here so the refresh works the day it lands.

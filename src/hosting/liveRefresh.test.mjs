@@ -48,15 +48,24 @@ test('a store write refreshes the layers fed by that source, once per burst', ()
   // After it ran, a new write schedules again.
   updated(target, { source: 'portwatch', rows: 28 });
   assert.equal(timers.length, 8);
-  // Row 14: a store write the supply board reads refreshes it in place.
+  // Row 14: a store write the supply board reads refreshes it in place;
+  // row 18 / #71: pipeline flows also redraw the gas-flows feedgas pins.
   updated(target, { source: 'ng_pipeline_flows', rows: 392 });
   updated(target, { source: 'ng_storage', rows: 8 });
-  assert.equal(timers.length, 9, 'one pending refresh for the board');
+  assert.equal(
+    timers.length,
+    10,
+    'one pending refresh each for the board and the gas-flows layer',
+  );
+  timers.at(-2).fn();
   timers.at(-1).fn();
-  assert.equal(refreshed.at(-1), 'gas-supply-us');
+  assert.deepEqual(refreshed.slice(-2), [
+    'gas-supply-us',
+    'commodity-gas-flows',
+  ]);
   uninstall();
   updated(target, { source: 'wx_aifs', rows: 12 });
-  assert.equal(timers.length, 9, 'uninstalled: no more refreshes');
+  assert.equal(timers.length, 10, 'uninstalled: no more refreshes');
 });
 
 test('the mapped sources are the ones the globe reads through /api/oracle/', () => {
@@ -71,6 +80,16 @@ test('the mapped sources are the ones the globe reads through /api/oracle/', () 
     'wx_aifs',
     'wx_ghcn',
   ]);
+});
+
+test('row 18 / #71: pipeline flows refresh the supply board and the gas-flows pins', () => {
+  assert.deepEqual(LIVE_REFRESH_LAYERS.ng_pipeline_flows, [
+    'gas-supply-us',
+    'commodity-gas-flows',
+  ]);
+  assert.ok(Object.isFrozen(LIVE_REFRESH_LAYERS.ng_pipeline_flows));
+  for (const source of ['ng_storage', 'ng_monthly', 'ng_regional'])
+    assert.ok(!LIVE_REFRESH_LAYERS[source].includes('commodity-gas-flows'));
 });
 
 test('FR-D29: steo and duc_build refresh the supply board; wx_aifs also redraws the basin forecast', () => {

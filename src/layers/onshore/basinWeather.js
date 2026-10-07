@@ -105,7 +105,12 @@ export function currentBasinReading(reading, { now = Date.now() } = {}) {
     ? verdict(reading.observedState, reading.observedAt, OBSERVED_TOL_DAYS, now)
     : null;
   const fcState = hasFc
-    ? verdict(reading.forecastState, reading.forecastInit, FORECAST_TOL_DAYS, now)
+    ? verdict(
+        reading.forecastState,
+        reading.forecastInit,
+        FORECAST_TOL_DAYS,
+        now,
+      )
     : null;
   return Object.freeze({
     ...reading,

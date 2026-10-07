@@ -26,7 +26,11 @@ test('console routes: pages, POST relays and the reserved oracle API; nothing el
     ['GET', '/oracle', '/oracle'],
     ['GET', '/scorecard', '/scorecard'],
     ['POST', '/scorecard', null],
-    ['GET', '/api/market/series?id=NG_SPOT&from=2026-01-01', '/api/market/series?id=NG_SPOT&from=2026-01-01'],
+    [
+      'GET',
+      '/api/market/series?id=NG_SPOT&from=2026-01-01',
+      '/api/market/series?id=NG_SPOT&from=2026-01-01',
+    ],
     ['POST', '/api/market/series', null],
     ['GET', '/api/market/other', null],
     ['POST', '/desk/consensus', '/desk/consensus'],

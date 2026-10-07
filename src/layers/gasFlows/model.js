@@ -3,8 +3,9 @@
  * draw until an EIA key exists (docs/COMMODITIES-PLAN.md §10.7, R4.29, R4.34,
  * R4.38, R4.41).
  *
- * Every mark this module describes is **mapped only**: January-2020 linework
- * and 2017 NACEI crossing points. Nothing here varies with a measured
+ * Every mark this module describes is **mapped only** — January-2020 linework
+ * and 2017 NACEI crossing points — except the LNG feedgas pins below
+ * (row 18, #71), whose numbers come from the Oil Oracle store. Nothing here varies with a measured
  * quantity, because there is no measured quantity in the bundle — that is the
  * whole point of the grade, and R4.29 is explicit that with no key "the layer
  * still renders the bundled network and the roster pips and says the volumes
@@ -54,6 +55,19 @@ export const CROSSING_UNKNOWN_CSS = '#9aa4b2';
 /** Fixed. Size variation is reserved, exclusively, for a measured volume. */
 export const CROSSING_PIXEL_SIZE = 6;
 export const NETWORK_WIDTH_PX = 1;
+
+/**
+ * The LNG feedgas pins (row 18 item 2, #71): the layer's only marks with a
+ * number, from the Oil Oracle store's scheduled pipeline postings. Fixed size
+ * — the colour states the reading's age, never its magnitude. Ok is the
+ * accent the supply board prints the same feedgas lines in; late is the
+ * console's amber; stale falls back to the `thin` grey above, and a stale
+ * pin's card shows no number.
+ */
+export const FEEDGAS_PIN_PIXEL_SIZE = 10;
+export const FEEDGAS_OK_CSS = '#39d5ff';
+export const FEEDGAS_LATE_CSS = '#ffb547';
+export const FEEDGAS_STALE_CSS = NETWORK_COLOR_CSS;
 
 /**
  * What drawing the network costs, quoted in the meta line so a dark grid says
