@@ -176,7 +176,7 @@ test('the filed regions line names each built region with its month', () => {
   const line = regionsLine(regions);
   assert.match(
     line,
-    /^Filed: Williston 3\.43 \(JUL, \+27\.5 MoM\) · Gulf 2\.03 \(JUN, \+72\.8\) Bcf\/d$/,
+    /^Filed: Williston 3\.43 \(JUL, \+27\.5 MoM\) · Gulf 1\.98 \(JUL, −50\.8\) Bcf\/d$/,
   );
 });
 
@@ -211,7 +211,7 @@ test('layers of one region fold into one item at the month all have filed', () =
   assert.equal(group.members, 3);
   const line = regionsLine(all);
   assert.match(line, /^Filed: Permian TX \d+\.\d\d \([A-Z]{3}, [+−]/);
-  assert.match(line, /· Williston 3\.43 .* · Gulf 2\.03 /);
+  assert.match(line, /· Williston 3\.43 .* · Gulf 1\.98 /);
   // With Appalachia too the list is longer than the card: it wraps, never cut.
   const appalachia = {
     ...normaliseContributors(

@@ -42,10 +42,10 @@ test('source.json sha256, byte count and gzip budget hold for the committed byte
   );
 });
 
-test('the committed bundle is the measured one: installed structures with coordinates, 2026-06 current', () => {
-  assert.equal(payload.current.month, '2026-06');
+test('the committed bundle is the measured one: installed structures with coordinates, 2026-07 current', () => {
+  assert.equal(payload.current.month, '2026-07');
   assert.equal(payload.months.length, 120);
-  assert.equal(payload.months.at(-1), '2026-06');
+  assert.equal(payload.months.at(-1), '2026-07');
   assert.ok(
     payload.counts.installed >= 1200 && payload.counts.installed <= 1500,
   );
@@ -54,7 +54,8 @@ test('the committed bundle is the measured one: installed structures with coordi
     payload.counts.producingCurrent >= 300 &&
       payload.counts.producingCurrent <= 400,
   );
-  assert.ok(payload.counts.gasMcfdCurrent > 2_000_000, 'well over 2 Bcf/d');
+  // Measured 2026-07: 1.98 Bcf/d (2026-06: 2.03); July has 31 days.
+  assert.ok(payload.counts.gasMcfdCurrent > 1_900_000, 'about 2 Bcf/d');
   for (const s of payload.structures) {
     assert.equal(s.removed, null, `${s.id} is removed`);
     assert.ok(
@@ -76,11 +77,17 @@ test('the committed bundle is the measured one: installed structures with coordi
     c.gasMcfdFiled - c.gasMcfdCurrent,
     'unbundled Gulf gas accounts for the whole gap',
   );
-  // Measured 2026-06: Alaska (Northstar) and thirteen Pacific platforms are in
-  // the file and outside this layer; they must be counted, never drawn.
-  assert.ok(c.outOfRegion.Y?.gasMcfd > 100_000, 'Alaska is counted');
+  // Alaska (Northstar) and the Pacific platforms are in the file and outside
+  // this layer; they must be counted, never drawn. Measured 2026-06: Alaska
+  // 0.55 Bcf/d and 12 Pacific structures; measured 2026-07 (the 2026-10-01
+  // release): Northstar has not filed July yet, so only the Pacific is there.
+  if (c.outOfRegion.Y)
+    assert.ok(c.outOfRegion.Y.gasMcfd > 100_000, 'Alaska is counted');
   assert.ok(c.outOfRegion.P?.structures >= 10, 'the Pacific is counted');
-  for (const s of payload.structures) assert.notEqual(s.region, 'P');
+  for (const s of payload.structures) {
+    assert.notEqual(s.region, 'P');
+    assert.notEqual(s.region, 'Y');
+  }
 });
 
 test('the bundled completeness table reproduces the verdict from the rule', () => {
