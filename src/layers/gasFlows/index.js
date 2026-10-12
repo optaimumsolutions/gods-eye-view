@@ -1,5 +1,6 @@
 import * as Cesium from 'cesium';
 import { isPointerFree } from '../../data/inputOwnership.js';
+import { isEmptySpacePick } from '../commodities/emptyPick.js';
 import {
   CROSSING_PIXEL_SIZE,
   CROSSING_UNKNOWN_CSS,
@@ -492,8 +493,9 @@ export function createGasFlowsLayer({
     if (id) {
       _selectedFeedgasId = id;
     } else {
-      // A pick that belongs to a sibling layer is not empty space.
-      if (picked || !_selectedFeedgasId) return;
+      // A pick that belongs to a sibling layer is not empty space; the
+      // 3D-tiles basemap (a pick with no id) is (emptyPick.js, #74).
+      if (!isEmptySpacePick(picked) || !_selectedFeedgasId) return;
       _selectedFeedgasId = null;
     }
     publishOverlay();

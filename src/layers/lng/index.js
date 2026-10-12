@@ -1,6 +1,7 @@
 import * as Cesium from 'cesium';
 import { horizonOccluder } from '../../data/iconOrientation.js';
 import { createObservation } from '../commodities/observation.js';
+import { isEmptySpacePick } from '../commodities/emptyPick.js';
 import {
   LNG_ARROW_TAIL_POINTS,
   LNG_FLY_DURATION_S,
@@ -432,8 +433,9 @@ export function createLngLayer({
         selectRoute(routeId, anchor ?? null);
         return;
       }
-      // A pick that belongs to a sibling layer is not empty space.
-      if (picked) return;
+      // A pick that belongs to a sibling layer is not empty space; the
+      // 3D-tiles basemap (a pick with no id) is (emptyPick.js, #74).
+      if (!isEmptySpacePick(picked)) return;
       clearSelection();
     }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
     _handler.setInputAction((movement) => {

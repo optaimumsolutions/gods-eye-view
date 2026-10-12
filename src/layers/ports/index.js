@@ -1,6 +1,7 @@
 import * as Cesium from 'cesium';
 import { horizonOccluder } from '../../data/iconOrientation.js';
 import { isPointerFree } from '../../data/inputOwnership.js';
+import { isEmptySpacePick } from '../commodities/emptyPick.js';
 import { isUsPort } from './records.js';
 import {
   PORT_LAYER_ID,
@@ -163,10 +164,9 @@ export function createPortsLayer({
         select(entity);
         return;
       }
-      // A pick that belongs to a sibling layer is not empty space. A pick
-      // with no id is the photorealistic 3D-tiles basemap: nothing any layer
-      // can select, so a ground click still deselects (emptyClick.test.mjs).
-      if (picked?.id != null) return;
+      // A pick that belongs to a sibling layer is not empty space; the
+      // 3D-tiles basemap (a pick with no id) is (emptyPick.js, #74).
+      if (!isEmptySpacePick(picked)) return;
       clearSelection();
     }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
   }

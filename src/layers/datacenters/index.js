@@ -1,5 +1,6 @@
 import * as Cesium from 'cesium';
 import { isPointerFree } from '../../data/inputOwnership.js';
+import { isEmptySpacePick } from '../commodities/emptyPick.js';
 import {
   DATACENTER_FLY_DURATION_S,
   DATACENTER_FLY_FROM_HEIGHT_M,
@@ -385,8 +386,9 @@ export function createDatacentersLayer({
         selectById(id);
         return;
       }
-      // A pick that belongs to a sibling layer is not empty space.
-      if (picked) return;
+      // A pick that belongs to a sibling layer is not empty space; the
+      // 3D-tiles basemap (a pick with no id) is (emptyPick.js, #74).
+      if (!isEmptySpacePick(picked)) return;
       clearSelection();
     }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
     _handler.setInputAction((movement) => {

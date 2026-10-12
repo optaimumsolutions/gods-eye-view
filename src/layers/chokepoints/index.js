@@ -1,6 +1,7 @@
 import * as Cesium from 'cesium';
 import { horizonOccluder } from '../../data/iconOrientation.js';
 import { isPointerFree } from '../../data/inputOwnership.js';
+import { isEmptySpacePick } from '../commodities/emptyPick.js';
 import { CHOKEPOINT_GAZETTEER } from './gazetteer.js';
 import {
   CHOKEPOINT_LAYER_ID,
@@ -141,8 +142,9 @@ export function createChokepointsLayer({
         select(entity);
         return;
       }
-      // A pick that belongs to a sibling layer is not empty space.
-      if (picked) return;
+      // A pick that belongs to a sibling layer is not empty space; the
+      // 3D-tiles basemap (a pick with no id) is (emptyPick.js, #74).
+      if (!isEmptySpacePick(picked)) return;
       clearSelection();
     }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
   }

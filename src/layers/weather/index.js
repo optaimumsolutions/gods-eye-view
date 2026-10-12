@@ -1,6 +1,7 @@
 import * as Cesium from 'cesium';
 import { horizonOccluder } from '../../data/iconOrientation.js';
 import { isPointerFree } from '../../data/inputOwnership.js';
+import { isEmptySpacePick } from '../commodities/emptyPick.js';
 import { formatAsOf } from '../commodities/observation.js';
 import {
   BAND_LABELS,
@@ -338,7 +339,8 @@ export function createWeatherForecastLayer({
         select(entity);
         return;
       }
-      if (picked) return;
+      // The 3D-tiles basemap (a pick with no id) is empty space (#74).
+      if (!isEmptySpacePick(picked)) return;
       clearSelection();
     }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
     _handler.setInputAction((movement) => {
