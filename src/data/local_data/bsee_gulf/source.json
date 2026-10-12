@@ -3,35 +3,35 @@
   "name": "Gulf of Mexico OCS platform production, monthly per structure",
   "category": "production",
   "description": "Facility-level monthly production for the production-gulf-platforms layer: every installed OCS platform structure with coordinates, a trailing 120-month series and a lifetime summary. Current = the newest complete reporting month, by rule.",
-  "downloaded_at": "2026-09-21",
+  "downloaded_at": "2026-10-12",
   "license_note": "US Government public domain (BSEE, US Department of the Interior)",
   "files": [
     {
       "path": "platforms.json",
       "format": "JSON",
-      "structures": 1315,
+      "structures": 1308,
       "window_months": 120,
-      "sha256": "0a845ca976a781f31455ddb08249b8ebbe0dc766a91574334a24b9878174861f",
-      "bytes": 2683473,
-      "gzip_bytes": 607989
+      "sha256": "2c2f8e49d3cd3997b7a45c111c9549c38a45102905d3030ac5bb4117d992539a",
+      "bytes": 2666715,
+      "gzip_bytes": 602734
     },
     {
       "path": "contributors.json",
       "format": "JSON",
       "operators": 43,
       "window_months": 24,
-      "sha256": "8b3fe4e2c6b042ca61c939d2aa952fcf39209d18f1f308db64a7ce05e72f6c90",
-      "bytes": 44617,
-      "gzip_bytes": 11436
+      "sha256": "ade5aaea1b14763c1bf2a356ecfcca7bcc0b1946de60154df2273f673546e073",
+      "bytes": 44395,
+      "gzip_bytes": 11416
     },
     {
       "path": "aggregates.json",
       "format": "JSON",
       "operators": 71,
-      "rows": 21061,
-      "sha256": "bd6d8fd93f0cbff5cc6e2989a9edfe0fed40ba02289bc547521ec9d296d108ee",
-      "bytes": 525975,
-      "gzip_bytes": 192026
+      "rows": 20922,
+      "sha256": "9210c7dc2ee3c497a7d1e17c2eb4a0672a20ad9ce29335795e0d0a3a0ff709ee",
+      "bytes": 522661,
+      "gzip_bytes": 190573
     }
   ],
   "upstream": [
@@ -39,24 +39,24 @@
       "url": "https://www.data.bsee.gov/Production/Files/ProdByPlatformRawData.zip",
       "archive": "ProdByPlatformRawData.zip",
       "entry": "ProdByPlatformRawData/mv_prod_by_platform_all.txt",
-      "entry_bytes": 218165545,
-      "entry_sha256": "fbbc052186140925a7c396a97ada40d7e1d793a91c7c3baa4a601ec3702c8024",
-      "rows": 1695490,
+      "entry_bytes": 218264857,
+      "entry_sha256": "44d0bf351767156cfb83d13817c614fd3c9170f0859d392b07c981dfd8134e2c",
+      "rows": 1696058,
       "hosted_by": "data.bsee.gov — Bureau of Safety and Environmental Enforcement, US Department of the Interior"
     },
     {
       "url": "https://www.data.bsee.gov/Platform/Files/PlatStrucRawData.zip",
       "archive": "PlatStrucRawData.zip",
       "entry": "PlatStrucRawData/mv_platstruc_structures.txt",
-      "entry_bytes": 1517546,
-      "entry_sha256": "ccc37e8d75eff1786616919a3f90f3b65c9389e99c13d48fc454a744468fdfbb",
+      "entry_bytes": 1517629,
+      "entry_sha256": "1212e2ea19bd605b732ee38b01dc988671a69fdc24cb5e5723fb5c18ac6f4e5d",
       "rows": 7091,
       "incidents_entry": "PlatStrucRawData/mv_platstruc_inccount.txt",
-      "incidents_sha256": "a92d2d5a7404c923fecedf31d29b5a1af3206baa9ea2ead71b28aed66ec683d8",
+      "incidents_sha256": "ee284986704c51c134c6606cd61ea924829923612e9607242b80a6739fcdf065",
       "hosted_by": "data.bsee.gov — Bureau of Safety and Environmental Enforcement, US Department of the Interior"
     }
   ],
-  "current_month": "2026-06",
+  "current_month": "2026-07",
   "completeness": {
     "rule": "newest month whose count of structures reporting any production is at least the threshold share of the median over the preceding lookback of months, that median being at least the floor share of the median over the lookback before it",
     "threshold": 0.9,
@@ -66,15 +66,15 @@
     "table": [
       {
         "month": "2026-08",
-        "reporters": 2,
-        "share": 0.006,
+        "reporters": 138,
+        "share": 0.397,
         "complete": false
       },
       {
         "month": "2026-07",
-        "reporters": 163,
-        "share": 0.468,
-        "complete": false
+        "reporters": 327,
+        "share": 0.94,
+        "complete": true
       },
       {
         "month": "2026-06",
