@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "portid": "port57",
+  "slug": "antwerp",
+  "name": "Antwerp",
+  "fullname": "Antwerp, Belgium",
+  "country": "Belgium",
+  "iso3": "BEL",
+  "continent": "Europe",
+  "locode": "BE ANR",
+  "lat": 51.27935494,
+  "lon": 4.317802311,
+  "role": "ARA refining and chemicals",
+  "roleNotes": "Second leg of the ARA hub on the Scheldt: the TotalEnergies and ExxonMobil refineries and Europe's largest integrated chemical cluster take crude and feedstock over the port's jetties, while the Evos, Sea-Tank and ATPC tank farms trade refined products with Rotterdam and Amsterdam by barge and pipeline.",
+  "linkedSystems": [
+    {
+      "id": "chokepoint9",
+      "name": "Dover Strait",
+      "kind": "chokepoint"
+    },
+    {
+      "id": "chokepoint1",
+      "name": "Suez Canal",
+      "kind": "chokepoint"
+    },
+    {
+      "id": "ara",
+      "name": "ARA hub",
+      "kind": "tag"
+    }
+  ],
+  "aliases": [
+    "Port of Antwerp",
+    "Antwerp port",
+    "Antwerp-Bruges",
+    "Antwerp refinery",
+    "Antwerp terminal"
+  ],
+  "authority": {
+    "name": "Port of Antwerp-Bruges",
+    "url": "https://www.portofantwerpbruges.com/"
+  },
+  "terminals": [
+    {
+      "name": "TotalEnergies Antwerp refinery jetties",
+      "operator": "TotalEnergies",
+      "product": "mixed"
+    },
+    {
+      "name": "ExxonMobil Antwerp refinery jetties",
+      "operator": "ExxonMobil",
+      "product": "mixed"
+    },
+    {
+      "name": "Evos Antwerp terminal (former Oiltanking)",
+      "operator": "Evos",
+      "product": "products"
+    },
+    {
+      "name": "Sea-Tank Terminal Antwerp",
+      "operator": "SEA-invest",
+      "product": "products"
+    },
+    {
+      "name": "Antwerp Terminal and Processing Company (ATPC)",
+      "operator": "ATPC",
+      "product": "products"
+    }
+  ],
+  "annualCalls": {
+    "total": 22760,
+    "tanker": 13486,
+    "container": 4600,
+    "dryBulk": 567,
+    "generalCargo": 3137,
+    "roro": 970
+  },
+  "industries": [
+    "Mineral Products",
+    "Chemical & Allied Industries",
+    "Metals"
+  ],
+  "countryShare": {
+    "importPct": 83.64,
+    "exportPct": 89.26
+  },
+  "wikipedia": {
+    "title": "Port of Antwerp",
+    "url": "https://en.wikipedia.org/wiki/Port_of_Antwerp",
+    "description": "Maritime commercial facility in Antwerp, Belgium",
+    "extract": "The port of Antwerp is the port of the city of Antwerp, Belgium. It is located in Flanders, mainly in the province of Antwerp, but also partially in East Flanders. It is a seaport in the heart of Europe accessible to capesize ships. It is Europe's second-largest seaport, after that of Rotterdam. Antwerp stands at the upper end of the tidal estuary of the Scheldt. The estuary is navigable by ships of more than 100,000 Gross Tons as far as 80 km inland. Like the Port of Hamburg, the Port of Antwerp's inland location provides a more central location in Europe than the majority of North Sea ports. Antwerp's docks are connected to the hinterland by rail, road, and river and canal waterways. As a result, the port of Antwerp has become one of Europe's largest seaports, ranking second behind Rotterdam by total freight shipped. Its international rankings vary from 11th to 20th (AAPA). In 2012, the Port of Antwerp handled 14,220 sea trade ships, 57,044 inland barges, and offered liner services to 800 different maritime destinations.",
+    "thumbnail": {
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/be/Zicht_op_het_Delwaidedok.jpg/330px-Zicht_op_het_Delwaidedok.jpg",
+      "width": 330,
+      "height": 226
+    },
+    "revision": "1360917575",
+    "timestamp": "2026-06-24T13:22:04Z",
+    "licence": "CC BY-SA 4.0"
+  },
+  "links": {
+    "authority": "https://www.portofantwerpbruges.com/",
+    "portwatch": "https://portwatch.imf.org/datasets/1a0d6c1d19984931af093eaf41afc684",
+    "wikipedia": "https://en.wikipedia.org/wiki/Port_of_Antwerp"
+  },
+  "cameraIds": [
+    "port-antwerp-1"
+  ],
+  "satelliteZoom": 9
+}

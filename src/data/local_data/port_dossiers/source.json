@@ -1,0 +1,198 @@
+{
+  "bundle": "port_dossiers",
+  "vintage": "2026-10-12",
+  "seed": {
+    "file": "config/port_dossiers.seed.json",
+    "sha256": "d9e8eea7bcc5a0d677f7e8af14bd8424bb47db434402dad40904585844ded6a4"
+  },
+  "sources": [
+    {
+      "id": "portwatch-registry",
+      "name": "IMF PortWatch ports database",
+      "url": "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/PortWatch_ports_database/FeatureServer/0/query?where=portid+IN+%28%27port1091%27%2C%27port570%27%2C%27port362%27%2C%27port1090%27%2C%27port2164%27%2C%27port481%27%2C%27port264%27%2C%27port2388%27%2C%27port933%27%2C%27port1114%27%2C%27port57%27%2C%27port45%27%2C%27port740%27%2C%27port833%27%2C%27port1020%27%2C%27port1201%27%2C%27port824%27%2C%27port1338%27%2C%27port239%27%2C%27port1199%27%29&outFields=portid%2Cportname%2Cfullname%2Ccountry%2CISO3%2Ccontinent%2Clat%2Clon%2CLOCODE%2Cvessel_count_total%2Cvessel_count_tanker%2Cvessel_count_container%2Cvessel_count_dry_bulk%2Cvessel_count_general_cargo%2Cvessel_count_RoRo%2Cindustry_top1%2Cindustry_top2%2Cindustry_top3%2Cshare_country_maritime_import%2Cshare_country_maritime_export%2Cpageid&returnGeometry=false&orderByFields=portid&resultRecordCount=20&f=json",
+      "licence": "IMF terms of use (https://www.imf.org/external/terms.htm)",
+      "retrieved": "2026-09-17",
+      "sha256": "f956f7d59ff34a8452ca632ac00950abd95597514c5ea9157bb7dbc71367ba4c"
+    },
+    {
+      "id": "wikipedia:port1091",
+      "name": "Wikipedia, Ras Tanura",
+      "url": "https://en.wikipedia.org/api/rest_v1/page/summary/Ras_Tanura",
+      "licence": "CC BY-SA 4.0",
+      "retrieved": "2026-10-12",
+      "revision": "1377193773",
+      "sha256": "d6fcfe26498ade19719f9a47413252e3e65bcf18b8a32f07c8b0f55f53eeebdc"
+    },
+    {
+      "id": "wikipedia:port570",
+      "name": "Wikipedia, King Fahd Industrial Port (Yanbu)",
+      "url": "https://en.wikipedia.org/api/rest_v1/page/summary/King_Fahd_Industrial_Port_(Yanbu)",
+      "licence": "CC BY-SA 4.0",
+      "retrieved": "2026-09-17",
+      "revision": "1370271575",
+      "sha256": "85dbb912b95c5de4a5de26c427b3803f557c41163554c1e0c8a6837fbe3cd1d2"
+    },
+    {
+      "id": "wikipedia:port362",
+      "name": "Wikipedia, Port of Fujairah",
+      "url": "https://en.wikipedia.org/api/rest_v1/page/summary/Port_of_Fujairah",
+      "licence": "CC BY-SA 4.0",
+      "retrieved": "2026-09-17",
+      "revision": "1357531408",
+      "sha256": "c70ddf57316b12fd923f90eef7c6a9d5dc5a4c9f984d073e275bed1c2e32aca0"
+    },
+    {
+      "id": "wikipedia:port1090",
+      "name": "Wikipedia, Ras Laffan Industrial City",
+      "url": "https://en.wikipedia.org/api/rest_v1/page/summary/Ras_Laffan_Industrial_City",
+      "licence": "CC BY-SA 4.0",
+      "retrieved": "2026-10-12",
+      "revision": "1378973103",
+      "sha256": "9a80efd02b731e9a24e894b4e61ca64ffdb91532b482cf085612a256afab0e12"
+    },
+    {
+      "id": "wikipedia:port2164",
+      "name": "Wikipedia, Kharg Island",
+      "url": "https://en.wikipedia.org/api/rest_v1/page/summary/Kharg_Island",
+      "licence": "CC BY-SA 4.0",
+      "retrieved": "2026-09-17",
+      "revision": "1372317716",
+      "sha256": "3bc3bcf8ca2ff49234207005ddb85cc9a1c4fc1cca8920cfd4b42c0d4a602930"
+    },
+    {
+      "id": "wikipedia:port481",
+      "name": "Wikipedia, Port of Houston",
+      "url": "https://en.wikipedia.org/api/rest_v1/page/summary/Port_of_Houston",
+      "licence": "CC BY-SA 4.0",
+      "retrieved": "2026-10-12",
+      "revision": "1378307325",
+      "sha256": "49394ee4901f2d38c017b48626405b6ad634677ebb15158abff6c433bbca9867"
+    },
+    {
+      "id": "wikipedia:port264",
+      "name": "Wikipedia, Port of Corpus Christi",
+      "url": "https://en.wikipedia.org/api/rest_v1/page/summary/Port_of_Corpus_Christi",
+      "licence": "CC BY-SA 4.0",
+      "retrieved": "2026-09-17",
+      "revision": "1364826375",
+      "sha256": "9ba7865f1a40278bd86bcba18eeed83576c20db1e1a8a5cc6713fa46fd6f6000"
+    },
+    {
+      "id": "wikipedia:port2388",
+      "name": "Wikipedia, Sabine Pass",
+      "url": "https://en.wikipedia.org/api/rest_v1/page/summary/Sabine_Pass",
+      "licence": "CC BY-SA 4.0",
+      "retrieved": "2026-09-17",
+      "revision": "1374228810",
+      "sha256": "383f9a734f0397c2727572f4d7a8a454a4cf74eee91dd4043fc6c7ad4d5d27e6"
+    },
+    {
+      "id": "wikipedia:port933",
+      "name": "Wikipedia, Port of Port Arthur",
+      "url": "https://en.wikipedia.org/api/rest_v1/page/summary/Port_of_Port_Arthur",
+      "licence": "CC BY-SA 4.0",
+      "retrieved": "2026-09-17",
+      "revision": "1317736379",
+      "sha256": "7c07edf8ddb7f5b241c0927691f4ed770f4e5cb303f39300eacfe3e12e2ce8c4"
+    },
+    {
+      "id": "wikipedia:port1114",
+      "name": "Wikipedia, Port of Rotterdam",
+      "url": "https://en.wikipedia.org/api/rest_v1/page/summary/Port_of_Rotterdam",
+      "licence": "CC BY-SA 4.0",
+      "retrieved": "2026-10-12",
+      "revision": "1378453600",
+      "sha256": "602de7bef96bd70542798a2c939049a20761a7f4091236d506bb63c31028d874"
+    },
+    {
+      "id": "wikipedia:port57",
+      "name": "Wikipedia, Port of Antwerp",
+      "url": "https://en.wikipedia.org/api/rest_v1/page/summary/Port_of_Antwerp",
+      "licence": "CC BY-SA 4.0",
+      "retrieved": "2026-09-17",
+      "revision": "1360917575",
+      "sha256": "65074c3cf4e93a7c3ddfc846b18bd1f02fdffe212b6164ebee9e23b8cbe3d525"
+    },
+    {
+      "id": "wikipedia:port45",
+      "name": "Wikipedia, Port of Amsterdam",
+      "url": "https://en.wikipedia.org/api/rest_v1/page/summary/Port_of_Amsterdam",
+      "licence": "CC BY-SA 4.0",
+      "retrieved": "2026-09-17",
+      "revision": "1333001230",
+      "sha256": "86f6c4d7f4d6800b79c1138b3dcf68e6971d29d79632b1554e2716053c8c7a27"
+    },
+    {
+      "id": "wikipedia:port740",
+      "name": "Wikipedia, Milford Haven Waterway",
+      "url": "https://en.wikipedia.org/api/rest_v1/page/summary/Milford_Haven_Waterway",
+      "licence": "CC BY-SA 4.0",
+      "retrieved": "2026-09-17",
+      "revision": "1368084476",
+      "sha256": "fc9bfc56f747d86442e8ca90eff09def95fc224273f0e75f4073effaf531a56f"
+    },
+    {
+      "id": "wikipedia:port833",
+      "name": "Wikipedia, Port of Novorossiysk",
+      "url": "https://en.wikipedia.org/api/rest_v1/page/summary/Port_of_Novorossiysk",
+      "licence": "CC BY-SA 4.0",
+      "retrieved": "2026-10-12",
+      "revision": "1378185565",
+      "sha256": "135992cbbba21784996bde6a09c61ac60704655a5ee0ade547ad5c5a3bf8b4c8"
+    },
+    {
+      "id": "wikipedia:port1020",
+      "name": "Wikipedia, Port of Primorsk",
+      "url": "https://en.wikipedia.org/api/rest_v1/page/summary/Port_of_Primorsk",
+      "licence": "CC BY-SA 4.0",
+      "retrieved": "2026-09-17",
+      "revision": "1355074718",
+      "sha256": "4ccad3b43e78bb1683339979ddf514808e31fcab6e4cdd82d702772e60310907"
+    },
+    {
+      "id": "wikipedia:port1201",
+      "name": "Wikipedia, Port of Singapore",
+      "url": "https://en.wikipedia.org/api/rest_v1/page/summary/Port_of_Singapore",
+      "licence": "CC BY-SA 4.0",
+      "retrieved": "2026-10-12",
+      "revision": "1375510759",
+      "sha256": "e1e2fe6f4b325003242c670fcfa03c704ee488a9146fec3d3436010e1f359d16"
+    },
+    {
+      "id": "wikipedia:port824",
+      "name": "Wikipedia, Port of Ningbo-Zhoushan",
+      "url": "https://en.wikipedia.org/api/rest_v1/page/summary/Port_of_Ningbo-Zhoushan",
+      "licence": "CC BY-SA 4.0",
+      "retrieved": "2026-09-17",
+      "revision": "1353391308",
+      "sha256": "116ccfdfccfebccd2e1c778c6ba980c00621646fd4d3a7ffaab346ec21803ac5"
+    },
+    {
+      "id": "wikipedia:port1338",
+      "name": "Wikipedia, Port of Ulsan",
+      "url": "https://en.wikipedia.org/api/rest_v1/page/summary/Port_of_Ulsan",
+      "licence": "CC BY-SA 4.0",
+      "retrieved": "2026-09-17",
+      "revision": "1320769083",
+      "sha256": "cedd39f93b635f2e3bc1a80d70d15e5891fc2d04721b68f64246d82060e359a3"
+    },
+    {
+      "id": "wikipedia:port239",
+      "name": "Wikipedia, Port of Chiba",
+      "url": "https://en.wikipedia.org/api/rest_v1/page/summary/Port_of_Chiba",
+      "licence": "CC BY-SA 4.0",
+      "retrieved": "2026-09-17",
+      "revision": "1274284026",
+      "sha256": "f0d70691554e6882bb38a133df60f956fbd831d12691d4b5c346ecc09f216574"
+    },
+    {
+      "id": "wikipedia:port1199",
+      "name": "Wikipedia, Jamnagar refinery",
+      "url": "https://en.wikipedia.org/api/rest_v1/page/summary/Jamnagar_refinery",
+      "licence": "CC BY-SA 4.0",
+      "retrieved": "2026-09-17",
+      "revision": "1374526504",
+      "sha256": "cf5281d1027ae00a7f475b0aa83c1f70bb379c2963f5f13d2b44c88cab274676"
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "portid": "port1020",
+  "slug": "primorsk",
+  "name": "Primorsk",
+  "fullname": "Primorsk, Russian Federation",
+  "country": "Russian Federation",
+  "iso3": "RUS",
+  "continent": "Europe",
+  "locode": "RU PRI",
+  "lat": 60.33694122,
+  "lon": 28.73119074,
+  "role": "Baltic crude outlet",
+  "roleNotes": "End point of the Baltic Pipeline System on the Gulf of Finland and Russia's largest Baltic oil-loading port: Transneft loads Urals crude at the oil terminal and diesel from the Sever products pipeline at the products berths, with cargoes sailing out past the Danish straits.",
+  "linkedSystems": [
+    {
+      "id": "chokepoint10",
+      "name": "Oresund Strait",
+      "kind": "chokepoint"
+    },
+    {
+      "id": "sanctions",
+      "name": "Sanctions",
+      "kind": "tag"
+    }
+  ],
+  "aliases": [
+    "Primorsk",
+    "Port of Primorsk",
+    "Primorsk port",
+    "Baltic Pipeline System"
+  ],
+  "authority": {
+    "name": "FSUE Rosmorport (North-Western Basin Branch)",
+    "url": "https://www.rosmorport.ru/"
+  },
+  "terminals": [
+    {
+      "name": "Primorsk oil terminal (Baltic Pipeline System)",
+      "operator": "Transneft Port Primorsk",
+      "product": "crude"
+    },
+    {
+      "name": "Primorsk products terminal (Sever pipeline)",
+      "operator": "Transneft Port Primorsk",
+      "product": "products"
+    }
+  ],
+  "annualCalls": {
+    "total": 965,
+    "tanker": 961,
+    "container": 0,
+    "dryBulk": 1,
+    "generalCargo": 3,
+    "roro": 0
+  },
+  "industries": [
+    "Mineral Products",
+    "Chemical & Allied Industries",
+    "Metals"
+  ],
+  "countryShare": {
+    "importPct": 0.07,
+    "exportPct": 11.9
+  },
+  "wikipedia": {
+    "title": "Port of Primorsk",
+    "url": "https://en.wikipedia.org/wiki/Port_of_Primorsk",
+    "description": "Port",
+    "extract": "Primorsk Port is the largest Russian oil-loading port in the Baltic Sea and the end point of the Baltic Pipeline System. The port is located on the Björkösund mainland of the Gulf of Finland in the Baltic Sea, 5km south-east from the town of Primorsk.",
+    "thumbnail": {
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/42/%D0%9A%D0%BE%D0%BF%D0%B8%D1%8F_%D0%9F%D1%80%D0%B8%D0%BC%D0%BE%D1%80%D1%81%D0%BA.jpg/330px-%D0%9A%D0%BE%D0%BF%D0%B8%D1%8F_%D0%9F%D1%80%D0%B8%D0%BC%D0%BE%D1%80%D1%81%D0%BA.jpg",
+      "width": 330,
+      "height": 220
+    },
+    "revision": "1355074718",
+    "timestamp": "2026-05-19T20:13:36Z",
+    "licence": "CC BY-SA 4.0"
+  },
+  "links": {
+    "authority": "https://www.rosmorport.ru/",
+    "portwatch": "https://portwatch.imf.org/datasets/bffa2ba1727a4233b0319a070d870595",
+    "wikipedia": "https://en.wikipedia.org/wiki/Port_of_Primorsk"
+  },
+  "cameraIds": [],
+  "satelliteZoom": 9
+}

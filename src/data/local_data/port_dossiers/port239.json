@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "portid": "port239",
+  "slug": "chiba",
+  "name": "Chiba",
+  "fullname": "Chiba, Japan",
+  "country": "Japan",
+  "iso3": "JPN",
+  "continent": "Asia & Pacific",
+  "locode": "JP CHB",
+  "lat": 35.52513992,
+  "lon": 140.0523392,
+  "role": "Tokyo Bay refining",
+  "roleNotes": "Japan's largest port by tonnage, spanning the Keiyo industrial belt on the east shore of Tokyo Bay: the Idemitsu and Cosmo Chiba refineries, the Fuji Oil Sodegaura refinery and the shared Keiyo Sea Berth VLCC crude terminal, with the Sodegaura LNG terminal feeding the Tokyo gas and power market.",
+  "linkedSystems": [
+    {
+      "id": "chokepoint14",
+      "name": "Luzon Strait",
+      "kind": "chokepoint"
+    },
+    {
+      "id": "chokepoint5",
+      "name": "Malacca Strait",
+      "kind": "chokepoint"
+    }
+  ],
+  "aliases": [
+    "Port of Chiba",
+    "Chiba port",
+    "Chiba refinery",
+    "Ichihara",
+    "Sodegaura"
+  ],
+  "authority": {
+    "name": "Chiba Prefecture (Port of Chiba administrator)",
+    "url": "https://www.pref.chiba.lg.jp/"
+  },
+  "terminals": [
+    {
+      "name": "Idemitsu Kosan Chiba refinery berths",
+      "operator": "Idemitsu Kosan",
+      "product": "mixed"
+    },
+    {
+      "name": "Cosmo Oil Chiba refinery berths",
+      "operator": "Cosmo Energy",
+      "product": "mixed"
+    },
+    {
+      "name": "Keiyo Sea Berth (shared VLCC crude berth)",
+      "operator": "Keiyo Sea Berth Co. (Idemitsu, Cosmo and Fuji Oil)",
+      "product": "crude"
+    },
+    {
+      "name": "Fuji Oil Sodegaura refinery berths",
+      "operator": "Fuji Oil",
+      "product": "mixed"
+    },
+    {
+      "name": "Sodegaura LNG terminal",
+      "operator": "Tokyo Gas and JERA",
+      "product": "LNG"
+    }
+  ],
+  "annualCalls": {
+    "total": 13509,
+    "tanker": 9275,
+    "container": 168,
+    "dryBulk": 1004,
+    "generalCargo": 2370,
+    "roro": 692
+  },
+  "industries": [
+    "Mineral Products",
+    "Chemical & Allied Industries",
+    "Metals"
+  ],
+  "countryShare": {
+    "importPct": 4.68,
+    "exportPct": 5.1
+  },
+  "wikipedia": {
+    "title": "Port of Chiba",
+    "url": "https://en.wikipedia.org/wiki/Port_of_Chiba",
+    "description": "Port in Japan",
+    "extract": "The Port of Chiba  is the largest seaport in Japan, located in Chiba Prefecture on the interior of Tokyo Bay. The Port spans 24,800 hectares across the cities of Ichikawa, Funabashi, Narashino, Chiba, Ichihara, and Sodegaura.",
+    "thumbnail": {
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4d/View_from_Chiba_Port-Tower_Southeast.jpg/330px-View_from_Chiba_Port-Tower_Southeast.jpg",
+      "width": 330,
+      "height": 186
+    },
+    "revision": "1274284026",
+    "timestamp": "2025-02-06T13:45:04Z",
+    "licence": "CC BY-SA 4.0"
+  },
+  "links": {
+    "authority": "https://www.pref.chiba.lg.jp/",
+    "portwatch": "https://portwatch.imf.org/datasets/a432aba86637409ca14f22f7eeec3101",
+    "wikipedia": "https://en.wikipedia.org/wiki/Port_of_Chiba"
+  },
+  "cameraIds": [],
+  "satelliteZoom": 9
+}

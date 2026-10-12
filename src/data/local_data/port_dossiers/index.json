@@ -1,0 +1,236 @@
+{
+  "schemaVersion": 1,
+  "vintage": "2026-10-12",
+  "count": 20,
+  "ports": [
+    {
+      "portid": "port1091",
+      "slug": "ras-tanura",
+      "name": "Ras Tanura",
+      "country": "Saudi Arabia",
+      "lat": 26.67168923,
+      "lon": 50.12291543,
+      "cameraIds": [],
+      "satelliteZoom": 9,
+      "file": "port1091.json"
+    },
+    {
+      "portid": "port570",
+      "slug": "yanbu",
+      "name": "Yanbu (King Fahd Port)",
+      "country": "Saudi Arabia",
+      "lat": 23.95087468,
+      "lon": 38.27170365,
+      "cameraIds": [],
+      "satelliteZoom": 9,
+      "file": "port570.json"
+    },
+    {
+      "portid": "port362",
+      "slug": "fujairah",
+      "name": "Fujairah",
+      "country": "United Arab Emirates",
+      "lat": 25.20017278,
+      "lon": 56.35942059,
+      "cameraIds": [],
+      "satelliteZoom": 9,
+      "file": "port362.json"
+    },
+    {
+      "portid": "port1090",
+      "slug": "ras-laffan",
+      "name": "Ras Laffan",
+      "country": "Qatar",
+      "lat": 25.90850676,
+      "lon": 51.59049926,
+      "cameraIds": [],
+      "satelliteZoom": 9,
+      "file": "port1090.json"
+    },
+    {
+      "portid": "port2164",
+      "slug": "kharg-island",
+      "name": "Kharg Island",
+      "country": "Iran",
+      "lat": 29.2430727915583,
+      "lon": 50.335074434646,
+      "cameraIds": [],
+      "satelliteZoom": 9,
+      "file": "port2164.json"
+    },
+    {
+      "portid": "port481",
+      "slug": "houston",
+      "name": "Houston (US-TX)",
+      "country": "United States",
+      "lat": 29.72023114,
+      "lon": -95.13978774,
+      "cameraIds": [
+        "port-houston-2",
+        "port-houston-3",
+        "port-houston-4",
+        "port-houston-1"
+      ],
+      "satelliteZoom": 8,
+      "file": "port481.json"
+    },
+    {
+      "portid": "port264",
+      "slug": "corpus-christi",
+      "name": "Corpus Christi",
+      "country": "United States",
+      "lat": 27.84122725,
+      "lon": -97.37990791,
+      "cameraIds": [],
+      "satelliteZoom": 9,
+      "file": "port264.json"
+    },
+    {
+      "portid": "port2388",
+      "slug": "sabine-pass",
+      "name": "Sabine Pass",
+      "country": "United States",
+      "lat": 29.745253719133864,
+      "lon": -93.88596237635302,
+      "cameraIds": [],
+      "satelliteZoom": 9,
+      "file": "port2388.json"
+    },
+    {
+      "portid": "port933",
+      "slug": "port-arthur",
+      "name": "Port Arthur",
+      "country": "United States",
+      "lat": 29.88170301,
+      "lon": -93.93104818,
+      "cameraIds": [],
+      "satelliteZoom": 9,
+      "file": "port933.json"
+    },
+    {
+      "portid": "port1114",
+      "slug": "rotterdam",
+      "name": "Rotterdam",
+      "country": "The Netherlands",
+      "lat": 51.92228121,
+      "lon": 4.215144967,
+      "cameraIds": [],
+      "satelliteZoom": 9,
+      "file": "port1114.json"
+    },
+    {
+      "portid": "port57",
+      "slug": "antwerp",
+      "name": "Antwerp",
+      "country": "Belgium",
+      "lat": 51.27935494,
+      "lon": 4.317802311,
+      "cameraIds": [
+        "port-antwerp-1"
+      ],
+      "satelliteZoom": 9,
+      "file": "port57.json"
+    },
+    {
+      "portid": "port45",
+      "slug": "amsterdam",
+      "name": "Amsterdam",
+      "country": "The Netherlands",
+      "lat": 52.41036165,
+      "lon": 4.819634112,
+      "cameraIds": [],
+      "satelliteZoom": 9,
+      "file": "port45.json"
+    },
+    {
+      "portid": "port740",
+      "slug": "milford-haven",
+      "name": "Milford Haven",
+      "country": "United Kingdom",
+      "lat": 51.70054285,
+      "lon": -5.023498674,
+      "cameraIds": [
+        "port-milford-haven-1"
+      ],
+      "satelliteZoom": 9,
+      "file": "port740.json"
+    },
+    {
+      "portid": "port833",
+      "slug": "novorossiysk",
+      "name": "Novorossiysk",
+      "country": "Russian Federation",
+      "lat": 44.72345598,
+      "lon": 37.8087215,
+      "cameraIds": [],
+      "satelliteZoom": 9,
+      "file": "port833.json"
+    },
+    {
+      "portid": "port1020",
+      "slug": "primorsk",
+      "name": "Primorsk",
+      "country": "Russian Federation",
+      "lat": 60.33694122,
+      "lon": 28.73119074,
+      "cameraIds": [],
+      "satelliteZoom": 9,
+      "file": "port1020.json"
+    },
+    {
+      "portid": "port1201",
+      "slug": "singapore",
+      "name": "Singapore",
+      "country": "Singapore",
+      "lat": 1.271989257,
+      "lon": 103.7074816,
+      "cameraIds": [],
+      "satelliteZoom": 9,
+      "file": "port1201.json"
+    },
+    {
+      "portid": "port824",
+      "slug": "ningbo",
+      "name": "Ningbo",
+      "country": "China",
+      "lat": 29.92076897,
+      "lon": 121.8818408,
+      "cameraIds": [],
+      "satelliteZoom": 8,
+      "file": "port824.json"
+    },
+    {
+      "portid": "port1338",
+      "slug": "ulsan",
+      "name": "Ulsan",
+      "country": "Korea",
+      "lat": 35.48647294,
+      "lon": 129.3780838,
+      "cameraIds": [],
+      "satelliteZoom": 9,
+      "file": "port1338.json"
+    },
+    {
+      "portid": "port239",
+      "slug": "chiba",
+      "name": "Chiba",
+      "country": "Japan",
+      "lat": 35.52513992,
+      "lon": 140.0523392,
+      "cameraIds": [],
+      "satelliteZoom": 9,
+      "file": "port239.json"
+    },
+    {
+      "portid": "port1199",
+      "slug": "sikka",
+      "name": "Sikka",
+      "country": "India",
+      "lat": 22.36483725,
+      "lon": 69.80786454,
+      "cameraIds": [],
+      "satelliteZoom": 9,
+      "file": "port1199.json"
+    }
+  ]
+}

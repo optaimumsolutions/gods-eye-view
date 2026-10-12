@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "portid": "port1090",
+  "slug": "ras-laffan",
+  "name": "Ras Laffan",
+  "fullname": "Ras Laffan, Qatar",
+  "country": "Qatar",
+  "iso3": "QAT",
+  "continent": "Asia & Pacific",
+  "locode": "QA RLF",
+  "lat": 25.90850676,
+  "lon": 51.59049926,
+  "role": "Largest LNG export complex",
+  "roleNotes": "Owned, regulated and operated by QatarEnergy, the loading point for QatarEnergy LNG's 14 trains (77 mtpa) across six Q-Flex and Q-Max capable LNG berths, plus condensate, LPG, sulphur, Laffan Refinery products and the Pearl and Oryx GTL liquids, every seaborne cargo of which transits the Strait of Hormuz.",
+  "linkedSystems": [
+    {
+      "id": "chokepoint6",
+      "name": "Strait of Hormuz",
+      "kind": "chokepoint"
+    }
+  ],
+  "aliases": [
+    "Ras Laffan",
+    "Ras Laffan Industrial City",
+    "Ras Laffan Port",
+    "Ras Laffan LNG"
+  ],
+  "authority": {
+    "name": "QatarEnergy",
+    "url": "https://www.qatarenergy.qa/"
+  },
+  "terminals": [
+    {
+      "name": "Ras Laffan LNG berths (six berths, 14 trains)",
+      "operator": "QatarEnergy LNG",
+      "product": "LNG"
+    },
+    {
+      "name": "Ras Laffan Terminal Operations (condensate, LPG, sulphur, GTL berths)",
+      "operator": "QatarEnergy LNG",
+      "product": "mixed"
+    },
+    {
+      "name": "Laffan Refinery (306,600 b/d condensate refinery)",
+      "operator": "QatarEnergy LNG",
+      "product": "products"
+    },
+    {
+      "name": "Pearl GTL (140,000 b/d)",
+      "operator": "Qatar Shell GTL",
+      "product": "products"
+    },
+    {
+      "name": "Oryx GTL (34,000 b/d)",
+      "operator": "Oryx GTL (QatarEnergy and Sasol)",
+      "product": "products"
+    },
+    {
+      "name": "Ras Laffan Petrochemicals ethane cracker (start-up expected late 2026)",
+      "operator": "Ras Laffan Petrochemicals (QatarEnergy and CPChem)",
+      "product": "chemicals"
+    }
+  ],
+  "annualCalls": {
+    "total": 1790,
+    "tanker": 1634,
+    "container": 8,
+    "dryBulk": 80,
+    "generalCargo": 63,
+    "roro": 5
+  },
+  "industries": [
+    "Mineral Products",
+    "Chemical & Allied Industries",
+    "Plastics, Rubber, Leather"
+  ],
+  "countryShare": {
+    "importPct": 0.54,
+    "exportPct": 80.37
+  },
+  "wikipedia": {
+    "title": "Ras Laffan Industrial City",
+    "url": "https://en.wikipedia.org/wiki/Ras_Laffan_Industrial_City",
+    "description": "Place in Al Khor, Qatar",
+    "extract": "Ras Laffan Industrial City is a Qatari industrial hub located 80 kilometres (50 mi) north of Doha. It is administered by QatarEnergy.",
+    "thumbnail": {
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7c/Ras_Laffan_LNG_terminal_in_2012.jpg/330px-Ras_Laffan_LNG_terminal_in_2012.jpg",
+      "width": 330,
+      "height": 248
+    },
+    "revision": "1378973103",
+    "timestamp": "2026-10-07T04:16:38Z",
+    "licence": "CC BY-SA 4.0"
+  },
+  "links": {
+    "authority": "https://www.qatarenergy.qa/",
+    "portwatch": "https://portwatch.imf.org/datasets/400466b383894304852a7c9748c39301",
+    "wikipedia": "https://en.wikipedia.org/wiki/Ras_Laffan_Industrial_City"
+  },
+  "cameraIds": [],
+  "satelliteZoom": 9
+}

@@ -6,6 +6,7 @@
   "scripts/format.mjs",
   "scripts/check-package-boundaries.mjs",
   "scripts/precompute-cctv-heights.mjs",
+  "scripts/build-port-dossiers.mjs",
   "src/tooling/precomputeCctvHeights.test.mjs",
   "src/tooling/fixtureRoot.mjs",
   "src/tooling/fixtureRoot.test.mjs",

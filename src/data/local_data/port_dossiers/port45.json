@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "portid": "port45",
+  "slug": "amsterdam",
+  "name": "Amsterdam",
+  "fullname": "Amsterdam, The Netherlands",
+  "country": "The Netherlands",
+  "iso3": "NLD",
+  "continent": "Europe",
+  "locode": "NL AMS",
+  "lat": 52.41036165,
+  "lon": 4.819634112,
+  "role": "ARA gasoline and product storage",
+  "roleNotes": "The gasoline leg of the ARA hub: the Westpoort tank farms behind the IJmuiden sea locks blend and store gasoline, diesel and jet for the Atlantic Basin export trade, and the port is one of the largest petrol ports in the world by throughput.",
+  "linkedSystems": [
+    {
+      "id": "chokepoint9",
+      "name": "Dover Strait",
+      "kind": "chokepoint"
+    },
+    {
+      "id": "ara",
+      "name": "ARA hub",
+      "kind": "tag"
+    }
+  ],
+  "aliases": [
+    "Port of Amsterdam",
+    "Amsterdam port",
+    "Amsterdam terminal",
+    "Westpoort",
+    "Amsterdam gasoline"
+  ],
+  "authority": {
+    "name": "Port of Amsterdam",
+    "url": "https://www.portofamsterdam.com/"
+  },
+  "terminals": [
+    {
+      "name": "Vopak Terminal Amsterdam Westpoort",
+      "operator": "Vopak",
+      "product": "products"
+    },
+    {
+      "name": "Evos Amsterdam terminal (former Oiltanking)",
+      "operator": "Evos",
+      "product": "products"
+    },
+    {
+      "name": "Zenith Energy Amsterdam terminal",
+      "operator": "Zenith Energy",
+      "product": "products"
+    }
+  ],
+  "annualCalls": {
+    "total": 8246,
+    "tanker": 5628,
+    "container": 371,
+    "dryBulk": 448,
+    "generalCargo": 1675,
+    "roro": 124
+  },
+  "industries": [
+    "Mineral Products",
+    "Chemical & Allied Industries",
+    "Vegetable Products"
+  ],
+  "countryShare": {
+    "importPct": 10.4,
+    "exportPct": 16.73
+  },
+  "wikipedia": {
+    "title": "Port of Amsterdam",
+    "url": "https://en.wikipedia.org/wiki/Port_of_Amsterdam",
+    "description": "Port in Netherlands",
+    "extract": "The port of Amsterdam is an inland seaport in Amsterdam in North Holland, Netherlands. It is the 14th busiest port in Europe by total cargo tonnage. In 2023, the port of Amsterdam had a cargo throughput of 63 million tons.",
+    "thumbnail": {
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/36/Amsterdam_Westpoort.jpg/330px-Amsterdam_Westpoort.jpg",
+      "width": 330,
+      "height": 220
+    },
+    "revision": "1333001230",
+    "timestamp": "2026-01-15T03:01:50Z",
+    "licence": "CC BY-SA 4.0"
+  },
+  "links": {
+    "authority": "https://www.portofamsterdam.com/",
+    "portwatch": "https://portwatch.imf.org/datasets/148e0d053aec4eb0a27d53cc6a7ae520",
+    "wikipedia": "https://en.wikipedia.org/wiki/Port_of_Amsterdam"
+  },
+  "cameraIds": [],
+  "satelliteZoom": 9
+}

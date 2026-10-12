@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "portid": "port481",
+  "slug": "houston",
+  "name": "Houston (US-TX)",
+  "fullname": "Houston (US-TX), United States",
+  "country": "United States",
+  "iso3": "USA",
+  "continent": "North America",
+  "locode": "US HOU",
+  "lat": 29.72023114,
+  "lon": -95.13978774,
+  "role": "Largest US crude export and petrochemical complex",
+  "roleNotes": "The 52-mile Houston Ship Channel hosts Enterprise's LPG and ethane export docks at Morgan's Point, the Kinder Morgan and ONEOK refined-product hubs at Pasadena and Galena Park, the ExxonMobil Baytown and Pemex Deer Park refineries and the US Gulf Coast's main residual-fuel and bunkering market, and is one of the two largest US crude export points.",
+  "linkedSystems": [
+    {
+      "id": "us-gulf",
+      "name": "US Gulf Coast",
+      "kind": "tag"
+    },
+    {
+      "id": "padd-3",
+      "name": "PADD 3",
+      "kind": "tag"
+    }
+  ],
+  "aliases": [
+    "Port of Houston",
+    "Port Houston",
+    "Houston Ship Channel",
+    "Galena Park terminal"
+  ],
+  "authority": {
+    "name": "Port Houston (Port of Houston Authority)",
+    "url": "https://porthouston.com/"
+  },
+  "terminals": [
+    {
+      "name": "Enterprise Hydrocarbons Terminal and Morgan's Point ethane export terminal",
+      "operator": "Enterprise Products Partners",
+      "product": "mixed"
+    },
+    {
+      "name": "Kinder Morgan Pasadena and Galena Park terminals (with BOSTCO)",
+      "operator": "Kinder Morgan",
+      "product": "products"
+    },
+    {
+      "name": "ONEOK Galena Park marine terminal (Magellan)",
+      "operator": "ONEOK",
+      "product": "products"
+    },
+    {
+      "name": "Energy Transfer Houston Terminal (former HFOTCO), Jacintoport",
+      "operator": "Energy Transfer",
+      "product": "mixed"
+    },
+    {
+      "name": "Pemex Deer Park refinery docks",
+      "operator": "Pemex",
+      "product": "mixed"
+    },
+    {
+      "name": "ExxonMobil Baytown refinery and chemical complex docks",
+      "operator": "ExxonMobil",
+      "product": "mixed"
+    }
+  ],
+  "annualCalls": {
+    "total": 7358,
+    "tanker": 5014,
+    "container": 984,
+    "dryBulk": 735,
+    "generalCargo": 562,
+    "roro": 63
+  },
+  "industries": [
+    "Mineral Products",
+    "Chemical & Allied Industries",
+    "Vegetable Products"
+  ],
+  "countryShare": {
+    "importPct": 8.21,
+    "exportPct": 17.78
+  },
+  "wikipedia": {
+    "title": "Port of Houston",
+    "url": "https://en.wikipedia.org/wiki/Port_of_Houston",
+    "description": "Port in United States",
+    "extract": "The Port of Houston is one of the world's largest ports and serves the metropolitan area of Houston, Texas. The port is a 50-mile-long (80 km) complex of diversified public and private facilities located a few hours' sailing time from the Gulf of Mexico. Located in the fourth-largest city in the United States, it is the busiest port in the U.S. in terms of foreign tonnage and the busiest in the U.S. in terms of overall tonnage. Though originally the port's terminals were primarily within the Houston city limits, the port has expanded to such a degree that today it has facilities in multiple communities in the surrounding area. In particular the port's busiest terminal, the Barbours Cut Terminal, is located in Morgan's Point.",
+    "thumbnail": {
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/39/GreensPortIndustrialPakr-BuffaloBayou_%2834933182210%29.jpg/330px-GreensPortIndustrialPakr-BuffaloBayou_%2834933182210%29.jpg",
+      "width": 330,
+      "height": 220
+    },
+    "revision": "1378307325",
+    "timestamp": "2026-10-03T22:37:51Z",
+    "licence": "CC BY-SA 4.0"
+  },
+  "links": {
+    "authority": "https://porthouston.com/",
+    "portwatch": "https://portwatch.imf.org/datasets/1581e7affcc84016af4e4bbf372e721b",
+    "wikipedia": "https://en.wikipedia.org/wiki/Port_of_Houston"
+  },
+  "cameraIds": [
+    "port-houston-2",
+    "port-houston-3",
+    "port-houston-4",
+    "port-houston-1"
+  ],
+  "satelliteZoom": 8
+}

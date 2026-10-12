@@ -86,6 +86,15 @@ const LIVE_PACKS = [
     enabled: () => envEnabled('CCTV_CALGARY_ENABLED'),
     load: loadCalgarySourcesFromOpenData,
   },
+  // Commodities row 9: hand-verified port cameras for the dossier panel (portSources.js).
+  {
+    name: 'ports',
+    enabled: () => envEnabled('CCTV_PORTS_ENABLED'),
+    load: (options) =>
+      import('./portSources.js').then((m) =>
+        m.loadPortSourcesFromCatalog(options),
+      ),
+  },
 ];
 /**
  * Load CCTV sources from a local JSON file (CCTV_SOURCES_FILE env or default).

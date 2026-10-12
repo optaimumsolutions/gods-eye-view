@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "portid": "port740",
+  "slug": "milford-haven",
+  "name": "Milford Haven",
+  "fullname": "Milford Haven, United Kingdom",
+  "country": "United Kingdom",
+  "iso3": "GBR",
+  "continent": "Europe",
+  "locode": "GB MLF",
+  "lat": 51.70054285,
+  "lon": -5.023498674,
+  "role": "UK LNG (South Hook, Dragon) and refining",
+  "roleNotes": "Deep-water natural harbour in Pembrokeshire that lands most of the United Kingdom's LNG at the South Hook and Dragon terminals and hosts the Valero Pembroke refinery, making it the UK's largest energy port by tonnage.",
+  "linkedSystems": [
+    {
+      "id": "atlantic",
+      "name": "Atlantic",
+      "kind": "tag"
+    }
+  ],
+  "aliases": [
+    "Milford Haven",
+    "South Hook",
+    "Dragon LNG",
+    "Pembroke refinery"
+  ],
+  "authority": {
+    "name": "Port of Milford Haven",
+    "url": "https://www.mhpa.co.uk/"
+  },
+  "terminals": [
+    {
+      "name": "South Hook LNG terminal",
+      "operator": "South Hook LNG Terminal Company",
+      "product": "LNG"
+    },
+    {
+      "name": "Dragon LNG terminal",
+      "operator": "Dragon LNG",
+      "product": "LNG"
+    },
+    {
+      "name": "Valero Pembroke refinery jetties",
+      "operator": "Valero",
+      "product": "mixed"
+    },
+    {
+      "name": "Puma Energy Milford Haven terminal (former Murco refinery)",
+      "operator": "Puma Energy",
+      "product": "products"
+    }
+  ],
+  "annualCalls": {
+    "total": 1123,
+    "tanker": 1110,
+    "container": 1,
+    "dryBulk": 1,
+    "generalCargo": 10,
+    "roro": 1
+  },
+  "industries": [
+    "Mineral Products",
+    "Chemical & Allied Industries",
+    "Plastics, Rubber, Leather"
+  ],
+  "countryShare": {
+    "importPct": 11.27,
+    "exportPct": 9.15
+  },
+  "wikipedia": {
+    "title": "Milford Haven Waterway",
+    "url": "https://en.wikipedia.org/wiki/Milford_Haven_Waterway",
+    "description": "Natural harbour in south-west Wales",
+    "extract": "Milford Haven Waterway, or simply Milford Haven, is a natural harbour in Pembrokeshire, Wales. It is a ria or drowned valley which was flooded at the end of the last ice age. The Daugleddau estuary winds west to the sea. As one of the deepest natural harbours in the world, it is a busy shipping channel, trafficked by ferries from Pembroke Dock to Ireland, oil tankers and pleasure craft. Admiral Horatio Nelson, visiting the haven with the Hamiltons, described it as the next best natural harbour to Trincomalee in Ceylon and \"the finest port in Christendom\". Much of the coastline of the Waterway is designated as a Site of Special Scientific Interest, listed as Milford Haven Waterway SSSI.",
+    "thumbnail": {
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f5/Milford_Haven_harbourmap1946.jpg/330px-Milford_Haven_harbourmap1946.jpg",
+      "width": 330,
+      "height": 228
+    },
+    "revision": "1368084476",
+    "timestamp": "2026-08-06T23:13:30Z",
+    "licence": "CC BY-SA 4.0"
+  },
+  "links": {
+    "authority": "https://www.mhpa.co.uk/",
+    "portwatch": "https://portwatch.imf.org/datasets/6a0a011427e4441c9436b0353b82bb97",
+    "wikipedia": "https://en.wikipedia.org/wiki/Milford_Haven_Waterway"
+  },
+  "cameraIds": [
+    "port-milford-haven-1"
+  ],
+  "satelliteZoom": 9
+}

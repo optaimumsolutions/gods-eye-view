@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "portid": "port2388",
+  "slug": "sabine-pass",
+  "name": "Sabine Pass",
+  "fullname": "Sabine Pass, United States",
+  "country": "United States",
+  "iso3": "USA",
+  "continent": "North America",
+  "locode": "US NSS",
+  "lat": 29.745253719133864,
+  "lon": -93.88596237635302,
+  "role": "First and largest US LNG export terminal",
+  "roleNotes": "Cheniere's six-train, roughly 30 mtpa Sabine Pass Liquefaction plant on the Louisiana bank of the pass, in service since 2016, loads LNG carriers at three berths from interstate and intrastate pipeline gas, and since 2026 shares the pass with the QatarEnergy and ExxonMobil Golden Pass export terminal on the Texas bank.",
+  "linkedSystems": [
+    {
+      "id": "us-gulf",
+      "name": "US Gulf Coast",
+      "kind": "tag"
+    },
+    {
+      "id": "henry-hub",
+      "name": "Henry Hub",
+      "kind": "tag"
+    }
+  ],
+  "aliases": [
+    "Sabine Pass LNG",
+    "Sabine Pass Liquefaction",
+    "Cheniere Sabine Pass",
+    "Golden Pass LNG"
+  ],
+  "authority": {
+    "name": "Cheniere Energy (Sabine Pass Liquefaction)",
+    "url": "https://www.cheniere.com/"
+  },
+  "terminals": [
+    {
+      "name": "Sabine Pass LNG terminal (six trains, three berths)",
+      "operator": "Cheniere Energy (Sabine Pass Liquefaction)",
+      "product": "LNG"
+    },
+    {
+      "name": "Sabine Pass Stage 5 expansion (Train 7, about 6 mtpa, pre-FID)",
+      "operator": "Cheniere Energy (Sabine Pass Liquefaction Stage V)",
+      "product": "LNG"
+    },
+    {
+      "name": "Golden Pass LNG (Texas bank, three trains, first cargo April 2026)",
+      "operator": "Golden Pass LNG (QatarEnergy and ExxonMobil affiliates)",
+      "product": "LNG"
+    }
+  ],
+  "annualCalls": {
+    "total": 605,
+    "tanker": 569,
+    "container": 0,
+    "dryBulk": 18,
+    "generalCargo": 13,
+    "roro": 5
+  },
+  "industries": [],
+  "countryShare": {
+    "importPct": 0.04,
+    "exportPct": 2.21
+  },
+  "wikipedia": {
+    "title": "Sabine Pass",
+    "url": "https://en.wikipedia.org/wiki/Sabine_Pass",
+    "description": "Watercourse in United States of America",
+    "extract": "Sabine Pass is the natural outlet of Sabine Lake into the Gulf of Mexico. It borders Jefferson County, Texas, and Cameron Parish, Louisiana.",
+    "thumbnail": {
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/81/Wide_natural_beach_near_Sabine_Pass.jpg/330px-Wide_natural_beach_near_Sabine_Pass.jpg",
+      "width": 330,
+      "height": 223
+    },
+    "revision": "1374228810",
+    "timestamp": "2026-09-10T17:33:24Z",
+    "licence": "CC BY-SA 4.0"
+  },
+  "links": {
+    "authority": "https://www.cheniere.com/",
+    "portwatch": "https://portwatch.imf.org/datasets/9c60d5a537a243bba196803a9466bde8",
+    "wikipedia": "https://en.wikipedia.org/wiki/Sabine_Pass"
+  },
+  "cameraIds": [],
+  "satelliteZoom": 9
+}

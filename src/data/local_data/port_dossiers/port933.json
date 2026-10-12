@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "portid": "port933",
+  "slug": "port-arthur",
+  "name": "Port Arthur",
+  "fullname": "Port Arthur, United States",
+  "country": "United States",
+  "iso3": "USA",
+  "continent": "North America",
+  "locode": "US POA",
+  "lat": 29.88170301,
+  "lon": -93.93104818,
+  "role": "Gulf refining (Motiva), Sabine-Neches waterway",
+  "roleNotes": "On the Sabine-Neches Waterway 19 miles from the Gulf, hosting three crude-fed refineries with their own docks (Motiva's 730,000 b/d plant, North America's largest, plus Valero and TotalEnergies), Energy Transfer's Nederland crude and NGL export terminal upstream on the Neches, and Sempra's Port Arthur LNG under construction.",
+  "linkedSystems": [
+    {
+      "id": "us-gulf",
+      "name": "US Gulf Coast",
+      "kind": "tag"
+    },
+    {
+      "id": "padd-3",
+      "name": "PADD 3",
+      "kind": "tag"
+    }
+  ],
+  "aliases": [
+    "Port of Port Arthur",
+    "Port Arthur, Texas",
+    "Motiva Port Arthur",
+    "Port Arthur LNG",
+    "Sabine-Neches Waterway"
+  ],
+  "authority": {
+    "name": "Port of Port Arthur Navigation District",
+    "url": "https://portpa.com/"
+  },
+  "terminals": [
+    {
+      "name": "Motiva Port Arthur refinery docks (730,000 b/d)",
+      "operator": "Motiva Enterprises (Saudi Aramco)",
+      "product": "mixed"
+    },
+    {
+      "name": "Valero Port Arthur refinery docks (435,000 b/d)",
+      "operator": "Valero Energy",
+      "product": "mixed"
+    },
+    {
+      "name": "TotalEnergies Port Arthur refinery docks (238,000 b/d)",
+      "operator": "TotalEnergies",
+      "product": "mixed"
+    },
+    {
+      "name": "Nederland Terminal (six ship docks, crude and NGL)",
+      "operator": "Energy Transfer",
+      "product": "mixed"
+    },
+    {
+      "name": "Port Arthur LNG (under construction)",
+      "operator": "Sempra Infrastructure",
+      "product": "LNG"
+    }
+  ],
+  "annualCalls": {
+    "total": 1192,
+    "tanker": 912,
+    "container": 11,
+    "dryBulk": 170,
+    "generalCargo": 86,
+    "roro": 13
+  },
+  "industries": [
+    "Mineral Products",
+    "Chemical & Allied Industries",
+    "Plastics, Rubber, Leather"
+  ],
+  "countryShare": {
+    "importPct": 1.96,
+    "exportPct": 2.44
+  },
+  "wikipedia": {
+    "title": "Port of Port Arthur",
+    "url": "https://en.wikipedia.org/wiki/Port_of_Port_Arthur",
+    "description": "Port in United States",
+    "extract": "The Port of Port Arthur is a seaport in Port Arthur, Texas.",
+    "thumbnail": {
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/29/Port_of_Port_Arthur%2C_Texas.jpg/330px-Port_of_Port_Arthur%2C_Texas.jpg",
+      "width": 330,
+      "height": 231
+    },
+    "revision": "1317736379",
+    "timestamp": "2025-10-19T19:07:36Z",
+    "licence": "CC BY-SA 4.0"
+  },
+  "links": {
+    "authority": "https://portpa.com/",
+    "portwatch": "https://portwatch.imf.org/datasets/364cdadd07584173b901c879366bc9e7",
+    "wikipedia": "https://en.wikipedia.org/wiki/Port_of_Port_Arthur"
+  },
+  "cameraIds": [],
+  "satelliteZoom": 9
+}

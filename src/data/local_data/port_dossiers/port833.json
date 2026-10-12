@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "portid": "port833",
+  "slug": "novorossiysk",
+  "name": "Novorossiysk",
+  "fullname": "Novorossiysk, Russian Federation",
+  "country": "Russian Federation",
+  "iso3": "RUS",
+  "continent": "Europe",
+  "locode": "RU NVS",
+  "lat": 44.72345598,
+  "lon": 37.8087215,
+  "role": "Black Sea crude and CPC terminal",
+  "roleNotes": "Russia's main Black Sea crude and products outlet: the Sheskharis terminal loads Urals crude and products from the Transneft system, and the Caspian Pipeline Consortium marine terminal at Yuzhnaya Ozereyevka loads Kazakh CPC Blend from single-point moorings, all sailing through the Bosporus.",
+  "linkedSystems": [
+    {
+      "id": "chokepoint3",
+      "name": "Bosporus Strait",
+      "kind": "chokepoint"
+    },
+    {
+      "id": "sanctions",
+      "name": "Sanctions",
+      "kind": "tag"
+    }
+  ],
+  "aliases": [
+    "Novorossiysk",
+    "Sheskharis",
+    "CPC terminal",
+    "Caspian Pipeline Consortium",
+    "CPC Blend"
+  ],
+  "authority": {
+    "name": "FSUE Rosmorport (Azov-Black Sea Basin Branch)",
+    "url": "https://www.rosmorport.ru/"
+  },
+  "terminals": [
+    {
+      "name": "Sheskharis oil terminal",
+      "operator": "NCSP Group (Transneft)",
+      "product": "mixed"
+    },
+    {
+      "name": "CPC Marine Terminal (Yuzhnaya Ozereyevka)",
+      "operator": "Caspian Pipeline Consortium",
+      "product": "crude"
+    },
+    {
+      "name": "IPP Novorossiysk products terminal",
+      "operator": "NCSP Group (Transneft)",
+      "product": "products"
+    }
+  ],
+  "annualCalls": {
+    "total": 4438,
+    "tanker": 1578,
+    "container": 712,
+    "dryBulk": 774,
+    "generalCargo": 1195,
+    "roro": 179
+  },
+  "industries": [
+    "Mineral Products",
+    "Chemical & Allied Industries",
+    "Metals"
+  ],
+  "countryShare": {
+    "importPct": 6.25,
+    "exportPct": 17.19
+  },
+  "wikipedia": {
+    "title": "Port of Novorossiysk",
+    "url": "https://en.wikipedia.org/wiki/Port_of_Novorossiysk",
+    "description": "Largest port in Krasnodar Krai, from Russia",
+    "extract": "Novorossiysk Sea Port is one of the largest ports in the Black Sea basin and the largest in Krasnodar Krai. At 8.3 km, the NSP berthing line is the longest among all the ports of Russia. The port is located on the Northeast coast of the Black Sea, in the Tsemes Bay. The bay is ice-free and open for navigation all year round. However, in winter the navigation occasionally stops due to the hazardous northeastern bora wind. The Tsemes Bay allows deep-draft vessels up to 19 m, and the inner harbour up to 12.5 m. The liquid bulk terminals depth range from 8.4 to 15.6 m, suitable for tankers with a deadweight of up to 250,000 tons, like Suezmax-class vessels.",
+    "thumbnail": {
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bf/Novo-2010-08-27-043.jpg/330px-Novo-2010-08-27-043.jpg",
+      "width": 330,
+      "height": 221
+    },
+    "revision": "1378185565",
+    "timestamp": "2026-10-03T10:13:12Z",
+    "licence": "CC BY-SA 4.0"
+  },
+  "links": {
+    "authority": "https://www.rosmorport.ru/",
+    "portwatch": "https://portwatch.imf.org/datasets/49e29e693dbb40b8862589a53ab72e12",
+    "wikipedia": "https://en.wikipedia.org/wiki/Port_of_Novorossiysk"
+  },
+  "cameraIds": [],
+  "satelliteZoom": 9
+}

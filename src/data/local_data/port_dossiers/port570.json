@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "portid": "port570",
+  "slug": "yanbu",
+  "name": "Yanbu (King Fahd Port)",
+  "fullname": "King Fahd Port, Saudi Arabia",
+  "country": "Saudi Arabia",
+  "iso3": "SAU",
+  "continent": "Asia & Pacific",
+  "locode": null,
+  "lat": 23.95087468,
+  "lon": 38.27170365,
+  "role": "Red Sea outlet of the East-West pipeline, Hormuz bypass",
+  "roleNotes": "Red Sea terminus of Saudi Aramco's East-West crude pipeline: crude loads at the four-berth North Crude Terminal and the three-berth South Terminal, and refined products from the Aramco Yanbu, SAMREF and YASREF refineries ship from adjacent product berths, giving Saudi exports a route that avoids the Strait of Hormuz.",
+  "linkedSystems": [
+    {
+      "id": "chokepoint4",
+      "name": "Bab el-Mandeb Strait",
+      "kind": "chokepoint"
+    },
+    {
+      "id": "chokepoint1",
+      "name": "Suez Canal",
+      "kind": "chokepoint"
+    },
+    {
+      "id": "hormuz-bypass",
+      "name": "Hormuz bypass",
+      "kind": "tag"
+    }
+  ],
+  "aliases": [
+    "Yanbu",
+    "Yanbu port",
+    "Yanbu terminal",
+    "Yanbu Industrial Port",
+    "King Fahd Industrial Port",
+    "King Fahad Industrial Port"
+  ],
+  "authority": {
+    "name": "Saudi Ports Authority (Mawani)",
+    "url": "https://mawani.gov.sa/"
+  },
+  "terminals": [
+    {
+      "name": "Yanbu North Crude Terminal (berths 61 to 64)",
+      "operator": "Saudi Aramco",
+      "product": "crude"
+    },
+    {
+      "name": "Yanbu South Terminal (berths 101 to 103)",
+      "operator": "Saudi Aramco",
+      "product": "crude"
+    },
+    {
+      "name": "Yanbu North Refined Product Terminal (berths 91 to 94)",
+      "operator": "Saudi Aramco",
+      "product": "products"
+    },
+    {
+      "name": "SAMREF Export Refinery Terminal",
+      "operator": "SAMREF (Saudi Aramco Mobil Refinery Co.)",
+      "product": "products"
+    },
+    {
+      "name": "YASREF sulphur, oil and petroleum coke terminal and NGL berth",
+      "operator": "YASREF (Yanbu Aramco Sinopec Refining Co.)",
+      "product": "mixed"
+    },
+    {
+      "name": "YANPET Chemical Terminal",
+      "operator": "YANPET",
+      "product": "chemicals"
+    }
+  ],
+  "annualCalls": {
+    "total": 1424,
+    "tanker": 1323,
+    "container": 2,
+    "dryBulk": 80,
+    "generalCargo": 17,
+    "roro": 2
+  },
+  "industries": [
+    "Mineral Products",
+    "Chemical & Allied Industries",
+    "Plastics, Rubber, Leather"
+  ],
+  "countryShare": {
+    "importPct": 0.96,
+    "exportPct": 15.56
+  },
+  "wikipedia": {
+    "title": "King Fahd Industrial Port (Yanbu)",
+    "url": "https://en.wikipedia.org/wiki/King_Fahd_Industrial_Port_(Yanbu)",
+    "description": "Port in Saudi Arabia",
+    "extract": "King Fahad Industrial Port (Yanbu) is a Saudi port located in Yanbu city of Saudi Arabia on the Red sea coast. It is the largest port for loading crude oil and petrochemicals in the Red Sea.",
+    "thumbnail": null,
+    "revision": "1370271575",
+    "timestamp": "2026-08-20T03:48:52Z",
+    "licence": "CC BY-SA 4.0"
+  },
+  "links": {
+    "authority": "https://mawani.gov.sa/",
+    "portwatch": "https://portwatch.imf.org/datasets/79d393e8b28b454db88cc8f1e2bdbfad",
+    "wikipedia": "https://en.wikipedia.org/wiki/King_Fahd_Industrial_Port_(Yanbu)"
+  },
+  "cameraIds": [],
+  "satelliteZoom": 9
+}

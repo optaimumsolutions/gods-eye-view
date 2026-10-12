@@ -29,6 +29,34 @@ export const DISRUPTION_RECENT_DAYS = 90;
  */
 export const PORT_MIN_ANNUAL_TANKER_VISITS = 250;
 /**
+ * The row 9 port dossiers (docs/COMMODITIES-PLAN.md §9.6.1), kept on the layer
+ * whatever their tanker count: they were chosen by role, and Kharg Island's
+ * 75 calls a year sit under the floor. Pinned to the bundle's index.json by
+ * records.test.mjs, so a port added to the bundle must be added here too.
+ */
+export const PORT_DOSSIER_IDS = Object.freeze([
+  'port1091',
+  'port570',
+  'port362',
+  'port1090',
+  'port2164',
+  'port481',
+  'port264',
+  'port2388',
+  'port933',
+  'port1114',
+  'port57',
+  'port45',
+  'port740',
+  'port833',
+  'port1020',
+  'port1201',
+  'port824',
+  'port1338',
+  'port239',
+  'port1199',
+]);
+/**
  * Below this baseline a deviation is noise, not a move: one extra tanker at a
  * port that sees two a month reads as +1,400%. Such ports are 'thin'.
  */
@@ -271,14 +299,18 @@ export function buildPortSnapshot({
   latestDate = null,
   disruptions = [],
   minAnnualTankers = PORT_MIN_ANNUAL_TANKER_VISITS,
+  keepIds = [],
 }) {
   const recentById = new Map(recentStats.map((row) => [row.id, row]));
   const baselineById = new Map(baselineStats.map((row) => [row.id, row]));
-  // A missing count is not evidence of traffic: an unrated port is dropped.
+  const keep = new Set(keepIds);
+  // A missing count is not evidence of traffic: an unrated port is dropped,
+  // unless it is one the caller keeps by name (the row 9 dossier ports).
   const tankerPorts = ports.filter(
     (port) =>
+      keep.has(port.id) ||
       (Number.isFinite(port.annualTankers) ? port.annualTankers : 0) >=
-      minAnnualTankers,
+        minAnnualTankers,
   );
   const rows = tankerPorts.map((port) => {
     const recent = recentById.get(port.id) ?? null;

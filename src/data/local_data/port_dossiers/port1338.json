@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "portid": "port1338",
+  "slug": "ulsan",
+  "name": "Ulsan",
+  "fullname": "Ulsan, Korea",
+  "country": "Korea",
+  "iso3": "KOR",
+  "continent": "Asia & Pacific",
+  "locode": "KR USN",
+  "lat": 35.48647294,
+  "lon": 129.3780838,
+  "role": "SK Energy and S-Oil refining complex",
+  "roleNotes": "South Korea's largest liquid-bulk port: the SK Energy Ulsan complex and the S-Oil Onsan refinery take Middle East crude over their own berths and ship products and petrochemicals back out, alongside the Korea National Oil Corporation stockpile and the Korea Oil Terminal tank farms, on the Korea Strait route.",
+  "linkedSystems": [
+    {
+      "id": "chokepoint12",
+      "name": "Korea Strait",
+      "kind": "chokepoint"
+    }
+  ],
+  "aliases": [
+    "Ulsan",
+    "Port of Ulsan",
+    "Ulsan port",
+    "Onsan",
+    "SK Energy Ulsan"
+  ],
+  "authority": {
+    "name": "Ulsan Port Authority",
+    "url": "https://www.upa.or.kr/"
+  },
+  "terminals": [
+    {
+      "name": "SK Energy Ulsan Complex berths",
+      "operator": "SK Innovation (SK Energy)",
+      "product": "mixed"
+    },
+    {
+      "name": "S-Oil Onsan refinery berths",
+      "operator": "S-Oil (Saudi Aramco)",
+      "product": "mixed"
+    },
+    {
+      "name": "Korea Oil Terminal (KOTC) Ulsan",
+      "operator": "Korea Oil Terminal Co.",
+      "product": "products"
+    },
+    {
+      "name": "Korea National Oil Corporation Ulsan stockpile base",
+      "operator": "KNOC",
+      "product": "crude"
+    }
+  ],
+  "annualCalls": {
+    "total": 11795,
+    "tanker": 8643,
+    "container": 1143,
+    "dryBulk": 625,
+    "generalCargo": 936,
+    "roro": 448
+  },
+  "industries": [
+    "Mineral Products",
+    "Chemical & Allied Industries",
+    "Plastics, Rubber, Leather"
+  ],
+  "countryShare": {
+    "importPct": 20.51,
+    "exportPct": 25.07
+  },
+  "wikipedia": {
+    "title": "Port of Ulsan",
+    "url": "https://en.wikipedia.org/wiki/Port_of_Ulsan",
+    "description": "Port in South Korea",
+    "extract": "The Port of Ulsan is a port in South Korea, located in the city of Ulsan.",
+    "thumbnail": {
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/eb/Hyundai_Heavy_Industries_Ulsan_Shipyard_from_Jujeon_Beacon_Mound_-_2023-07-24.jpg/330px-Hyundai_Heavy_Industries_Ulsan_Shipyard_from_Jujeon_Beacon_Mound_-_2023-07-24.jpg",
+      "width": 330,
+      "height": 186
+    },
+    "revision": "1320769083",
+    "timestamp": "2025-11-06T17:33:43Z",
+    "licence": "CC BY-SA 4.0"
+  },
+  "links": {
+    "authority": "https://www.upa.or.kr/",
+    "portwatch": "https://portwatch.imf.org/datasets/5a2512e38bb441b29ea24011a5a996b6",
+    "wikipedia": "https://en.wikipedia.org/wiki/Port_of_Ulsan"
+  },
+  "cameraIds": [],
+  "satelliteZoom": 9
+}

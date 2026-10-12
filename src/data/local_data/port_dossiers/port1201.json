@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "portid": "port1201",
+  "slug": "singapore",
+  "name": "Singapore",
+  "fullname": "Singapore, Singapore",
+  "country": "Singapore",
+  "iso3": "SGP",
+  "continent": "Asia & Pacific",
+  "locode": "SG SIN",
+  "lat": 1.271989257,
+  "lon": 103.7074816,
+  "role": "Bunkering, refining and trading hub",
+  "roleNotes": "The world's largest bunkering port and Asia's oil trading and pricing hub: the Jurong Island and Pulau Bukom refineries and the island tank farms sit on the Malacca and Singapore Straits route between Middle East crude and North-East Asian demand, and the Singapore LNG terminal supplies the city's gas.",
+  "linkedSystems": [
+    {
+      "id": "chokepoint5",
+      "name": "Malacca Strait",
+      "kind": "chokepoint"
+    }
+  ],
+  "aliases": [
+    "Port of Singapore",
+    "Singapore port",
+    "Singapore bunker",
+    "Singapore Strait",
+    "Jurong Island",
+    "Pulau Bukom"
+  ],
+  "authority": {
+    "name": "Maritime and Port Authority of Singapore",
+    "url": "https://www.mpa.gov.sg/"
+  },
+  "terminals": [
+    {
+      "name": "Pulau Bukom refinery and terminal",
+      "operator": "Aster Chemicals and Energy (former Shell Bukom)",
+      "product": "mixed"
+    },
+    {
+      "name": "ExxonMobil Singapore refinery (Jurong Island)",
+      "operator": "ExxonMobil",
+      "product": "mixed"
+    },
+    {
+      "name": "Singapore Refining Company (Jurong Island)",
+      "operator": "SRC (Chevron and PetroChina)",
+      "product": "products"
+    },
+    {
+      "name": "Universal Terminal (Jurong Island)",
+      "operator": "Universal Terminal (S) Pte",
+      "product": "products"
+    },
+    {
+      "name": "Vopak Terminals Singapore (Banyan, Sebarok, Penjuru)",
+      "operator": "Vopak",
+      "product": "mixed"
+    },
+    {
+      "name": "Singapore LNG terminal (Jurong Island)",
+      "operator": "Singapore LNG Corporation",
+      "product": "LNG"
+    }
+  ],
+  "annualCalls": {
+    "total": 44369,
+    "tanker": 26277,
+    "container": 13921,
+    "dryBulk": 810,
+    "generalCargo": 2039,
+    "roro": 1322
+  },
+  "industries": [
+    "Mineral Products",
+    "Vegetable Products",
+    "Chemical & Allied Industries"
+  ],
+  "countryShare": {
+    "importPct": 95.12,
+    "exportPct": 95.45
+  },
+  "wikipedia": {
+    "title": "Port of Singapore",
+    "url": "https://en.wikipedia.org/wiki/Port_of_Singapore",
+    "description": "Port in Singapore",
+    "extract": "The Port of Singapore is a collection of facilities and terminals that conduct maritime trade and handle Singapore's harbours and shipping. Since 2015, it has been ranked as the world's top maritime capital. Currently, it is ranked as the world's second-busiest port in terms of total shipping tonnage, while also transshipping a fifth of the world's shipping containers, and half of the world's annual crude oil supplies, alongside being ranked as the world's busiest transshipment port. Furthermore, it was also ranked as the world's busiest port in terms of total cargo tonnage handled until 2010, when it was surpassed by the Port of Shanghai.",
+    "thumbnail": {
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/90/Port_of_Singapore.jpg/330px-Port_of_Singapore.jpg",
+      "width": 330,
+      "height": 220
+    },
+    "revision": "1375510759",
+    "timestamp": "2026-09-18T06:30:09Z",
+    "licence": "CC BY-SA 4.0"
+  },
+  "links": {
+    "authority": "https://www.mpa.gov.sg/",
+    "portwatch": "https://portwatch.imf.org/datasets/9c50d7b7ca3e4b7690ab89d16029d418",
+    "wikipedia": "https://en.wikipedia.org/wiki/Port_of_Singapore"
+  },
+  "cameraIds": [],
+  "satelliteZoom": 9
+}

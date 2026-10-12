@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "portid": "port824",
+  "slug": "ningbo",
+  "name": "Ningbo",
+  "fullname": "Ningbo, China",
+  "country": "China",
+  "iso3": "CHN",
+  "continent": "Asia & Pacific",
+  "locode": "CN NBO",
+  "lat": 29.92076897,
+  "lon": 121.8818408,
+  "role": "China's crude gateway (Ningbo-Zhoushan)",
+  "roleNotes": "The world's busiest port by tonnage and China's largest crude import gateway: VLCC berths at Daxie, Zhenhai and the Zhoushan islands feed the Sinopec Zhenhai refinery, the Zhoushan commercial and strategic crude reserves and the Yangtze delta refining belt, and the Zhoushan and Ningbo LNG terminals receive gas.",
+  "linkedSystems": [
+    {
+      "id": "chokepoint11",
+      "name": "Taiwan Strait",
+      "kind": "chokepoint"
+    },
+    {
+      "id": "chokepoint5",
+      "name": "Malacca Strait",
+      "kind": "chokepoint"
+    }
+  ],
+  "aliases": [
+    "Ningbo",
+    "Ningbo-Zhoushan",
+    "Zhoushan",
+    "Ningbo port",
+    "Zhenhai refinery"
+  ],
+  "authority": {
+    "name": "Ningbo Zhoushan Port Group",
+    "url": "https://www.nbport.com.cn/"
+  },
+  "terminals": [
+    {
+      "name": "Zhenhai Refining and Chemical crude berths",
+      "operator": "Sinopec",
+      "product": "crude"
+    },
+    {
+      "name": "Ningbo Daxie crude oil terminal",
+      "operator": "Ningbo Zhoushan Port Group",
+      "product": "crude"
+    },
+    {
+      "name": "Zhoushan (Aoshan) crude oil storage and berths",
+      "operator": "Sinopec Zhoushan and the national reserve",
+      "product": "crude"
+    },
+    {
+      "name": "Zhoushan LNG terminal",
+      "operator": "ENN",
+      "product": "LNG"
+    },
+    {
+      "name": "Ningbo (Beilun) LNG terminal",
+      "operator": "CNOOC",
+      "product": "LNG"
+    }
+  ],
+  "annualCalls": {
+    "total": 18455,
+    "tanker": 4945,
+    "container": 10352,
+    "dryBulk": 2117,
+    "generalCargo": 770,
+    "roro": 271
+  },
+  "industries": [
+    "Mineral Products",
+    "Vegetable Products",
+    "Metals"
+  ],
+  "countryShare": {
+    "importPct": 8.4,
+    "exportPct": 10.56
+  },
+  "wikipedia": {
+    "title": "Port of Ningbo-Zhoushan",
+    "url": "https://en.wikipedia.org/wiki/Port_of_Ningbo-Zhoushan",
+    "description": "Port in China",
+    "extract": "The Port of Ningbo-Zhoushan is the busiest port in the world in terms of cargo tonnage. It handled 888.96 million tons of cargo in 2015. The port is located in Ningbo and Zhoushan, on the coast of the East China Sea, in Zhejiang province on the southeast end of Hangzhou Bay, across which it faces the municipality of Shanghai.",
+    "thumbnail": {
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c0/Beilun_Port_2020-05-02.jpg/330px-Beilun_Port_2020-05-02.jpg",
+      "width": 330,
+      "height": 120
+    },
+    "revision": "1353391308",
+    "timestamp": "2026-05-10T00:42:35Z",
+    "licence": "CC BY-SA 4.0"
+  },
+  "links": {
+    "authority": "https://www.nbport.com.cn/",
+    "portwatch": "https://portwatch.imf.org/datasets/4aa6636d67c745ffa65acd3f53c736ad",
+    "wikipedia": "https://en.wikipedia.org/wiki/Port_of_Ningbo-Zhoushan"
+  },
+  "cameraIds": [],
+  "satelliteZoom": 8
+}

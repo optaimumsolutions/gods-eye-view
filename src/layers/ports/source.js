@@ -1,6 +1,7 @@
 import {
   DISRUPTION_RECENT_DAYS,
   PORT_BASELINE_DAYS,
+  PORT_DOSSIER_IDS,
   PORT_RECENT_DAYS,
   buildPortSnapshot,
   latestPublishedDate,
@@ -87,6 +88,8 @@ export function createPortWatchPortSource({
   fetchImpl = (...args) => globalThis.fetch(...args),
   now = () => Date.now(),
   pageSize = DEFAULT_PAGE_SIZE,
+  /** Ports kept on the layer below the tanker floor (row 9 dossiers by default). */
+  keepPortIds = PORT_DOSSIER_IDS,
 } = {}) {
   async function readJson(url, signal, label) {
     signal?.throwIfAborted();
@@ -218,6 +221,7 @@ export function createPortWatchPortSource({
         baselineStats,
         latestDate,
         disruptions,
+        keepIds: keepPortIds,
       });
     },
   };

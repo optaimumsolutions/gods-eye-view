@@ -1,0 +1,373 @@
+/* ── Port dossier panel (commodities row 9) ─────────────────── */
+#port-dossier-panel {
+  --panel-expanded-width: 330px;
+  width: var(--panel-expanded-width);
+  max-width: 100%;
+  min-height: 0;
+}
+
+#port-dossier-panel[hidden] {
+  display: none !important;
+}
+
+#right-context-rail > #port-dossier-panel {
+  position: relative;
+  inset: auto;
+  flex: 0 1 auto;
+  min-height: 0;
+  width: 100%;
+  max-height: 100%;
+  pointer-events: auto;
+}
+
+#right-context-rail > #port-dossier-panel.collapsed {
+  width: var(--right-context-collapsed-width);
+  margin-left: auto;
+}
+
+#port-dossier-panel .panel-glow {
+  position: absolute;
+  inset: -18px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 212, 255, 0.16) 0%,
+    transparent 65%
+  );
+  filter: blur(16px);
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+.port-dossier-inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 100%;
+  padding: 12px 14px;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 212, 255, 0.46) rgba(255, 255, 255, 0.06);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--panel-radius);
+  backdrop-filter: blur(24px) saturate(1.4);
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-primary);
+}
+
+#port-dossier-panel.collapsed .port-dossier-inner {
+  min-height: 42px;
+  padding: 8px 10px 8px 14px;
+  overflow: visible;
+}
+
+#port-dossier-panel.collapsed .port-dossier-inner > :not(.port-dossier-header) {
+  display: none;
+}
+
+.port-dossier-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.port-dossier-header .panel-divider {
+  flex: 1 1 auto;
+}
+
+.port-dossier-stamp {
+  color: var(--text-secondary);
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.port-dossier-collapse-btn,
+.port-dossier-close-btn {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 1px solid var(--glass-border);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-secondary);
+  font: inherit;
+  cursor: pointer;
+}
+
+.port-dossier-collapse-btn:hover,
+.port-dossier-close-btn:hover {
+  color: var(--accent);
+  border-color: var(--glass-border-hover);
+}
+
+.port-dossier-subtitle {
+  color: var(--text-secondary);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+}
+
+.port-dossier-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.port-dossier-section {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-top: 8px;
+  border-top: 1px solid var(--glass-border);
+}
+
+.port-dossier-section-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.port-dossier-section-title {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+}
+
+.port-dossier-status {
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 1px 6px;
+  border-radius: 999px;
+  border: 1px solid var(--glass-border);
+  color: var(--text-dim);
+}
+
+.port-dossier-status-ready {
+  color: #7dffb0;
+  border-color: rgba(125, 255, 176, 0.4);
+}
+
+.port-dossier-status-partial {
+  color: #ffb347;
+  border-color: rgba(255, 179, 71, 0.4);
+}
+
+.port-dossier-status-unavailable {
+  color: #ff3b5c;
+  border-color: rgba(255, 59, 92, 0.4);
+}
+
+.port-dossier-section-stamp {
+  margin-left: auto;
+  font-size: 10px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.port-dossier-section-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.port-dossier-line {
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.port-dossier-pending {
+  color: var(--text-dim);
+}
+
+.port-dossier-unavailable {
+  color: #ff8fa3;
+}
+
+.port-dossier-provenance {
+  font-size: 9px;
+  color: var(--text-dim);
+  letter-spacing: 0.03em;
+}
+
+.port-dossier-frame {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.port-dossier-frame-satellite {
+  aspect-ratio: 1 / 1;
+  image-rendering: auto;
+}
+
+.port-dossier-road {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.port-dossier-road-thumb {
+  flex: 0 0 96px;
+  width: 96px;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.port-dossier-flow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.port-dossier-band {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.6);
+  flex: 0 0 auto;
+}
+
+.port-dossier-sparkline {
+  display: block;
+  width: 100%;
+  height: 64px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 6px;
+}
+
+.port-dossier-sparkline-series {
+  fill: none;
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+}
+
+.port-dossier-sparkline-baseline {
+  stroke: rgba(232, 234, 237, 0.35);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+
+.port-dossier-sparkline-recent {
+  stroke: rgba(0, 212, 255, 0.8);
+  stroke-width: 1.4;
+}
+
+.port-dossier-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 10px;
+}
+
+.port-dossier-table th,
+.port-dossier-table td {
+  padding: 2px 4px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.port-dossier-table th:first-child,
+.port-dossier-table td:first-child {
+  text-align: left;
+}
+
+.port-dossier-table th {
+  color: var(--text-dim);
+  font-weight: normal;
+  letter-spacing: 0.04em;
+}
+
+.port-dossier-list {
+  margin: 0;
+  padding-left: 14px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.port-dossier-list li + li {
+  margin-top: 3px;
+}
+
+.port-dossier-headline {
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.port-dossier-headline:hover,
+.port-dossier-link:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.port-dossier-link {
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.port-dossier-headlines li {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.port-dossier-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.port-dossier-chip {
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  padding: 1px 7px;
+  border-radius: 999px;
+  border: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+}
+
+.port-dossier-chip-chokepoint {
+  border-color: rgba(0, 212, 255, 0.4);
+  color: var(--accent);
+}
+
+.port-dossier-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px 10px;
+  color: var(--text-secondary);
+}
+
+.port-dossier-grid-label {
+  color: var(--text-dim);
+}
+
+.port-dossier-thumb {
+  float: right;
+  width: 96px;
+  height: auto;
+  margin: 0 0 6px 8px;
+  border-radius: 6px;
+}
+
+.port-dossier-extract {
+  margin: 0;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+
+body.ui-clean-view #port-dossier-panel {
+  display: none;
+}

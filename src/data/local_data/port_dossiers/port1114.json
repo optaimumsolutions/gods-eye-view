@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "portid": "port1114",
+  "slug": "rotterdam",
+  "name": "Rotterdam",
+  "fullname": "Rotterdam, The Netherlands",
+  "country": "The Netherlands",
+  "iso3": "NLD",
+  "continent": "Europe",
+  "locode": "NL RTM",
+  "lat": 51.92228121,
+  "lon": 4.215144967,
+  "role": "Europe's crude and product hub (ARA), Gate LNG",
+  "roleNotes": "Europe's largest crude import and product trading hub: the Maasvlakte and Europoort crude terminals feed the Pernis and Europoort refineries and the pipelines into Germany and Belgium, the Botlek and Europoort tank farms anchor the ARA product market, and Gate terminal is the Dutch LNG import point.",
+  "linkedSystems": [
+    {
+      "id": "chokepoint9",
+      "name": "Dover Strait",
+      "kind": "chokepoint"
+    },
+    {
+      "id": "chokepoint1",
+      "name": "Suez Canal",
+      "kind": "chokepoint"
+    },
+    {
+      "id": "ara",
+      "name": "ARA hub",
+      "kind": "tag"
+    }
+  ],
+  "aliases": [
+    "Port of Rotterdam",
+    "Rotterdam port",
+    "Maasvlakte",
+    "Europoort",
+    "Pernis refinery",
+    "Rotterdam refinery"
+  ],
+  "authority": {
+    "name": "Port of Rotterdam Authority",
+    "url": "https://www.portofrotterdam.com/"
+  },
+  "terminals": [
+    {
+      "name": "Maasvlakte Olie Terminal (MOT)",
+      "operator": "MOT (refinery and storage consortium)",
+      "product": "crude"
+    },
+    {
+      "name": "Gate terminal",
+      "operator": "Gasunie and Vopak",
+      "product": "LNG"
+    },
+    {
+      "name": "Vopak Terminal Europoort",
+      "operator": "Vopak",
+      "product": "mixed"
+    },
+    {
+      "name": "Shell Pernis refinery jetties",
+      "operator": "Shell",
+      "product": "mixed"
+    },
+    {
+      "name": "BP Rotterdam (Europoort) refinery jetties",
+      "operator": "BP",
+      "product": "mixed"
+    },
+    {
+      "name": "Evos Rotterdam terminal (former Oiltanking)",
+      "operator": "Evos",
+      "product": "products"
+    }
+  ],
+  "annualCalls": {
+    "total": 32584,
+    "tanker": 16990,
+    "container": 7045,
+    "dryBulk": 1052,
+    "generalCargo": 5181,
+    "roro": 2316
+  },
+  "industries": [
+    "Mineral Products",
+    "Chemical & Allied Industries",
+    "Vegetable Products"
+  ],
+  "countryShare": {
+    "importPct": 76.05,
+    "exportPct": 68.1
+  },
+  "wikipedia": {
+    "title": "Port of Rotterdam",
+    "url": "https://en.wikipedia.org/wiki/Port_of_Rotterdam",
+    "description": "Seaport in the Netherlands",
+    "extract": "The Port of Rotterdam is the largest seaport in Europe, and the world's largest seaport outside of Asia, located in and near the city of Rotterdam, in the province of South Holland in the Netherlands. From 1962 until 2004, it was the world's busiest port by annual cargo tonnage. It was overtaken first in 2004 by the port of Singapore, and since then by Shanghai and other very large Chinese seaports. In 2020, Rotterdam was the world's tenth-largest container port in terms of twenty-foot equivalent units (TEU) handled. In 2017, Rotterdam was also the world's tenth-largest cargo port in terms of annual cargo tonnage.",
+    "thumbnail": {
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1d/Port_of_Rotterdam_logo_%28light-blue%29.svg/330px-Port_of_Rotterdam_logo_%28light-blue%29.svg.png",
+      "width": 330,
+      "height": 108
+    },
+    "revision": "1378453600",
+    "timestamp": "2026-10-04T15:51:00Z",
+    "licence": "CC BY-SA 4.0"
+  },
+  "links": {
+    "authority": "https://www.portofrotterdam.com/",
+    "portwatch": "https://portwatch.imf.org/datasets/eaea80cf75f54d2e924223abc70979f3",
+    "wikipedia": "https://en.wikipedia.org/wiki/Port_of_Rotterdam"
+  },
+  "cameraIds": [],
+  "satelliteZoom": 9
+}

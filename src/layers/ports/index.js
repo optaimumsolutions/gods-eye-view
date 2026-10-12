@@ -23,6 +23,7 @@ import {
   statusColor,
 } from './model.js';
 import { formatDeviation } from './records.js';
+import { formatAsOf, portLayerObservation } from './dossierSections.js';
 export * from './model.js';
 export * from './records.js';
 export { createPortWatchPortSource } from './source.js';
@@ -162,8 +163,10 @@ export function createPortsLayer({
         select(entity);
         return;
       }
-      // A pick that belongs to a sibling layer is not empty space.
-      if (picked) return;
+      // A pick that belongs to a sibling layer is not empty space. A pick
+      // with no id is the photorealistic 3D-tiles basemap: nothing any layer
+      // can select, so a ground click still deselects (emptyClick.test.mjs).
+      if (picked?.id != null) return;
       clearSelection();
     }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
   }
@@ -259,6 +262,8 @@ export function createPortsLayer({
     icon: '⚓',
     source: 'IMF PortWatch',
     updateInterval: UPDATE_INTERVAL_MS,
+    /** R2: PortWatch publishes daily rows with a lag of days; the reading is never fresher than its published day. */
+    freshnessClass: 'published',
 
     init(viewer) {
       if (_viewer) throw new Error('Ports layer is already initialized');
@@ -496,13 +501,37 @@ export function createPortsLayer({
       return [...events, ...ports].slice(0, limit);
     },
 
+    /**
+     * Row 9 (port dossier): the port's current row, every disruption in the
+     * snapshot and the refresh stamps; null before the first update or for a
+     * port the registry does not carry. The one accessor the dossier needs.
+     */
+    getDossierInputs(portid) {
+      const row = _rowById.get(String(portid));
+      if (!row) return null;
+      return {
+        row,
+        disruptions: _disruptions,
+        latestDate: _latestDate,
+        lastUpdate: _lastUpdate,
+      };
+    },
+
     getStats() {
+      // Row 1 contract (§7.6.4): the layer's latest reading as an observation
+      // and the one formatted stamp the panel row, hover and cards all share.
+      const observation = portLayerObservation(
+        _latestDate,
+        _lastUpdate ?? Date.now(),
+      );
       return {
         count: _rows.length,
         disruptions: _disruptions.length,
         lastUpdate: _lastUpdate,
         error: _lastError,
         latestDate: _latestDate,
+        observation,
+        asOf: observation ? formatAsOf(observation) : null,
       };
     },
   };

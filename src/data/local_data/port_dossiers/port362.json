@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "portid": "port362",
+  "slug": "fujairah",
+  "name": "Fujairah",
+  "fullname": "Al Fujayrah, United Arab Emirates",
+  "country": "United Arab Emirates",
+  "iso3": "ARE",
+  "continent": "Asia & Pacific",
+  "locode": null,
+  "lat": 25.20017278,
+  "lon": 56.35942059,
+  "role": "Gulf of Oman storage and bunkering hub outside Hormuz",
+  "roleNotes": "Gulf of Oman terminus of ADNOC's Habshan-Fujairah crude pipeline (ADCOP, about 1.8 million b/d of transmission capacity), which lets Abu Dhabi crude load outside the Strait of Hormuz, with the Fujairah Oil Industry Zone tank farms feeding the FOTT berths and the world's second largest bunkering hub.",
+  "linkedSystems": [
+    {
+      "id": "chokepoint6",
+      "name": "Strait of Hormuz",
+      "kind": "chokepoint"
+    },
+    {
+      "id": "hormuz-bypass",
+      "name": "Hormuz bypass",
+      "kind": "tag"
+    }
+  ],
+  "aliases": [
+    "Port of Fujairah",
+    "Fujairah port",
+    "Fujairah Oil Industry Zone",
+    "FOIZ",
+    "Fujairah Oil Tanker Terminals",
+    "Fujairah bunker"
+  ],
+  "authority": {
+    "name": "Fujairah Ports Authority",
+    "url": "https://fujairahport.ae/"
+  },
+  "terminals": [
+    {
+      "name": "Fujairah Oil Tanker Terminals (FOTT) berths and VLCC jetty",
+      "operator": "Fujairah Ports Authority",
+      "product": "mixed"
+    },
+    {
+      "name": "ADNOC Fujairah crude oil export terminal (ADCOP terminus)",
+      "operator": "ADNOC (Abu Dhabi Crude Oil Pipeline LLC)",
+      "product": "crude"
+    },
+    {
+      "name": "Vopak Horizon Fujairah",
+      "operator": "Vopak Horizon Fujairah Ltd",
+      "product": "mixed"
+    },
+    {
+      "name": "VTTI Fujairah",
+      "operator": "VTTI",
+      "product": "mixed"
+    },
+    {
+      "name": "Fujairah Oil Terminals FZC (FOT)",
+      "operator": "Fujairah Oil Terminals FZC",
+      "product": "mixed"
+    },
+    {
+      "name": "Former Brooge Energy storage and blending terminal",
+      "operator": "Gulf Navigation Holding",
+      "product": "mixed"
+    }
+  ],
+  "annualCalls": {
+    "total": 3462,
+    "tanker": 3165,
+    "container": 8,
+    "dryBulk": 267,
+    "generalCargo": 22,
+    "roro": 0
+  },
+  "industries": [
+    "Mineral Products",
+    "Chemical & Allied Industries",
+    "Plastics, Rubber, Leather"
+  ],
+  "countryShare": {
+    "importPct": 17.66,
+    "exportPct": 19.23
+  },
+  "wikipedia": {
+    "title": "Port of Fujairah",
+    "url": "https://en.wikipedia.org/wiki/Port_of_Fujairah",
+    "description": "Port in United Arab Emirates",
+    "extract": "The Port of Fujairah, also called Fujairah Port, is a deep port located in Fujairah, United Arab Emirates, on the Gulf of Oman. It is the largest port on the eastern seaboard of the United Arab Emirates and the world second largest bunkering hub.",
+    "thumbnail": null,
+    "revision": "1357531408",
+    "timestamp": "2026-06-03T04:53:55Z",
+    "licence": "CC BY-SA 4.0"
+  },
+  "links": {
+    "authority": "https://fujairahport.ae/",
+    "portwatch": "https://portwatch.imf.org/datasets/18e896cce55349e48d994f5ceef19bf0",
+    "wikipedia": "https://en.wikipedia.org/wiki/Port_of_Fujairah"
+  },
+  "cameraIds": [],
+  "satelliteZoom": 9
+}

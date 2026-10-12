@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "portid": "port264",
+  "slug": "corpus-christi",
+  "name": "Corpus Christi",
+  "fullname": "Corpus Christi, United States",
+  "country": "United States",
+  "iso3": "USA",
+  "continent": "North America",
+  "locode": "US CRP",
+  "lat": 27.84122725,
+  "lon": -97.37990791,
+  "role": "Largest US crude export port, LNG",
+  "roleNotes": "The largest US crude export gateway, loading Permian and Eagle Ford crude onto VLCCs at the Ingleside terminals (Enbridge and Gibson South Texas Gateway) and Inner Harbor docks, while Cheniere's Corpus Christi Liquefaction plant on the La Quinta Channel exports LNG and the Valero and Citgo refineries take crude in and ship products out across the ship channel.",
+  "linkedSystems": [
+    {
+      "id": "us-gulf",
+      "name": "US Gulf Coast",
+      "kind": "tag"
+    },
+    {
+      "id": "padd-3",
+      "name": "PADD 3",
+      "kind": "tag"
+    }
+  ],
+  "aliases": [
+    "Port of Corpus Christi",
+    "Corpus Christi Ship Channel",
+    "Corpus Christi LNG",
+    "Ingleside Energy Center",
+    "Corpus Christi crude"
+  ],
+  "authority": {
+    "name": "Port of Corpus Christi Authority",
+    "url": "https://portofcc.com/"
+  },
+  "terminals": [
+    {
+      "name": "Enbridge Ingleside Energy Center",
+      "operator": "Enbridge",
+      "product": "crude"
+    },
+    {
+      "name": "South Texas Gateway Terminal",
+      "operator": "Gibson Energy",
+      "product": "crude"
+    },
+    {
+      "name": "Corpus Christi Liquefaction",
+      "operator": "Cheniere",
+      "product": "LNG"
+    },
+    {
+      "name": "Flint Hills Resources Ingleside terminal",
+      "operator": "Flint Hills Resources",
+      "product": "crude"
+    },
+    {
+      "name": "Corpus Christi Crude terminal (former NuStar North Beach)",
+      "operator": "Sunoco LP",
+      "product": "crude"
+    },
+    {
+      "name": "Valero Corpus Christi refineries docks",
+      "operator": "Valero",
+      "product": "mixed"
+    }
+  ],
+  "annualCalls": {
+    "total": 1723,
+    "tanker": 1454,
+    "container": 3,
+    "dryBulk": 186,
+    "generalCargo": 67,
+    "roro": 13
+  },
+  "industries": [
+    "Mineral Products",
+    "Chemical & Allied Industries",
+    "Vegetable Products"
+  ],
+  "countryShare": {
+    "importPct": 0.55,
+    "exportPct": 6.36
+  },
+  "wikipedia": {
+    "title": "Port of Corpus Christi",
+    "url": "https://en.wikipedia.org/wiki/Port_of_Corpus_Christi",
+    "description": "Port in Texas, US",
+    "extract": "Through 2023, the Port of Corpus Christi had a record 203 million tons of cargo, cementing its status as the United States' largest gateway for crude oil exports and a top exporter of liquefied natural gas (LNG).The Port of Corpus Christi’s headquarters, the Executive Administration Building, is located near the entrance the Inner Harbor in Nueces County. The Port operates as an independent subdivision of the State of Texas and is governed by state Navigation Code. The Port of Corpus Christi’s operations are funded without any city, county or state tax dollars.",
+    "thumbnail": null,
+    "revision": "1364826375",
+    "timestamp": "2026-07-18T19:04:13Z",
+    "licence": "CC BY-SA 4.0"
+  },
+  "links": {
+    "authority": "https://portofcc.com/",
+    "portwatch": "https://portwatch.imf.org/datasets/82d91bc3fad340cf90c5547d5a0de2b5",
+    "wikipedia": "https://en.wikipedia.org/wiki/Port_of_Corpus_Christi"
+  },
+  "cameraIds": [],
+  "satelliteZoom": 9
+}

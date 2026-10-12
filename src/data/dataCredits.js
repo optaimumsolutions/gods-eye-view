@@ -74,6 +74,16 @@ export const DATA_CREDITS = [
       '<a href="https://www.imf.org/external/terms.htm" target="_blank" rel="noopener">IMF terms</a>',
   },
   {
+    key: 'port-dossier',
+    html:
+      'Port dossiers: registry facts IMF PortWatch · about text ' +
+      '<a href="https://en.wikipedia.org/" target="_blank" rel="noopener">Wikipedia</a> (CC BY-SA 4.0) · ' +
+      'satellite <a href="https://www.earthdata.nasa.gov/data/tools/global-imagery-browse-services-gibs" target="_blank" rel="noopener">NASA GIBS</a> · ' +
+      'weather <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> (CC BY 4.0) · ' +
+      'headlines Google News RSS and GDELT (unverified wire) · ' +
+      'cameras Port Houston, Sabine Pass Port Authority, Antwerp Maritime Academy (Hogere Zeevaartschool), Port of Milford Haven',
+  },
+  {
     key: 'overpass',
     html:
       'Road geometry (traffic): ' +

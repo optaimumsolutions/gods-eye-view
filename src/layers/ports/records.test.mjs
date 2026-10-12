@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
 import {
+  PORT_DOSSIER_IDS,
   buildPortSnapshot,
   deviationStatus,
   formatDeviation,
@@ -256,6 +258,43 @@ test('the tanker floor drops registry ports that are not tanker ports', () => {
   // The registry count is what was offered, not what survived: the layer
   // reports both so the drop is visible rather than silent.
   assert.equal(snapshot.registryCount, 5);
+});
+
+test('a dossier port stays on the layer below the tanker floor', () => {
+  // Row 9 picked its twenty by role: Kharg Island takes 75 huge calls a year,
+  // under the 250 floor, and without this its dossier could never be clicked.
+  const ports = normalizePortRows({
+    features: [
+      port('port2164', 'Kharg Island', 50.3, 29.2, { vessel_count_tanker: 75 }),
+      port('port8', 'Just Under', 30, 30, { vessel_count_tanker: 249 }),
+    ],
+  });
+  const snapshot = buildPortSnapshot({
+    ports,
+    recentStats: [],
+    baselineStats: [],
+    keepIds: ['port2164'],
+  });
+  assert.deepEqual(
+    snapshot.rows.map((row) => row.name),
+    ['Kharg Island'],
+  );
+});
+
+test('PORT_DOSSIER_IDS is exactly the bundled dossier index', () => {
+  const index = JSON.parse(
+    fs.readFileSync(
+      new URL(
+        '../../data/local_data/port_dossiers/index.json',
+        import.meta.url,
+      ),
+      'utf8',
+    ),
+  );
+  const bundled = (index.ports ?? index.entries ?? index).map(
+    (entry) => entry.portid,
+  );
+  assert.deepEqual([...PORT_DOSSIER_IDS].sort(), [...bundled].sort());
 });
 
 test('source anchors both windows on the newest published day and follows the transfer-limit flag', async () => {

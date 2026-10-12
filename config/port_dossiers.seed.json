@@ -1,0 +1,376 @@
+[
+  {
+    "portid": "port1091",
+    "slug": "ras-tanura",
+    "aliases": ["Ras Tanura", "Ras Tannurah", "Ras Tanura terminal", "Ras Tanura refinery", "Juaymah", "Ju'aymah"],
+    "role": "Saudi Aramco's main crude export terminal",
+    "roleNotes": "Saudi Aramco's Gulf-coast export complex: Eastern Province crude loads at the Sea Islands and the six-buoy Juaymah SPM terminal, refined products ship from the North Pier and the adjoining 550,000 b/d refinery, and refrigerated LPG loads at the Juaymah LPG pier; every cargo sails out through the Strait of Hormuz.",
+    "linkedSystems": ["chokepoint6"],
+    "authority": { "name": "Saudi Aramco (Ports and Terminals)", "url": "https://www.aramco.com/en/what-we-do/operations/ports-and-terminals" },
+    "terminals": [
+      { "name": "Ras Tanura Terminal, Sea Islands", "operator": "Saudi Aramco", "product": "crude" },
+      { "name": "Ras Tanura Terminal, North Pier (berths 6 to 11)", "operator": "Saudi Aramco", "product": "products" },
+      { "name": "Juaymah Crude Terminal (six SPM buoys)", "operator": "Saudi Aramco", "product": "crude" },
+      { "name": "Juaymah LPG Terminal (two-berth pier)", "operator": "Saudi Aramco", "product": "LPG" },
+      { "name": "Ras Tanura Refinery (550,000 b/d)", "operator": "Saudi Aramco", "product": "products" }
+    ],
+    "wikipediaTitle": "Ras Tanura",
+    "cameraIds": [],
+    "satelliteZoom": 9
+  },
+  {
+    "portid": "port570",
+    "slug": "yanbu",
+    "aliases": ["Yanbu", "Yanbu port", "Yanbu terminal", "Yanbu Industrial Port", "King Fahd Industrial Port", "King Fahad Industrial Port"],
+    "role": "Red Sea outlet of the East-West pipeline, Hormuz bypass",
+    "roleNotes": "Red Sea terminus of Saudi Aramco's East-West crude pipeline: crude loads at the four-berth North Crude Terminal and the three-berth South Terminal, and refined products from the Aramco Yanbu, SAMREF and YASREF refineries ship from adjacent product berths, giving Saudi exports a route that avoids the Strait of Hormuz.",
+    "linkedSystems": ["chokepoint4", "chokepoint1", "hormuz-bypass"],
+    "authority": { "name": "Saudi Ports Authority (Mawani)", "url": "https://mawani.gov.sa/" },
+    "terminals": [
+      { "name": "Yanbu North Crude Terminal (berths 61 to 64)", "operator": "Saudi Aramco", "product": "crude" },
+      { "name": "Yanbu South Terminal (berths 101 to 103)", "operator": "Saudi Aramco", "product": "crude" },
+      { "name": "Yanbu North Refined Product Terminal (berths 91 to 94)", "operator": "Saudi Aramco", "product": "products" },
+      { "name": "SAMREF Export Refinery Terminal", "operator": "SAMREF (Saudi Aramco Mobil Refinery Co.)", "product": "products" },
+      { "name": "YASREF sulphur, oil and petroleum coke terminal and NGL berth", "operator": "YASREF (Yanbu Aramco Sinopec Refining Co.)", "product": "mixed" },
+      { "name": "YANPET Chemical Terminal", "operator": "YANPET", "product": "chemicals" }
+    ],
+    "wikipediaTitle": "King Fahd Industrial Port (Yanbu)",
+    "cameraIds": [],
+    "satelliteZoom": 9
+  },
+  {
+    "portid": "port362",
+    "slug": "fujairah",
+    "aliases": ["Port of Fujairah", "Fujairah port", "Fujairah Oil Industry Zone", "FOIZ", "Fujairah Oil Tanker Terminals", "Fujairah bunker"],
+    "role": "Gulf of Oman storage and bunkering hub outside Hormuz",
+    "roleNotes": "Gulf of Oman terminus of ADNOC's Habshan-Fujairah crude pipeline (ADCOP, about 1.8 million b/d of transmission capacity), which lets Abu Dhabi crude load outside the Strait of Hormuz, with the Fujairah Oil Industry Zone tank farms feeding the FOTT berths and the world's second largest bunkering hub.",
+    "linkedSystems": ["chokepoint6", "hormuz-bypass"],
+    "authority": { "name": "Fujairah Ports Authority", "url": "https://fujairahport.ae/" },
+    "terminals": [
+      { "name": "Fujairah Oil Tanker Terminals (FOTT) berths and VLCC jetty", "operator": "Fujairah Ports Authority", "product": "mixed" },
+      { "name": "ADNOC Fujairah crude oil export terminal (ADCOP terminus)", "operator": "ADNOC (Abu Dhabi Crude Oil Pipeline LLC)", "product": "crude" },
+      { "name": "Vopak Horizon Fujairah", "operator": "Vopak Horizon Fujairah Ltd", "product": "mixed" },
+      { "name": "VTTI Fujairah", "operator": "VTTI", "product": "mixed" },
+      { "name": "Fujairah Oil Terminals FZC (FOT)", "operator": "Fujairah Oil Terminals FZC", "product": "mixed" },
+      { "name": "Former Brooge Energy storage and blending terminal", "operator": "Gulf Navigation Holding", "product": "mixed" }
+    ],
+    "wikipediaTitle": "Port of Fujairah",
+    "cameraIds": [],
+    "satelliteZoom": 9
+  },
+  {
+    "portid": "port1090",
+    "slug": "ras-laffan",
+    "aliases": ["Ras Laffan", "Ras Laffan Industrial City", "Ras Laffan Port", "Ras Laffan LNG"],
+    "role": "Largest LNG export complex",
+    "roleNotes": "Owned, regulated and operated by QatarEnergy, the loading point for QatarEnergy LNG's 14 trains (77 mtpa) across six Q-Flex and Q-Max capable LNG berths, plus condensate, LPG, sulphur, Laffan Refinery products and the Pearl and Oryx GTL liquids, every seaborne cargo of which transits the Strait of Hormuz.",
+    "linkedSystems": ["chokepoint6"],
+    "authority": { "name": "QatarEnergy", "url": "https://www.qatarenergy.qa/" },
+    "terminals": [
+      { "name": "Ras Laffan LNG berths (six berths, 14 trains)", "operator": "QatarEnergy LNG", "product": "LNG" },
+      { "name": "Ras Laffan Terminal Operations (condensate, LPG, sulphur, GTL berths)", "operator": "QatarEnergy LNG", "product": "mixed" },
+      { "name": "Laffan Refinery (306,600 b/d condensate refinery)", "operator": "QatarEnergy LNG", "product": "products" },
+      { "name": "Pearl GTL (140,000 b/d)", "operator": "Qatar Shell GTL", "product": "products" },
+      { "name": "Oryx GTL (34,000 b/d)", "operator": "Oryx GTL (QatarEnergy and Sasol)", "product": "products" },
+      { "name": "Ras Laffan Petrochemicals ethane cracker (start-up expected late 2026)", "operator": "Ras Laffan Petrochemicals (QatarEnergy and CPChem)", "product": "chemicals" }
+    ],
+    "wikipediaTitle": "Ras Laffan Industrial City",
+    "cameraIds": [],
+    "satelliteZoom": 9
+  },
+  {
+    "portid": "port2164",
+    "slug": "kharg-island",
+    "aliases": ["Kharg Island", "Khark Island", "Kharg oil terminal", "Khark oil terminal", "Kharg terminal"],
+    "role": "Sanctioned crude export terminal",
+    "roleNotes": "Iran's principal crude and condensate export terminal, loading about nine tenths of the country's oil exports from a 32 to 34 million barrel tank farm fed by pipelines from the Gachsaran, Ahvaz and Marun fields, through the eastern T-Jetty and the western Sea Island (Azarpad) ULCC berths, 660 km northwest of the Strait of Hormuz.",
+    "linkedSystems": ["chokepoint6", "sanctions"],
+    "authority": { "name": "Iranian Oil Terminals Company (IOTC, National Iranian Oil Company)", "url": "https://www.iotco.ir/" },
+    "terminals": [
+      { "name": "T-Jetty (eastern oil loading jetty, VLCC berths)", "operator": "Iranian Oil Terminals Company", "product": "crude" },
+      { "name": "Sea Island / Azarpad jetty (western ULCC berths)", "operator": "Iranian Oil Terminals Company", "product": "crude" },
+      { "name": "Darius single-buoy sea loading terminal", "operator": "Iranian Oil Terminals Company", "product": "crude" },
+      { "name": "Kharg Chemical Complex (KHEMCO) sulphur and LPG berth", "operator": "Kharg Petrochemical Company", "product": "LPG" },
+      { "name": "Kharg crude and products tank farm", "operator": "Iranian Oil Terminals Company", "product": "mixed" }
+    ],
+    "wikipediaTitle": "Kharg Island",
+    "cameraIds": [],
+    "satelliteZoom": 9
+  },
+  {
+    "portid": "port481",
+    "slug": "houston",
+    "aliases": ["Port of Houston", "Port Houston", "Houston Ship Channel", "Galena Park terminal"],
+    "role": "Largest US crude export and petrochemical complex",
+    "roleNotes": "The 52-mile Houston Ship Channel hosts Enterprise's LPG and ethane export docks at Morgan's Point, the Kinder Morgan and ONEOK refined-product hubs at Pasadena and Galena Park, the ExxonMobil Baytown and Pemex Deer Park refineries and the US Gulf Coast's main residual-fuel and bunkering market, and is one of the two largest US crude export points.",
+    "linkedSystems": ["us-gulf", "padd-3"],
+    "authority": { "name": "Port Houston (Port of Houston Authority)", "url": "https://porthouston.com/" },
+    "terminals": [
+      { "name": "Enterprise Hydrocarbons Terminal and Morgan's Point ethane export terminal", "operator": "Enterprise Products Partners", "product": "mixed" },
+      { "name": "Kinder Morgan Pasadena and Galena Park terminals (with BOSTCO)", "operator": "Kinder Morgan", "product": "products" },
+      { "name": "ONEOK Galena Park marine terminal (Magellan)", "operator": "ONEOK", "product": "products" },
+      { "name": "Energy Transfer Houston Terminal (former HFOTCO), Jacintoport", "operator": "Energy Transfer", "product": "mixed" },
+      { "name": "Pemex Deer Park refinery docks", "operator": "Pemex", "product": "mixed" },
+      { "name": "ExxonMobil Baytown refinery and chemical complex docks", "operator": "ExxonMobil", "product": "mixed" }
+    ],
+    "wikipediaTitle": "Port of Houston",
+    "cameraIds": ["port-houston-2", "port-houston-3", "port-houston-4", "port-houston-1"],
+    "satelliteZoom": 8
+  },
+  {
+    "portid": "port264",
+    "slug": "corpus-christi",
+    "aliases": ["Port of Corpus Christi", "Corpus Christi Ship Channel", "Corpus Christi LNG", "Ingleside Energy Center", "Corpus Christi crude"],
+    "role": "Largest US crude export port, LNG",
+    "roleNotes": "The largest US crude export gateway, loading Permian and Eagle Ford crude onto VLCCs at the Ingleside terminals (Enbridge and Gibson South Texas Gateway) and Inner Harbor docks, while Cheniere's Corpus Christi Liquefaction plant on the La Quinta Channel exports LNG and the Valero and Citgo refineries take crude in and ship products out across the ship channel.",
+    "linkedSystems": ["us-gulf", "padd-3"],
+    "authority": { "name": "Port of Corpus Christi Authority", "url": "https://portofcc.com/" },
+    "terminals": [
+      { "name": "Enbridge Ingleside Energy Center", "operator": "Enbridge", "product": "crude" },
+      { "name": "South Texas Gateway Terminal", "operator": "Gibson Energy", "product": "crude" },
+      { "name": "Corpus Christi Liquefaction", "operator": "Cheniere", "product": "LNG" },
+      { "name": "Flint Hills Resources Ingleside terminal", "operator": "Flint Hills Resources", "product": "crude" },
+      { "name": "Corpus Christi Crude terminal (former NuStar North Beach)", "operator": "Sunoco LP", "product": "crude" },
+      { "name": "Valero Corpus Christi refineries docks", "operator": "Valero", "product": "mixed" }
+    ],
+    "wikipediaTitle": "Port of Corpus Christi",
+    "cameraIds": [],
+    "satelliteZoom": 9
+  },
+  {
+    "portid": "port2388",
+    "slug": "sabine-pass",
+    "aliases": ["Sabine Pass LNG", "Sabine Pass Liquefaction", "Cheniere Sabine Pass", "Golden Pass LNG"],
+    "role": "First and largest US LNG export terminal",
+    "roleNotes": "Cheniere's six-train, roughly 30 mtpa Sabine Pass Liquefaction plant on the Louisiana bank of the pass, in service since 2016, loads LNG carriers at three berths from interstate and intrastate pipeline gas, and since 2026 shares the pass with the QatarEnergy and ExxonMobil Golden Pass export terminal on the Texas bank.",
+    "linkedSystems": ["us-gulf", "henry-hub"],
+    "authority": { "name": "Cheniere Energy (Sabine Pass Liquefaction)", "url": "https://www.cheniere.com/" },
+    "terminals": [
+      { "name": "Sabine Pass LNG terminal (six trains, three berths)", "operator": "Cheniere Energy (Sabine Pass Liquefaction)", "product": "LNG" },
+      { "name": "Sabine Pass Stage 5 expansion (Train 7, about 6 mtpa, pre-FID)", "operator": "Cheniere Energy (Sabine Pass Liquefaction Stage V)", "product": "LNG" },
+      { "name": "Golden Pass LNG (Texas bank, three trains, first cargo April 2026)", "operator": "Golden Pass LNG (QatarEnergy and ExxonMobil affiliates)", "product": "LNG" }
+    ],
+    "wikipediaTitle": "Sabine Pass",
+    "cameraIds": [],
+    "satelliteZoom": 9
+  },
+  {
+    "portid": "port933",
+    "slug": "port-arthur",
+    "aliases": ["Port of Port Arthur", "Port Arthur, Texas", "Motiva Port Arthur", "Port Arthur LNG", "Sabine-Neches Waterway"],
+    "role": "Gulf refining (Motiva), Sabine-Neches waterway",
+    "roleNotes": "On the Sabine-Neches Waterway 19 miles from the Gulf, hosting three crude-fed refineries with their own docks (Motiva's 730,000 b/d plant, North America's largest, plus Valero and TotalEnergies), Energy Transfer's Nederland crude and NGL export terminal upstream on the Neches, and Sempra's Port Arthur LNG under construction.",
+    "linkedSystems": ["us-gulf", "padd-3"],
+    "authority": { "name": "Port of Port Arthur Navigation District", "url": "https://portpa.com/" },
+    "terminals": [
+      { "name": "Motiva Port Arthur refinery docks (730,000 b/d)", "operator": "Motiva Enterprises (Saudi Aramco)", "product": "mixed" },
+      { "name": "Valero Port Arthur refinery docks (435,000 b/d)", "operator": "Valero Energy", "product": "mixed" },
+      { "name": "TotalEnergies Port Arthur refinery docks (238,000 b/d)", "operator": "TotalEnergies", "product": "mixed" },
+      { "name": "Nederland Terminal (six ship docks, crude and NGL)", "operator": "Energy Transfer", "product": "mixed" },
+      { "name": "Port Arthur LNG (under construction)", "operator": "Sempra Infrastructure", "product": "LNG" }
+    ],
+    "wikipediaTitle": "Port of Port Arthur",
+    "cameraIds": [],
+    "satelliteZoom": 9
+  },
+  {
+    "portid": "port1114",
+    "slug": "rotterdam",
+    "aliases": ["Port of Rotterdam", "Rotterdam port", "Maasvlakte", "Europoort", "Pernis refinery", "Rotterdam refinery"],
+    "role": "Europe's crude and product hub (ARA), Gate LNG",
+    "roleNotes": "Europe's largest crude import and product trading hub: the Maasvlakte and Europoort crude terminals feed the Pernis and Europoort refineries and the pipelines into Germany and Belgium, the Botlek and Europoort tank farms anchor the ARA product market, and Gate terminal is the Dutch LNG import point.",
+    "linkedSystems": ["chokepoint9", "chokepoint1", "ara"],
+    "authority": { "name": "Port of Rotterdam Authority", "url": "https://www.portofrotterdam.com/" },
+    "terminals": [
+      { "name": "Maasvlakte Olie Terminal (MOT)", "operator": "MOT (refinery and storage consortium)", "product": "crude" },
+      { "name": "Gate terminal", "operator": "Gasunie and Vopak", "product": "LNG" },
+      { "name": "Vopak Terminal Europoort", "operator": "Vopak", "product": "mixed" },
+      { "name": "Shell Pernis refinery jetties", "operator": "Shell", "product": "mixed" },
+      { "name": "BP Rotterdam (Europoort) refinery jetties", "operator": "BP", "product": "mixed" },
+      { "name": "Evos Rotterdam terminal (former Oiltanking)", "operator": "Evos", "product": "products" }
+    ],
+    "wikipediaTitle": "Port of Rotterdam",
+    "cameraIds": [],
+    "satelliteZoom": 9
+  },
+  {
+    "portid": "port57",
+    "slug": "antwerp",
+    "aliases": ["Port of Antwerp", "Antwerp port", "Antwerp-Bruges", "Antwerp refinery", "Antwerp terminal"],
+    "role": "ARA refining and chemicals",
+    "roleNotes": "Second leg of the ARA hub on the Scheldt: the TotalEnergies and ExxonMobil refineries and Europe's largest integrated chemical cluster take crude and feedstock over the port's jetties, while the Evos, Sea-Tank and ATPC tank farms trade refined products with Rotterdam and Amsterdam by barge and pipeline.",
+    "linkedSystems": ["chokepoint9", "chokepoint1", "ara"],
+    "authority": { "name": "Port of Antwerp-Bruges", "url": "https://www.portofantwerpbruges.com/" },
+    "terminals": [
+      { "name": "TotalEnergies Antwerp refinery jetties", "operator": "TotalEnergies", "product": "mixed" },
+      { "name": "ExxonMobil Antwerp refinery jetties", "operator": "ExxonMobil", "product": "mixed" },
+      { "name": "Evos Antwerp terminal (former Oiltanking)", "operator": "Evos", "product": "products" },
+      { "name": "Sea-Tank Terminal Antwerp", "operator": "SEA-invest", "product": "products" },
+      { "name": "Antwerp Terminal and Processing Company (ATPC)", "operator": "ATPC", "product": "products" }
+    ],
+    "wikipediaTitle": "Port of Antwerp",
+    "cameraIds": ["port-antwerp-1"],
+    "satelliteZoom": 9
+  },
+  {
+    "portid": "port45",
+    "slug": "amsterdam",
+    "aliases": ["Port of Amsterdam", "Amsterdam port", "Amsterdam terminal", "Westpoort", "Amsterdam gasoline"],
+    "role": "ARA gasoline and product storage",
+    "roleNotes": "The gasoline leg of the ARA hub: the Westpoort tank farms behind the IJmuiden sea locks blend and store gasoline, diesel and jet for the Atlantic Basin export trade, and the port is one of the largest petrol ports in the world by throughput.",
+    "linkedSystems": ["chokepoint9", "ara"],
+    "authority": { "name": "Port of Amsterdam", "url": "https://www.portofamsterdam.com/" },
+    "terminals": [
+      { "name": "Vopak Terminal Amsterdam Westpoort", "operator": "Vopak", "product": "products" },
+      { "name": "Evos Amsterdam terminal (former Oiltanking)", "operator": "Evos", "product": "products" },
+      { "name": "Zenith Energy Amsterdam terminal", "operator": "Zenith Energy", "product": "products" }
+    ],
+    "wikipediaTitle": "Port of Amsterdam",
+    "cameraIds": [],
+    "satelliteZoom": 9
+  },
+  {
+    "portid": "port740",
+    "slug": "milford-haven",
+    "aliases": ["Milford Haven", "South Hook", "Dragon LNG", "Pembroke refinery"],
+    "role": "UK LNG (South Hook, Dragon) and refining",
+    "roleNotes": "Deep-water natural harbour in Pembrokeshire that lands most of the United Kingdom's LNG at the South Hook and Dragon terminals and hosts the Valero Pembroke refinery, making it the UK's largest energy port by tonnage.",
+    "linkedSystems": ["atlantic"],
+    "authority": { "name": "Port of Milford Haven", "url": "https://www.mhpa.co.uk/" },
+    "terminals": [
+      { "name": "South Hook LNG terminal", "operator": "South Hook LNG Terminal Company", "product": "LNG" },
+      { "name": "Dragon LNG terminal", "operator": "Dragon LNG", "product": "LNG" },
+      { "name": "Valero Pembroke refinery jetties", "operator": "Valero", "product": "mixed" },
+      { "name": "Puma Energy Milford Haven terminal (former Murco refinery)", "operator": "Puma Energy", "product": "products" }
+    ],
+    "wikipediaTitle": "Milford Haven Waterway",
+    "cameraIds": ["port-milford-haven-1"],
+    "satelliteZoom": 9
+  },
+  {
+    "portid": "port833",
+    "slug": "novorossiysk",
+    "aliases": ["Novorossiysk", "Sheskharis", "CPC terminal", "Caspian Pipeline Consortium", "CPC Blend"],
+    "role": "Black Sea crude and CPC terminal",
+    "roleNotes": "Russia's main Black Sea crude and products outlet: the Sheskharis terminal loads Urals crude and products from the Transneft system, and the Caspian Pipeline Consortium marine terminal at Yuzhnaya Ozereyevka loads Kazakh CPC Blend from single-point moorings, all sailing through the Bosporus.",
+    "linkedSystems": ["chokepoint3", "sanctions"],
+    "authority": { "name": "FSUE Rosmorport (Azov-Black Sea Basin Branch)", "url": "https://www.rosmorport.ru/" },
+    "terminals": [
+      { "name": "Sheskharis oil terminal", "operator": "NCSP Group (Transneft)", "product": "mixed" },
+      { "name": "CPC Marine Terminal (Yuzhnaya Ozereyevka)", "operator": "Caspian Pipeline Consortium", "product": "crude" },
+      { "name": "IPP Novorossiysk products terminal", "operator": "NCSP Group (Transneft)", "product": "products" }
+    ],
+    "wikipediaTitle": "Port of Novorossiysk",
+    "cameraIds": [],
+    "satelliteZoom": 9
+  },
+  {
+    "portid": "port1020",
+    "slug": "primorsk",
+    "aliases": ["Primorsk", "Port of Primorsk", "Primorsk port", "Baltic Pipeline System"],
+    "role": "Baltic crude outlet",
+    "roleNotes": "End point of the Baltic Pipeline System on the Gulf of Finland and Russia's largest Baltic oil-loading port: Transneft loads Urals crude at the oil terminal and diesel from the Sever products pipeline at the products berths, with cargoes sailing out past the Danish straits.",
+    "linkedSystems": ["chokepoint10", "sanctions"],
+    "authority": { "name": "FSUE Rosmorport (North-Western Basin Branch)", "url": "https://www.rosmorport.ru/" },
+    "terminals": [
+      { "name": "Primorsk oil terminal (Baltic Pipeline System)", "operator": "Transneft Port Primorsk", "product": "crude" },
+      { "name": "Primorsk products terminal (Sever pipeline)", "operator": "Transneft Port Primorsk", "product": "products" }
+    ],
+    "wikipediaTitle": "Port of Primorsk",
+    "cameraIds": [],
+    "satelliteZoom": 9
+  },
+  {
+    "portid": "port1201",
+    "slug": "singapore",
+    "aliases": ["Port of Singapore", "Singapore port", "Singapore bunker", "Singapore Strait", "Jurong Island", "Pulau Bukom"],
+    "role": "Bunkering, refining and trading hub",
+    "roleNotes": "The world's largest bunkering port and Asia's oil trading and pricing hub: the Jurong Island and Pulau Bukom refineries and the island tank farms sit on the Malacca and Singapore Straits route between Middle East crude and North-East Asian demand, and the Singapore LNG terminal supplies the city's gas.",
+    "linkedSystems": ["chokepoint5"],
+    "authority": { "name": "Maritime and Port Authority of Singapore", "url": "https://www.mpa.gov.sg/" },
+    "terminals": [
+      { "name": "Pulau Bukom refinery and terminal", "operator": "Aster Chemicals and Energy (former Shell Bukom)", "product": "mixed" },
+      { "name": "ExxonMobil Singapore refinery (Jurong Island)", "operator": "ExxonMobil", "product": "mixed" },
+      { "name": "Singapore Refining Company (Jurong Island)", "operator": "SRC (Chevron and PetroChina)", "product": "products" },
+      { "name": "Universal Terminal (Jurong Island)", "operator": "Universal Terminal (S) Pte", "product": "products" },
+      { "name": "Vopak Terminals Singapore (Banyan, Sebarok, Penjuru)", "operator": "Vopak", "product": "mixed" },
+      { "name": "Singapore LNG terminal (Jurong Island)", "operator": "Singapore LNG Corporation", "product": "LNG" }
+    ],
+    "wikipediaTitle": "Port of Singapore",
+    "cameraIds": [],
+    "satelliteZoom": 9
+  },
+  {
+    "portid": "port824",
+    "slug": "ningbo",
+    "aliases": ["Ningbo", "Ningbo-Zhoushan", "Zhoushan", "Ningbo port", "Zhenhai refinery"],
+    "role": "China's crude gateway (Ningbo-Zhoushan)",
+    "roleNotes": "The world's busiest port by tonnage and China's largest crude import gateway: VLCC berths at Daxie, Zhenhai and the Zhoushan islands feed the Sinopec Zhenhai refinery, the Zhoushan commercial and strategic crude reserves and the Yangtze delta refining belt, and the Zhoushan and Ningbo LNG terminals receive gas.",
+    "linkedSystems": ["chokepoint11", "chokepoint5"],
+    "authority": { "name": "Ningbo Zhoushan Port Group", "url": "https://www.nbport.com.cn/" },
+    "terminals": [
+      { "name": "Zhenhai Refining and Chemical crude berths", "operator": "Sinopec", "product": "crude" },
+      { "name": "Ningbo Daxie crude oil terminal", "operator": "Ningbo Zhoushan Port Group", "product": "crude" },
+      { "name": "Zhoushan (Aoshan) crude oil storage and berths", "operator": "Sinopec Zhoushan and the national reserve", "product": "crude" },
+      { "name": "Zhoushan LNG terminal", "operator": "ENN", "product": "LNG" },
+      { "name": "Ningbo (Beilun) LNG terminal", "operator": "CNOOC", "product": "LNG" }
+    ],
+    "wikipediaTitle": "Port of Ningbo-Zhoushan",
+    "cameraIds": [],
+    "satelliteZoom": 8
+  },
+  {
+    "portid": "port1338",
+    "slug": "ulsan",
+    "aliases": ["Ulsan", "Port of Ulsan", "Ulsan port", "Onsan", "SK Energy Ulsan"],
+    "role": "SK Energy and S-Oil refining complex",
+    "roleNotes": "South Korea's largest liquid-bulk port: the SK Energy Ulsan complex and the S-Oil Onsan refinery take Middle East crude over their own berths and ship products and petrochemicals back out, alongside the Korea National Oil Corporation stockpile and the Korea Oil Terminal tank farms, on the Korea Strait route.",
+    "linkedSystems": ["chokepoint12"],
+    "authority": { "name": "Ulsan Port Authority", "url": "https://www.upa.or.kr/" },
+    "terminals": [
+      { "name": "SK Energy Ulsan Complex berths", "operator": "SK Innovation (SK Energy)", "product": "mixed" },
+      { "name": "S-Oil Onsan refinery berths", "operator": "S-Oil (Saudi Aramco)", "product": "mixed" },
+      { "name": "Korea Oil Terminal (KOTC) Ulsan", "operator": "Korea Oil Terminal Co.", "product": "products" },
+      { "name": "Korea National Oil Corporation Ulsan stockpile base", "operator": "KNOC", "product": "crude" }
+    ],
+    "wikipediaTitle": "Port of Ulsan",
+    "cameraIds": [],
+    "satelliteZoom": 9
+  },
+  {
+    "portid": "port239",
+    "slug": "chiba",
+    "aliases": ["Port of Chiba", "Chiba port", "Chiba refinery", "Ichihara", "Sodegaura"],
+    "role": "Tokyo Bay refining",
+    "roleNotes": "Japan's largest port by tonnage, spanning the Keiyo industrial belt on the east shore of Tokyo Bay: the Idemitsu and Cosmo Chiba refineries, the Fuji Oil Sodegaura refinery and the shared Keiyo Sea Berth VLCC crude terminal, with the Sodegaura LNG terminal feeding the Tokyo gas and power market.",
+    "linkedSystems": ["chokepoint14", "chokepoint5"],
+    "authority": { "name": "Chiba Prefecture (Port of Chiba administrator)", "url": "https://www.pref.chiba.lg.jp/" },
+    "terminals": [
+      { "name": "Idemitsu Kosan Chiba refinery berths", "operator": "Idemitsu Kosan", "product": "mixed" },
+      { "name": "Cosmo Oil Chiba refinery berths", "operator": "Cosmo Energy", "product": "mixed" },
+      { "name": "Keiyo Sea Berth (shared VLCC crude berth)", "operator": "Keiyo Sea Berth Co. (Idemitsu, Cosmo and Fuji Oil)", "product": "crude" },
+      { "name": "Fuji Oil Sodegaura refinery berths", "operator": "Fuji Oil", "product": "mixed" },
+      { "name": "Sodegaura LNG terminal", "operator": "Tokyo Gas and JERA", "product": "LNG" }
+    ],
+    "wikipediaTitle": "Port of Chiba",
+    "cameraIds": [],
+    "satelliteZoom": 9
+  },
+  {
+    "portid": "port1199",
+    "slug": "sikka",
+    "aliases": ["Sikka", "Jamnagar", "Reliance Jamnagar", "Jamnagar refinery"],
+    "role": "Outlet of the Jamnagar refinery (Reliance)",
+    "roleNotes": "Captive marine terminal of the Reliance Jamnagar complex, the world's largest refinery site: single-point moorings off Sikka receive crude that has crossed the Arabian Sea from the Gulf, and the product jetties ship diesel, gasoline and jet to Europe, Asia and Africa.",
+    "linkedSystems": ["chokepoint6"],
+    "authority": { "name": "Reliance Industries (Jamnagar)", "url": "https://www.ril.com/" },
+    "terminals": [
+      { "name": "Reliance Jamnagar SPM crude terminals off Sikka", "operator": "Reliance Industries", "product": "crude" },
+      { "name": "Reliance Sikka marine terminal product jetties", "operator": "Reliance Industries", "product": "products" },
+      { "name": "Jamnagar refinery complex (DTA and SEZ refineries)", "operator": "Reliance Industries", "product": "mixed" }
+    ],
+    "wikipediaTitle": "Jamnagar refinery",
+    "cameraIds": [],
+    "satelliteZoom": 9
+  }
+]

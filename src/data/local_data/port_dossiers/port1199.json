@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "portid": "port1199",
+  "slug": "sikka",
+  "name": "Sikka",
+  "fullname": "Sikka, India",
+  "country": "India",
+  "iso3": "IND",
+  "continent": "Asia & Pacific",
+  "locode": null,
+  "lat": 22.36483725,
+  "lon": 69.80786454,
+  "role": "Outlet of the Jamnagar refinery (Reliance)",
+  "roleNotes": "Captive marine terminal of the Reliance Jamnagar complex, the world's largest refinery site: single-point moorings off Sikka receive crude that has crossed the Arabian Sea from the Gulf, and the product jetties ship diesel, gasoline and jet to Europe, Asia and Africa.",
+  "linkedSystems": [
+    {
+      "id": "chokepoint6",
+      "name": "Strait of Hormuz",
+      "kind": "chokepoint"
+    }
+  ],
+  "aliases": [
+    "Sikka",
+    "Jamnagar",
+    "Reliance Jamnagar",
+    "Jamnagar refinery"
+  ],
+  "authority": {
+    "name": "Reliance Industries (Jamnagar)",
+    "url": "https://www.ril.com/"
+  },
+  "terminals": [
+    {
+      "name": "Reliance Jamnagar SPM crude terminals off Sikka",
+      "operator": "Reliance Industries",
+      "product": "crude"
+    },
+    {
+      "name": "Reliance Sikka marine terminal product jetties",
+      "operator": "Reliance Industries",
+      "product": "products"
+    },
+    {
+      "name": "Jamnagar refinery complex (DTA and SEZ refineries)",
+      "operator": "Reliance Industries",
+      "product": "mixed"
+    }
+  ],
+  "annualCalls": {
+    "total": 488,
+    "tanker": 462,
+    "container": 0,
+    "dryBulk": 8,
+    "generalCargo": 18,
+    "roro": 0
+  },
+  "industries": [
+    "Mineral Products",
+    "Chemical & Allied Industries",
+    "Metals"
+  ],
+  "countryShare": {
+    "importPct": 0,
+    "exportPct": 7.26
+  },
+  "wikipedia": {
+    "title": "Jamnagar refinery",
+    "url": "https://en.wikipedia.org/wiki/Jamnagar_refinery",
+    "description": "Oil refinery in Gujarat, India",
+    "extract": "The Jamnagar refinery, also known as RIL Jamnagar or RPL Jamnagar, is a private sector crude oil refinery owned by Reliance Industries in Motikhavdi, Jamnagar, Gujarat, India. The refinery was commissioned in July 1999 with an initial installed capacity of 668,000 barrels per day (106,200 m3/d). Its current installed capacity after expansion is 1,240,000 barrels per day (197,000 m3/d). It is currently the largest oil refinery in the world.",
+    "thumbnail": {
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/32/Jamnagar_Refinery.jpg/330px-Jamnagar_Refinery.jpg",
+      "width": 330,
+      "height": 248
+    },
+    "revision": "1374526504",
+    "timestamp": "2026-09-12T16:31:19Z",
+    "licence": "CC BY-SA 4.0"
+  },
+  "links": {
+    "authority": "https://www.ril.com/",
+    "portwatch": "https://portwatch.imf.org/datasets/6eff445f193b4f288087638d2d419a40",
+    "wikipedia": "https://en.wikipedia.org/wiki/Jamnagar_refinery"
+  },
+  "cameraIds": [],
+  "satelliteZoom": 9
+}

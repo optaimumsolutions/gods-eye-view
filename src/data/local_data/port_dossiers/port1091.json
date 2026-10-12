@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "portid": "port1091",
+  "slug": "ras-tanura",
+  "name": "Ras Tanura",
+  "fullname": "Ras Tanura, Saudi Arabia",
+  "country": "Saudi Arabia",
+  "iso3": "SAU",
+  "continent": "Asia & Pacific",
+  "locode": "SA RTA",
+  "lat": 26.67168923,
+  "lon": 50.12291543,
+  "role": "Saudi Aramco's main crude export terminal",
+  "roleNotes": "Saudi Aramco's Gulf-coast export complex: Eastern Province crude loads at the Sea Islands and the six-buoy Juaymah SPM terminal, refined products ship from the North Pier and the adjoining 550,000 b/d refinery, and refrigerated LPG loads at the Juaymah LPG pier; every cargo sails out through the Strait of Hormuz.",
+  "linkedSystems": [
+    {
+      "id": "chokepoint6",
+      "name": "Strait of Hormuz",
+      "kind": "chokepoint"
+    }
+  ],
+  "aliases": [
+    "Ras Tanura",
+    "Ras Tannurah",
+    "Ras Tanura terminal",
+    "Ras Tanura refinery",
+    "Juaymah",
+    "Ju'aymah"
+  ],
+  "authority": {
+    "name": "Saudi Aramco (Ports and Terminals)",
+    "url": "https://www.aramco.com/en/what-we-do/operations/ports-and-terminals"
+  },
+  "terminals": [
+    {
+      "name": "Ras Tanura Terminal, Sea Islands",
+      "operator": "Saudi Aramco",
+      "product": "crude"
+    },
+    {
+      "name": "Ras Tanura Terminal, North Pier (berths 6 to 11)",
+      "operator": "Saudi Aramco",
+      "product": "products"
+    },
+    {
+      "name": "Juaymah Crude Terminal (six SPM buoys)",
+      "operator": "Saudi Aramco",
+      "product": "crude"
+    },
+    {
+      "name": "Juaymah LPG Terminal (two-berth pier)",
+      "operator": "Saudi Aramco",
+      "product": "LPG"
+    },
+    {
+      "name": "Ras Tanura Refinery (550,000 b/d)",
+      "operator": "Saudi Aramco",
+      "product": "products"
+    }
+  ],
+  "annualCalls": {
+    "total": 672,
+    "tanker": 672,
+    "container": 0,
+    "dryBulk": 0,
+    "generalCargo": 0,
+    "roro": 0
+  },
+  "industries": [
+    "Mineral Products",
+    "Chemical & Allied Industries",
+    "Plastics, Rubber, Leather"
+  ],
+  "countryShare": {
+    "importPct": 0,
+    "exportPct": 16
+  },
+  "wikipedia": {
+    "title": "Ras Tanura",
+    "url": "https://en.wikipedia.org/wiki/Ras_Tanura",
+    "description": "Governorate in Eastern Province, Saudi Arabia",
+    "extract": "Ras Tanura, also colloquially known as Rahima, is a governorate in the Eastern Province of Saudi Arabia. Located on the Ras Tanura peninsula, it is bordered by the Jubail governorate to the north and Qatif governorate to the west and south. The area was officially referred to as Rahima from 1941 until 1986, when its historical name was restored.",
+    "thumbnail": {
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e1/Eastern_Region_-_Ras_Tannurah.svg/330px-Eastern_Region_-_Ras_Tannurah.svg.png",
+      "width": 330,
+      "height": 327
+    },
+    "revision": "1377193773",
+    "timestamp": "2026-09-28T06:39:29Z",
+    "licence": "CC BY-SA 4.0"
+  },
+  "links": {
+    "authority": "https://www.aramco.com/en/what-we-do/operations/ports-and-terminals",
+    "portwatch": "https://portwatch.imf.org/datasets/0da6b948dac6472a8599fddb6686b8d6",
+    "wikipedia": "https://en.wikipedia.org/wiki/Ras_Tanura"
+  },
+  "cameraIds": [],
+  "satelliteZoom": 9
+}

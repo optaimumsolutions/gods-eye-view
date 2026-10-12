@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "portid": "port2164",
+  "slug": "kharg-island",
+  "name": "Kharg Island",
+  "fullname": "Kharg Island, Iran",
+  "country": "Iran",
+  "iso3": "IRN",
+  "continent": "Asia & Pacific",
+  "locode": null,
+  "lat": 29.2430727915583,
+  "lon": 50.335074434646,
+  "role": "Sanctioned crude export terminal",
+  "roleNotes": "Iran's principal crude and condensate export terminal, loading about nine tenths of the country's oil exports from a 32 to 34 million barrel tank farm fed by pipelines from the Gachsaran, Ahvaz and Marun fields, through the eastern T-Jetty and the western Sea Island (Azarpad) ULCC berths, 660 km northwest of the Strait of Hormuz.",
+  "linkedSystems": [
+    {
+      "id": "chokepoint6",
+      "name": "Strait of Hormuz",
+      "kind": "chokepoint"
+    },
+    {
+      "id": "sanctions",
+      "name": "Sanctions",
+      "kind": "tag"
+    }
+  ],
+  "aliases": [
+    "Kharg Island",
+    "Khark Island",
+    "Kharg oil terminal",
+    "Khark oil terminal",
+    "Kharg terminal"
+  ],
+  "authority": {
+    "name": "Iranian Oil Terminals Company (IOTC, National Iranian Oil Company)",
+    "url": "https://www.iotco.ir/"
+  },
+  "terminals": [
+    {
+      "name": "T-Jetty (eastern oil loading jetty, VLCC berths)",
+      "operator": "Iranian Oil Terminals Company",
+      "product": "crude"
+    },
+    {
+      "name": "Sea Island / Azarpad jetty (western ULCC berths)",
+      "operator": "Iranian Oil Terminals Company",
+      "product": "crude"
+    },
+    {
+      "name": "Darius single-buoy sea loading terminal",
+      "operator": "Iranian Oil Terminals Company",
+      "product": "crude"
+    },
+    {
+      "name": "Kharg Chemical Complex (KHEMCO) sulphur and LPG berth",
+      "operator": "Kharg Petrochemical Company",
+      "product": "LPG"
+    },
+    {
+      "name": "Kharg crude and products tank farm",
+      "operator": "Iranian Oil Terminals Company",
+      "product": "mixed"
+    }
+  ],
+  "annualCalls": {
+    "total": 91,
+    "tanker": 75,
+    "container": 0,
+    "dryBulk": 1,
+    "generalCargo": 13,
+    "roro": 2
+  },
+  "industries": [],
+  "countryShare": {
+    "importPct": 0.05,
+    "exportPct": 16.34
+  },
+  "wikipedia": {
+    "title": "Kharg Island",
+    "url": "https://en.wikipedia.org/wiki/Kharg_Island",
+    "description": "Iranian island in Persian Gulf",
+    "extract": "Kharg Island, also spelled Khark Island and often referred to as the \"Forbidden Island\", is a continental island of Iran in the Persian Gulf. The island is 25 kilometres (16 mi) off the coast of Iran and 660 kilometres (410 mi) northwest of the Strait of Hormuz. Administered by the adjacent coastal Bushehr Province, Kharg Island provides a sea port for the export of up to 90% of Iran's oil products, as well as supplying storage for up to 30 million barrels of oil.",
+    "thumbnail": {
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/46/ISS005-E-11900_lrg.jpg/330px-ISS005-E-11900_lrg.jpg",
+      "width": 330,
+      "height": 500
+    },
+    "revision": "1372317716",
+    "timestamp": "2026-08-31T06:41:09Z",
+    "licence": "CC BY-SA 4.0"
+  },
+  "links": {
+    "authority": "https://www.iotco.ir/",
+    "portwatch": "https://portwatch.imf.org/datasets/5bad935f978740d98e26c56059c5293d",
+    "wikipedia": "https://en.wikipedia.org/wiki/Kharg_Island"
+  },
+  "cameraIds": [],
+  "satelliteZoom": 9
+}

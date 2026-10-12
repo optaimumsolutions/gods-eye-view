@@ -110,6 +110,36 @@ has a verified free endpoint and a slot in `docs/COMMODITIES.md`.
 | --- | --- | --- | --- |
 | EIA spot settles, FRED macro, delayed futures via the oracle's yfinance lane, CFTC positioning | Real-time futures and options, full curve, physical differentials, freight rates | **CME Market Data**, **ICE Data Services**, **LSEG Refinitiv**, **Bloomberg**, **Databento** (CME futures feed), **Barchart OnDemand**, **Polygon.io**, **Twelve Data**, **Baltic Exchange** (tanker freight) | Live price and curve on the commodity node, freight rates on the shipping-route cards, differentials at each export terminal |
 
+### 11. Port cameras (BUILT, row 9)
+
+| Free now | What it lacks | Paid or keyed upgrades | What the globe gains |
+| --- | --- | --- | --- |
+| Hand-verified operator stills through the existing CCTV proxy (`config/cctv_sources.ports.json`: Port Houston, Antwerp Maritime Academy (Hogere Zeevaartschool), Port of Milford Haven), the newest NASA GIBS true-colour tile where no still exists, road cameras within 3 km from the repo's own DOT loaders | Coverage: 3 of 20 ports with an operator still (houston: 4, antwerp: 1, milford haven: 1); the other 17 use the satellite tile; motion, sound, pan and zoom; a guarantee that a still keeps refreshing | **Windy Webcams API** (free key, their player, "Webcams provided by Windy.com" attribution, thousands of harbour cams), **EarthCam** and **YouTube** embeds for curated views (San Jacinto Monument cam on the Houston Ship Channel, Sabine Pass Port Authority live player, Skyline Webcams Fujairah), **Planet** or **Maxar** daily scenes for the satellite slot | Live video in the camera slot on any port with a player, a dropdown of every nearby cam, yesterday's 3 m scene instead of a 250 m tile |
+
+A still ships only when `--probe` reports **frames differ** across two fetches
+a minute apart. The panel re-requests the frame every sixty seconds and stamps
+it as observed then, so an hourly poster image would make the slot claim a
+freshness it does not have.
+
+Found and excluded, with the reason:
+
+- **Terms.** Houston TranStar and the Windy-rehosted TxDOT frames at Corpus
+  Christi (TxDOT forbids framing or linking its images; the compliant route is
+  `CCTV_TXDOT_DISTRICTS=AUS,SAT,HOU,CRP,BMT` through the repo's own TxDOT
+  loader, which then feeds the dossier's 3 km road-camera rule); the Flemish
+  Verkeerscentrum cameras at Antwerp ("mogen op geen enkele manier hergebruikt
+  of verspreid worden via andere kanalen"); AEB Amsterdam (its disclaimer
+  forbids downloading).
+- **Refresh.** Port of Amsterdam's Havenkantoor camera and the Webcam Galore
+  re-hosts at Rotterdam: real images, but the same bytes an hour later.
+- **Distance.** Port of Amsterdam's IJmuiden sea-lock camera, 17 km from the
+  PortWatch point and so outside the 15 km rule, though it watches every vessel
+  entering the port.
+- **No still at all.** Ras Tanura, Yanbu, Ras Laffan, Kharg Island, Fujairah,
+  Corpus Christi, Port Arthur, Novorossiysk, Primorsk, Singapore, Ningbo,
+  Ulsan and Sikka: operator sites publish none, and the nearby cameras are
+  video-only players.
+
 ## Connectors already attached to this workspace
 
 The Claude Code environment used for this repo has **S&P Global** and
