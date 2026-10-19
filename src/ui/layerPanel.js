@@ -23,6 +23,7 @@ const PANEL_GROUPS = [
       'energy-datacenters',
       'commodity-gas-flows',
       'gas-supply-us',
+      'commodity-flares',
       'production-gulf-platforms',
       'production-appalachia',
       'production-permian-delaware',
@@ -95,6 +96,8 @@ const PANEL_LABELS = {
   // Row 14 M2: the national balance and storage from the Oil Oracle store,
   // filed production for the regions the globe has built.
   'gas-supply-us': 'Gas · US Supply Board',
+  // Row 15: last clear night's VIIRS flare heat on the bundled ND sites.
+  'commodity-flares': 'Gas flares · nightly heat',
   'production-gulf-platforms': 'Gas · Gulf Platforms (BSEE)',
   // Row 12: monthly production per well as filed with the state (North
   // Dakota DMR first); "current" is the newest complete filing month.

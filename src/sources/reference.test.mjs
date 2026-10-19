@@ -18,6 +18,7 @@ test('reference factories retain compatibility without starting acquisition or s
     'chokepoints',
     'ports',
     'datacenters',
+    'flares',
     'gasFlows',
     'gulfPlatforms',
     'lng',
@@ -45,6 +46,8 @@ test('reference factories retain compatibility without starting acquisition or s
   assert.equal(typeof first.lng.getSnapshot, 'function');
   assert.notEqual(first.news, second.news);
   assert.equal(typeof first.news.getSnapshot, 'function');
+  assert.notEqual(first.flares, second.flares);
+  assert.equal(typeof first.flares.getSnapshot, 'function');
   assert.equal(typeof first.earthquakes.getSnapshot, 'function');
   assert.equal(typeof first.cables.fetch, 'function');
   assert.equal(typeof first.chokepoints.getSnapshot, 'function');

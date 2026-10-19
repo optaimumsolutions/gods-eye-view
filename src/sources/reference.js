@@ -12,6 +12,7 @@ import {
   createBundledGulfSource,
   GULF_CONTRIBUTORS_URL,
 } from '../layers/production/bundledSource.js';
+import { createFlaresSource } from '../layers/flares/source.js';
 import { createBundledLngSource } from '../layers/lng/source.js';
 import { createNewsAssetsSource } from '../layers/news/source.js';
 import {
@@ -53,6 +54,9 @@ export function createReferenceSources() {
       ? createWithheldSource('IMF PortWatch', PORTWATCH_WITHHELD_MESSAGE)
       : createPortWatchPortSource(),
     datacenters: createBundledDatacenterSource(),
+    // Row 15: nightly flare readings from the local proxy (/api/flares)
+    // joined onto the bundled Williston site gazetteer.
+    flares: createFlaresSource(),
     gasFlows: createBundledGasSource(),
     gulfPlatforms: createBundledGulfSource(),
     lng: createBundledLngSource(),

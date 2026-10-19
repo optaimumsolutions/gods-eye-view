@@ -173,6 +173,16 @@ export const DATA_CREDITS = [
       '(unverified wire; headlines pinned to the asset they name; publisher terms apply)',
   },
   {
+    key: 'commodity-flares',
+    html:
+      'Nightly gas-flare heat (Flares layer): NASA FIRMS VIIRS NRT — we acknowledge the use of data and/or imagery ' +
+      'from NASA’s Fire Information for Resource Management System ' +
+      '(<a href="https://earthdata.nasa.gov/firms" target="_blank" rel="noopener">earthdata.nasa.gov/firms</a>), ' +
+      'part of NASA’s EOSDIS · sky cover <a href="https://mesonet.agron.iastate.edu/" target="_blank" rel="noopener">IEM ASOS</a> ' +
+      'and <a href="https://www.weather.gov/" target="_blank" rel="noopener">NWS</a> (US public domain) · ' +
+      'flare sites North Dakota DMR Oil and Gas Division (public record)',
+  },
+  {
     key: 'austin-cctv',
     html:
       'CCTV cameras &amp; frames: City of Austin, TX — ' +

@@ -21,6 +21,7 @@ import { createApplicationCables } from './layers/submarineCables.js';
 import { createApplicationChokepoints } from './layers/chokepoints.js';
 import { createApplicationPorts } from './layers/ports.js';
 import { createApplicationDatacenters } from './layers/datacenters.js';
+import { createApplicationFlares } from './layers/flares.js';
 import { createApplicationGasFlows } from './layers/gasFlows.js';
 import { createApplicationGulfPlatforms } from './layers/gulfPlatforms.js';
 import { createApplicationLng } from './layers/lng.js';
@@ -67,6 +68,7 @@ const SOURCE_METHODS = Object.freeze({
   chokepoints: ['getSnapshot'],
   ports: ['getSnapshot'],
   datacenters: ['getSnapshot'],
+  flares: ['getSnapshot'],
   gasFlows: ['getSnapshot'],
   gulfPlatforms: ['getSnapshot'],
   lng: ['getSnapshot'],
@@ -172,6 +174,7 @@ export function createApplicationCatalog({
           source: sources.datacenters,
           forecast: weatherService,
         }),
+        createApplicationFlares({ source: sources.flares }),
         createApplicationGasFlows({ source: sources.gasFlows }),
         createApplicationGulfPlatforms({ source: sources.gulfPlatforms }),
         createApplicationLng({ source: sources.lng }),
