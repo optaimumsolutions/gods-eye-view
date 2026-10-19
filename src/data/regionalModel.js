@@ -82,7 +82,7 @@ export function normalizeRegionalArticles(payload, limit = MAX_ARTICLES) {
       publishedAt,
       sourceCountry: cleanText(row?.sourcecountry, 60) || null,
     });
-    if (articles.length >= Math.max(1, Math.min(MAX_ARTICLES, limit))) break;
+    if (articles.length >= Math.max(1, limit)) break;
   }
   return articles;
 }

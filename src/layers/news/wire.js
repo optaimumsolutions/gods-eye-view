@@ -77,14 +77,20 @@ export function buildGroupQuery(group) {
   return phrases.length > 1 ? `(${phrases.join(' OR ')})` : phrases[0];
 }
 
-/** True when the headline names the asset by one of its aliases (case- and whitespace-insensitive). */
+/**
+ * True when the headline names the asset by one of its aliases (case- and
+ * whitespace-insensitive). Matches on word boundaries, not bare substrings:
+ * the seed alias "Onsan" must not match "Monsanto".
+ */
 export function titleMatchesAsset(title, aliases) {
   const haystack = String(title || '')
     .toLowerCase()
     .replace(/\s+/g, ' ');
   return (aliases || []).some((alias) => {
     const needle = cleanAlias(alias).toLowerCase();
-    return needle && haystack.includes(needle);
+    if (!needle) return false;
+    const escaped = needle.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return new RegExp(`(?<![a-z0-9])${escaped}(?![a-z0-9])`).test(haystack);
   });
 }
 

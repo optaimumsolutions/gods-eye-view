@@ -64,6 +64,12 @@ test('titleMatchesAsset is case- and whitespace-insensitive', () => {
   assert.ok(!titleMatchesAsset('Oil surges on OPEC cut', ['Strait of Hormuz']));
 });
 
+test('titleMatchesAsset matches whole words, not substrings', () => {
+  assert.ok(!titleMatchesAsset('Monsanto settles lawsuit', ['Onsan']));
+  assert.ok(titleMatchesAsset('Fire at Onsan refinery contained', ['Onsan']));
+  assert.ok(titleMatchesAsset("Golden Pass's first cargo loads", ['Golden Pass LNG', 'Golden Pass']));
+});
+
 test('matchArticlesToAssets pins a headline to every asset it names', () => {
   const [group] = buildNewsGroups([
     { id: 'strait-hormuz', keywords: ['Strait of Hormuz', 'Hormuz'] },

@@ -26,7 +26,8 @@ import {
  * per minute and each group's answer is cached for fifteen minutes, so the
  * route always answers from cache at once and the groups fill in behind it
  * (`status: warming` until every group has fetched). A failed group keeps its
- * stale copy; errors reach the client as fixed strings, never upstream text.
+ * stale copy until it ages past the article window, then drops it; errors
+ * reach the client as fixed strings, never upstream text.
  */
 export const NEWS_ASSETS_ROUTE = '/api/news-assets';
 export const NEWS_ASSETS_CACHE_MS = 15 * 60_000;
@@ -34,6 +35,8 @@ export const NEWS_ASSETS_CACHE_MS = 15 * 60_000;
 export const NEWS_ASSETS_SPACING_MS = 61_000;
 /** A failed group waits this long before its next attempt. */
 export const NEWS_ASSETS_RETRY_MS = 2 * 60_000;
+/** A group's stale copy older than the article window is dropped, not served. */
+export const NEWS_ASSETS_MAX_STALE_MS = NEWS_WINDOW_DAYS * 24 * 60 * 60_000;
 const SEED_FILE = 'config/port_dossiers.seed.json';
 const UPSTREAM_TIMEOUT_MS = 12_000;
 const UPSTREAM_MAX_BYTES = 1_500_000;
@@ -134,7 +137,19 @@ export function newsAssetsProxy({
    */
   function maybeRefresh() {
     const at = now();
+    for (const entry of groups()) {
+      if (
+        entry.fetchedAtMs &&
+        at - entry.fetchedAtMs > NEWS_ASSETS_MAX_STALE_MS
+      ) {
+        entry.byAsset = new Map();
+        entry.fetchedAt = null;
+        entry.fetchedAtMs = 0;
+      }
+    }
     if (at - _lastUpstreamAt < NEWS_ASSETS_SPACING_MS) return;
+    // Rank by the last attempt, not the last success: a group that keeps
+    // failing would otherwise stay oldest and hold the slot every backoff.
     const due = groups()
       .filter(
         (entry) =>
@@ -143,7 +158,11 @@ export function newsAssetsProxy({
           at - entry.fetchedAtMs > NEWS_ASSETS_CACHE_MS &&
           at - entry.lastAttemptMs > NEWS_ASSETS_RETRY_MS,
       )
-      .sort((a, b) => a.fetchedAtMs - b.fetchedAtMs)[0];
+      .sort(
+        (a, b) =>
+          Math.max(a.fetchedAtMs, a.lastAttemptMs) -
+          Math.max(b.fetchedAtMs, b.lastAttemptMs),
+      )[0];
     if (!due) return;
     _lastUpstreamAt = at;
     due.lastAttemptMs = at;

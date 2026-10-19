@@ -184,7 +184,8 @@ export const NEWS_GAZETTEER = Object.freeze(
     { id: 'chiba', name: 'Chiba', group: 'port', lon: 140.05, lat: 35.57 },
     { id: 'sikka', name: 'Sikka', group: 'port', lon: 69.84, lat: 22.43 },
     // US LNG export terminals (group 'terminal') the dossier ports do not
-    // already cover: Sabine Pass, Corpus Christi and Port Arthur ride their
+    // already cover: Sabine Pass, Golden Pass ("Golden Pass LNG" is a
+    // sabine-pass seed alias), Corpus Christi and Port Arthur ride their
     // port entries' seed aliases.
     {
       id: 'freeport-lng',
@@ -216,7 +217,8 @@ export const NEWS_GAZETTEER = Object.freeze(
       group: 'terminal',
       lon: -89.98,
       lat: 29.59,
-      keywords: ['Plaquemines LNG', 'Plaquemines'],
+      // Bare "Plaquemines" is the parish; keep the badge about the terminal.
+      keywords: ['Plaquemines LNG', 'Venture Global Plaquemines'],
     },
     {
       id: 'cove-point',
@@ -232,24 +234,19 @@ export const NEWS_GAZETTEER = Object.freeze(
       group: 'terminal',
       lon: -81.01,
       lat: 32.08,
-      keywords: ['Elba Island'],
-    },
-    {
-      id: 'golden-pass',
-      name: 'Golden Pass LNG',
-      group: 'terminal',
-      lon: -93.92,
-      lat: 29.76,
-      keywords: ['Golden Pass'],
+      // Bare "Elba Island" is also the Italian island.
+      keywords: ['Elba Island LNG'],
     },
     // Producing basins (group 'basin'), pinned at a representative centroid.
+    // Keywords stay qualified: bare "Permian" is a geologic era, "Marcellus"
+    // a given name, "Haynesville" a town — the same rule as Gulf of Mexico.
     {
       id: 'permian',
       name: 'Permian Basin',
       group: 'basin',
       lon: -102.0,
       lat: 31.8,
-      keywords: ['Permian Basin', 'Permian'],
+      keywords: ['Permian Basin', 'Permian oil', 'Permian gas'],
     },
     {
       id: 'appalachia',
@@ -257,7 +254,7 @@ export const NEWS_GAZETTEER = Object.freeze(
       group: 'basin',
       lon: -80.0,
       lat: 40.5,
-      keywords: ['Marcellus', 'Utica shale', 'Appalachian basin'],
+      keywords: ['Marcellus shale', 'Utica shale', 'Appalachian basin'],
     },
     {
       id: 'haynesville',
@@ -265,7 +262,7 @@ export const NEWS_GAZETTEER = Object.freeze(
       group: 'basin',
       lon: -93.8,
       lat: 32.3,
-      keywords: ['Haynesville'],
+      keywords: ['Haynesville shale', 'Haynesville gas', 'Haynesville basin'],
     },
     {
       id: 'williston-basin',
