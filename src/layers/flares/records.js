@@ -125,6 +125,8 @@ export function normalizeSitesBundle(bundle) {
         ? site.operators.map(String)
         : [],
       wells: Array.isArray(site.wells) ? site.wells.length : 0,
+      wellIds: Array.isArray(site.wells) ? site.wells.map(String) : [],
+      flaredMonthly: Array.isArray(site.flared) ? site.flared : [],
       flaredMcfCurrent: Array.isArray(site.flared)
         ? finiteOr(site.flared.at(-1), 0)
         : 0,
@@ -147,6 +149,7 @@ export function normalizeSitesBundle(bundle) {
     currentMonth: String(bundle.source?.currentMonth || ''),
     sourceName: String(bundle.source?.name || ''),
     retrieved: String(bundle.source?.retrieved || ''),
+    months: Array.isArray(bundle.months) ? bundle.months.map(String) : [],
     counts: {
       sitesFlaringCurrent: finiteOr(bundle.counts?.sitesFlaringCurrent, 0),
       flaredMmcfdCurrent: finiteOr(bundle.counts?.flaredMmcfdCurrent, 0),
@@ -196,6 +199,50 @@ export function lastLitBySite(nights) {
 }
 
 /**
+ * One site's served nights, oldest first, for the dossier's night chart
+ * (FR-F7): FRP 0 on a served night the site was dark; `hatched` marks the
+ * nights the chart draws as untrusted (obscured, or the suspect backstop).
+ */
+export function siteNightSeries(nights, siteId) {
+  return [...nights]
+    .sort((a, b) => (a.night < b.night ? -1 : 1))
+    .map((night) => {
+      const reading = night.sites.find((row) => row.id === siteId) ?? null;
+      return {
+        night: night.night,
+        frp: reading?.maxFrp ?? 0,
+        lit: Boolean(reading),
+        hatched: night.cloud.state === 'obscured' || night.suspect,
+        cloud: night.cloud.state,
+      };
+    });
+}
+
+/** The region's served nights, oldest first, for the region dossier. */
+export function regionNightSeries(nights) {
+  return [...nights]
+    .sort((a, b) => (a.night < b.night ? -1 : 1))
+    .map((night) => ({
+      night: night.night,
+      litSites: night.litSites,
+      siteFrpMw: night.siteFrpMw,
+      hatched: night.cloud.state === 'obscured' || night.suspect,
+      cloud: night.cloud.state,
+    }));
+}
+
+/** The region's filed flared Mcf per bundle month: the sites summed. */
+export function regionFlaredMonthly(sites, monthCount) {
+  const totals = new Array(monthCount).fill(0);
+  for (const site of sites) {
+    const series = site.flaredMonthly ?? [];
+    for (let i = 0; i < monthCount; i += 1)
+      totals[i] += Number.isFinite(series[i]) ? series[i] : 0;
+  }
+  return totals;
+}
+
+/**
  * Join the nightly readings onto the bundled gazetteer: one row per site,
  * lit when the display night saw it.
  */
@@ -228,6 +275,11 @@ export function buildFlaresSnapshot(payload, bundle) {
     sourceName: bundle.sourceName,
     currentMonth: bundle.currentMonth,
     bundleCounts: bundle.counts,
+    months: bundle.months,
+    regionFlaredMonthly: regionFlaredMonthly(
+      bundle.sites,
+      bundle.months.length,
+    ),
     windowNights: payload.windowNights,
     nights: payload.nights,
     baseline: payload.baseline,

@@ -8,6 +8,9 @@ import {
   mapAnalystRecord,
   normalizeFlaresPayload,
   normalizeSitesBundle,
+  regionFlaredMonthly,
+  regionNightSeries,
+  siteNightSeries,
 } from './records.js';
 
 /** A served night, newest-first order left to the normalizer. */
@@ -35,6 +38,7 @@ const BUNDLE = {
     center: { lat: 47.85, lon: -103.1 },
   },
   counts: { sitesFlaringCurrent: 2, flaredMmcfdCurrent: 1.2 },
+  months: ['2026-06', '2026-07'],
   source: {
     name: 'North Dakota DMR',
     retrieved: '2026-09-27',
@@ -99,10 +103,43 @@ test('normalizeSitesBundle keeps positions, the filed figures and the counts', (
   const bundle = normalizeSitesBundle(BUNDLE);
   assert.equal(bundle.sites.length, 2);
   assert.equal(bundle.sites[0].wells, 2);
+  assert.deepEqual(bundle.sites[0].wellIds, ['w1', 'w2']);
+  assert.deepEqual(bundle.sites[0].flaredMonthly, [100, 300]);
   assert.equal(bundle.sites[0].flaredMcfCurrent, 300);
   assert.equal(bundle.counts.flaredMmcfdCurrent, 1.2);
   assert.equal(bundle.currentMonth, '2026-07');
+  assert.deepEqual(bundle.months, ['2026-06', '2026-07']);
   assert.equal(normalizeSitesBundle({ sites: [] }), null);
+});
+
+test('the dossier series: site nights, region nights, region monthly total', () => {
+  const nights = [
+    night('2026-10-19', {
+      cloud: { state: 'obscured', stations: 4, covered: 3 },
+      sites: [],
+      litSites: 0,
+      siteFrpMw: 0,
+    }),
+    night('2026-10-18'),
+  ];
+  const series = siteNightSeries(nights, 's1');
+  assert.deepEqual(
+    series.map((n) => [n.night, n.frp, n.lit, n.hatched]),
+    [
+      ['2026-10-18', 4.2, true, false],
+      ['2026-10-19', 0, false, true],
+    ],
+  );
+  const region = regionNightSeries(nights);
+  assert.deepEqual(
+    region.map((n) => [n.night, n.litSites, n.siteFrpMw, n.hatched]),
+    [
+      ['2026-10-18', 1, 4.2, false],
+      ['2026-10-19', 0, 0, true],
+    ],
+  );
+  const bundle = normalizeSitesBundle(BUNDLE);
+  assert.deepEqual(regionFlaredMonthly(bundle.sites, 2), [150, 300]);
 });
 
 test('displayNightOf prefers the newest trusted clear night', () => {

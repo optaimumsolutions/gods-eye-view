@@ -42,7 +42,8 @@ import {
  */
 export const FLARES_ROUTE = '/api/flares';
 export const FLARES_FILE_CACHE_MS = 30 * 60_000;
-export const FLARES_NIGHTS_SERVED = 60;
+/** FR-F7: the site dossier charts 90 nights, so the route serves 90. */
+export const FLARES_NIGHTS_SERVED = 90;
 /** The 7 d files backfill only while the store misses one of these nights. */
 export const FLARES_GAP_WINDOW_NIGHTS = 7;
 const NWS_FALLBACK_WINDOW_MS = 48 * 3_600_000;
