@@ -1,7 +1,6 @@
 import {
   el,
   ensureDossierStyles,
-  renderSeriesChart,
   svgEl,
 } from '../commodities/dossierChrome.js';
 import {
