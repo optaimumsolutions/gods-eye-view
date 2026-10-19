@@ -193,9 +193,7 @@ export function createRegionOverlayEntry(snapshot, position, now = Date.now()) {
     details.push(
       joinParts([
         `${formatInt(night.litSites)} sites lit · ${formatMw(night.siteFrpMw)}`,
-        night.satellites.length
-          ? `${night.satellites.length} passes`
-          : null,
+        night.satellites.length ? `${night.satellites.length} passes` : null,
       ]),
     );
     const base = snapshot.baseline;

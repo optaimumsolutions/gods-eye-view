@@ -340,7 +340,9 @@ export function createFlaresLayer({
       ? _sitePositions.get(_selectedId)
       : null;
     if (selected && selectedPosition)
-      entries.push(buildSelectedSiteCard(selected, selectedPosition, _snapshot));
+      entries.push(
+        buildSelectedSiteCard(selected, selectedPosition, _snapshot),
+      );
     overlayHost.setEntries(FLARES_OVERLAY_SOURCE_ID, entries, {
       cohortLimit: FLARES_OVERLAY_COHORT_LIMIT + 2,
       collisionCapacity: FLARES_OVERLAY_COLLISION_CAPACITY + 2,
@@ -393,8 +395,7 @@ export function createFlaresLayer({
    * regional tier, where the far side is never in view.
    */
   function refreshHorizonCulling() {
-    if (!_enabled || !_viewer || _viewer.isDestroyed?.() || !_regionPin)
-      return;
+    if (!_enabled || !_viewer || _viewer.isDestroyed?.() || !_regionPin) return;
     const occluder = horizonOccluder(_viewer.camera);
     const visible =
       _tier === FLARES_TIER_GLOBAL &&

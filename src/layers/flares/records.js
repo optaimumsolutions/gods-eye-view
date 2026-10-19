@@ -29,7 +29,9 @@ function normalizeSiteRow(item) {
     id,
     detections: finiteOr(item.detections, 0),
     maxFrp: finiteOr(item.maxFrp, 0),
-    satellites: Array.isArray(item.satellites) ? item.satellites.map(String) : [],
+    satellites: Array.isArray(item.satellites)
+      ? item.satellites.map(String)
+      : [],
     cloud: typeof item.cloud === 'string' ? item.cloud : 'unknown',
   };
 }
@@ -165,16 +167,19 @@ export function displayNightOf(nights) {
 }
 
 /** The newest `window` clear, trusted nights — the norm the colours read. */
-export function clearWindow(nights, window = FLARES_NORM_WINDOW_NIGHTS) {
+export function clearWindow(nights, windowNights = FLARES_NORM_WINDOW_NIGHTS) {
   return nights
     .filter((n) => n.cloud.state === 'clear' && !n.suspect)
-    .slice(0, window);
+    .slice(0, windowNights);
 }
 
 /** Nights lit per site id over the clear window (the colour ramp's input). */
-export function litNightCounts(nights, window = FLARES_NORM_WINDOW_NIGHTS) {
+export function litNightCounts(
+  nights,
+  windowNights = FLARES_NORM_WINDOW_NIGHTS,
+) {
   const counts = new Map();
-  for (const night of clearWindow(nights, window))
+  for (const night of clearWindow(nights, windowNights))
     for (const row of night.sites)
       counts.set(row.id, (counts.get(row.id) ?? 0) + 1);
   return counts;
@@ -199,9 +204,7 @@ export function buildFlaresSnapshot(payload, bundle) {
   const litCounts = litNightCounts(payload.nights);
   const lastLit = lastLitBySite(payload.nights);
   const clearNights = clearWindow(payload.nights).length;
-  const byId = new Map(
-    (displayNight?.sites ?? []).map((row) => [row.id, row]),
-  );
+  const byId = new Map((displayNight?.sites ?? []).map((row) => [row.id, row]));
   let frpMax = 0;
   const rows = bundle.sites.map((site) => {
     const reading = byId.get(site.id) ?? null;
