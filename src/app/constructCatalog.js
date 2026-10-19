@@ -24,6 +24,7 @@ import { createApplicationDatacenters } from './layers/datacenters.js';
 import { createApplicationGasFlows } from './layers/gasFlows.js';
 import { createApplicationGulfPlatforms } from './layers/gulfPlatforms.js';
 import { createApplicationLng } from './layers/lng.js';
+import { createApplicationNews } from './layers/news.js';
 import {
   createApplicationOnshoreAppalachia,
   createApplicationOnshorePermianDelaware,
@@ -69,6 +70,7 @@ const SOURCE_METHODS = Object.freeze({
   gasFlows: ['getSnapshot'],
   gulfPlatforms: ['getSnapshot'],
   lng: ['getSnapshot'],
+  news: ['getSnapshot'],
   weatherForecast: ['getSnapshot'],
   weatherField: ['getManifest', 'getGrid'],
 });
@@ -173,6 +175,7 @@ export function createApplicationCatalog({
         createApplicationGasFlows({ source: sources.gasFlows }),
         createApplicationGulfPlatforms({ source: sources.gulfPlatforms }),
         createApplicationLng({ source: sources.lng }),
+        createApplicationNews({ source: sources.news }),
         createApplicationOnshoreWilliston({ source: sources.onshoreWilliston }),
         createApplicationOnshoreAppalachia({
           source: sources.onshoreAppalachia,

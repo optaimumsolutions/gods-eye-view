@@ -11,6 +11,7 @@ import { geocodeProxy } from './regional/place.js';
 import { weatherEffectsProxy } from './regional/weather-effects.js';
 import { cctvProxy } from './cctv.js';
 import { portNewsProxy } from './portNews.js';
+import { newsAssetsProxy } from './newsAssets.js';
 import { defaultSourceRoot } from './common/source-root.js';
 import { radioBrowserProxy } from './radio.js';
 import { gbfsProxy } from './gbfs.js';
@@ -40,6 +41,7 @@ function localProviderPlugins() {
     weatherEffectsProxy(),
     cctvProxy({ sourceRoot: defaultSourceRoot }),
     portNewsProxy({ sourceRoot: defaultSourceRoot }),
+    newsAssetsProxy({ sourceRoot: defaultSourceRoot }),
     radioBrowserProxy(),
     gbfsProxy(),
     transitProxy(),

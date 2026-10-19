@@ -19,6 +19,7 @@ const PANEL_GROUPS = [
     ids: [
       'commodity-chokepoints',
       'commodity-ports',
+      'commodity-news',
       'energy-datacenters',
       'commodity-gas-flows',
       'gas-supply-us',
@@ -82,6 +83,8 @@ const PANEL_LABELS = {
   'local-firms': 'Active Fires',
   'commodity-chokepoints': 'Chokepoints · Tanker Transits',
   'commodity-ports': 'Ports · Tanker Calls',
+  // Row 5: GDELT headlines pinned to the assets they name; unverified wire.
+  'commodity-news': 'News · Asset Headlines (GDELT)',
   'energy-datacenters': 'Data Centers · US Power',
   // R4.54: "Flows" implies something continuous and current. The measure is
   // a monthly total published ~80 days in arrears, and right now there is no

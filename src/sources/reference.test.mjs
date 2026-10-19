@@ -21,6 +21,7 @@ test('reference factories retain compatibility without starting acquisition or s
     'gasFlows',
     'gulfPlatforms',
     'lng',
+    'news',
     'onshoreWilliston',
     'onshoreAppalachia',
     'onshorePermianDelaware',
@@ -42,6 +43,8 @@ test('reference factories retain compatibility without starting acquisition or s
   assert.notEqual(first.datacenters, second.datacenters);
   assert.notEqual(first.lng, second.lng);
   assert.equal(typeof first.lng.getSnapshot, 'function');
+  assert.notEqual(first.news, second.news);
+  assert.equal(typeof first.news.getSnapshot, 'function');
   assert.equal(typeof first.earthquakes.getSnapshot, 'function');
   assert.equal(typeof first.cables.fetch, 'function');
   assert.equal(typeof first.chokepoints.getSnapshot, 'function');

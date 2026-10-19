@@ -13,6 +13,7 @@ import {
   GULF_CONTRIBUTORS_URL,
 } from '../layers/production/bundledSource.js';
 import { createBundledLngSource } from '../layers/lng/source.js';
+import { createNewsAssetsSource } from '../layers/news/source.js';
 import {
   createBundledOnshoreSource,
   ONSHORE_CONTRIBUTORS,
@@ -55,6 +56,8 @@ export function createReferenceSources() {
     gasFlows: createBundledGasSource(),
     gulfPlatforms: createBundledGulfSource(),
     lng: createBundledLngSource(),
+    // Row 5: matched headlines from the local GDELT proxy (/api/news-assets)
+    news: createNewsAssetsSource(),
     onshoreWilliston: createBundledOnshoreSource({ region: 'williston' }),
     onshoreAppalachia: isWithheld('pa-dep-wells')
       ? createWithheldSource('PA DEP', PA_WELLS_WITHHELD_MESSAGE)
