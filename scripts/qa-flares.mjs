@@ -452,6 +452,34 @@ try {
           clickStats?.selectedId === (clickStats?.hoverId ?? hoveredId),
         { got: clickStats?.selectedId },
       );
+
+      /** M4 (FR-F7): the click opened the site dossier; its chart counts
+       *  equal the API nights and the bundle months. */
+      const siteDossier = await page.evaluate(() => {
+        const node = document.getElementById('flares-dossier');
+        if (!node || node.hidden) return { open: false };
+        return {
+          open: true,
+          title: node.querySelector('.dc-dossier__title')?.textContent ?? null,
+          nightPoints: node.querySelectorAll(
+            '[data-chart="nights"] [data-point]',
+          ).length,
+          monthBars: node.querySelectorAll('[data-chart="months"] [data-bar]')
+            .length,
+        };
+      });
+      report('site dossier', siteDossier);
+      check('the click opened the site dossier', siteDossier.open === true);
+      check(
+        'site dossier night-chart points equal the API nights',
+        siteDossier.nightPoints === nights.length,
+        { got: siteDossier.nightPoints, want: nights.length },
+      );
+      check(
+        'site dossier state bars equal the bundle months',
+        siteDossier.monthBars === SITES_BUNDLE.months.length,
+        { got: siteDossier.monthBars, want: SITES_BUNDLE.months.length },
+      );
     }
   } else {
     report('hover skipped', 'no lit site on the display night');
@@ -459,6 +487,77 @@ try {
 
   await page.screenshot({ path: path.join(SHOTS_DIR, 'flares-regional.png') });
   console.log(`  [SHOT] ${path.join(SHOTS_DIR, 'flares-regional.png')}`);
+
+  /** M4 (FR-F7): the region mark opens the basin dossier at global depth. */
+  await page.evaluate((view) => {
+    const v = window.__godsEyeView.viewer;
+    v.camera.cancelFlight();
+    const ell = v.scene.globe.ellipsoid;
+    v.camera.setView({
+      destination: ell.cartographicToCartesian({
+        longitude: (view[0] * Math.PI) / 180,
+        latitude: (view[1] * Math.PI) / 180,
+        height: view[2],
+      }),
+      orientation: { heading: 0, pitch: -Math.PI / 2, roll: 0 },
+    });
+    v.camera.moveEnd.raiseEvent?.();
+    v.scene.requestRender?.();
+  }, GLOBAL_VIEW);
+  await sleep(1_500);
+  const regionScreen = await page.evaluate(() => {
+    const v = window.__godsEyeView.viewer;
+    const world = v.scene.globe.ellipsoid.cartographicToCartesian({
+      longitude: (-103.1 * Math.PI) / 180,
+      latitude: (47.85 * Math.PI) / 180,
+      height: 0,
+    });
+    const c = v.scene.cartesianToCanvasCoordinates(world);
+    return c ? { x: c.x, y: c.y } : null;
+  });
+  check('the region mark projects on screen', regionScreen !== null);
+  if (regionScreen) {
+    await page.mouse.click(regionScreen.x, regionScreen.y);
+    await sleep(600);
+    const regionDossier = await page.evaluate(() => {
+      const node = document.getElementById('flares-dossier');
+      if (!node || node.hidden) return { open: false };
+      return {
+        open: true,
+        title: node.querySelector('.dc-dossier__title')?.textContent ?? null,
+        nightPoints: node.querySelectorAll('[data-chart="nights"] [data-point]')
+          .length,
+        monthBars: node.querySelectorAll('[data-chart="months"] [data-bar]')
+          .length,
+        band: node.querySelectorAll('[data-band]').length,
+      };
+    });
+    report('region dossier', regionDossier);
+    check(
+      'the region mark opens the basin dossier',
+      regionDossier.open === true && /WILLISTON/i.test(regionDossier.title),
+      { title: regionDossier.title },
+    );
+    check(
+      'region dossier night-chart points equal the API nights',
+      regionDossier.nightPoints === nights.length,
+      { got: regionDossier.nightPoints, want: nights.length },
+    );
+    check(
+      'region dossier state bars equal the bundle months',
+      regionDossier.monthBars === SITES_BUNDLE.months.length,
+      { got: regionDossier.monthBars, want: SITES_BUNDLE.months.length },
+    );
+    const closed = await page.evaluate(() => {
+      document
+        .getElementById('flares-dossier')
+        ?.querySelector('.dc-dossier__close')
+        ?.click();
+      const node = document.getElementById('flares-dossier');
+      return Boolean(node?.hidden);
+    });
+    check('the close button shuts the dossier', closed === true);
+  }
 
   check(
     'no uncaught page errors',
