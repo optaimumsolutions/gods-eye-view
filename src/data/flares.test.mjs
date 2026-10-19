@@ -4,17 +4,26 @@ import {
   FLARE_REGIONS,
   PAD_LINK_M,
   classifyDetection,
+  clearBaseline,
   clusterPads,
   distanceM,
   firmsNrtUrl,
   FIRMS_NRT_FEEDS,
   inBox,
   matchRadiusM,
+  mergeDetections,
+  nightIsFinal,
+  nightMetrics,
+  nightOverpasses,
+  nightSky,
   overpassMs,
   parseIemAsos,
   parseViirsCsv,
   pointIndex,
+  siteCloud,
   skyState,
+  stationCoverage,
+  suspectNight,
 } from './flares.js';
 
 const CSV = `latitude,longitude,bright_ti4,scan,track,acq_date,acq_time,satellite,confidence,version,bright_ti5,frp,daynight
@@ -149,4 +158,132 @@ test('clusterPads is independent of input order', () => {
   }));
   const ids = (pads) => JSON.stringify(pads.map((p) => p.map((w) => w.id)));
   assert.equal(ids(clusterPads(wells)), ids(clusterPads([...wells].reverse())));
+});
+
+// --- M2 fixtures (FR-F2 to F5) ---
+
+const det = (over = {}) => ({
+  lat: 48.0,
+  lon: -103.0,
+  frp: 1.5,
+  scanKm: 0.4,
+  trackKm: 0.4,
+  brightTi4: 300,
+  brightTi5: 280,
+  acqDate: '2026-10-18',
+  acqTime: '0850',
+  satellite: 'N20',
+  confidence: 'nominal',
+  daynight: 'N',
+  ...over,
+});
+
+test('a night file is final 36 hours after its UTC date begins', () => {
+  const night = '2026-10-18';
+  assert.equal(
+    nightIsFinal(night, Date.parse('2026-10-19T11:59:00Z')),
+    false,
+  );
+  assert.equal(nightIsFinal(night, Date.parse('2026-10-19T12:01:00Z')), true);
+  assert.equal(nightIsFinal('garbage', Date.parse('2026-10-19T12:01Z')), false);
+});
+
+test('mergeDetections deduplicates across the 24h and 7d files, deterministically', () => {
+  const a = det();
+  const b = det({ lon: -103.001 });
+  const merged = mergeDetections([a], [b, { ...a }]);
+  assert.equal(merged.length, 2);
+  assert.equal(
+    JSON.stringify(mergeDetections([b], [a])),
+    JSON.stringify(mergeDetections([a, b], [])),
+  );
+});
+
+test('nightOverpasses takes the median pass per satellite', () => {
+  const passes = nightOverpasses([
+    det({ acqTime: '0848' }),
+    det({ acqTime: '0850' }),
+    det({ acqTime: '0902' }),
+    det({ satellite: 'N', acqTime: '0930' }),
+  ]);
+  assert.deepEqual(
+    passes.map((p) => p.satellite),
+    ['N20', 'N'],
+  );
+  assert.equal(passes[0].ms, Date.parse('2026-10-18T08:50:00Z'));
+});
+
+const OVC_NIGHT = `station,valid,skyc1,skyc2,skyc3
+XWA,2026-10-18 08:53,OVC,M,M
+ISN,2026-10-18 08:55,OVC,M,M
+DIK,2026-10-18 08:56,BKN,M,M
+MOT,2026-10-18 08:53,CLR,M,M
+`;
+
+test('an OVC night reads obscured for the region and the sites under it (G15.3)', () => {
+  const reports = parseIemAsos(OVC_NIGHT);
+  const passes = nightOverpasses([det()]);
+  assert.equal(nightSky(reports, passes).state, 'obscured');
+  const coverage = stationCoverage(reports, passes);
+  assert.equal(coverage.get('XWA'), true);
+  assert.equal(coverage.get('MOT'), false);
+  // A site by Williston sits under the deck; one by Minot is clear.
+  assert.equal(siteCloud({ lat: 48.2, lon: -103.7 }, coverage), 'obscured');
+  assert.equal(siteCloud({ lat: 48.25, lon: -101.3 }, coverage), 'clear');
+  assert.equal(siteCloud({ lat: 48, lon: -103 }, new Map()), 'unknown');
+});
+
+test('nightMetrics takes the per-site maximum FRP, never the pixel sum', () => {
+  const sites = pointIndex([{ id: 's1', lat: 48.0, lon: -103.0 }]);
+  const wells = pointIndex([{ id: 'w1', lat: 48.0, lon: -103.0 }]);
+  const m = nightMetrics({
+    night: '2026-10-18',
+    detections: [
+      det({ frp: 2.5 }),
+      det({ frp: 1.0, lon: -103.001 }),
+      det({ lat: 48.3, frp: 9 }), // near nothing: other
+    ],
+    sites,
+    wells,
+    reports: parseIemAsos(OVC_NIGHT),
+  });
+  assert.equal(m.litSites, 1);
+  assert.equal(m.sites[0].maxFrp, 2.5);
+  assert.equal(m.siteFrpMw, 2.5);
+  assert.deepEqual(m.counts, { site: 2, unlisted: 0, other: 1 });
+  assert.equal(m.cloud.state, 'obscured');
+  assert.deepEqual(m.satellites, ['N20']);
+});
+
+test('a dropout night goes suspect only once enough clear nights exist (G15.3)', () => {
+  const clearNight = (litSites) => ({
+    cloud: { state: 'clear' },
+    suspect: false,
+    litSites,
+    siteFrpMw: litSites * 2,
+  });
+  const few = clearBaseline([clearNight(100), clearNight(90)]);
+  assert.equal(suspectNight(10, few), false); // 2 clear nights: no judgement
+  const nights = [100, 95, 105, 98, 102, 101].map(clearNight);
+  const base = clearBaseline(nights);
+  assert.equal(base.clearNights, 6);
+  assert.ok(Math.abs(base.litMedian - 100.5) < 0.6, String(base.litMedian));
+  assert.equal(suspectNight(39, base), true); // under 40 % of the median
+  assert.equal(suspectNight(45, base), false);
+});
+
+test('clearBaseline skips covered and suspect nights and caps the window', () => {
+  const nights = [
+    { cloud: { state: 'obscured' }, suspect: false, litSites: 3, siteFrpMw: 1 },
+    { cloud: { state: 'clear' }, suspect: true, litSites: 5, siteFrpMw: 2 },
+    ...Array.from({ length: 40 }, (_, i) => ({
+      cloud: { state: 'clear' },
+      suspect: false,
+      litSites: 100 + i,
+      siteFrpMw: 200,
+    })),
+  ];
+  const base = clearBaseline(nights, 30);
+  assert.equal(base.clearNights, 30);
+  assert.ok(base.litMedian >= 100 && base.litMedian <= 139);
 });

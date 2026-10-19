@@ -12,6 +12,7 @@ import { weatherEffectsProxy } from './regional/weather-effects.js';
 import { cctvProxy } from './cctv.js';
 import { portNewsProxy } from './portNews.js';
 import { newsAssetsProxy } from './newsAssets.js';
+import { flaresProxy } from './flares.js';
 import { defaultSourceRoot } from './common/source-root.js';
 import { radioBrowserProxy } from './radio.js';
 import { gbfsProxy } from './gbfs.js';
@@ -42,6 +43,7 @@ function localProviderPlugins() {
     cctvProxy({ sourceRoot: defaultSourceRoot }),
     portNewsProxy({ sourceRoot: defaultSourceRoot }),
     newsAssetsProxy({ sourceRoot: defaultSourceRoot }),
+    flaresProxy({ sourceRoot: defaultSourceRoot }),
     radioBrowserProxy(),
     gbfsProxy(),
     transitProxy(),
