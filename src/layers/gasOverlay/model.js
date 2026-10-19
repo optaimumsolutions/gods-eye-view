@@ -157,7 +157,7 @@ export function createPipelineOverlayEntry(
   const details = [
     pipeline.gasDay
       ? joinParts([
-          `${pipeline.litPoints} points read`,
+          `${pipeline.litPoints} point${pipeline.litPoints === 1 ? '' : 's'} read`,
           pipeline.medianUtilization !== null
             ? `median ${formatUtilization(pipeline.medianUtilization)} of design`
             : null,
@@ -165,7 +165,7 @@ export function createPipelineOverlayEntry(
         ])
       : 'no live reading — geometry and placement only',
     pipeline.notices.length
-      ? `${pipeline.notices.length} critical notices (${pipeline.pipelineWideNotices} pipeline-wide)`
+      ? `${pipeline.notices.length} critical notice${pipeline.notices.length === 1 ? '' : 's'} (${pipeline.pipelineWideNotices} pipeline-wide)`
       : null,
     gasDayStamp(pipeline, now),
     'zoom in for the points',

@@ -741,6 +741,18 @@ export function createGasOverlayLayer({
         tier: _tier,
         selectedId: _selectedId,
         hoverId: _hover ? `${_hover.kind}:${_hover.id}` : null,
+        // The hover card as published, so the headless QA can read the P4
+        // gate's five facts off the same build the overlay draws.
+        hoverCard:
+          _hover?.kind === 'point' && _snapshot
+            ? (() => {
+                const row = _rowById.get(_hover.id);
+                const position = _positionById.get(_hover.id);
+                return row && position
+                  ? buildHoverPointCard(row, position, _snapshot).details
+                  : null;
+              })()
+            : null,
       };
     },
   };
