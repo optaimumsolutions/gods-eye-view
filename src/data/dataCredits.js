@@ -173,6 +173,16 @@ export const DATA_CREDITS = [
       '(unverified wire; headlines pinned to the asset they name; publisher terms apply)',
   },
   {
+    key: 'gas-pipeline-overlay',
+    html:
+      'Pipeline utilization (Gas overlay layer): interstate pipeline postings ' +
+      '(FERC 18 CFR 284.13) — Gulf South (Boardwalk Pipelines), Gulf Run (Energy Transfer); ' +
+      'derived figures, raw tables never republished · linework ' +
+      '<a href="https://www.eia.gov/maps/" target="_blank" rel="noopener">EIA</a> (2020) and public FERC filings · ' +
+      'stations HIFLD community copy, cross-checked against ' +
+      '<a href="https://www.epa.gov/ghgreporting" target="_blank" rel="noopener">EPA GHGRP</a> and EPA FRS (US public domain)',
+  },
+  {
     key: 'commodity-flares',
     html:
       'Nightly gas-flare heat (Flares layer): NASA FIRMS VIIRS NRT — we acknowledge the use of data and/or imagery ' +

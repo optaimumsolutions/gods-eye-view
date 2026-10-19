@@ -22,6 +22,7 @@ const PANEL_GROUPS = [
       'commodity-news',
       'energy-datacenters',
       'commodity-gas-flows',
+      'gas-pipeline-overlay',
       'gas-supply-us',
       'commodity-flares',
       'production-gulf-platforms',
@@ -95,6 +96,9 @@ const PANEL_LABELS = {
   // "current" is the newest complete reporting month, named on the row.
   // Row 14 M2: the national balance and storage from the Oil Oracle store,
   // filed production for the regions the globe has built.
+  // Row 17 P4: Gulf South + Gulf Run coloured by scheduled ÷ design on the
+  // newest gas day (postings), with critical notices ringed.
+  'gas-pipeline-overlay': 'Gas · Pipeline Utilization (postings)',
   'gas-supply-us': 'Gas · US Supply Board',
   // Row 15: last clear night's VIIRS flare heat on the bundled ND sites.
   'commodity-flares': 'Gas flares · nightly heat',

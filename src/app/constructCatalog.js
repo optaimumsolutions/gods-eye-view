@@ -23,6 +23,7 @@ import { createApplicationPorts } from './layers/ports.js';
 import { createApplicationDatacenters } from './layers/datacenters.js';
 import { createApplicationFlares } from './layers/flares.js';
 import { createApplicationGasFlows } from './layers/gasFlows.js';
+import { createApplicationGasOverlay } from './layers/gasOverlay.js';
 import { createApplicationGulfPlatforms } from './layers/gulfPlatforms.js';
 import { createApplicationLng } from './layers/lng.js';
 import { createApplicationNews } from './layers/news.js';
@@ -70,6 +71,7 @@ const SOURCE_METHODS = Object.freeze({
   datacenters: ['getSnapshot'],
   flares: ['getSnapshot'],
   gasFlows: ['getSnapshot'],
+  gasOverlay: ['getSnapshot'],
   gulfPlatforms: ['getSnapshot'],
   lng: ['getSnapshot'],
   news: ['getSnapshot'],
@@ -176,6 +178,7 @@ export function createApplicationCatalog({
         }),
         createApplicationFlares({ source: sources.flares }),
         createApplicationGasFlows({ source: sources.gasFlows }),
+        createApplicationGasOverlay({ source: sources.gasOverlay }),
         createApplicationGulfPlatforms({ source: sources.gulfPlatforms }),
         createApplicationLng({ source: sources.lng }),
         createApplicationNews({ source: sources.news }),

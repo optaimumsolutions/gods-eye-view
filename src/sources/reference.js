@@ -8,6 +8,7 @@ import {
 import { createPortWatchPortSource } from '../layers/ports/source.js';
 import { createBundledDatacenterSource } from '../layers/datacenters/source.js';
 import { createBundledGasSource } from '../layers/gasFlows/bundledSource.js';
+import { createGasOverlaySource } from '../layers/gasOverlay/source.js';
 import {
   createBundledGulfSource,
   GULF_CONTRIBUTORS_URL,
@@ -58,6 +59,8 @@ export function createReferenceSources() {
     // joined onto the bundled Williston site gazetteer.
     flares: createFlaresSource(),
     gasFlows: createBundledGasSource(),
+    // Row 17 P4: the committed P1/P2 bundles + /api/oracle/pipeline-overlay.
+    gasOverlay: createGasOverlaySource(),
     gulfPlatforms: createBundledGulfSource(),
     lng: createBundledLngSource(),
     // Row 5: matched headlines from the local GDELT proxy (/api/news-assets)

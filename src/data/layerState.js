@@ -373,6 +373,11 @@ export const LAYER_STATE_REGISTRY = Object.freeze([
     optionOwner: 'flights',
   }),
   Object.freeze({
+    id: 'gas-pipeline-overlay',
+    token: 'P',
+    disposition: 'enabled-only',
+  }),
+  Object.freeze({
     id: 'gas-supply-us',
     token: '5',
     disposition: 'enabled-only',
