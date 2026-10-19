@@ -1,5 +1,6 @@
 import * as Cesium from 'cesium';
 import { formatAge } from '../commodities/observation.js';
+import { mcfPerDay } from './records.js';
 
 export const FLARES_LAYER_ID = 'commodity-flares';
 export const FLARES_OVERLAY_SOURCE_ID = 'commodity-flares';
@@ -11,6 +12,8 @@ export const FLARES_TIER_REGIONAL = 'regional';
 /** Below this camera height the site marks replace the region card. */
 export const FLARES_REGIONAL_HEIGHT_M = 2_500_000;
 export const FLARES_ZOOM_TO_REGION_HEIGHT_M = 1_200_000;
+/** A site is a pad; 12 km keeps its neighbours in frame (the onshore rule). */
+export const FLARES_FLY_TO_SITE_HEIGHT_M = 12_000;
 export const FLARES_FLY_DURATION_S = 2.0;
 /** Hover picks are event-driven and throttled; a still pointer costs nothing. */
 export const FLARES_HOVER_THROTTLE_MS = 120;
@@ -145,7 +148,7 @@ export function filedLine(row, currentMonth) {
       row.lastFlaredMonth ? `last filed ${row.lastFlaredMonth}` : null,
     ]);
   return joinParts([
-    `filed ${formatInt(Math.round(row.flaredMcfCurrent / 30))} Mcf/d flared (${currentMonth})`,
+    `filed ${formatInt(Math.round(mcfPerDay(row.flaredMcfCurrent, currentMonth)))} Mcf/d flared (${currentMonth})`,
     `${row.wells} well${row.wells === 1 ? '' : 's'}`,
   ]);
 }

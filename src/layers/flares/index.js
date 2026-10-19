@@ -4,6 +4,7 @@ import { isPointerFree } from '../../data/inputOwnership.js';
 import { isEmptySpacePick } from '../commodities/emptyPick.js';
 import {
   FLARES_FLY_DURATION_S,
+  FLARES_FLY_TO_SITE_HEIGHT_M,
   FLARES_HOVER_THROTTLE_MS,
   FLARES_LAYER_ID,
   FLARES_OVERLAY_COHORT_LIMIT,
@@ -34,6 +35,11 @@ import {
 import { mapAnalystRecord } from './records.js';
 export * from './model.js';
 export * from './records.js';
+export {
+  buildRegionDossierModel,
+  buildSiteDossierModel,
+  createFlaresDossier,
+} from './dossier.js';
 export { createFlaresSource, FLARES_ROUTE, FLARES_REGION } from './source.js';
 
 /**
@@ -55,6 +61,7 @@ export function createFlaresLayer({
   source,
   overlayHost,
   context,
+  dossier = null,
   screenSpaceEventHandlerFactory,
 } = {}) {
   if (typeof source?.getSnapshot !== 'function')
@@ -421,19 +428,15 @@ export function createFlaresLayer({
     _horizonCullRemovers = [];
   }
 
-  function zoomToRegion() {
-    const center = _snapshot?.region?.center;
-    if (!center || !_viewer || _viewer.isDestroyed?.()) return false;
+  /** Fly straight down onto a point; the caller decides the height. */
+  function flyTo(lon, lat, height) {
+    if (!_viewer || _viewer.isDestroyed?.()) return false;
     if (!isPointerFree()) return false;
     const camera = _viewer.camera;
     _viewer.trackedEntity = undefined;
     camera.cancelFlight?.();
     camera.flyTo({
-      destination: Cesium.Cartesian3.fromDegrees(
-        center.lon,
-        center.lat,
-        FLARES_ZOOM_TO_REGION_HEIGHT_M,
-      ),
+      destination: Cesium.Cartesian3.fromDegrees(lon, lat, height),
       orientation: {
         heading: camera.heading,
         pitch: -Cesium.Math.PI_OVER_TWO,
@@ -443,6 +446,25 @@ export function createFlaresLayer({
       easingFunction: Cesium.EasingFunction.CUBIC_IN_OUT,
     });
     return true;
+  }
+
+  function zoomToRegion() {
+    const center = _snapshot?.region?.center;
+    return center
+      ? flyTo(center.lon, center.lat, FLARES_ZOOM_TO_REGION_HEIGHT_M)
+      : false;
+  }
+
+  function flyToSite(id) {
+    const row = _rowById.get(id ?? _selectedId);
+    return row ? flyTo(row.lon, row.lat, FLARES_FLY_TO_SITE_HEIGHT_M) : false;
+  }
+
+  function zoomOutFromSite(id) {
+    const row = _rowById.get(id ?? _selectedId);
+    return row
+      ? flyTo(row.lon, row.lat, FLARES_ZOOM_TO_REGION_HEIGHT_M)
+      : false;
   }
 
   /* ---------------------------------------------------------------- *
@@ -504,20 +526,32 @@ export function createFlaresLayer({
     if (!row) return;
     _selectedId = id;
     context.selectEntityContext(registerSiteContext(row));
+    dossier?.show?.(row, _snapshot);
     publishOverlay();
   }
 
   function clearSelection({ publish = true } = {}) {
+    dossier?.hide?.();
     if (!_selectedId) return;
     _selectedId = null;
     context.clearSelectedEntityContextForLayer(FLARES_LAYER_ID);
     if (publish) publishOverlay();
   }
 
-  /** Another layer took the selection: our card steps aside. */
+  /** The region mark opens the basin dossier (FR-F7); without one it zooms. */
+  function openRegionDossier() {
+    if (!dossier?.showRegion || !_snapshot) return false;
+    clearSelection({ publish: true });
+    dossier.showRegion(_snapshot);
+    return true;
+  }
+
+  /** Another layer took the selection: our card and dossier step aside. */
   function onForeignSelection(event) {
     const layerId = event?.detail?.layerId;
-    if (!_selectedId || layerId === FLARES_LAYER_ID) return;
+    if (layerId === FLARES_LAYER_ID) return;
+    if (dossier?.isOpen?.()) dossier.hide();
+    if (!_selectedId) return;
     _selectedId = null;
     publishOverlay();
   }
@@ -535,7 +569,7 @@ export function createFlaresLayer({
         return;
       }
       if (target?.kind === 'region') {
-        zoomToRegion();
+        if (!openRegionDossier()) zoomToRegion();
         return;
       }
       // A pick that belongs to a sibling layer is not empty space; the
@@ -640,6 +674,8 @@ export function createFlaresLayer({
         _lastUpdate = Date.now();
         _lastError = null;
         refreshTier({ force: true });
+        // A new night re-renders whichever dossier is open.
+        dossier?.refresh?.(_snapshot);
         console.log(
           `[Data:Flares] Updated: ${snapshot.displayNight?.litSites ?? 0} sites lit of ${snapshot.rows.length} on ${snapshot.displayNight?.night ?? 'no night'} (${snapshot.displayNight?.cloud?.state ?? 'n/a'})`,
         );
@@ -663,6 +699,7 @@ export function createFlaresLayer({
       removeHandlers();
       removeCameraListeners();
       removeHorizonCulling();
+      dossier?.destroy?.();
       overlayHost.clearSource(FLARES_OVERLAY_SOURCE_ID);
       overlayHost.setVisible(FLARES_OVERLAY_SOURCE_ID, false);
       context.removeEntityContextsForLayer(FLARES_LAYER_ID);
@@ -690,15 +727,24 @@ export function createFlaresLayer({
       _lastError = null;
     },
 
-    /** Voice and QA hooks. */
+    /** Voice, dossier-button and QA hooks. */
     selectSite(id) {
       selectById(id);
     },
     clearSite() {
       clearSelection();
     },
+    flyToSite(id) {
+      return flyToSite(id);
+    },
+    zoomOutFromSite(id) {
+      return zoomOutFromSite(id);
+    },
     zoomToRegion() {
       return zoomToRegion();
+    },
+    openRegionDossier() {
+      return openRegionDossier();
     },
 
     /** The panel row's colour legend: the persistence ramp with counts. */
@@ -745,6 +791,8 @@ export function createFlaresLayer({
         tier: _tier,
         selectedId: _selectedId,
         hoverId: _hover?.id ?? null,
+        dossierOpen: Boolean(dossier?.isOpen?.()),
+        dossierMode: dossier?.current?.()?.mode ?? null,
         // The global-tier region card as published to the overlay.
         regionCard:
           _entries.find((entry) => String(entry.id).startsWith('region:'))

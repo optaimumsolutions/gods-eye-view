@@ -291,6 +291,18 @@ export function buildFlaresSnapshot(payload, bundle) {
   };
 }
 
+/** Calendar days in a `YYYY-MM` month. */
+export function daysInMonth(month) {
+  const [y, m] = String(month).split('-').map(Number);
+  if (!Number.isFinite(y) || !Number.isFinite(m)) return 30;
+  return new Date(Date.UTC(y, m, 0)).getUTCDate();
+}
+
+/** A monthly Mcf figure as Mcf per calendar day of its month. */
+export function mcfPerDay(mcf, month) {
+  return Number.isFinite(mcf) ? mcf / daysInMonth(month) : null;
+}
+
 /** JSON-safe record for the analyst query engine; missing values are null. */
 export function mapAnalystRecord(row) {
   return {
