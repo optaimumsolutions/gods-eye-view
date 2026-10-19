@@ -30,7 +30,7 @@ const argOf = (flag, fallback) => {
 const APP_URL = argOf('--url', process.env.GEV_URL || 'http://localhost:4173');
 const HEADFUL = argv.includes('--headful');
 const LAYER_ID = 'commodity-news';
-const PINNED_ASSETS = 30;
+const PINNED_ASSETS = 48;
 
 /** Pre-committed gate: thirty pinned points is a trivial draw. */
 const MAX_ACTIVATION_MS = 400;

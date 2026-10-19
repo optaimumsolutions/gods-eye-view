@@ -1,13 +1,16 @@
 /**
  * The assets the news layer pins headlines to (docs/COMMODITIES-PLAN.md §4
  * row 5). Milestone 1: ten market-salient maritime chokepoints and the twenty
- * dossier ports (§9.6.1). Positions are public geographic facts, hand-placed
- * from public charts and rounded to two decimals (about 1 km) — deliberately
- * NOT read from the IMF PortWatch databases, so the layer carries no
- * PortWatch data and stays on in the hosted build (docs/LICENCES.md: GDELT is
- * the only upstream). Port ids are the dossier slugs so the server can join
- * each port's committed alias list (config/port_dossiers.seed.json); strait
- * keywords live here because no seed carries them.
+ * dossier ports (§9.6.1); milestone 2 adds the US LNG export terminals the
+ * ports do not already cover, six producing basins and the five posted
+ * pipelines the supply board reads. Positions are public geographic facts,
+ * hand-placed from public charts and rounded to two decimals (about 1 km) —
+ * deliberately NOT read from the IMF PortWatch databases, so the layer
+ * carries no PortWatch data and stays on in the hosted build
+ * (docs/LICENCES.md: GDELT is the only upstream). Port ids are the dossier
+ * slugs so the server can join each port's committed alias list
+ * (config/port_dossiers.seed.json); every other group's keywords live here
+ * because no seed carries them.
  */
 export const NEWS_GAZETTEER = Object.freeze(
   [
@@ -180,5 +183,161 @@ export const NEWS_GAZETTEER = Object.freeze(
     { id: 'ulsan', name: 'Ulsan', group: 'port', lon: 129.38, lat: 35.5 },
     { id: 'chiba', name: 'Chiba', group: 'port', lon: 140.05, lat: 35.57 },
     { id: 'sikka', name: 'Sikka', group: 'port', lon: 69.84, lat: 22.43 },
+    // US LNG export terminals (group 'terminal') the dossier ports do not
+    // already cover: Sabine Pass, Corpus Christi and Port Arthur ride their
+    // port entries' seed aliases.
+    {
+      id: 'freeport-lng',
+      name: 'Freeport LNG',
+      group: 'terminal',
+      lon: -95.31,
+      lat: 28.94,
+      keywords: ['Freeport LNG'],
+    },
+    {
+      id: 'cameron-lng',
+      name: 'Cameron LNG',
+      group: 'terminal',
+      lon: -93.3,
+      lat: 29.8,
+      keywords: ['Cameron LNG'],
+    },
+    {
+      id: 'calcasieu-pass',
+      name: 'Calcasieu Pass LNG',
+      group: 'terminal',
+      lon: -93.34,
+      lat: 29.77,
+      keywords: ['Calcasieu Pass'],
+    },
+    {
+      id: 'plaquemines-lng',
+      name: 'Plaquemines LNG',
+      group: 'terminal',
+      lon: -89.98,
+      lat: 29.59,
+      keywords: ['Plaquemines LNG', 'Plaquemines'],
+    },
+    {
+      id: 'cove-point',
+      name: 'Cove Point LNG',
+      group: 'terminal',
+      lon: -76.39,
+      lat: 38.39,
+      keywords: ['Cove Point'],
+    },
+    {
+      id: 'elba-island',
+      name: 'Elba Island LNG',
+      group: 'terminal',
+      lon: -81.01,
+      lat: 32.08,
+      keywords: ['Elba Island'],
+    },
+    {
+      id: 'golden-pass',
+      name: 'Golden Pass LNG',
+      group: 'terminal',
+      lon: -93.92,
+      lat: 29.76,
+      keywords: ['Golden Pass'],
+    },
+    // Producing basins (group 'basin'), pinned at a representative centroid.
+    {
+      id: 'permian',
+      name: 'Permian Basin',
+      group: 'basin',
+      lon: -102.0,
+      lat: 31.8,
+      keywords: ['Permian Basin', 'Permian'],
+    },
+    {
+      id: 'appalachia',
+      name: 'Appalachia',
+      group: 'basin',
+      lon: -80.0,
+      lat: 40.5,
+      keywords: ['Marcellus', 'Utica shale', 'Appalachian basin'],
+    },
+    {
+      id: 'haynesville',
+      name: 'Haynesville',
+      group: 'basin',
+      lon: -93.8,
+      lat: 32.3,
+      keywords: ['Haynesville'],
+    },
+    {
+      id: 'williston-basin',
+      name: 'Williston Basin',
+      group: 'basin',
+      lon: -103.0,
+      lat: 48.0,
+      keywords: ['Bakken', 'Williston Basin'],
+    },
+    {
+      id: 'eagle-ford',
+      name: 'Eagle Ford',
+      group: 'basin',
+      lon: -98.5,
+      lat: 28.8,
+      keywords: ['Eagle Ford'],
+    },
+    {
+      id: 'gulf-of-mexico',
+      name: 'Gulf of Mexico production',
+      group: 'basin',
+      lon: -90.5,
+      lat: 27.5,
+      // Bare "Gulf of Mexico" sweeps in weather and politics; the qualified
+      // phrases keep the badge about production.
+      keywords: [
+        'Gulf of Mexico oil',
+        'Gulf of Mexico gas',
+        'Gulf of Mexico platform',
+      ],
+    },
+    // The posted pipelines the supply board reads (group 'pipeline'), pinned
+    // mid-system from the public FERC filings.
+    {
+      id: 'gulf-run',
+      name: 'Gulf Run Pipeline',
+      group: 'pipeline',
+      lon: -93.6,
+      lat: 31.6,
+      keywords: ['Gulf Run pipeline', 'Gulf Run'],
+    },
+    {
+      id: 'gulf-south',
+      name: 'Gulf South Pipeline',
+      group: 'pipeline',
+      lon: -91.0,
+      lat: 30.5,
+      keywords: ['Gulf South pipeline'],
+    },
+    {
+      id: 'rover-pipeline',
+      name: 'Rover Pipeline',
+      group: 'pipeline',
+      lon: -81.5,
+      lat: 40.7,
+      keywords: ['Rover pipeline'],
+    },
+    {
+      id: 'panhandle-eastern',
+      name: 'Panhandle Eastern',
+      group: 'pipeline',
+      lon: -99.0,
+      lat: 36.5,
+      keywords: ['Panhandle Eastern'],
+    },
+    {
+      id: 'cameron-interstate',
+      name: 'Cameron Interstate',
+      group: 'pipeline',
+      lon: -93.3,
+      lat: 30.0,
+      keywords: ['Cameron Interstate'],
+    },
   ].map((row) => Object.freeze(row)),
 );

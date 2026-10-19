@@ -19,10 +19,14 @@ test('gazetteer rows are frozen with unique ids and plausible coordinates', () =
     assert.match(row.id, /^[a-z0-9-]+$/);
     assert.ok(!ids.has(row.id), `duplicate id ${row.id}`);
     ids.add(row.id);
-    assert.ok(['strait', 'port'].includes(row.group));
+    assert.ok(
+      ['strait', 'port', 'terminal', 'basin', 'pipeline'].includes(row.group),
+    );
     assert.ok(Math.abs(row.lon) <= 180);
     assert.ok(Math.abs(row.lat) <= 90);
-    if (row.group === 'strait')
+    // Only the dossier ports may lean on seed aliases; every other group
+    // carries its own keywords.
+    if (row.group !== 'port')
       assert.ok(row.keywords.length >= 1, `${row.id} needs keywords`);
   }
 });
