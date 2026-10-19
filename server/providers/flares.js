@@ -13,6 +13,8 @@ import {
   nightIsFinal,
   nightMetrics,
   nightOf,
+  nightOverpasses,
+  nightPips,
   parseIemAsos,
   parseNwsObservations,
   parseViirsCsv,
@@ -357,17 +359,25 @@ export function flaresProxy({
     // Two passes (G15.3): a clear-state dropout must not feed the norm it is
     // judged against.
     const base = clearBaseline(metrics.map((m) => ({ ...m, suspect: false })));
-    const flagged = metrics.map((m) => ({
-      night: m.night,
-      final: state.nights.get(m.night)?.final ?? false,
-      cloud: m.cloud,
-      suspect: suspectNight(m.litSites, base),
-      counts: m.counts,
-      litSites: m.litSites,
-      siteFrpMw: m.siteFrpMw,
-      satellites: m.satellites,
-      sites: m.sites,
-    }));
+    // Overpass times and the unmatched grey pips (FR-F6) come from the stored
+    // raw detections, which every night file keeps — sealed summaries carry
+    // counts only, and both derivations are deterministic re-reads.
+    const flagged = metrics.map((m) => {
+      const record = state.nights.get(m.night);
+      return {
+        night: m.night,
+        final: record?.final ?? false,
+        cloud: m.cloud,
+        suspect: suspectNight(m.litSites, base),
+        counts: m.counts,
+        litSites: m.litSites,
+        siteFrpMw: m.siteFrpMw,
+        satellites: m.satellites,
+        sites: m.sites,
+        overpasses: nightOverpasses(record?.detections ?? []),
+        pips: nightPips(record?.detections ?? [], state.sites, state.wells),
+      };
+    });
     const baseline = clearBaseline(flagged);
     return {
       region: state.region.id,

@@ -306,6 +306,31 @@ export function classifyDetection(d, sites, wells) {
 }
 
 /**
+ * The night's unmatched heat for the layer's grey pips (FR-F6): every
+ * detection that is not on a flare site, with its position and FRP.
+ * Derived from the stored raw detections, so it works for sealed nights
+ * (whose summaries carry counts only) exactly as for live ones.
+ * @param {object[]} detections
+ * @param {ReturnType<typeof pointIndex>} sites
+ * @param {ReturnType<typeof pointIndex>} wells
+ * @returns {Array<{lat: number, lon: number, frp: number, kind: 'unlisted'|'other'}>}
+ */
+export function nightPips(detections, sites, wells) {
+  const out = [];
+  for (const d of detections ?? []) {
+    const hit = classifyDetection(d, sites, wells);
+    if (hit.kind === 'site') continue;
+    out.push({
+      lat: d.lat,
+      lon: d.lon,
+      frp: Math.round((d.frp || 0) * 100) / 100,
+      kind: hit.kind,
+    });
+  }
+  return out;
+}
+
+/**
  * Parse an IEM ASOS CSV (`format=onlycomma`) into sky reports.
  * @param {string} text
  * @returns {?Array<{station: string, validMs: number, layers: string[]}>}

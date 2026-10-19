@@ -15,6 +15,7 @@ import {
   nightIsFinal,
   nightMetrics,
   nightOverpasses,
+  nightPips,
   nightSky,
   overpassMs,
   parseIemAsos,
@@ -88,6 +89,25 @@ test('classifyDetection splits site, unlisted well and other', () => {
     'unlisted',
   );
   assert.equal(classifyDetection(at(48.3, -103.0), sites, wells).kind, 'other');
+});
+
+test('nightPips keeps only unmatched heat, with position, FRP and kind', () => {
+  const sites = pointIndex([{ id: 's1', lat: 48.0, lon: -103.0 }]);
+  const wells = pointIndex([
+    { id: 'w1', lat: 48.0, lon: -103.0 },
+    { id: 'w2', lat: 48.1, lon: -103.0 },
+  ]);
+  const at = (lat, lon, frp) => ({ lat, lon, frp, scanKm: 0.4, trackKm: 0.4 });
+  const pips = nightPips(
+    [at(48.005, -103.0, 9.1), at(48.104, -103.0, 2.345), at(48.3, -103.0, 0)],
+    sites,
+    wells,
+  );
+  assert.deepEqual(pips, [
+    { lat: 48.104, lon: -103.0, frp: 2.35, kind: 'unlisted' },
+    { lat: 48.3, lon: -103.0, frp: 0, kind: 'other' },
+  ]);
+  assert.deepEqual(nightPips(undefined, sites, wells), []);
 });
 
 test('pointIndex finds the nearest point across grid cells', () => {
