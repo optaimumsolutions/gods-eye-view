@@ -360,6 +360,266 @@ export function skyState(reports, atMs) {
   return { state, stations, covered };
 }
 
+/**
+ * Parse api.weather.gov observations for one station into the IEM report
+ * shape (FR-F4: live nights fall back to NWS when the IEM archive has not
+ * caught up). Null when the payload is not an observation collection.
+ * @param {object} json
+ * @param {string} station - The ASOS id the reports are filed under.
+ * @returns {?Array<{station: string, validMs: number, layers: string[]}>}
+ */
+export function parseNwsObservations(json, station) {
+  if (!Array.isArray(json?.features)) return null;
+  const out = [];
+  for (const feature of json.features) {
+    const p = feature?.properties;
+    const validMs = Date.parse(p?.timestamp ?? '');
+    if (!Number.isFinite(validMs)) continue;
+    const layers = (Array.isArray(p.cloudLayers) ? p.cloudLayers : [])
+      .map((layer) => str(layer?.amount).toUpperCase())
+      .filter(Boolean);
+    out.push({ station, validMs, layers });
+  }
+  return out;
+}
+
+/**
+ * ASOS station coordinates (public airport facts, ~100 m) so a site can take
+ * the cloud state of its nearest reporting station (FR-F4, per-site rule).
+ */
+export const FLARE_STATION_COORDS = Object.freeze({
+  XWA: Object.freeze({ lat: 48.258, lon: -103.748 }),
+  ISN: Object.freeze({ lat: 48.178, lon: -103.642 }),
+  DIK: Object.freeze({ lat: 46.797, lon: -102.802 }),
+  MOT: Object.freeze({ lat: 48.259, lon: -101.28 }),
+  SDY: Object.freeze({ lat: 47.707, lon: -104.193 }),
+  MAF: Object.freeze({ lat: 31.942, lon: -102.202 }),
+  HOB: Object.freeze({ lat: 32.688, lon: -103.217 }),
+  CNM: Object.freeze({ lat: 32.337, lon: -104.263 }),
+  PEQ: Object.freeze({ lat: 31.382, lon: -103.511 }),
+  FST: Object.freeze({ lat: 30.915, lon: -102.916 }),
+});
+
+/** A night file is final this long after its UTC date begins (FR-F2). */
+export const NIGHT_FINAL_MS = 36 * 3_600_000;
+
+/** True when the night's file may never change again. */
+export function nightIsFinal(night, nowMs) {
+  const start = Date.parse(`${night}T00:00:00Z`);
+  return Number.isFinite(start) && nowMs - start > NIGHT_FINAL_MS;
+}
+
+/** Identity of one detection across the 24 h and 7 d files and reruns. */
+export function detectionKey(d) {
+  return `${d.satellite}|${d.acqDate}|${d.acqTime}|${d.lat.toFixed(5)}|${d.lon.toFixed(5)}`;
+}
+
+/**
+ * Merge new detections into a night's stored list: duplicates (by
+ * `detectionKey`) collapse, order is the key order so reruns are
+ * byte-identical.
+ */
+export function mergeDetections(existing, incoming) {
+  const byKey = new Map();
+  for (const d of [...(existing ?? []), ...(incoming ?? [])])
+    byKey.set(detectionKey(d), d);
+  return [...byKey.entries()]
+    .sort((a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0))
+    .map(([, d]) => d);
+}
+
+/**
+ * The night's overpasses: per satellite, the median acquisition time (the
+ * probe's rule — one pass per satellite per night over a basin).
+ * @returns {Array<{satellite: string, ms: number}>}
+ */
+export function nightOverpasses(detections) {
+  const bySat = new Map();
+  for (const d of detections) {
+    let list = bySat.get(d.satellite);
+    if (!list) bySat.set(d.satellite, (list = []));
+    list.push(overpassMs(d));
+  }
+  return [...bySat.entries()]
+    .map(([satellite, times]) => {
+      times.sort((a, b) => a - b);
+      return { satellite, ms: times[times.length >> 1] };
+    })
+    .sort((a, b) => a.ms - b.ms);
+}
+
+const SKY_RANK = ['unknown', 'clear', 'partial', 'obscured'];
+
+/** The night's region cloud state: the worst `skyState` across its overpasses. */
+export function nightSky(reports, overpasses) {
+  return overpasses
+    .map(({ ms }) => skyState(reports, ms))
+    .reduce(
+      (worst, s) =>
+        SKY_RANK.indexOf(s.state) > SKY_RANK.indexOf(worst.state) ? s : worst,
+      { state: 'unknown', stations: 0, covered: 0 },
+    );
+}
+
+/**
+ * Which stations were covered at the night's overpasses (FR-F4 per-site
+ * rule): per station, the report nearest each pass within 90 minutes;
+ * covered at any pass counts as covered — conservative, so a site under a
+ * passing deck is never read as a clear zero.
+ * @returns {Map<string, boolean>} reporting stations only
+ */
+export function stationCoverage(reports, overpasses) {
+  /** @type {Map<string, boolean>} */
+  const covered = new Map();
+  for (const { ms } of overpasses) {
+    /** @type {Map<string, {validMs: number, layers: string[]}>} */
+    const nearest = new Map();
+    for (const r of reports) {
+      const gap = Math.abs(r.validMs - ms);
+      if (gap > 90 * 60_000) continue;
+      const prev = nearest.get(r.station);
+      if (!prev || gap < Math.abs(prev.validMs - ms)) nearest.set(r.station, r);
+    }
+    for (const [station, r] of nearest) {
+      const isCovered = r.layers.some((c) => COVERING.has(c));
+      covered.set(station, (covered.get(station) ?? false) || isCovered);
+    }
+  }
+  return covered;
+}
+
+/**
+ * One site's cloud state: its nearest reporting station's coverage
+ * (`obscured` | `clear` | `unknown` with no reporting station).
+ */
+export function siteCloud(
+  site,
+  coverage,
+  stationCoords = FLARE_STATION_COORDS,
+) {
+  let best = null;
+  for (const [station, isCovered] of coverage) {
+    const at = stationCoords[station];
+    if (!at) continue;
+    const dist = distanceM(site.lat, site.lon, at.lat, at.lon);
+    if (!best || dist < best.dist) best = { dist, isCovered };
+  }
+  if (!best) return 'unknown';
+  return best.isCovered ? 'obscured' : 'clear';
+}
+
+/**
+ * One night's reading (FR-F3, F4, F5): the detection split, per-site
+ * detections with the per-site-per-night MAXIMUM FRP (never the pixel sum —
+ * bow-tie duplicates at scan edge), the region sky state and per-site cloud.
+ */
+export function nightMetrics({
+  night,
+  detections,
+  sites,
+  wells,
+  reports,
+  stationCoords = FLARE_STATION_COORDS,
+}) {
+  const overpasses = nightOverpasses(detections);
+  const cloud = nightSky(reports ?? [], overpasses);
+  const coverage = stationCoverage(reports ?? [], overpasses);
+  const counts = { site: 0, unlisted: 0, other: 0 };
+  /** @type {Map<string, object>} */
+  const bySite = new Map();
+  for (const d of detections) {
+    const hit = classifyDetection(d, sites, wells);
+    counts[hit.kind] += 1;
+    if (hit.kind !== 'site') continue;
+    let row = bySite.get(hit.site.id);
+    if (!row)
+      bySite.set(
+        hit.site.id,
+        (row = {
+          id: hit.site.id,
+          site: hit.site,
+          detections: 0,
+          maxFrp: 0,
+          satellites: new Set(),
+        }),
+      );
+    row.detections += 1;
+    row.maxFrp = Math.max(row.maxFrp, d.frp || 0);
+    row.satellites.add(d.satellite);
+  }
+  const siteRows = [...bySite.values()]
+    .map((row) => ({
+      id: row.id,
+      detections: row.detections,
+      maxFrp: Math.round(row.maxFrp * 100) / 100,
+      satellites: [...row.satellites].sort(),
+      cloud: siteCloud(row.site, coverage, stationCoords),
+    }))
+    .sort((a, b) => b.maxFrp - a.maxFrp || (a.id < b.id ? -1 : 1));
+  return {
+    night,
+    overpasses,
+    satellites: overpasses.map((o) => o.satellite),
+    cloud,
+    counts,
+    litSites: siteRows.length,
+    siteFrpMw:
+      Math.round(siteRows.reduce((sum, row) => sum + row.maxFrp, 0) * 100) /
+      100,
+    sites: siteRows,
+  };
+}
+
+/** Linear-interpolated percentile of an unsorted sample. */
+export function percentileOf(values, p) {
+  const sorted = values.filter((v) => Number.isFinite(v)).sort((a, b) => a - b);
+  if (!sorted.length) return null;
+  const at = (sorted.length - 1) * p;
+  const lo = Math.floor(at);
+  const hi = Math.ceil(at);
+  return sorted[lo] + (sorted[hi] - sorted[lo]) * (at - lo);
+}
+
+/** Suspect backstop (G15.3) needs at least this many clear nights to judge. */
+export const BASELINE_MIN_CLEAR_NIGHTS = 5;
+/** Lit sites under this share of the clear-night median mark a night `suspect`. */
+export const SUSPECT_LIT_SHARE = 0.4;
+
+/**
+ * The norm (FR-F5): median and 10th/90th percentile of lit sites and site
+ * FRP over the newest `window` nights whose region state is `clear` and that
+ * are not themselves suspect. Pass nights newest-first.
+ */
+export function clearBaseline(nights, window = 30) {
+  const clear = nights
+    .filter((n) => n.cloud?.state === 'clear' && !n.suspect)
+    .slice(0, window);
+  const lit = clear.map((n) => n.litSites);
+  const frp = clear.map((n) => n.siteFrpMw);
+  return {
+    clearNights: clear.length,
+    litMedian: percentileOf(lit, 0.5),
+    litP10: percentileOf(lit, 0.1),
+    litP90: percentileOf(lit, 0.9),
+    frpMedian: percentileOf(frp, 0.5),
+    frpP10: percentileOf(frp, 0.1),
+    frpP90: percentileOf(frp, 0.9),
+  };
+}
+
+/**
+ * G15.3 backstop: a night whose lit sites fall under 40 % of the clear-night
+ * median is `suspect` (deep dropout the ceilometers missed), judged only
+ * once enough clear nights exist.
+ */
+export function suspectNight(litSites, baseline) {
+  return (
+    baseline.clearNights >= BASELINE_MIN_CLEAR_NIGHTS &&
+    Number.isFinite(baseline.litMedian) &&
+    litSites < SUSPECT_LIT_SHARE * baseline.litMedian
+  );
+}
+
 function num(v) {
   const n = Number(v);
   return Number.isFinite(n) ? n : 0;
